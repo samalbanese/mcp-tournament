@@ -146,3 +146,38 @@ export interface ScoringDimension {
  */
 export const BUILTIN_PLUGINS = ['dnd', 'coding', 'customer-support'] as const;
 export type BuiltinPlugin = typeof BUILTIN_PLUGINS[number];
+
+// ── Slug helpers (ported from oracle-tournament) ────────
+
+/** Slugify a model name for file paths */
+export function modelSlug(model: string): string {
+  return model.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+}
+
+/** Slugify a scenario name for file paths */
+export function scenarioSlug(scenario: TestCase | { name: string }): string {
+  return scenario.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+}
+
+// ── Runtime scenario registry ───────────────────────────
+
+let _scenarios: TestCase[] = [];
+
+export function setScenarios(scenarios: TestCase[]): void {
+  _scenarios = scenarios;
+}
+
+export function getScenarios(): TestCase[] {
+  return _scenarios;
+}
+
+export const SCENARIOS: TestCase[] = new Proxy([] as TestCase[], {
+  get(_target, prop) {
+    if (prop === 'length') return _scenarios.length;
+    if (typeof prop === 'string' && !isNaN(Number(prop))) return _scenarios[Number(prop)];
+    return (_scenarios as any)[prop];
+  },
+  *[Symbol.iterator]() {
+    yield* _scenarios;
+  },
+});

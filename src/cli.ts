@@ -1,4 +1,13 @@
 import { Command } from 'commander';
+
+/**
+ * CLI results are user-facing program output, so they belong on stdout —
+ * unlike the MCP server path, where stdout is reserved for JSON-RPC and all
+ * logging goes to stderr (see src/utils/logger.ts).
+ */
+function print(text: string): void {
+  process.stdout.write(`${text}\n`);
+}
 import { serve } from './index.js';
 import {
   evaluateTournament,
@@ -30,8 +39,8 @@ program.command('run')
       judges: options.judges,
       outputRoot: options.out,
     });
-    console.log(formatLeaderboard(run.leaderboard));
-    console.log(`\nResults: ${run.runDir}`);
+    print(formatLeaderboard(run.leaderboard));
+    print(`\nResults: ${run.runDir}`);
   });
 
 program.command('leaderboard')
@@ -40,7 +49,7 @@ program.command('leaderboard')
   .option('--limit <count>', 'Maximum rows', value => Number.parseInt(value, 10), 10)
   .option('--out <directory>', 'Root directory containing result runs')
   .action(options => {
-    console.log(formatLeaderboard(readLeaderboard({
+    print(formatLeaderboard(readLeaderboard({
       plugin: options.plugin,
       limit: options.limit,
       outputRoot: options.out,

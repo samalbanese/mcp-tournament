@@ -12,30 +12,22 @@ import path from 'node:path';
 export function generateReport(
   outputDir: string,
   leaderboard: LeaderboardEntry[],
-  disqualified: LeaderboardEntry[],
+  _disqualified: LeaderboardEntry[] = [],
 ): string {
-  let report = `# Oracle Tournament Results\n\n`;
+  let report = `# MCP Tournament Results\n\n`;
   report += `**Generated:** ${new Date().toISOString()}\n`;
-  report += `**Models evaluated:** ${leaderboard.length + disqualified.length}\n`;
-  report += `**Passed:** ${leaderboard.length} | **Disqualified:** ${disqualified.length}\n\n`;
+  report += `**Models evaluated:** ${leaderboard.length}\n\n`;
 
   report += `---\n\n## Leaderboard\n\n`;
-  report += `| Rank | Model | Tier | Avg Score | Best Scenario | Worst Scenario | Tools |\n`;
-  report += `|------|-------|------|-----------|---------------|----------------|-------|\n`;
+  report += `| Rank | Model | Tier | Avg Score | Best Scenario | Worst Scenario |\n`;
+  report += `|------|-------|------|-----------|---------------|----------------|\n`;
 
   for (let i = 0; i < leaderboard.length; i++) {
     const m = leaderboard[i];
     const best = m.scenarioScores.reduce((a, b) => (a.average > b.average ? a : b));
     const worst = m.scenarioScores.reduce((a, b) => (a.average < b.average ? a : b));
 
-    report += `| ${i + 1} | ${m.modelName} | ${m.tier} | ${m.overallAverage.toFixed(2)} | ${best.scenarioName} (${best.average.toFixed(1)}) | ${worst.scenarioName} (${worst.average.toFixed(1)}) | ${m.totalToolCalls} |\n`;
-  }
-
-  if (disqualified.length > 0) {
-    report += `\n---\n\n## Disqualified Models\n\n`;
-    for (const m of disqualified) {
-      report += `- **${m.modelName}** (${m.tier}): ${m.dqReasons.join('; ')}\n`;
-    }
+    report += `| ${i + 1} | ${m.modelName} | ${m.tier} | ${m.overallAverage.toFixed(2)} | ${best.scenarioName} (${best.average.toFixed(1)}) | ${worst.scenarioName} (${worst.average.toFixed(1)}) |\n`;
   }
 
   // Tier recommendations

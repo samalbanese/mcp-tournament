@@ -1,15 +1,11 @@
-// judge-runner.ts — Runs all 5 judges in parallel on one model/scenario result, then synthesizes.
-
-import { JUDGES } from '../config/judges.js';
-import { runJudge, type JudgeResult } from '../agents/judge-agent.js';
-import { runSynthesis, type SynthesisResult } from '../agents/synthesizer.js';
-import type { TestCase } from '../plugins/base.js';
-import type { Turn } from '../schemas/result.js';
-import { modelSlug, scenarioSlug } from '../config/scenarios.js';
-import { log, logWarn, logError } from '../utils/logger.js';
-import { RETRY_ATTEMPTS, RETRY_BASE_DELAY_MS } from '../config/constants.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import { runJudge, type JudgeResult } from '../agents/judge-agent.js';
+import { runSynthesis, type SynthesisResult } from '../agents/synthesizer.js';
+import { JUDGES, type JudgeConfig } from '../config/judges.js';
+import { modelSlug, scenarioSlug, type TestCase, type TournamentPlugin, type Turn } from '../plugins/base.js';
+import type { Synthesis } from '../schemas/synthesis.js';
+import { log } from '../utils/logger.js';
 
 export interface JudgePhaseResult {
   judgeResults: JudgeResult[];
@@ -17,92 +13,74 @@ export interface JudgePhaseResult {
   synthesis: SynthesisResult;
 }
 
-/**
- * Run a judge with retry logic. Retries up to RETRY_ATTEMPTS times
- * with exponential backoff starting at RETRY_BASE_DELAY_MS.
- */
-async function runJudgeWithRetry(
-  judge: typeof JUDGES[0],
-  scenario: Scenario,
-  turns: Turn[],
-): Promise<JudgeResult> {
-  let lastError: Error | null = null;
-
-  for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
-    try {
-      return await runJudge(judge, scenario, turns);
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-      if (attempt < RETRY_ATTEMPTS) {
-        const delay = RETRY_BASE_DELAY_MS * Math.pow(2, attempt);
-        logWarn(`  [Judge/${scenario.name}] ${judge.name} attempt ${attempt + 1} failed, retrying in ${delay}ms: ${lastError.message}`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-  }
-
-  throw lastError ?? new Error('Judge failed with no error details');
+function singleJudgeSynthesis(result: JudgeResult): Synthesis {
+  if (!result.parsed) throw new Error(`${result.judgeName} returned invalid score JSON`);
+  const finalScores = Object.fromEntries(Object.entries(result.parsed.scores).map(
+    ([criterion, score]) => [criterion, {
+      score: score.score,
+      confidence: 'medium' as const,
+      outliers: [],
+    }],
+  ));
+  const values = Object.values(finalScores);
+  return {
+    final_scores: finalScores,
+    average_score: values.length
+      ? values.reduce((sum, value) => sum + value.score, 0) / values.length : 0,
+    rule_errors_confirmed: result.parsed.rule_errors,
+    assessment: result.parsed.overall_impression,
+    judge_agreement: 'Single-judge quick test',
+  };
 }
 
 export async function evaluateWithJudges(
-  scenario: Scenario,
+  plugin: TournamentPlugin,
+  scenario: TestCase,
   turns: Turn[],
   modelId: string,
   outputDir: string,
+  judges: JudgeConfig[] = JUDGES,
+  useSynthesizer = true,
 ): Promise<JudgePhaseResult> {
-  const slug = modelSlug(modelId);
-  const scSlug = scenarioSlug(scenario as Scenario);
-  const judgeDir = path.join(outputDir, 'judges', slug, scSlug);
+  const judgeDir = path.join(outputDir, 'judges', modelSlug(modelId), scenarioSlug(scenario));
   fs.mkdirSync(judgeDir, { recursive: true });
+  log(`  [Judge/${scenario.name}] Running ${judges.length} judge(s)`);
 
-  // Run all 5 judges in parallel
-  log(`  [Judge/${scenario.name}] Sending to ${JUDGES.length} judges...`);
-  const results = await Promise.allSettled(
-    JUDGES.map(async (judge) => {
-      const result = await runJudgeWithRetry(judge, scenario, turns);
-      fs.writeFileSync(path.join(judgeDir, `${judge.role}-judge.json`), JSON.stringify(result, null, 2));
-      log(`  [Judge/${scenario.name}]   ${judge.name}: ${result.parseSuccess ? 'OK' : 'PARSE FAILED'} (${result.metrics.timeMs}ms)`);
-      return result;
-    }),
-  );
+  const settled = await Promise.allSettled(judges.map(async judge => {
+    const result = await runJudge(judge, plugin, scenario, turns);
+    if (!result.parsed) throw new Error(`${judge.name} returned invalid score JSON`);
+    fs.writeFileSync(
+      path.join(judgeDir, `${judge.role}.json`),
+      JSON.stringify(result.parsed, null, 2),
+    );
+    return result;
+  }));
 
-  const successfulJudges = results
-    .filter((r): r is PromiseFulfilledResult<JudgeResult> => r.status === 'fulfilled')
-    .map(r => r.value);
+  const judgeResults = settled
+    .filter((result): result is PromiseFulfilledResult<JudgeResult> => result.status === 'fulfilled')
+    .map(result => result.value);
+  const failedJudges = settled.flatMap((result, index) => result.status === 'rejected'
+    ? [{ judge: judges[index].name, error: result.reason instanceof Error
+      ? result.reason.message : String(result.reason) }]
+    : []);
+  if (!judgeResults.length) throw new Error('All judges failed');
 
-  const failedJudges = results
-    .map((r, i) => ({ result: r, judge: JUDGES[i] }))
-    .filter((x): x is { result: PromiseRejectedResult; judge: typeof JUDGES[0] } => x.result.status === 'rejected')
-    .map(x => ({ judge: x.judge.name, error: (x.result.reason as Error)?.message ?? 'Unknown' }));
-
-  if (failedJudges.length > 0) {
-    logWarn(`  [Judge/${scenario.name}] WARNING: ${failedJudges.length} judge(s) failed after retries`);
-    for (const fj of failedJudges) {
-      logError(`  [Judge/${scenario.name}]   FAILED: ${fj.judge} — ${fj.error}`);
-    }
-  }
-
-  if (successfulJudges.length === 0) {
-    logError(`  [Judge/${scenario.name}] CRITICAL: All 5 judges failed. Cannot synthesize.`);
-    // Return a degraded result so the pipeline doesn't crash
-    return {
-      judgeResults: [],
-      failedJudges,
-      synthesis: {
-        synthesis: null,
-        parseSuccess: false,
-        raw: '',
-        metrics: { timeMs: 0, inputTokens: 0, outputTokens: 0 },
-      },
+  let synthesis: SynthesisResult;
+  if (useSynthesizer) {
+    synthesis = await runSynthesis(scenario, judgeResults);
+    if (!synthesis.synthesis) throw new Error(`Synthesis failed: ${synthesis.raw}`);
+  } else {
+    const derived = singleJudgeSynthesis(judgeResults[0]);
+    synthesis = {
+      synthesis: derived,
+      raw: JSON.stringify(derived),
+      parseSuccess: true,
+      metrics: { inputTokens: 0, outputTokens: 0, timeMs: 0 },
     };
   }
-
-  // Opus synthesis
-  log(`  [Judge/${scenario.name}] Running synthesis with ${successfulJudges.length}/5 judges...`);
-  const synthesis = await runSynthesis(scenario, successfulJudges);
-  fs.writeFileSync(path.join(judgeDir, 'synthesis.json'), JSON.stringify(synthesis, null, 2));
-
-  if (synthesis.synthesis) log(`  [Judge/${scenario.name}] Synthesis: avg ${synthesis.synthesis.average_score}/10`);
-
-  return { judgeResults: successfulJudges, failedJudges, synthesis };
+  fs.writeFileSync(
+    path.join(judgeDir, 'synthesis.json'),
+    JSON.stringify(synthesis.synthesis, null, 2),
+  );
+  return { judgeResults, failedJudges, synthesis };
 }

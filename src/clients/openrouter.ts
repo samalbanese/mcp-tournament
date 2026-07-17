@@ -1,28 +1,16 @@
 // openrouter.ts — Non-streaming OpenRouter API wrapper for tournament.
-// Accepts Anthropic-style params, returns Anthropic-style responses.
+// Uses route-neutral request and response types.
 // Uses the openai npm package pointed at OpenRouter's API.
 
 import OpenAI from 'openai';
 import { API_TIMEOUT_MS } from '../config/constants.js';
-
-export interface AnthropicMessage {
-  role: 'user' | 'assistant';
-  content: string | Array<{ type: string; [key: string]: unknown }>;
-}
-
-export interface AnthropicResponse {
-  content: Array<{ type: string; text?: string; id?: string; name?: string; input?: unknown }>;
-  stop_reason: string;
-  usage: { input_tokens: number; output_tokens: number };
-  model: string;
-  _raw?: { id: string; created: number; system_fingerprint: string | undefined };
-}
-
-export interface ToolDefinition {
-  name: string;
-  description: string;
-  input_schema: Record<string, unknown>;
-}
+import type {
+  CreateMessageParams,
+  ModelClient,
+  ModelMessage,
+  ModelResponse,
+  ModelToolDefinition,
+} from './types.js';
 
 let _client: OpenAI | null = null;
 
@@ -46,13 +34,13 @@ function getClient(): OpenAI {
 }
 
 /**
- * Convert Anthropic tool definitions to OpenAI function format.
+ * Convert route-neutral tool definitions to OpenAI function format.
  */
 function convertTools(
-  anthropicTools: ToolDefinition[] | null | undefined
+  tools: ModelToolDefinition[] | null | undefined
 ): OpenAI.Chat.ChatCompletionTool[] | undefined {
-  if (!anthropicTools?.length) return undefined;
-  return anthropicTools.map(tool => ({
+  if (!tools?.length) return undefined;
+  return tools.map(tool => ({
     type: 'function' as const,
     function: {
       name: tool.name,
@@ -81,11 +69,11 @@ function stripUnsupportedSchemaFields(schema: unknown): unknown {
 }
 
 /**
- * Convert Anthropic messages (system + messages array) to OpenAI format.
+ * Convert route-neutral messages to OpenAI format.
  */
 function convertMessages(
   system: string | undefined,
-  messages: AnthropicMessage[]
+  messages: ModelMessage[]
 ): OpenAI.Chat.ChatCompletionMessageParam[] {
   const out: OpenAI.Chat.ChatCompletionMessageParam[] = [];
   if (system) out.push({ role: 'system', content: system });
@@ -144,12 +132,13 @@ function convertMessages(
 }
 
 /**
- * Convert OpenAI response to Anthropic message format.
+ * Convert an OpenAI-compatible response to the route-neutral format.
  */
-function convertResponse(openaiResponse: OpenAI.Chat.ChatCompletion): AnthropicResponse {
+function convertResponse(openaiResponse: OpenAI.Chat.ChatCompletion): ModelResponse {
   const choice = openaiResponse.choices?.[0];
   if (!choice) {
     return {
+      text: '',
       content: [{ type: 'text', text: '' }],
       stop_reason: 'end_turn',
       usage: { input_tokens: 0, output_tokens: 0 },
@@ -158,7 +147,7 @@ function convertResponse(openaiResponse: OpenAI.Chat.ChatCompletion): AnthropicR
   }
 
   const message = choice.message;
-  const content: AnthropicResponse['content'] = [];
+  const content: ModelResponse['content'] = [];
   if (message.content) content.push({ type: 'text', text: message.content });
   if (message.tool_calls) {
     for (const tc of message.tool_calls) {
@@ -184,6 +173,7 @@ function convertResponse(openaiResponse: OpenAI.Chat.ChatCompletion): AnthropicR
   else if (choice.finish_reason === 'length') stop_reason = 'max_tokens';
 
   return {
+    text: content.filter(block => block.type === 'text').map(block => block.text ?? '').join('\n'),
     content: content.length > 0 ? content : [{ type: 'text', text: '' }],
     stop_reason,
     usage: {
@@ -196,16 +186,9 @@ function convertResponse(openaiResponse: OpenAI.Chat.ChatCompletion): AnthropicR
 
 /**
  * Send a non-streaming message to any model via OpenRouter.
- * Accepts Anthropic-style params: { model, max_tokens, system, messages, tools }
- * Returns Anthropic-style response with content[], stop_reason, usage
+ * Accepts the shared ModelClient request and returns a shared ModelResponse.
  */
-export async function createMessage(params: {
-  model: string;
-  max_tokens: number;
-  system?: string;
-  messages: AnthropicMessage[];
-  tools?: ToolDefinition[] | null;
-}): Promise<AnthropicResponse> {
+export async function createMessage(params: CreateMessageParams): Promise<ModelResponse> {
   const { model, max_tokens, system, messages, tools } = params;
   const openaiMessages = convertMessages(system, messages);
   const openaiTools = convertTools(tools);
@@ -225,17 +208,13 @@ export async function createMessage(params: {
       signal: controller.signal,
     });
     const converted = convertResponse(response);
-    // Attach raw response metadata for logging
-    converted._raw = {
-      id: response.id,
-      created: response.created,
-      system_fingerprint: response.system_fingerprint,
-    };
     return converted;
   } finally {
     clearTimeout(timer);
   }
 }
+
+export const openRouterClient: ModelClient = { createMessage };
 
 interface OpenRouterModel {
   id: string;

@@ -1,7 +1,7 @@
 export interface CandidateModel {
   id: string;
   name: string;
-  tier: 'budget' | 'mid' | 'premium' | 'wildcards';
+  tier: 'budget' | 'mid' | 'premium' | 'wildcards' | 'unknown';
   notes: string;
 }
 
@@ -51,6 +51,15 @@ export function getModelById(id: string): CandidateModel | undefined {
   return CANDIDATE_MODELS.find(m => m.id === id);
 }
 
-export function getModelTier(id: string): CandidateModel['tier'] | 'unknown' {
+export function resolveCandidateModel(id: string): CandidateModel {
+  return getModelById(id) ?? {
+    id,
+    name: id.split('/').at(-1) ?? id,
+    tier: 'unknown',
+    notes: 'User-supplied OpenRouter model',
+  };
+}
+
+export function getModelTier(id: string): CandidateModel['tier'] {
   return CANDIDATE_MODELS.find(m => m.id === id)?.tier ?? 'unknown';
 }

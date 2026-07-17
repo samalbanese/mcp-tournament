@@ -1,6 +1,6 @@
 // API token limits
-export const MAX_TOKENS_DM = 4096;
-export const MAX_TOKENS_PLAYER = 512;
+export const MAX_TOKENS_CANDIDATE = 4096;
+export const MAX_TOKENS_PARTICIPANT = 512;
 export const MAX_TOKENS_JUDGE = 16384;
 export const MAX_TOKENS_SYNTHESIS = 4096;
 

@@ -6,6 +6,9 @@
  */
 
 import type { TournamentPlugin, TestCase, Turn, ToolDefinition } from './base.js';
+import { getModelClient } from '../clients/index.js';
+import { PARTICIPANT_AGENT_MODEL, PARTICIPANT_AGENT_ROUTE } from '../config/judges.js';
+import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
 
 // ── Test Character ──────────────────────────────────────
 
@@ -130,6 +133,32 @@ export const DND_SCENARIOS: TestCase[] = [
   },
 ];
 
+const DND_TOOLS: ToolDefinition[] = [{
+  name: 'roll_dice',
+  description: 'Roll dice using notation such as 1d20+5.',
+  parameters: {
+    type: 'object',
+    properties: {
+      notation: { type: 'string', description: 'Dice notation such as 2d6+3' },
+    },
+    required: ['notation'],
+  },
+  async handler(args): Promise<string> {
+    const notation = String(args.notation ?? '');
+    const match = notation.match(/^(\d+)d(\d+)([+-]\d+)?$/i);
+    if (!match) throw new Error('notation must look like 1d20+5');
+    const count = Number(match[1]);
+    const sides = Number(match[2]);
+    const modifier = Number(match[3] ?? 0);
+    if (count < 1 || count > 100 || sides < 2 || sides > 1000) {
+      throw new Error('dice count or sides out of range');
+    }
+    const rolls = Array.from({ length: count }, () => Math.floor(Math.random() * sides) + 1);
+    const total = rolls.reduce((sum, roll) => sum + roll, modifier);
+    return JSON.stringify({ notation, rolls, modifier, total });
+  },
+}];
+
 // ── Plugin Definition ───────────────────────────────────
 
 export const dndPlugin: TournamentPlugin = {
@@ -137,6 +166,7 @@ export const dndPlugin: TournamentPlugin = {
   description: 'D&D 5th Edition Dungeon Master evaluation. Tests AI models on combat, roleplay, puzzle design, and improvisation.',
   version: '1.0.0',
   scenarios: DND_SCENARIOS,
+  tools: DND_TOOLS,
 
   buildCandidatePrompt(scenario: TestCase): string {
     const char = scenario.context?.character as TestCharacter | undefined;
@@ -171,19 +201,40 @@ ${scenario.setupMessage}`;
   },
 
   async generateParticipantMessage(scenario: TestCase, turns: Turn[]): Promise<string> {
-    // Simple player agent: reacts to last DM message
     const lastDM = turns.filter(t => t.role === 'candidate').pop();
     if (!lastDM) return 'I cautiously look around, hand on my bow.';
 
-    // Generate a response based on context
-    const responses = [
-      'I draw my bow and take aim. "Show yourselves!"',
-      'I take a cautious step forward, scanning for traps.',
-      'I speak calmly. "I mean no harm. Let us talk."',
-      'I cast Hunters Mark on the nearest enemy and ready an attack.',
-      'I kneel down and examine the runes more carefully.',
-      'I look at the widow with concern. "Tell me everything. Start from the beginning."',
-    ];
-    return responses[Math.floor(turns.length / 2) % responses.length];
+    const fallback = FALLBACK_PLAYER_LINES[Math.floor(turns.length / 2) % FALLBACK_PLAYER_LINES.length];
+    if (!process.env.OPENROUTER_API_KEY && !process.env.OPENROUTER_DICE_ORACLE_API_KEY) {
+      return fallback;
+    }
+
+    try {
+      const transcript = turns
+        .map(t => `${t.role === 'candidate' ? 'DM' : 'PLAYER'}: ${t.content}`)
+        .join('\n\n');
+      const response = await getModelClient(PARTICIPANT_AGENT_ROUTE).createMessage({
+        model: PARTICIPANT_AGENT_MODEL,
+        system: `You are roleplaying ${TEST_CHARACTER.name}, a level ${TEST_CHARACTER.level} ${TEST_CHARACTER.race} ${TEST_CHARACTER.class}, as a player at a D&D table. Reply with what the PLAYER says: 1-3 sentences of action and/or dialogue, first person, in character. Declare intent — never narrate outcomes, roll dice, or speak for NPCs (that is the DM's job).`,
+        messages: [{
+          role: 'user',
+          content: `Scenario goal: ${scenario.goalCard}\n\nSession so far:\n${transcript}\n\nWhat do you do next?`,
+        }],
+        max_tokens: MAX_TOKENS_PARTICIPANT,
+      });
+      return response.text.trim() || fallback;
+    } catch {
+      return fallback;
+    }
   },
 };
+
+/** Used when no OpenRouter key is configured (offline tests) or the participant call fails. */
+const FALLBACK_PLAYER_LINES = [
+  'I draw my bow and take aim. "Show yourselves!"',
+  'I take a cautious step forward, scanning for traps.',
+  'I speak calmly. "I mean no harm. Let us talk."',
+  'I cast Hunters Mark on the nearest enemy and ready an attack.',
+  'I kneel down and examine the runes more carefully.',
+  'I look at the widow with concern. "Tell me everything. Start from the beginning."',
+];

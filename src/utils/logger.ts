@@ -19,8 +19,10 @@ function formatMsg(level: LogLevel, msg: string): string {
   return `[${new Date().toISOString().slice(11, 19)}] ${tag} ${msg}`;
 }
 
+// NOTE: all levels write to stderr — this server speaks JSON-RPC on stdout (MCP
+// stdio transport), so any stdout write would corrupt the protocol stream.
 export function log(msg: string): void {
-  console.log(formatMsg('info', msg));
+  console.error(formatMsg('info', msg));
 }
 
 export function logError(msg: string): void {
@@ -28,13 +30,13 @@ export function logError(msg: string): void {
 }
 
 export function logWarn(msg: string): void {
-  if (shouldLog('warn')) console.warn(formatMsg('warn', msg));
+  if (shouldLog('warn')) console.error(formatMsg('warn', msg));
 }
 
 export function logInfo(msg: string): void {
-  if (shouldLog('info')) console.log(formatMsg('info', msg));
+  if (shouldLog('info')) console.error(formatMsg('info', msg));
 }
 
 export function logDebug(msg: string): void {
-  if (shouldLog('debug')) console.log(formatMsg('debug', msg));
+  if (shouldLog('debug')) console.error(formatMsg('debug', msg));
 }

@@ -1,231 +1,163 @@
-// scenario-runner.ts — Orchestrates player agent + DM conversation for one model/scenario pair.
-// Ported from v1 backend/scripts/oracle-tournament/scenario-runner.mjs
-
-import { runConversation } from '../tools/conversation-loop.js';
-import { generateParticipantMessage } from '../agents/participant-agent.js';
-import { buildSystemPrompt } from '../prompts/system-prompt.js';
-import { MAX_TURNS, MIN_TURNS } from '../config/constants.js';
-import { modelSlug, scenarioSlug, type TestCase } from '../plugins/base.js';
-import type { CandidateModel } from '../config/models.js';
-import type { AnthropicMessage } from '../clients/openrouter.js';
-import { log } from '../utils/logger.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import { getModelClient } from '../clients/index.js';
+import type { ModelMessage, ModelToolDefinition } from '../clients/types.js';
+import { MAX_TOKENS_CANDIDATE, MAX_TOOL_ROUNDS } from '../config/constants.js';
+import type { CandidateModel } from '../config/models.js';
+import {
+  modelSlug,
+  scenarioSlug,
+  type TestCase,
+  type ToolCall,
+  type TournamentPlugin,
+  type Turn,
+} from '../plugins/base.js';
+import type { RunMetrics, ScenarioResult } from '../schemas/result.js';
+import { log } from '../utils/logger.js';
 
-export { modelSlug, scenarioSlug } from '../config/scenarios.js';
+export { modelSlug, scenarioSlug } from '../plugins/base.js';
+export type ScenarioRunResult = ScenarioResult;
 
-export interface ScenarioRunResult {
-  success: boolean;
-  turns: Array<{
-    turn: number;
-    type: 'setup' | 'player_turn';
-    playerMessage: string;
-    playerReflection?: string;
-    dmResponse: string;
-    dmMetrics: {
-      ttfbMs: number | null;
-      totalTimeMs: number;
-      inputTokens: number;
-      outputTokens: number;
-      toolRounds: number;
-      toolCallCount: number;
-      narrativeLength: number;
-    };
-    playerMetrics?: {
-      inputTokens: number;
-      outputTokens: number;
-      timeMs: number;
-    };
-    toolCalls: Array<{
-      name: string;
-      input: Record<string, unknown>;
-      result: string;
-      id: string;
-      validation: { valid: boolean; errors: string[] };
-      round: number;
-    }>;
-  }>;
-  metrics: {
-    dmInputTokens: number;
-    dmOutputTokens: number;
-    playerInputTokens: number;
-    playerOutputTokens: number;
-    totalTimeMs: number;
-    toolCallCount: number;
-    toolRounds: number;
-  };
-  toolCalls?: Array<{
-    name: string;
-    input: Record<string, unknown>;
-    result: string;
-    id: string;
-    validation: { valid: boolean; errors: string[] };
-    round: number;
-  }>;
-  error?: string;
+function clientTools(plugin: TournamentPlugin): ModelToolDefinition[] | undefined {
+  return plugin.tools?.map(tool => ({
+    name: tool.name,
+    description: tool.description,
+    input_schema: tool.parameters,
+  }));
 }
 
-/**
- * Run a single model through a single scenario.
- *
- * @param model - CandidateModel from config
- * @param scenario - Scenario object from config
- * @param outputDir - Path to save results
- * @returns ScenarioRunResult with success, turns, metrics, and optional error
- */
+async function runTool(
+  plugin: TournamentPlugin,
+  name: string,
+  input: unknown,
+): Promise<ToolCall> {
+  const args = input && typeof input === 'object' && !Array.isArray(input)
+    ? input as Record<string, unknown> : {};
+  const tool = plugin.tools?.find(candidate => candidate.name === name);
+  if (!tool) {
+    return { name, arguments: args, result: `Unknown tool: ${name}`, valid: false };
+  }
+  try {
+    return { name, arguments: args, result: await tool.handler(args), valid: true };
+  } catch (error) {
+    return {
+      name,
+      arguments: args,
+      result: error instanceof Error ? error.message : String(error),
+      valid: false,
+    };
+  }
+}
+
 export async function runScenario(
   model: CandidateModel,
-  scenario: Scenario,
+  scenario: TestCase,
+  plugin: TournamentPlugin,
   outputDir: string,
 ): Promise<ScenarioRunResult> {
-  const slug = modelSlug(model.id);
-  const scSlug = scenarioSlug(scenario);
-  const scenarioDir = path.join(outputDir, 'candidates', slug, scSlug);
+  const scenarioDir = path.join(
+    outputDir,
+    'candidates',
+    modelSlug(model.id),
+    scenarioSlug(scenario),
+  );
   fs.mkdirSync(scenarioDir, { recursive: true });
 
-  const systemPrompt = buildSystemPrompt(scenario);
-
-  log(`  [${model.name}/${scenario.name}] Starting...`);
-
-  // Save the request config
-  fs.writeFileSync(
-    path.join(scenarioDir, 'request.json'),
-    JSON.stringify(
-      {
-        model: model.id,
-        scenario: scenario.id,
-        systemPromptLength: systemPrompt.length,
-        timestamp: new Date().toISOString(),
-      },
-      null,
-      2,
-    ),
-  );
-
-  const turns: ScenarioRunResult['turns'] = [];
-  const allToolCalls: ScenarioRunResult['toolCalls'] = [];
-  let conversationHistory: AnthropicMessage[] = [];
-  const playerConversation: Array<{ role: 'dm' | 'player'; text: string }> = [];
-  const totalMetrics: ScenarioRunResult['metrics'] = {
-    dmInputTokens: 0,
-    dmOutputTokens: 0,
-    playerInputTokens: 0,
-    playerOutputTokens: 0,
+  const turns: Turn[] = [{
+    turn: 0,
+    role: 'participant',
+    content: scenario.setupMessage,
+  }];
+  const metrics: RunMetrics = {
+    candidateInputTokens: 0,
+    candidateOutputTokens: 0,
+    participantInputTokens: 0,
+    participantOutputTokens: 0,
     totalTimeMs: 0,
     toolCallCount: 0,
-    toolRounds: 0,
   };
+  const messages: ModelMessage[] = [{ role: 'user', content: scenario.setupMessage }];
+  const client = getModelClient('openrouter');
+  const system = plugin.buildCandidatePrompt(scenario);
+  const tools = clientTools(plugin);
 
   try {
-    // Turn 0: Setup message is the first "player" message
-    const setupMessage = scenario.setupMessage;
+    log(`  [${model.name}/${scenario.name}] Starting`);
+    for (let turnNumber = 1; turnNumber <= scenario.maxTurns; turnNumber++) {
+      const startedAt = Date.now();
+      const turnToolCalls: ToolCall[] = [];
+      const textParts: string[] = [];
+      let inputTokens = 0;
+      let outputTokens = 0;
 
-    const dmResult = await sendDMMessage(model.id, systemPrompt, conversationHistory, setupMessage);
-    conversationHistory = dmResult.conversationHistory;
-    allToolCalls!.push(...dmResult.toolCalls);
+      for (let toolRound = 0; toolRound <= MAX_TOOL_ROUNDS; toolRound++) {
+        const response = await client.createMessage({
+          model: model.id,
+          system,
+          messages,
+          max_tokens: MAX_TOKENS_CANDIDATE,
+          tools,
+        });
+        inputTokens += response.usage.input_tokens;
+        outputTokens += response.usage.output_tokens;
+        if (response.text) textParts.push(response.text);
 
-    totalMetrics.dmInputTokens += dmResult.metrics.inputTokens;
-    totalMetrics.dmOutputTokens += dmResult.metrics.outputTokens;
-    totalMetrics.toolCallCount += dmResult.metrics.toolCallCount;
-    totalMetrics.toolRounds += dmResult.metrics.toolRounds;
-    totalMetrics.totalTimeMs += dmResult.metrics.totalTimeMs;
+        const requestedTools = response.content.filter(block => block.type === 'tool_use');
+        if (!requestedTools.length) {
+          messages.push({ role: 'assistant', content: response.text });
+          break;
+        }
+        if (toolRound === MAX_TOOL_ROUNDS) {
+          throw new Error(`Candidate exceeded ${MAX_TOOL_ROUNDS} tool rounds`);
+        }
 
-    turns.push({
-      turn: 0,
-      type: 'setup',
-      playerMessage: setupMessage,
-      dmResponse: dmResult.narrativeText,
-      dmMetrics: dmResult.metrics,
-      toolCalls: dmResult.toolCalls,
-    });
+        messages.push({ role: 'assistant', content: response.content });
+        const results = await Promise.all(requestedTools.map(block =>
+          runTool(plugin, String(block.name), block.input)));
+        turnToolCalls.push(...results);
+        messages.push({
+          role: 'user',
+          content: requestedTools.map((block, index) => ({
+            type: 'tool_result',
+            tool_use_id: block.id,
+            content: results[index].result,
+          })),
+        });
+      }
 
-    playerConversation.push({ role: 'dm', text: dmResult.narrativeText });
-    log(`  [${model.name}/${scenario.name}] Setup done (${dmResult.metrics.totalTimeMs}ms, ${dmResult.metrics.toolCallCount} tools)`);
+      const totalTimeMs = Date.now() - startedAt;
+      const candidateTurn: Turn = {
+        turn: turnNumber,
+        role: 'candidate',
+        content: textParts.join('\n').trim(),
+        ...(turnToolCalls.length ? { toolCalls: turnToolCalls } : {}),
+        metrics: { ttfbMs: null, totalTimeMs, inputTokens, outputTokens },
+      };
+      turns.push(candidateTurn);
+      metrics.candidateInputTokens += inputTokens;
+      metrics.candidateOutputTokens += outputTokens;
+      metrics.totalTimeMs += totalTimeMs;
+      metrics.toolCallCount += turnToolCalls.length;
 
-    // Player agent turns
-    for (let turn = 1; turn <= MAX_TURNS; turn++) {
-      // Player agent generates a message
-      const playerResult = await generatePlayerMessage(
-        scenario.goalCard,
-        playerConversation,
-        turn,
-        MAX_TURNS,
-      );
-
-      totalMetrics.playerInputTokens += playerResult.metrics.inputTokens;
-      totalMetrics.playerOutputTokens += playerResult.metrics.outputTokens;
-
-      log(`  [${model.name}/${scenario.name}] Turn ${turn}: "${playerResult.message.substring(0, 60)}..."`);
-
-      // Send player message to DM
-      const dmTurnResult = await sendDMMessage(
-        model.id,
-        systemPrompt,
-        conversationHistory,
-        playerResult.message,
-      );
-      conversationHistory = dmTurnResult.conversationHistory;
-      allToolCalls!.push(...dmTurnResult.toolCalls);
-
-      totalMetrics.dmInputTokens += dmTurnResult.metrics.inputTokens;
-      totalMetrics.dmOutputTokens += dmTurnResult.metrics.outputTokens;
-      totalMetrics.toolCallCount += dmTurnResult.metrics.toolCallCount;
-      totalMetrics.toolRounds += dmTurnResult.metrics.toolRounds;
-      totalMetrics.totalTimeMs += dmTurnResult.metrics.totalTimeMs + playerResult.metrics.timeMs;
-
-      turns.push({
-        turn,
-        type: 'player_turn',
-        playerMessage: playerResult.message,
-        playerReflection: playerResult.reflection,
-        dmResponse: dmTurnResult.narrativeText,
-        dmMetrics: dmTurnResult.metrics,
-        playerMetrics: playerResult.metrics,
-        toolCalls: dmTurnResult.toolCalls,
-      });
-
-      playerConversation.push({ role: 'player', text: playerResult.message });
-      playerConversation.push({ role: 'dm', text: dmTurnResult.narrativeText });
-
-      log(`  [${model.name}/${scenario.name}]   DM responded (${dmTurnResult.metrics.totalTimeMs}ms, ${dmTurnResult.metrics.toolCallCount} tools)`);
-
-      // Check if player agent wants to end early
-      if (playerResult.shouldEnd && turn >= MIN_TURNS) {
-        log(`  [${model.name}/${scenario.name}] Player agent ending after ${turn} turns (goals complete)`);
-        break;
+      if (turnNumber < scenario.maxTurns) {
+        const participantMessage = await plugin.generateParticipantMessage(
+          scenario,
+          turns,
+          scenario.context,
+        );
+        turns.push({ turn: turnNumber, role: 'participant', content: participantMessage });
+        messages.push({ role: 'user', content: participantMessage });
       }
     }
 
-    // Save all results
     fs.writeFileSync(path.join(scenarioDir, 'turns.json'), JSON.stringify(turns, null, 2));
-    fs.writeFileSync(path.join(scenarioDir, 'tool-calls.json'), JSON.stringify(allToolCalls, null, 2));
-    fs.writeFileSync(path.join(scenarioDir, 'metrics.json'), JSON.stringify(totalMetrics, null, 2));
-
-    // Human-readable response text
-    let responseText = `# ${model.name} - ${scenario.name}\n\n`;
-    for (const t of turns) {
-      responseText += `## ${t.type === 'setup' ? 'Setup' : `Turn ${t.turn}`}\n\n`;
-      responseText += `**Player:** ${t.playerMessage}\n\n`;
-      responseText += `**DM:** ${t.dmResponse}\n\n`;
-      if (t.toolCalls?.length) {
-        responseText += `*Tools: ${t.toolCalls.map(tc => tc.name).join(', ')}*\n\n`;
-      }
-      responseText += '---\n\n';
-    }
-    fs.writeFileSync(path.join(scenarioDir, 'response-text.md'), responseText);
-
-    log(`  [${model.name}/${scenario.name}] Complete: ${turns.length} turns, ${allToolCalls!.length} tool calls, ${totalMetrics.totalTimeMs}ms total`);
-
-    return { success: true, turns, metrics: totalMetrics, toolCalls: allToolCalls };
-
+    fs.writeFileSync(path.join(scenarioDir, 'metrics.json'), JSON.stringify(metrics, null, 2));
+    return { success: true, turns, metrics };
   } catch (error) {
-    const errorData = {
-      error: (error as Error).message,
-      stack: (error as Error).stack,
-      timestamp: new Date().toISOString(),
-    };
-    fs.writeFileSync(path.join(scenarioDir, 'error.json'), JSON.stringify(errorData, null, 2));
-    log(`  [${model.name}/${scenario.name}] ERROR: ${(error as Error).message}`);
-    return { success: false, turns, metrics: totalMetrics, error: (error as Error).message };
+    const message = error instanceof Error ? error.message : String(error);
+    fs.writeFileSync(path.join(scenarioDir, 'turns.json'), JSON.stringify(turns, null, 2));
+    fs.writeFileSync(path.join(scenarioDir, 'metrics.json'), JSON.stringify(metrics, null, 2));
+    fs.writeFileSync(path.join(scenarioDir, 'error.json'), JSON.stringify({ error: message }, null, 2));
+    return { success: false, turns, metrics, error: message };
   }
 }

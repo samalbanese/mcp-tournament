@@ -6,8 +6,6 @@
  * for a specific evaluation domain (D&D, coding, customer support, etc.).
  */
 
-import type { z } from 'zod';
-
 /** A single test case the candidate model must handle. */
 export interface TestCase {
   id: string;
@@ -40,22 +38,17 @@ export interface GradingCriterion {
 /** A message in the conversation between candidate and test participant. */
 export interface Turn {
   turn: number;
-  role: 'candidate' | 'participant' | 'tool';
+  role: 'candidate' | 'participant';
   content: string;
   toolCalls?: ToolCall[];
-  toolResults?: ToolResult[];
   metrics?: TurnMetrics;
 }
 
 export interface ToolCall {
   name: string;
   arguments: Record<string, unknown>;
-}
-
-export interface ToolResult {
-  toolCallId: string;
-  content: string;
-  isError?: boolean;
+  result: string;
+  valid: boolean;
 }
 
 export interface TurnMetrics {
@@ -109,8 +102,8 @@ export interface TournamentPlugin {
   
   /**
    * Generate the next participant message.
-   * This is what the "player" says in response to the candidate.
-   * For D&D: the player describes their character's action.
+   * This is what the simulated counterpart says in response to the candidate.
+   * For D&D, the participant describes a character action.
    * For coding: the test system provides the next requirement.
    * For customer support: the simulated customer sends a message.
    */
@@ -144,7 +137,7 @@ export interface ScoringDimension {
 /**
  * Built-in plugins that ship with the package.
  */
-export const BUILTIN_PLUGINS = ['dnd', 'coding', 'customer-support'] as const;
+export const BUILTIN_PLUGINS = ['dnd', 'coding'] as const;
 export type BuiltinPlugin = typeof BUILTIN_PLUGINS[number];
 
 // ── Slug helpers (ported from oracle-tournament) ────────
@@ -158,26 +151,3 @@ export function modelSlug(model: string): string {
 export function scenarioSlug(scenario: TestCase | { name: string }): string {
   return scenario.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
 }
-
-// ── Runtime scenario registry ───────────────────────────
-
-let _scenarios: TestCase[] = [];
-
-export function setScenarios(scenarios: TestCase[]): void {
-  _scenarios = scenarios;
-}
-
-export function getScenarios(): TestCase[] {
-  return _scenarios;
-}
-
-export const SCENARIOS: TestCase[] = new Proxy([] as TestCase[], {
-  get(_target, prop) {
-    if (prop === 'length') return _scenarios.length;
-    if (typeof prop === 'string' && !isNaN(Number(prop))) return _scenarios[Number(prop)];
-    return (_scenarios as any)[prop];
-  },
-  *[Symbol.iterator]() {
-    yield* _scenarios;
-  },
-});

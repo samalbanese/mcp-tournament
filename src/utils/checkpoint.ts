@@ -21,7 +21,7 @@ export function saveCheckpoint(outputDir: string, checkpoint: Checkpoint): void 
 export function isScenarioComplete(
   checkpoint: Checkpoint,
   modelId: string,
-  scenarioId: number,
+  scenarioId: string,
 ): boolean {
   return checkpoint.completedScenarios[`${modelSlug(modelId)}:${scenarioId}`] === true;
 }
@@ -29,7 +29,7 @@ export function isScenarioComplete(
 export function markScenarioComplete(
   checkpoint: Checkpoint,
   modelId: string,
-  scenarioId: number,
+  scenarioId: string,
 ): void {
   checkpoint.completedScenarios[`${modelSlug(modelId)}:${scenarioId}`] = true;
 }

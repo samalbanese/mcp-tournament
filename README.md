@@ -78,12 +78,28 @@ Evaluation is domain-agnostic. Plugins define what "good" means for your use cas
 
 Single evaluators miss things. A "Rules" judge catches logic errors. A "Creative" judge catches boring output. A "Holistic" judge catches "would I keep using this?" The synthesizer catches outlier scores and resolves disagreements.
 
+## Model routing
+
+Every role is independently model-selectable — the candidate under test, each judge, and
+the synthesizer. You choose which model does which part of judging.
+
+**Default: OpenRouter for everything.** Candidates and the full judge panel route through a
+single OpenRouter key, so you can point cheap models (e.g. Kimi) at the judges and keep runs
+inexpensive. One key, any model, no paid first-party API required.
+
+**Optional: Claude Agent SDK for `$0`-marginal Anthropic usage.** Any Claude role can instead
+be routed through the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk),
+which authenticates against your local `claude /login` session — so Claude judging/testing
+draws on a Max/Pro **subscription** rather than the metered API. This was the original design
+intent (see [oracle-tournament](https://github.com/samalbanese/oracle-tournament)); the
+routing layer takes a pluggable client per role, so OpenRouter and the Agent SDK can be mixed.
+
 ## Environment Variables
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `ANTHROPIC_API_KEY` | Yes | Claude models (judges + synthesizer) |
-| `OPENROUTER_API_KEY` | Yes | Non-Claude candidate models |
+| `OPENROUTER_API_KEY` | Yes | All models (candidates + judges + synthesizer) by default |
+| `ANTHROPIC_API_KEY` | Optional | Only if a role is routed to the paid Anthropic API instead of OpenRouter or the subscription-based Agent SDK |
 
 ## License
 

@@ -1,8 +1,7 @@
 /**
- * Generalized participant agent — replaces oracle-tournament's player-agent.ts.
+ * Generic participant-message adapter.
  * 
- * Instead of a D&D-specific player, this is a generic "test participant" that
- * generates messages based on the active plugin's generateParticipantMessage method.
+ * Generates messages through the active plugin's participant implementation.
  */
 
 import type { TournamentPlugin, TestCase, Turn } from '../plugins/base.js';

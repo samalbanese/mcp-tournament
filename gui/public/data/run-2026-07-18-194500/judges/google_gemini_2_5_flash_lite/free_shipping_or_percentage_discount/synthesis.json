@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "Creative Judge: scored 7 vs median 8 - The judge found the test plan feasible but lacking specific platform implementation steps, while other judges emphasized the concrete 30-day plan with actionable tracking"
+      ]
+    },
+    "specificity": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 6 vs median 8 - The judge felt the recommendation lacked quantitative profit delta calculations between the two options, while others praised the exact $75 threshold and clear formulas"
+      ]
+    },
+    "risk_awareness": {
+      "score": 7,
+      "confidence": "contested",
+      "outliers": [
+        "Creative Judge: scored 5 vs median 7 - The judge criticized failure to identify experiment-design risks like seasonality, while Rules Judge and Holistic Judge acknowledged margin risks but noted limited experiment risk analysis"
+      ]
+    }
+  },
+  "average_score": 7,
+  "rule_errors_confirmed": [],
+  "assessment": "The recommendation for free shipping with a $75 threshold is strong on practicality and specificity, offering a clear 30-day test plan with concrete metrics and decision rules. Judges consistently praised the use of provided economics to justify the threshold and the actionable tracking methodology. However, risk awareness showed notable disagreement, with concerns about experimental design limitations like confounding variables and seasonality that weren't fully addressed in the pre/post comparison approach.",
+  "judge_agreement": "Judges strongly agreed on practicality (scores 7-8) and specificity (scores 6-9), praising the concrete implementation plan and clear metrics. They disagreed significantly on risk awareness (scores 5-7), with the Creative Judge being more critical of experiment design flaws while others acknowledged margin risks but wanted deeper analysis of confounding variables."
+}

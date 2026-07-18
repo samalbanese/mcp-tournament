@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The plan is highly feasible for a small operator: it provides a clear 30-day timeline, specifies A/B testing methodology, and offers concrete implementation steps using common tools.",
+      "quotes": [
+        "\"Run the test for a full business cycle (e.g., 30 days)\"",
+        "\"Use your website platform's native A/B testing tool or a dedicated tool\"",
+        "\"Step 1: Gather Data for Both Groups... Step 2: Calculate the Key Performance Indicators... Step 3: Make the Decision\""
+      ],
+      "improvement": "Provide guidance on minimum visitor count needed for reliable results, or suggest a simpler alternative if A/B testing tools are unavailable."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "Extremely specific: calculates exact threshold ($100) using provided AOV, defines precise offer wording, identifies Profit per Visitor as primary metric with exact formula, and gives clear decision rule.",
+      "quotes": [
+        "\"setting it at $100\"",
+        "\"Offer: 'Free Shipping on Orders Over $100'\"",
+        "\"Calculate it as: (Conversion Rate) x (Average Order Value) x (Gross Margin %) - (Conversion Rate) x (Average Shipping Cost)\"",
+        "\"Compare Gross Profit per Visitor between the Control and Variant\""
+      ],
+      "improvement": "Clarify handling of orders under $100 in the variant group: specify whether they pay shipping or get free shipping (currently ambiguous)."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "Identifies key risks: margin erosion from discount alternative, shipping cost increase, and need for statistical significance. Explains how to control through margin monitoring and AOV lift.",
+      "quotes": [
+        "\"With a 42% gross margin, a 15% discount eats deeply into your profit\"",
+        "\"Shipping Cost as a % of Revenue: This will increase for the variant group\"",
+        "\"Ensure your test reaches statistical significance (95% confidence level is standard)\""
+      ],
+      "improvement": "Address experiment risks more comprehensively: potential for customers gaming the threshold (buying then returning), seasonality affecting 30-day results, and risk of AOV lift being insufficient to offset shipping costs."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A thorough, highly specific, and actionable recommendation that directly addresses the business question with a feasible test plan. Margin risks are acknowledged but experiment design risks could be more fully explored."
+}

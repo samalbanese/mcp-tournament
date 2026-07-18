@@ -1,0 +1,27 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 7,
+      "confidence": "high",
+      "outliers": []
+    },
+    "specificity": {
+      "score": 6,
+      "confidence": "medium",
+      "outliers": [
+        "google/gemini-2.5-flash-lite: scored 7 vs median 6 - Provided more specific tracking metrics and profit calculation example, though other judges noted decision rule vagueness"
+      ]
+    },
+    "risk_awareness": {
+      "score": 5,
+      "confidence": "medium",
+      "outliers": [
+        "google/gemini-2.5-flash-lite: scored 6 vs median 5 - Acknowledged margin compensation from AOV lift more positively, though still noted design risk gaps"
+      ]
+    }
+  },
+  "average_score": 6,
+  "rule_errors_confirmed": [],
+  "assessment": "The response provides a structured, practical test plan for implementing a $75 free shipping threshold with a 30-day baseline and test period. It demonstrates clear feasibility for a small operator using standard e-commerce tools. However, it lacks a mathematically precise decision rule for evaluating success and has superficial treatment of experiment design risks. The profit modeling contains conceptual flaws regarding shipping cost allocation.",
+  "judge_agreement": "Judges unanimously agreed on the recommendation's practicality (median 7) and its specific threshold and timeline. They disagreed on specificity (scores 6-7) regarding the adequacy of profit calculations and decision rules. Risk awareness showed variation (5-6) with consistent criticism of insufficient experiment design controls and external factor mitigation."
+}

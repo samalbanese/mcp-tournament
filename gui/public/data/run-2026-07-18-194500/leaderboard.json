@@ -1,0 +1,108 @@
+[
+  {
+    "modelId": "deepseek/deepseek-v3.2",
+    "modelName": "DeepSeek V3.2",
+    "tier": "budget",
+    "overallAverage": 8,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 8,
+        "scores": {
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": []
+          },
+          "specificity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": []
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "google/gemini-2.5-flash-lite",
+    "modelName": "Gemini 2.5 Flash Lite",
+    "tier": "budget",
+    "overallAverage": 7,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 7,
+        "scores": {
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "Creative Judge: scored 7 vs median 8 - The judge found the test plan feasible but lacking specific platform implementation steps, while other judges emphasized the concrete 30-day plan with actionable tracking"
+            ]
+          },
+          "specificity": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 6 vs median 8 - The judge felt the recommendation lacked quantitative profit delta calculations between the two options, while others praised the exact $75 threshold and clear formulas"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "Creative Judge: scored 5 vs median 7 - The judge criticized failure to identify experiment-design risks like seasonality, while Rules Judge and Holistic Judge acknowledged margin risks but noted limited experiment risk analysis"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "meta-llama/llama-4-scout",
+    "modelName": "Llama 4 Scout",
+    "tier": "budget",
+    "overallAverage": 6,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 6,
+        "scores": {
+          "practicality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          },
+          "specificity": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-2.5-flash-lite: scored 7 vs median 6 - Provided more specific tracking metrics and profit calculation example, though other judges noted decision rule vagueness"
+            ]
+          },
+          "risk_awareness": {
+            "score": 5,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-2.5-flash-lite: scored 6 vs median 5 - Acknowledged margin compensation from AOV lift more positively, though still noted design risk gaps"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  }
+]

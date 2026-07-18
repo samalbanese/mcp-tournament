@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The recommendation provides a clear 30-day test plan using standard e-commerce practices and tools accessible to a small operator. It outlines specific steps for implementation and data gathering.",
+      "quotes": [
+        "A/B test this change against your current baseline (charging $9 flat-rate shipping). Run the test for a full business cycle (e.g., 30 days).",
+        "Use your website platform's native A/B testing tool or a dedicated tool (like Optimizely, VWO) to split traffic.",
+        "For Control (A) and Variant (B), track: Visitors, Orders, Total Revenue, Total Gross Profit (Revenue x 0.42), Total Shipping Costs Paid by You."
+      ],
+      "improvement": "While the plan is practical, it could explicitly mention the need for sufficient traffic to reach statistical significance within 30 days, a common concern for small operators."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "The answer provides a very specific offer ('Free Shipping on Orders Over $100'), a clear threshold ($100), a precise primary metric ('Profit per Visitor') with a formula, supporting metrics, and a direct decision rule based on the primary metric.",
+      "quotes": [
+        "specifically setting it at $100.",
+        "Offer: 'Free Shipping on Orders Over $100'",
+        "Primary Metric: Profit per Visitor",
+        "Compare Gross Profit per Visitor between the Control and Variant.",
+        "If Variant's Profit per Visitor is higher: The threshold is a winner. Implement it site-wide.",
+        "If it's lower or flat: The threshold did not work profitably."
+      ],
+      "improvement": "The calculation for 'Profit per Visitor' could be slightly refined to explicitly include the cost of shipping only on the variant that offers free shipping, rather than using 'Average Shipping Cost' which might imply it applies to both."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response correctly identifies potential risks related to margin erosion (comparing it to the sitewide discount) and customer behavior (tackling shipping abandonment). It also mentions the need for statistical significance.",
+      "quotes": [
+        "With a 42% gross margin, a 15% discount eats deeply into your profit (it would reduce your margin to 27% on the product portion, before shipping).",
+        "This directly tackles your stated problem: 38% of carts abandoned *after seeing shipping costs*.",
+        "Crucial Check: Ensure your test reaches statistical significance (95% confidence level is standard) on the *Profit per Visitor* metric before concluding."
+      ],
+      "improvement": "The response could more explicitly detail specific risks like 'cannibalization' (customers who would have bought anyway now get free shipping, reducing profit) or 'gaming the threshold' (customers adding low-value items to reach the threshold artificially). It also could better explain how to control for external factors that might influence sales during the 30-day test period."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate provides an excellent, data-driven recommendation with a well-defined test plan. It directly addresses the user's constraints and goals, focusing on profit rather than just revenue. The specificity in the offer, metrics, and decision-making framework is particularly strong. Practicality is also high, with clear implementation steps. Risk awareness is present but could be more detailed regarding specific experimental risks and controls."
+}

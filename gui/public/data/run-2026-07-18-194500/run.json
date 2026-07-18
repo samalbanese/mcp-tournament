@@ -1,0 +1,48 @@
+{
+  "runId": "run-2026-07-18-194500",
+  "plugin": "business-strategy",
+  "createdAt": "2026-07-18T19:45:00.452Z",
+  "candidates": [
+    {
+      "id": "deepseek/deepseek-v3.2",
+      "name": "DeepSeek V3.2",
+      "tier": "budget"
+    },
+    {
+      "id": "google/gemini-2.5-flash-lite",
+      "name": "Gemini 2.5 Flash Lite",
+      "tier": "budget"
+    },
+    {
+      "id": "meta-llama/llama-4-scout",
+      "name": "Llama 4 Scout",
+      "tier": "budget"
+    }
+  ],
+  "judges": [
+    {
+      "role": "rules",
+      "name": "Rules Judge",
+      "model": "deepseek/deepseek-v3.2"
+    },
+    {
+      "role": "creative",
+      "name": "Creative Judge",
+      "model": "qwen/qwen3.5-flash-02-23"
+    },
+    {
+      "role": "holistic",
+      "name": "Holistic Judge",
+      "model": "google/gemini-2.5-flash-lite"
+    }
+  ],
+  "synthesizer": {
+    "model": "deepseek/deepseek-v3.2"
+  },
+  "scenarios": [
+    {
+      "id": "pricing-pivot",
+      "name": "Free Shipping or Percentage Discount"
+    }
+  ]
+}

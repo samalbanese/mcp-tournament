@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The 30-day test plan is concrete, actionable, and designed for a small operator with minimal complexity. It clearly outlines what to track, how to calculate profit, and provides a specific decision rule based on comparing 30-day periods.",
+      "quotes": [
+        "track these key metrics daily or weekly over the 30-day test period",
+        "compare the calculated Net Profit from your free shipping offer against a baseline Net Profit figure... from the 30 days immediately preceding the test",
+        "If the Net Profit during the 30-day free shipping test is higher than the Net Profit from the 30 days prior, then the free shipping offer is proving to be a profitable change"
+      ],
+      "improvement": "The plan could be more specific about implementation details for a small operator (e.g., 'use your e-commerce platform's built-in promo code or free shipping rule feature, and track metrics in a simple spreadsheet')."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "Answer is highly specific: it proposes an exact offer (free shipping), an exact threshold ($75), uses the supplied economics to explain the threshold, provides an exact formula for measuring profit, and gives a precise decision rule.",
+      "quotes": [
+        "**Offer: Free Shipping on orders above a $75 threshold.**",
+        "Your current AOV is $72. A $75 threshold is a modest increase",
+        "At $75, you are covering your $9 average shipping cost and still leaving a small buffer for profit",
+        "Net Profit (during test) = (Total Revenue - COGS) - Total Shipping Cost Incurred"
+      ],
+      "improvement": "While the decision rule is clear, it could specify a minimum required profit increase percentage or absolute value to account for normal business fluctuations."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "Identifies core margin risk (absorbing shipping cost) and explains why free shipping might manage it better than a discount. Recognizes the risk of AOV not increasing sufficiently. However, the experiment design risk analysis is limited to a simple pre/post comparison without addressing confounding variables or seasonality.",
+      "quotes": [
+        "While you're absorbing the shipping cost, you're doing so on a potentially larger order. A sitewide discount reduces your margin on *every* item sold, which can be more detrimental if AOV doesn't increase sufficiently.",
+        "Even if revenue increases, if the cost of offering free shipping outweighs the gains, the test would not be considered successful for profit."
+      ],
+      "improvement": "Should explicitly address risks like: 1) Customers gaming the system (ordering exactly $75), 2) Inadequate pre/post comparison due to external factors (holidays, marketing changes), 3) Not segmenting customers who would have bought anyway, and propose controls (e.g., using a control group if possible, or analyzing profit per customer)."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, specific, and practical recommendation with a clear test plan. Excellent use of the provided economics to justify the exact threshold. Risk awareness is good but could be deepened on experiment design risks."
+}

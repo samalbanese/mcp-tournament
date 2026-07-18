@@ -10,7 +10,7 @@ Build a custom LLM benchmark in a form, run it from a local GUI, MCP client, or 
 
 ![Demo — build a bench, run it, inspect judge disagreements](docs/images/demo.gif)
 
-**[▶ Live demo](https://mcp-tournament.pages.dev/#/replay/run-2026-07-18-171738)** — watch a real `business-strategy` run assemble itself, no key needed.
+**[▶ Live demo](https://mcp-tournament.pages.dev/#/replay/run-2026-07-18-194500)** — watch a real `business-strategy` run assemble itself, no key needed.
 
 Why this is interesting:
 

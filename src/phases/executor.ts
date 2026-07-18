@@ -138,6 +138,7 @@ export async function runScenario(
       metrics.candidateOutputTokens += outputTokens;
       metrics.totalTimeMs += totalTimeMs;
       metrics.toolCallCount += turnToolCalls.length;
+      log(`  [${model.name}/${scenario.name}] Turn ${turnNumber}/${scenario.maxTurns} (${totalTimeMs}ms, ${turnToolCalls.length} tool call(s))`);
 
       if (turnNumber < scenario.maxTurns) {
         const participantMessage = await plugin.generateParticipantMessage(

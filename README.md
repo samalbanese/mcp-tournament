@@ -1,105 +1,139 @@
 # mcp-tournament
 
-> AI model evaluation as an MCP server. Multi-judge panels, structured scoring, pluggable domains.
+> LLM evaluation as an MCP server. Multi-judge panels, arbiter synthesis, pluggable
+> domains, and a static results viewer — all routed through OpenRouter for pennies.
 
-## What It Does
+Submit any model to a structured tournament: it plays through domain scenarios, a
+panel of specialist AI judges scores it independently, an arbiter resolves their
+disagreements, and the results land on a ranked leaderboard — from your AI
+assistant (MCP) or the CLI.
 
-Submit any language model to a structured evaluation with a panel of AI judges. Get ranked results with confidence scores. All from your AI assistant.
+![Leaderboard view](docs/images/leaderboard-1440.png)
 
-```bash
-npx mcp-tournament
+## Why multi-judge?
+
+Single evaluators miss things. A Rules judge catches mechanical errors; a Creative
+judge catches boring output; a Holistic judge catches "would I keep using this?"
+The synthesizer never scores independently — it arbitrates, flags outlier judges,
+and records **why** they disagreed. Judge disagreements are first-class data,
+rendered in the viewer:
+
+![Model scorecard with judge disagreements](docs/images/scorecard-1440.png)
+
+## How it works
+
+```
+1. EXECUTE     candidate model plays the scenario (tool calls included)
+2. JUDGE       N specialist judges score independently against plugin criteria
+3. SYNTHESIZE  arbiter merges scores, confidence-rates every criterion, keeps outlier notes
+4. AGGREGATE   ranked leaderboard + full JSON audit trail (docs/RESULTS_FORMAT.md)
 ```
 
-## Quick Start
+Domain logic is pluggable; the pipeline is not. A plugin supplies scenarios,
+prompts, a simulated participant, and optional tools — see
+[docs/PLUGINS.md](docs/PLUGINS.md).
 
-### As MCP Server (Claude Desktop, Cursor, Windsurf)
+| Plugin | Domain | Status |
+|--------|--------|--------|
+| `dnd` | D&D 5e Dungeon Master (scenarios, dice/damage tools, LLM player) | ✅ included |
+| `coding` | Code generation & review | ✅ included (minimal) |
+| Your domain | One TypeScript file | 📦 [guide](docs/PLUGINS.md) |
+
+## Quick start
+
+```bash
+npm install && npm run build
+export OPENROUTER_API_KEY=sk-or-...   # one key, every role
+```
+
+### As an MCP server (Claude Desktop, Cursor, Windsurf)
 
 ```json
 {
   "mcpServers": {
     "tournament": {
-      "command": "npx",
-      "args": ["-y", "mcp-tournament"]
+      "command": "node",
+      "args": ["<path-to-repo>/dist/index.js"],
+      "env": { "OPENROUTER_API_KEY": "sk-or-..." }
     }
   }
 }
 ```
 
-### As CLI
-
-```bash
-# Evaluate a single model
-mcp-tournament evaluate --model "anthropic/claude-sonnet-4" --plugin dnd
-
-# Compare two models head-to-head
-mcp-tournament compare --models "claude-sonnet-4,gpt-4o" --plugin coding
-
-# View leaderboard
-mcp-tournament leaderboard --plugin dnd
-```
-
-## MCP Tools
-
 | Tool | Description |
 |------|-------------|
-| `tournament.evaluate` | Run a model through test cases with a multi-judge panel |
-| `tournament.compare` | Head-to-head comparison of 2+ models |
-| `tournament.quick_test` | Single test case, fast evaluation (~2 min) |
-| `tournament.leaderboard` | View cached ranked results |
-| `tournament.scenarios` | List available test scenarios |
-| `tournament.judges` | List judge panel + specializations |
-| `tournament.report` | Generate markdown report from past runs |
-| `tournament.plugins` | List installed domain plugins |
+| `tournament.evaluate` | 1–4 models × scenarios × judge panel → ranked results |
+| `tournament.quick_test` | One scenario, one judge — fast smoke score |
+| `tournament.leaderboard` | Best cached score per model across runs |
 
-## Plugins
+### As a CLI
 
-Evaluation is domain-agnostic. Plugins define what "good" means for your use case:
+```bash
+# The demo: 3 cheap models, 1 scenario, 3 judges (~a few cents)
+node dist/cli.js run --plugin dnd \
+  --models "moonshotai/kimi-k2.5,deepseek/deepseek-v3.2,x-ai/grok-4.1-fast" \
+  --scenario dnd-combat --judges 3
 
-| Plugin | Domain | Included |
-|--------|--------|----------|
-| `dnd` | D&D 5e Dungeon Master | ✅ |
-| `coding` | Code generation & review | ✅ |
-| `customer-support` | Help desk conversations | ✅ |
-| `creative-writing` | Storytelling & prose | 🔜 |
-| Custom | Your domain | 📦 |
-
-## How It Works
-
-4-phase pipeline:
-
-```
-1. EXECUTE  — Candidate model runs through test case(s)
-2. JUDGE    — Panel of N specialist judges score independently
-3. SYNTHESIZE — Opus arbitrates all judge scores (never evaluates independently)
-4. AGGREGATE — Scores compiled into ranked leaderboard
+node dist/cli.js leaderboard
+node dist/cli.js serve          # MCP stdio server
 ```
 
-## Why Multi-Judge?
+## Results viewer
 
-Single evaluators miss things. A "Rules" judge catches logic errors. A "Creative" judge catches boring output. A "Holistic" judge catches "would I keep using this?" The synthesizer catches outlier scores and resolves disagreements.
+`gui/` is a self-contained Vite + React static site — no backend, deploys to any
+static host (Cloudflare Pages works as-is). It reads committed run JSON and
+renders rankings, per-judge breakdowns, disagreement callouts, and full
+transcripts with tool-call inspection.
+
+```bash
+cd gui && npm install
+npm run import-run -- ../results/<runId>   # copy a run into the viewer
+npm run build && npm run preview
+```
+
+![Transcript view](docs/images/transcript-1440.png)
 
 ## Model routing
 
-Every role is independently model-selectable — the candidate under test, each judge, and
-the synthesizer. You choose which model does which part of judging.
+Every role — the candidates, each judge, the synthesizer, the participant agent —
+is independently model-selectable and routes through **OpenRouter by default**.
+One key, any model, no paid first-party API in the demo path. Defaults are cheap
+(Kimi, DeepSeek, GPT-mini); override per role:
 
-**Default: OpenRouter for everything.** Candidates and the full judge panel route through a
-single OpenRouter key, so you can point cheap models (e.g. Kimi) at the judges and keep runs
-inexpensive. One key, any model, no paid first-party API required.
+```bash
+TOURNAMENT_MODEL_JUDGE_RULES=openai/gpt-5.4-mini
+TOURNAMENT_MODEL_SYNTHESIZER=moonshotai/kimi-k2.5
+TOURNAMENT_MODEL_PARTICIPANT=deepseek/deepseek-v3.2
+```
 
-**Optional: Claude Agent SDK for `$0`-marginal Anthropic usage.** Any Claude role can instead
-be routed through the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk),
-which authenticates against your local `claude /login` session — so Claude judging/testing
-draws on a Max/Pro **subscription** rather than the metered API. This was the original design
-intent (see [oracle-tournament](https://github.com/samalbanese/oracle-tournament)); the
-routing layer takes a pluggable client per role, so OpenRouter and the Agent SDK can be mixed.
+The routing layer resolves a pluggable `ModelClient` per role
+(`src/clients/types.ts`). That registry is the documented extension point for a
+[Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk) route, which
+authenticates against a local `claude /login` session so Claude-judged runs draw
+on a Max/Pro **subscription** instead of the metered API — the original
+oracle-tournament design. Two regression tests guard the default: the demo path
+never resolves to the paid Anthropic API, and the MCP server's logger stays on
+stderr (stdout is reserved for JSON-RPC).
 
-## Environment Variables
+## Environment variables
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `OPENROUTER_API_KEY` | Yes | All models (candidates + judges + synthesizer) by default |
-| `ANTHROPIC_API_KEY` | Optional | Only if a role is routed to the paid Anthropic API instead of OpenRouter or the subscription-based Agent SDK |
+| `OPENROUTER_API_KEY` | Yes | All roles by default |
+| `TOURNAMENT_MODEL_*` | No | Per-role model overrides (see above) |
+| `TOURNAMENT_RESULTS_DIR` | No | Results output root (default `./results`) |
+
+## Roadmap
+
+Deferred deliberately: `tournament.compare` / `report` / `plugins` / `scenarios` /
+`judges` tools, customer-support and creative-writing plugins, plugin
+auto-discovery, npm publish, MCP registry submission, CI. Tracked in `TODO.md`.
+
+## Provenance
+
+Generalized from [oracle-tournament](https://github.com/samalbanese/oracle-tournament),
+a D&D-specific model evaluator — its pipeline proved out the multi-judge +
+arbiter design; this repo makes the domain pluggable.
 
 ## License
 

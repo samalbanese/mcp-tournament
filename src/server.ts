@@ -230,8 +230,11 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
         return;
       }
       if (request.method === 'GET' && pathname === '/api/models') {
-        try { sendJson(response, 200, await getModels(fetcher)); }
-        catch (error) { sendJson(response, 502, { error: error instanceof Error ? error.message : String(error) }); }
+        try {
+          sendJson(response, 200, await getModels(fetcher));
+        } catch (error) {
+          sendJson(response, 502, { error: error instanceof Error ? error.message : String(error) });
+        }
         return;
       }
       if (request.method === 'GET' && pathname === '/api/plugins') {

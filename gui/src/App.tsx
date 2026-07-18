@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { detectAppMode, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
+import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis, Turn } from './types';
 
@@ -57,6 +58,7 @@ function Leaderboard({ run, entries }: { run: RunManifest; entries: LeaderboardE
     <Breadcrumbs run={run.runId}/>
     <section className="page-heading"><div><p className="eyebrow">AGGREGATED MODEL RANKING</p><h1>{spotlight ? 'Scorecard spotlight' : 'Leaderboard'}</h1><p>{run.plugin.toUpperCase()} evaluation · {run.scenarios.length} scenario{run.scenarios.length === 1 ? '' : 's'} · {run.judges.length} independent judges</p></div><div className="run-stamp"><span>RUN CREATED</span><b>{new Date(run.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' })}</b><small>{new Date(run.createdAt).toLocaleTimeString()}</small></div></section>
     {spotlight && <p className="spotlight-note"><span>SOLE CANDIDATE</span> One model was evaluated in this run. Its scorecard is shown at full resolution.</p>}
+    <div className="leaderboard-entry"><a className="watch-replay" href={href({ view: 'replay', runId: run.runId })}>▶ WATCH THIS RUN HAPPEN <span>→</span></a></div>
     <section className={`leaderboard ${spotlight ? 'spotlight' : ''}`}>
       <div className="leader-head"><span>RANK / MODEL</span><span>CRITERION SIGNAL</span><span>OVERALL</span></div>
       {entries.map((entry, index) => <a className="leader-row" key={entry.modelId} href={href({ view: 'model', runId: run.runId, modelId: entry.modelId })}>
@@ -292,7 +294,7 @@ function Progress({ runId, onViewResults }: { runId: string; onViewResults: (run
     {status === 'done' && <div className="progress-action"><button onClick={() => void onViewResults(runId)}>VIEW RESULTS <span>→</span></button></div>}
   </div>;
 }
-function About() { return <div className="page about reveal"><p className="eyebrow">HOW SCORES BECOME SIGNAL</p><h1>One run.<br/>Four accountable stages.</h1><p className="about-copy">EXECUTE captures every candidate response, tool call, and timing metric. A multi-judge panel scores the evidence independently, then a synthesizer resolves disagreements and documents its reasoning. Finally, AGGREGATE ranks candidates across scenarios without hiding the underlying transcript.</p><Pipeline/><div className="about-grid"><article><b>01</b><h2>Evidence first</h2><p>Every score links back to the exact conversation and tool behavior that produced it.</p></article><article><b>02</b><h2>Disagreement visible</h2><p>Outliers are surfaced as signal, not averaged into silence.</p></article><article><b>03</b><h2>Static by design</h2><p>This viewer reads local JSON only. No backend, accounts, tracking, or live model calls.</p></article></div></div>; }
+function About() { return <div className="page about reveal"><p className="eyebrow">HOW SCORES BECOME SIGNAL</p><h1>One run.<br/>Four accountable stages.</h1><p className="about-copy">EXECUTE captures every candidate response, tool call, and timing metric. A multi-judge panel scores the evidence independently, then a synthesizer resolves disagreements and documents its reasoning. Finally, AGGREGATE ranks candidates across scenarios without hiding the underlying transcript.</p><Pipeline/><div className="about-grid"><article><b>01</b><h2>Evidence first</h2><p>Every score links back to the exact conversation and tool behavior that produced it.</p></article><article><b>02</b><h2>Disagreement visible</h2><p>Outliers are surfaced as signal, not averaged into silence.</p></article><article><b>03</b><h2>Static by design</h2><p>This viewer reads local JSON only. No backend, accounts, tracking, or live model calls.</p></article></div><RunItYourself/></div>; }
 
 export default function App() {
   const route = useRoute();
@@ -326,6 +328,7 @@ export default function App() {
     if (index.loading || runState.loading || leaderboardState.loading) return <div className="page"><Skeleton/></div>;
     if (!activeRun || index.error || runState.error || leaderboardState.error || !runState.data || !leaderboardState.data) return <Empty detail={index.error ?? runState.error ?? leaderboardState.error}/>;
     if (route.view === 'home') return <Leaderboard run={runState.data} entries={leaderboardState.data}/>;
+    if (route.view === 'replay') return <Replay run={runState.data} entries={leaderboardState.data} renderInline={formatMessage}/>;
     if (!entry) return <Empty title="Model not found" detail="This share link does not match a candidate in the selected run."/>;
     if (route.view === 'model') return <ModelDetail run={runState.data} entry={entry} selectedScenario={route.scenarioId}/>;
     if (!scenario) return <Empty title="Scenario not found"/>;

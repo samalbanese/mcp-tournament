@@ -36,5 +36,13 @@ export function loadSynthesis(runId: string, modelId: string, scenarioId: string
   return firstAvailable<Synthesis>(scenarioSlugs(scenarioId, scenarioName).map((scenario) => `${runId}/judges/${slugify(modelId)}/${scenario}/synthesis.json`));
 }
 export function loadJudges(runId: string, modelId: string, scenarioId: string, scenarioName: string, roles: string[]) {
-  return Promise.all(roles.map(async (role) => ({ role, score: await firstAvailable<JudgeScore>(scenarioSlugs(scenarioId, scenarioName).map((scenario) => `${runId}/judges/${slugify(modelId)}/${scenario}/${role}.json`)) })));
+  return Promise.all(roles.map(async (role) => {
+    try {
+      return { role, score: await firstAvailable<JudgeScore>(scenarioSlugs(scenarioId, scenarioName).map((scenario) => `${runId}/judges/${slugify(modelId)}/${scenario}/${role}.json`)) };
+    } catch {
+      // Imported runs can omit an individual judge record. Keep the rest of
+      // the panel usable instead of failing the entire model view.
+      return null;
+    }
+  })).then((records) => records.filter((record): record is { role: string; score: JudgeScore } => record !== null));
 }

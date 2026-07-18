@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
 import { listPlugins } from './plugins/index.js';
-import { logError, logInfo, onLog } from './utils/logger.js';
+import { logDebug, logError, logInfo, onLog } from './utils/logger.js';
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MAX_BODY_BYTES = 64 * 1024;
@@ -98,6 +98,8 @@ export function mergeRunIndex(resultsDir: string, guiDataDir: string): { runs: s
 
 export function isAllowedOrigin(origin: string | undefined, port: number): boolean {
   if (!origin) return true;
+  // Plain http is correct here: these are loopback-only origins for a local
+  // server that never leaves the machine — there is no TLS on 127.0.0.1.
   return new Set([
     `http://localhost:${port}`,
     `http://127.0.0.1:${port}`,
@@ -319,8 +321,8 @@ export async function startServer(options: { port?: number; rootDir?: string } =
   // is best-effort — some machines have IPv6 disabled entirely.
   try {
     await listen(http.createServer(handler), port, '::1');
-  } catch {
-    // IPv4-only is fine; the printed URL still works.
+  } catch (error) {
+    logDebug(`IPv6 loopback bind skipped (IPv4-only host?): ${error instanceof Error ? error.message : String(error)}`);
   }
   return { server, url: `http://localhost:${port}` };
 }

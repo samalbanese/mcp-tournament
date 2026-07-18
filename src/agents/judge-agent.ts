@@ -1,5 +1,5 @@
 import { getModelClient } from '../clients/index.js';
-import { MAX_TOKENS_JUDGE } from '../config/constants.js';
+import { MAX_TOKENS_JUDGE, RETRY_ATTEMPTS } from '../config/constants.js';
 import type { JudgeConfig } from '../config/judges.js';
 import type { TestCase, TournamentPlugin, Turn } from '../plugins/base.js';
 import { JudgeScoreSchema, type JudgeScore } from '../schemas/judge-score.js';
@@ -36,25 +36,45 @@ export async function runJudge(
   const system = JUDGE_SYSTEM_PROMPTS[judge.role] ?? JUDGE_SYSTEM_PROMPTS.holistic;
   const prompt = buildJudgeUserPrompt(plugin, judge.role, scenario, turns);
   const startedAt = Date.now();
-  const response = await getModelClient(judge.route).createMessage({
-    model: judge.model,
-    max_tokens: MAX_TOKENS_JUDGE,
-    system,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  const parsed = parseJudgeJson(response.text);
+  let raw = '';
+  let inputTokens = 0;
+  let outputTokens = 0;
+
+  // Budget models occasionally emit token-corrupted JSON. A fresh sample
+  // nearly always parses, so re-generate before failing this judge.
+  for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
+    const response = await getModelClient(judge.route).createMessage({
+      model: judge.model,
+      max_tokens: MAX_TOKENS_JUDGE,
+      system,
+      messages: [{ role: 'user', content: prompt }],
+    });
+    raw = response.text;
+    inputTokens += response.usage.input_tokens;
+    outputTokens += response.usage.output_tokens;
+    const parsed = parseJudgeJson(raw);
+    if (parsed) {
+      return {
+        judgeName: judge.name,
+        judgeRole: judge.role,
+        judgeModel: judge.model,
+        judgeFamily: judge.family,
+        raw,
+        parsed,
+        parseSuccess: true,
+        metrics: { inputTokens, outputTokens, timeMs: Date.now() - startedAt },
+      };
+    }
+  }
+
   return {
     judgeName: judge.name,
     judgeRole: judge.role,
     judgeModel: judge.model,
     judgeFamily: judge.family,
-    raw: response.text,
-    parsed,
-    parseSuccess: parsed !== null,
-    metrics: {
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
-      timeMs: Date.now() - startedAt,
-    },
+    raw,
+    parsed: null,
+    parseSuccess: false,
+    metrics: { inputTokens, outputTokens, timeMs: Date.now() - startedAt },
   };
 }

@@ -24,6 +24,7 @@ export interface TournamentRun {
   runDir: string;
   leaderboard: LeaderboardEntry[];
   failures?: Array<{ model: string; scenario: string; error: string }>;
+  judgeFailures?: Array<{ model: string; scenario: string; error: string }>;
 }
 
 function createRunId(date = new Date()): string {
@@ -82,6 +83,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   // A failed candidate/scenario is recorded and skipped rather than aborting the
   // whole tournament — one flaky model must not waste every other model's run.
   const failures: Array<{ model: string; scenario: string; error: string }> = [];
+  const judgeFailures: Array<{ model: string; scenario: string; error: string }> = [];
   for (const candidate of candidates) {
     for (const scenario of scenarios) {
       try {
@@ -89,7 +91,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
         if (!execution.success) {
           throw new Error(execution.error ?? 'Scenario execution failed');
         }
-        await evaluateWithJudges(
+        const judgePhase = await evaluateWithJudges(
           plugin,
           scenario,
           execution.turns,
@@ -98,6 +100,11 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
           selectedJudges,
           !options.quick,
         );
+        for (const failure of judgePhase.failedJudges) {
+          const message = `judge ${failure.judge}: ${failure.error}`;
+          judgeFailures.push({ model: candidate.id, scenario: scenario.id, error: message });
+          logError(`  [${candidate.name}/${scenario.name}] ${message}`);
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         failures.push({ model: candidate.id, scenario: scenario.id, error: message });
@@ -105,19 +112,23 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
       }
     }
   }
+  if (failures.length || judgeFailures.length) {
+    fs.writeFileSync(
+      path.join(runDir, 'failures.json'),
+      JSON.stringify([...failures, ...judgeFailures], null, 2),
+    );
+  }
   if (failures.length === candidates.length * scenarios.length) {
     throw new Error(
       `Every candidate/scenario pair failed. First error: ${failures[0].error}`,
     );
-  }
-  if (failures.length) {
-    fs.writeFileSync(path.join(runDir, 'failures.json'), JSON.stringify(failures, null, 2));
   }
   return {
     runId: actualRunId,
     runDir,
     leaderboard: buildLeaderboard(runDir, candidates, scenarios),
     failures,
+    judgeFailures,
   };
 }
 
@@ -187,5 +198,11 @@ export function compactRunSummary(run: TournamentRun): string {
         .map(failure => `${failure.model}/${failure.scenario}`)
         .join(', ')} (details in failures.json)`
     : '';
-  return `${formatLeaderboard(run.leaderboard)}${failureNote}\n\nResults: ${run.runDir}`;
+  const judgeFailureNote = run.judgeFailures?.length
+    ? `\n\n${run.judgeFailures.map(failure => {
+        const judge = failure.error.split(':', 1)[0];
+        return `Incomplete judge panels: ${failure.model}/${failure.scenario} (${judge})`;
+      }).join('\n')} (details in failures.json)`
+    : '';
+  return `${formatLeaderboard(run.leaderboard)}${failureNote}${judgeFailureNote}\n\nResults: ${run.runDir}`;
 }

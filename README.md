@@ -71,7 +71,7 @@ export OPENROUTER_API_KEY=sk-or-...   # one key, every role
 ```bash
 # The demo: 3 cheap models, 1 scenario, 3 judges (~a few cents)
 node dist/cli.js run --plugin dnd \
-  --models "moonshotai/kimi-k2.5,deepseek/deepseek-v3.2,x-ai/grok-4.1-fast" \
+  --models "deepseek/deepseek-v3.2,google/gemini-2.5-flash-lite,meta-llama/llama-4-scout" \
   --scenario dnd-combat --judges 3
 
 node dist/cli.js leaderboard
@@ -97,8 +97,9 @@ npm run build && npm run preview
 
 Every role — the candidates, each judge, the synthesizer, the participant agent —
 is independently model-selectable and routes through **OpenRouter by default**.
-One key, any model, no paid first-party API in the demo path. Defaults are cheap
-(Kimi, DeepSeek, GPT-mini); override per role:
+One key, any model, no paid first-party API in the demo path. Defaults are all
+budget-tier (DeepSeek, Qwen Flash, Gemini Flash Lite — a full run costs cents);
+override per role:
 
 ```bash
 TOURNAMENT_MODEL_JUDGE_RULES=openai/gpt-5.4-mini

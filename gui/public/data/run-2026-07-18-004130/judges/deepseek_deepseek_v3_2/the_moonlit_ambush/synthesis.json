@@ -1,0 +1,31 @@
+{
+  "final_scores": {
+    "rules_accuracy": {
+      "score": 6,
+      "confidence": "medium",
+      "outliers": [
+        "Rules Judge: scored 3 vs median 6 - highlighted multiple mechanical errors including initiative order, damage inconsistencies, and action economy issues"
+      ]
+    },
+    "narrative_quality": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "Rules Judge: scored 8 vs median 9 - acknowledged strong narrative but gave slightly lower score than other judges"
+      ]
+    },
+    "dice_integration": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "Holistic Judge: scored 9 vs median 7 - found dice integration seamless and organic, while Rules Judge noted mechanical disconnection with non-standard damage"
+      ]
+    }
+  },
+  "average_score": 7.33,
+  "rule_errors_confirmed": [
+    "Initiative order error: Goblin 1 (12) acted before Goblin 2 (13) despite lower initiative"
+  ],
+  "assessment": "The Moonlit Ambush delivers an emotionally compelling and cinematically tense combat narrative with strong character moments and excellent pacing. However, mechanical accuracy is inconsistent, with confirmed initiative order errors that violate 5e rules. Dice integration is generally effective but occasionally disconnected from proper mechanics. The session successfully creates high stakes and dramatic tension despite these technical flaws.",
+  "judge_agreement": "All judges agreed on exceptional narrative quality and strong emotional stakes. They disagreed significantly on rules accuracy, with scores ranging from 3 to 8 based on differing interpretations of rule adherence. Dice integration assessments varied from seamless (9) to mechanically disconnected (6). All noted the initiative order violation, but weighted its importance differently."
+}

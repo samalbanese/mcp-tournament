@@ -1,5 +1,5 @@
 import { getModelClient } from '../clients/index.js';
-import { MAX_TOKENS_SYNTHESIS } from '../config/constants.js';
+import { MAX_TOKENS_SYNTHESIS, RETRY_ATTEMPTS } from '../config/constants.js';
 import { SYNTHESIZER } from '../config/judges.js';
 import type { TestCase } from '../plugins/base.js';
 import { buildSynthesisPrompt } from '../prompts/judge-prompts.js';
@@ -60,28 +60,42 @@ export async function runSynthesis(
     };
   }
   const startedAt = Date.now();
-  const response = await getModelClient(SYNTHESIZER.route).createMessage({
-    model: SYNTHESIZER.model,
-    max_tokens: MAX_TOKENS_SYNTHESIS,
-    system: 'Synthesize independent evaluations into final scores. Return only valid JSON.',
-    messages: [{
-      role: 'user',
-      content: buildSynthesisPrompt(scenario, parsedJudges.map(result => ({
-        judgeName: result.judgeName,
-        judgeModel: result.judgeModel,
-        parsed: result.parsed,
-      }))),
-    }],
-  });
-  const synthesis = parseSynthesis(response.text);
+  const prompt = buildSynthesisPrompt(scenario, parsedJudges.map(result => ({
+    judgeName: result.judgeName,
+    judgeModel: result.judgeModel,
+    parsed: result.parsed,
+  })));
+
+  // Budget models occasionally emit token-corrupted JSON (e.g. "score": Pt.5,
+  // stray non-ASCII, unescaped quotes) that no normalizer can rescue. A fresh
+  // sample nearly always parses, so re-generate instead of failing the pair.
+  let raw = '';
+  let inputTokens = 0;
+  let outputTokens = 0;
+  for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
+    const response = await getModelClient(SYNTHESIZER.route).createMessage({
+      model: SYNTHESIZER.model,
+      max_tokens: MAX_TOKENS_SYNTHESIS,
+      system: 'Synthesize independent evaluations into final scores. Return only valid JSON.',
+      messages: [{ role: 'user', content: prompt }],
+    });
+    raw = response.text;
+    inputTokens += response.usage.input_tokens;
+    outputTokens += response.usage.output_tokens;
+    const synthesis = parseSynthesis(raw);
+    if (synthesis) {
+      return {
+        synthesis,
+        raw,
+        parseSuccess: true,
+        metrics: { inputTokens, outputTokens, timeMs: Date.now() - startedAt },
+      };
+    }
+  }
   return {
-    synthesis,
-    raw: response.text,
-    parseSuccess: synthesis !== null,
-    metrics: {
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
-      timeMs: Date.now() - startedAt,
-    },
+    synthesis: null,
+    raw,
+    parseSuccess: false,
+    metrics: { inputTokens, outputTokens, timeMs: Date.now() - startedAt },
   };
 }

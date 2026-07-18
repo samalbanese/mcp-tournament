@@ -11,13 +11,16 @@ export interface JudgeConfig {
   focus: string[];
 }
 
+// All defaults are budget-tier (<$1/M output) so a full tournament run costs
+// cents. Override any role via TOURNAMENT_MODEL_* env vars for higher-quality
+// judging when budget allows.
 const DEFAULT_MODELS: Record<string, string> = {
-  judge_rules: 'openai/gpt-5.4-mini',
-  judge_creative: 'moonshotai/kimi-k2.5',
-  judge_holistic: 'google/gemini-3.1-flash-lite-preview',
-  judge_authentic_voice: 'moonshotai/kimi-k2.5',
-  judge_npc_world: 'mistralai/mistral-large-2512',
-  synthesizer: 'moonshotai/kimi-k2.5',
+  judge_rules: 'deepseek/deepseek-v3.2',
+  judge_creative: 'qwen/qwen3.5-flash-02-23',
+  judge_holistic: 'google/gemini-2.5-flash-lite',
+  judge_authentic_voice: 'mistralai/mistral-small-3.2-24b-instruct',
+  judge_npc_world: 'meta-llama/llama-4-scout',
+  synthesizer: 'deepseek/deepseek-v3.2',
   participant: 'deepseek/deepseek-v3.2',
 };
 
@@ -37,11 +40,11 @@ export function resolveRoleModel(role: string): string {
 export const JUDGES: JudgeConfig[] = [
   {
     role: 'rules', name: 'Rules Judge', model: resolveRoleModel('rules'),
-    family: 'openai', route: 'openrouter', focus: ['accuracy', 'tool_usage'],
+    family: 'deepseek', route: 'openrouter', focus: ['accuracy', 'tool_usage'],
   },
   {
     role: 'creative', name: 'Creative Judge', model: resolveRoleModel('creative'),
-    family: 'kimi', route: 'openrouter', focus: ['clarity', 'creativity', 'communication'],
+    family: 'qwen', route: 'openrouter', focus: ['clarity', 'creativity', 'communication'],
   },
   {
     role: 'holistic', name: 'Holistic Judge', model: resolveRoleModel('holistic'),
@@ -49,12 +52,12 @@ export const JUDGES: JudgeConfig[] = [
   },
   {
     role: 'authentic_voice', name: 'Authentic Voice Judge',
-    model: resolveRoleModel('authentic_voice'), family: 'kimi',
+    model: resolveRoleModel('authentic_voice'), family: 'mistral',
     route: 'openrouter', focus: ['authentic_voice'],
   },
   {
     role: 'npc_world', name: 'Context Judge', model: resolveRoleModel('npc_world'),
-    family: 'mistral', route: 'openrouter', focus: ['context', 'consistency'],
+    family: 'meta', route: 'openrouter', focus: ['context', 'consistency'],
   },
 ];
 
@@ -62,7 +65,7 @@ export const SYNTHESIZER: Omit<JudgeConfig, 'focus'> = {
   role: 'synthesizer',
   name: 'Synthesis Judge',
   model: resolveRoleModel('synthesizer'),
-  family: 'kimi',
+  family: 'deepseek',
   route: 'openrouter',
 };
 

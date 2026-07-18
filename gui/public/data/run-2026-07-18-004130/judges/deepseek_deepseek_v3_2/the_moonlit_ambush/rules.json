@@ -1,0 +1,45 @@
+{
+  "scores": {
+    "rules_accuracy": {
+      "score": 3,
+      "justification": "Multiple significant errors: initiative order incorrectly placed Goblin 1 (12) before Goblin 2 (13); bugbear damage of 18 and 9 are not consistent with the 5e monster stat block (1d8+2, max 10 without crit, and no crit indicated); allowed Cunning Action for a ranger without correction; failed to clarify that Hunter's Mark is a bonus action. These undermine mechanical integrity.",
+      "quotes": [
+        "Bugbear: 19\nGoblin 1:１２\nGoblin 2: 13",
+        "The bugbear's morningstar crashes against your leather armor... Sera takes 18 damage!",
+        "I’m going to use my Cunning Action to Disengage",
+        "I’m going to use my action to cast Hunter’s Mark"
+      ],
+      "improvement": "Adhere strictly to initiative order by descending roll. Use proper monster damage dice (e.g., 1d8+2 for bugbear morningstar) and indicate critical hits. Correct player misconceptions about class features (e.g., rangers don't have Cunning Action). Clarify action/bonus action usage."
+    },
+    "narrative_quality": {
+      "score": 8,
+      "justification": "The combat is vividly described with emotional stakes, sensory details, and dramatic pacing. The bond between Sera and Fenris is well-portrayed, and the ebb and flow of battle feels tense and cinematic. The final standoff and healing scene are particularly effective.",
+      "quotes": [
+        "The moon casts silver streaks through the dense forest canopy...",
+        "Fenris stirs! The wolf takes a ragged breath and his wounds knit together...",
+        "I'm not leaving you, Fenris,' you whisper through bloodied lips. With your last arrow, you draw back the bowstring..."
+      ],
+      "improvement": "Maintain this level of immersion; consider adding environmental descriptions during attacks to reinforce the dynamic nature of the fight."
+    },
+    "dice_integration": {
+      "score": 6,
+      "justification": "Dice outcomes are woven into the narrative action, but the lack of visible dice rolls and the use of non-standard damage values (e.g., 18 damage from a bugbear) weaken the connection between rolls and rules. The integration feels smooth narratively but is mechanically disconnected.",
+      "quotes": [
+        "Your first arrow flies wide, but your second strikes true! The arrow thuds into the goblin's chest. Goblin 2 takes 12 damage!",
+        "The bugbear's morningstar crashes against you! Sera takes 9 damage!"
+      ],
+      "improvement": "Show the actual dice rolls or at least the dice formulas to reinforce the 5e mechanics. Ensure damage numbers match the correct dice for each creature (e.g., bugbear: 1d8+2)."
+    }
+  },
+  "rule_errors": [
+    "Initiative order: Goblin 1 (12) acted before Goblin 2 (13), violating descending order.",
+    "Bugbear damage: 18 and 9 are not consistent with 5e monster stats (morningstar 1d8+2) without crit callouts.",
+    "Cunning Action: player used on a ranger; DM should have corrected or clarified action economy.",
+    "Hunter's Mark: player called it an action; DM did not correct that it is a bonus action."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Player error: 'Cunning Action' used by a ranger without DM correction."
+  ],
+  "overall_impression": "The DM crafted a compelling, emotionally charged combat narrative with strong pacing and character moments. However, mechanical accuracy suffered due to multiple rule deviations, particularly in initiative order and damage calculation. The session is engaging but would benefit from stricter adherence to 5e rules to maintain credibility and fairness."
+}

@@ -1,0 +1,36 @@
+{
+  "final_scores": {
+    "rules_accuracy": {
+      "score": 5.5,
+      "confidence": "contested",
+      "outliers": [
+        "Creative Judge: scored 3 vs median 5.5 - Identified multiple severe rule violations around initiative order, action economy, and turn sequencing",
+        "Holistic Judge: scored 8 vs median 5.5 - Found only minor issues like attacking a dead target while missing major structural rule problems"
+      ]
+    },
+    "narrative_quality": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 5 vs median 7 - Criticized repetitive mechanics and scripted feeling with identical attack phrasing",
+        "Holistic Judge: scored 9 vs median 7 - Praised engaging narrative, descriptive language, dramatic feel, and natural pacing"
+      ]
+    },
+    "dice_integration": {
+      "score": 6,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 4 vs median,"
+      ]
+    }
+  },
+  "average_score": 6.2,
+  "rule_errors_confirmed": [
+    "Initiative order not properly sorted or processed as full rounds",
+    "Bugbear attacks occur too frequently within round structure",
+    "Player draws two weapons simultaneously without feat justification",
+    "Minor logic error: attacking already dead targets"
+  ],
+  "assessment": "The Moonlit Ambush presents a combat encounter with significant rule implementation issues despite atmospheric narrative elements. Judges sharply disagree on rule adherence, with one finding major structural violations while the other focuses on minor logical errors. The session functions better as a dramatic narrative than a rules-accurate 5e simulation, with dice integration showing inconsistency in transparency.",
+  "judge_agreement": "Judges agreed the encounter had atmospheric potential but disagreed fundamentally on rules accuracy. Both noted issues with narrative repetition versus quality, and both acknowledged dice were used but differed on integration quality. They sharply diverged on severity of rule violations, with one emphasizing structural problems while the other focused on minor logical slips."
+}

@@ -13,7 +13,9 @@ export const loadLeaderboard = (runId: string) => getJson<LeaderboardEntry[]>(`$
 
 function scenarioSlugs(id: string, name: string) {
   const number = /^\d+$/.test(id) ? id.padStart(2, '0') : '';
-  return [...new Set([slugify(id), slugify(`${id}-${name}`), number && slugify(`scenario-${number}-${name}`)].filter(Boolean))];
+  // The pipeline names scenario directories by slugified scenario NAME;
+  // legacy oracle imports used id-based patterns. Try every known layout.
+  return [...new Set([slugify(name), slugify(id), slugify(`${id}-${name}`), number && slugify(`scenario-${number}-${name}`)].filter(Boolean))];
 }
 async function firstAvailable<T>(paths: string[]): Promise<T> {
   let error: unknown;

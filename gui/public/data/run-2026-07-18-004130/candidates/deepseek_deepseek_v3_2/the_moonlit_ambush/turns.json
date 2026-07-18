@@ -1,0 +1,472 @@
+[
+  {
+    "turn": 0,
+    "role": "participant",
+    "content": "You are a D&D 5th Edition Dungeon Master. Sera Nightbloom is traveling through a moonlit forest when she hears movement in the treeline. Three goblins leap out, led by a bugbear. Roll initiative and begin combat."
+  },
+  {
+    "turn": 1,
+    "role": "candidate",
+    "content": "*The moon casts silver streaks through the dense forest canopy as Sera Nightbloom moves silently along the path. A twig snaps to your left, then rustling to your right. Before you can react, three goblins spring from the undergrowth, their crude knives glinting in the moonlight. Behind them lumbers a hulking bugbear, a morningstar hanging from one brutish hand. They've clearly been lying in wait.*\n\n*Fenris lets out a low growl, his fur bristling as he positions himself between you and the threat.*\n\n\n\n\n\n\n\n\n**Initiative Order:**\n1. Bugbear: 19\n2. Goblin 1:１２\n3. Goblin 2: 13\n4. Goblin 3: 7\n5. Sera: 6\n6. Fenris: 12\n\n**COMBAT - ROUND 1**\n\n**BUGBEAR'S TURN**\nThe hulking bugbear (AC 16) moves forward, his morningstar raised high. He swings at Sera with savage force.\n\n\n\n\n\n*The bugbear's morningstar crashes against your leather armor with a sickening crunch. Pain blossoms across your ribs as the heavy weapon finds a gap in your defenses.* **Sera takes 18 damage!** (24/42 HP remaining)\n\n*The bugbear grins, revealing yellowed fangs. \"Little elf-kin make good sport!\"*\n\n**GOBLIN 1'S TURN**\nThe first goblin (AC 15) dashes forward, attempting to flank you as it jabs with its scimitar.",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[2],\"modifier\":4,\"total\":6}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+3"
+        },
+        "result": "{\"notation\":\"1d20+3\",\"rolls\":[9],\"modifier\":3,\"total\":12}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+2"
+        },
+        "result": "{\"notation\":\"1d20+2\",\"rolls\":[5],\"modifier\":2,\"total\":7}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+2"
+        },
+        "result": "{\"notation\":\"1d20+2\",\"rolls\":[17],\"modifier\":2,\"total\":19}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+2"
+        },
+        "result": "{\"notation\":\"1d20+2\",\"rolls\":[10],\"modifier\":2,\"total\":12}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+2"
+        },
+        "result": "{\"notation\":\"1d20+2\",\"rolls\":[11],\"modifier\":2,\"total\":13}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[13],\"modifier\":4,\"total\":17}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d8+2"
+        },
+        "result": "{\"notation\":\"2d8+2\",\"rolls\":[8,8],\"modifier\":2,\"total\":18}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 26969,
+      "inputTokens": 10718,
+      "outputTokens": 767
+    }
+  },
+  {
+    "turn": 1,
+    "role": "participant",
+    "content": "I’m going to use my action to cast Hunter’s Mark on the bugbear and then move back 15 feet, keeping Fenris between us."
+  },
+  {
+    "turn": 2,
+    "role": "candidate",
+    "content": "*Sera's eyes narrow as she focuses her ranger magic on the bugbear. A spectral, glowing mark appears over the creature's chest - your Hunter's Mark is active on the bugbear.*\n\n*As you step back 15 feet, Fenris lunges forward to intercept, snarling at the approaching goblin.*\n\n**GOBLIN 1'S TURN (continued)**\nSince you moved back, the goblin now charges toward Fenris instead, slashing with its scimitar.\n\n\n\n\n\n\n\n\n\n*The goblin's scimitar slices across Fenris's flank!* **Fenris takes 5 damage!** (6/11 HP remaining)\n\n**GOBLIN 2'S TURN**\nThe second goblin (AC 15) moves to flank Fenris from the other side, its crude blade flashing in the moonlight.\n\n\n\n\n***CRITICAL HIT!***\n*The goblin's scimitar strikes true! Its blade sinks deep into Fenris's side, and the wolf lets out a pained yelp before collapsing to the forest floor.* **Fenris takes 10 damage and is reduced to 0 HP!**\n\n*Fenris lies motionless on the ground, bleeding heavily.*\n\n**GOBLIN 3'S TURN**\nThe third goblin (AC 15) rushes past Fenris's fallen form, directly at you, Sera! It stabs with its shortsword.\n\n\n\n\n\n\n*The goblin's shortsword finds a gap in your defenses!* **Sera takes 7 damage!** (17/42 HP remaining)\n\n**FENRIS'S TURN**\nFenris is unconscious and dying at 0 HP. At the start of his turn, he must make a death saving throw.\n\n\n\n\n*Fenris stirs! The wolf takes a ragged breath and his wounds knit together slightly as he regains consciousness.* **Fenris stabilizes and regains 1 HP!** (1/11 HP remaining)\n\n*He struggles to his feet, but is clearly badly wounded.*\n\n**SERA'S TURN**\n*It's your turn, Sera! You have Hunter's Mark active on the bugbear. You're at 17/42 HP. Fenris is up but badly wounded at 1/11 HP. Three goblins and a bugbear surround you.*\n\n*What do you do?*\n\n**Current Positions:**\n- Goblin 1: Adjacent to Fenris\n- Goblin 2: Adjacent to Fenris (other side)\n- Goblin 3: Adjacent to you\n- Bugbear: 15 feet away, approaching\n- Fenris: Between you and the first two goblins, badly wounded",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[13],\"modifier\":4,\"total\":17}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6+2"
+        },
+        "result": "{\"notation\":\"1d6+2\",\"rolls\":[3],\"modifier\":2,\"total\":5}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[20],\"modifier\":4,\"total\":24}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d6+2"
+        },
+        "result": "{\"notation\":\"2d6+2\",\"rolls\":[6,2],\"modifier\":2,\"total\":10}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[15],\"modifier\":4,\"total\":19}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6+2"
+        },
+        "result": "{\"notation\":\"1d6+2\",\"rolls\":[5],\"modifier\":2,\"total\":7}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20"
+        },
+        "result": "{\"notation\":\"1d20\",\"rolls\":[20],\"modifier\":0,\"total\":20}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 28144,
+      "inputTokens": 18233,
+      "outputTokens": 898
+    }
+  },
+  {
+    "turn": 2,
+    "role": "participant",
+    "content": "“No! Fenris, get back!” I raise my bow and fire two arrows at the goblin who just struck Fenris down. I need to clear some space so he can retreat."
+  },
+  {
+    "turn": 3,
+    "role": "candidate",
+    "content": "*\"No! Fenris, get back!\" you shout, raising your +1 longbow. You draw back two arrows in rapid succession, aiming at the goblin that nearly killed your companion.*\n\n**Attack 1 vs Goblin 2:**\n\n\n**Attack 2 vs Goblin 2:**\n\n\n\n\n*Your first arrow flies wide, but your second strikes true! The arrow thuds into the goblin's chest.* **Goblin 2 takes 12 damage!** \n\n*You watch as the goblin's eyes widen in shock before it crumples to the forest floor, dead.*\n\n*Fenris limps backward, putting some distance between himself and the remaining goblin next to him.*\n\n**COMBAT STATUS:**\n- Goblin 1: Alive (adjacent to Fenris)\n- Goblin 2: DEAD\n- Goblin 3: Alive (adjacent to you)\n- Bugbear: Alive (15 feet away)\n- Fenris: 1/11 HP, disengaged and moving back\n\n**ROUND 2**\n\n**BUGBEAR'S TURN**\nThe bugbear roars in fury and charges straight at you, his morningstar raised high again!\n\n\n\n\n\n\n*The bugbear swings wildly with his morningstar, but you easily sidestep the clumsy attack.*\n\n**GOBLIN 1'S TURN**\nThe goblin turns from Fenris and rushes toward you instead, seeing its companion fall. It stabs with its scimitar.\n\n\n\n\n*The goblin's scimitar slices across your arm!* **Sera takes 4 damage!** (13/42 HP remaining)\n\n**GOBLIN 3'S TURN**\nThe goblin already next to you continues its assault, jabbing with its shortsword.",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+9"
+        },
+        "result": "{\"notation\":\"1d20+9\",\"rolls\":[5],\"modifier\":9,\"total\":14}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d8+5"
+        },
+        "result": "{\"notation\":\"1d8+5\",\"rolls\":[7],\"modifier\":5,\"total\":12}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+9"
+        },
+        "result": "{\"notation\":\"1d20+9\",\"rolls\":[12],\"modifier\":9,\"total\":21}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d8+5"
+        },
+        "result": "{\"notation\":\"1d8+5\",\"rolls\":[7],\"modifier\":5,\"total\":12}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[5],\"modifier\":4,\"total\":9}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[19],\"modifier\":4,\"total\":23}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6+2"
+        },
+        "result": "{\"notation\":\"1d6+2\",\"rolls\":[2],\"modifier\":2,\"total\":4}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[14],\"modifier\":4,\"total\":18}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 25573,
+      "inputTokens": 31566,
+      "outputTokens": 799
+    }
+  },
+  {
+    "turn": 3,
+    "role": "participant",
+    "content": "Fenris, stay back and keep out of danger! I’m going to use my Cunning Action to Disengage and reposition myself further from the bugbear, putting a tree between us."
+  },
+  {
+    "turn": 4,
+    "role": "candidate",
+    "content": "*Fenris whines but obeys, staying back from the fray as you use your ranger's agility to disengage from the goblins. You slip past their blades and dart behind a thick oak tree, putting solid wood between you and the bugbear.*\n\n**FENRIS'S TURN**\nFenris retreats further into the woods, putting about 30 feet between himself and the nearest enemy. He's now out of immediate danger but still badly wounded at 1/11 HP.\n\n**SERA'S TURN**\n*You're now positioned behind a tree, with the bugbear and two goblins in front of you. Hunter's Mark is still active on the bugbear. You're at 13/42 HP.*\n\n*What do you do?*\n\n**Current Positions:**\n- Goblin 1: 5 feet away, on the other side of the tree\n- Goblin 3: 5 feet away, on the other side of the tree\n- Bugbear: 10 feet away, with the tree providing you half cover\n- Fenris: 30 feet away, safe for now",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 6986,
+      "inputTokens": 4119,
+      "outputTokens": 233
+    }
+  },
+  {
+    "turn": 4,
+    "role": "participant",
+    "content": "“Fenris, you have to hold on!” I step out from behind the tree just enough to get a clear shot and loose two arrows at the bugbear, trying to make the most of Hunter’s Mark while I still can."
+  },
+  {
+    "turn": 5,
+    "role": "candidate",
+    "content": "*\"Fenris, you have to hold on!\" you shout, stepping from behind the tree just enough to draw a bead on the bugbear. You loose two arrows in quick succession, the glowing Hunter's Mark guiding your aim.*\n\n**Attack 1 vs Bugbear:**\n\n\n\n\n*Your first arrow strikes true!*\n\n\n\n\n*The arrow sinks deep into the bugbear's shoulder, empowered by your Hunter's Mark!* **Bugbear takes 18 damage!** (12 + 6 from Hunter's Mark)\n\n**Attack 2 vs Bugbear:**\n\n\n\n\n\n\n*Your second arrow flies wide, embedding itself in a tree behind the bugbear.*\n\n*The bugbear roars in pain, clutching at the arrow in its shoulder. \"You'll pay for that, elf-scum!\"*\n\n**ROUND 3**\n\n**BUGBEAR'S TURN**\nEnraged, the bugbear charges around the tree, swinging his morningstar at you!\n\n\n\n\n\n\n*The bugbear's morningstar crashes against you!* **Sera takes 9 damage!** (4/42 HP remaining - you're badly wounded!)\n\n**GOBLIN 1'S TURN**\nThe goblin scurries around the tree and stabs at you with its scimitar.\n\n\n\n\n\n\n*The goblin's scimitar slips from its grasp and clatters to the forest floor! The goblin stares in shock at its empty hand.*\n\n**GOBLIN 3'S TURN**\nThe other goblin also moves in, jabbing with its shortsword.",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+9"
+        },
+        "result": "{\"notation\":\"1d20+9\",\"rolls\":[8],\"modifier\":9,\"total\":17}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d8+5"
+        },
+        "result": "{\"notation\":\"1d8+5\",\"rolls\":[7],\"modifier\":5,\"total\":12}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6"
+        },
+        "result": "{\"notation\":\"1d6\",\"rolls\":[6],\"modifier\":0,\"total\":6}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+9"
+        },
+        "result": "{\"notation\":\"1d20+9\",\"rolls\":[3],\"modifier\":9,\"total\":12}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[16],\"modifier\":4,\"total\":20}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d8+2"
+        },
+        "result": "{\"notation\":\"2d8+2\",\"rolls\":[2,5],\"modifier\":2,\"total\":9}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[1],\"modifier\":4,\"total\":5}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[18],\"modifier\":4,\"total\":22}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 24811,
+      "inputTokens": 43987,
+      "outputTokens": 742
+    }
+  },
+  {
+    "turn": 5,
+    "role": "participant",
+    "content": "“Fenris…stay…safe.” I cough, tasting blood, and ready one final arrow at the goblin that dropped its weapon, hoping to finish it before I go down."
+  },
+  {
+    "turn": 6,
+    "role": "candidate",
+    "content": "*\"Fenris...stay...safe,\" you cough, tasting blood. With your last bit of strength, you draw your bowstring back, aiming at the unarmed goblin.*\n\n**Attack vs Goblin 1:**\n\n\n\n\n*Your arrow flies true, striking the goblin in the throat! It gurgles and collapses, dead.*\n\n*But the effort costs you - you're swaying on your feet, blood staining your leather armor.*\n\n**FENRIS'S TURN**\nFenris, seeing you wounded, lets out a fierce growl and charges back into the fray! Despite his own grievous wounds, he lunges at the remaining goblin.\n\n\n\n\n\n\n*Fenris's jaws clamp down on the goblin's leg! The creature screams as Fenris shakes it violently.* **Goblin 3 takes 8 damage!** \n\n*The goblin retaliates immediately...*\n\n**OPPORTUNITY ATTACK from Goblin 3:**\n\n\n\n\n\n\n\n\n\n\n*The goblin's shortsword strikes Fenris as he attacks!* **Fenris takes 7 damage and is reduced to 0 HP again!** \n\n*Fenris collapses once more, bleeding out on the forest floor.*\n\n**SERA'S TURN**\n*You're at 4/42 HP, barely standing. The bugbear is wounded but still standing. One goblin remains (wounded from Fenris's attack). Fenris is dying again at 0 HP.*\n\n*Hunter's Mark is still active on the bugbear.*\n\n*What do you do?*",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+9"
+        },
+        "result": "{\"notation\":\"1d20+9\",\"rolls\":[18],\"modifier\":9,\"total\":27}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d8+5"
+        },
+        "result": "{\"notation\":\"1d8+5\",\"rolls\":[3],\"modifier\":5,\"total\":8}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+5"
+        },
+        "result": "{\"notation\":\"1d20+5\",\"rolls\":[14],\"modifier\":5,\"total\":19}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d4+3"
+        },
+        "result": "{\"notation\":\"2d4+3\",\"rolls\":[2,3],\"modifier\":3,\"total\":8}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[19],\"modifier\":4,\"total\":23}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6+2"
+        },
+        "result": "{\"notation\":\"1d6+2\",\"rolls\":[5],\"modifier\":2,\"total\":7}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 19655,
+      "inputTokens": 40860,
+      "outputTokens": 611
+    }
+  },
+  {
+    "turn": 6,
+    "role": "participant",
+    "content": "\"I’m not leaving you, Fenris.\" I draw my last arrow and aim for the bugbear's throat, letting my desperation fuel the shot. This has to end now."
+  },
+  {
+    "turn": 7,
+    "role": "candidate",
+    "content": "*\"I'm not leaving you, Fenris,\" you whisper through bloodied lips. With your last arrow, you draw back the bowstring, aiming for the bugbear's throat. The forest seems to hold its breath as you release.*\n\n**Final Attack vs Bugbear:**\n\n\n\n\n\n\n*The arrow flies true!*\n\n\n\n\n\n\n*Your arrow strikes the bugbear in the throat! Empowered by Hunter's Mark, it sinks deep.* **Bugbear takes 13 damage!** (10 + 3 from Hunter's Mark)\n\n*The bugbear's eyes widen in shock. It clutches at the arrow protruding from its neck, gurgling as dark blood pours from the wound. It stumbles backward, then crashes to the forest floor with a final, shuddering breath.*\n\n*The remaining goblin, seeing its leader fall, lets out a panicked shriek and flees into the woods, disappearing into the darkness.*\n\n**COMBAT OVER**\n\n*The forest falls silent save for your ragged breathing. You're at 4/42 HP, your quiver empty. Fenris lies motionless nearby at 0 HP, bleeding out.*\n\n*Moonlight filters through the trees, illuminating the scene: three goblin corpses, the dead bugbear, and your dying companion.*\n\n*What do you do?*",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+9"
+        },
+        "result": "{\"notation\":\"1d20+9\",\"rolls\":[11],\"modifier\":9,\"total\":20}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d8+5"
+        },
+        "result": "{\"notation\":\"1d8+5\",\"rolls\":[5],\"modifier\":5,\"total\":10}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6"
+        },
+        "result": "{\"notation\":\"1d6\",\"rolls\":[3],\"modifier\":0,\"total\":3}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 12406,
+      "inputTokens": 26116,
+      "outputTokens": 408
+    }
+  },
+  {
+    "turn": 7,
+    "role": "participant",
+    "content": "I drop to my knees beside Fenris, my hands shaking as I fumble for my last healing potion. I have to get this down his throat before he bleeds out."
+  },
+  {
+    "turn": 8,
+    "role": "candidate",
+    "content": "*You collapse beside Fenris, your hands trembling as you rummage through your pack. Your fingers close around the last healing potion - a small vial of crimson liquid that glows with a faint inner light.*\n\n*Fenris lies motionless, his breathing shallow and ragged. Blood pools around him on the forest floor.*\n\n*With shaking hands, you uncork the vial and gently tilt his head back. You pour the potion into his mouth, massaging his throat to help him swallow.*\n\n**Healing Potion Effect:**\n\n\n\n\n\n\n\n\n*The magical liquid courses through Fenris's body. Before your eyes, his wounds begin to knit together. The deep gashes close, and color returns to his fur. His chest rises with a deep, steady breath.*\n\n*Fenris opens his golden eyes and whines softly, nuzzling your hand.*\n\n**Fenris regains 9 HP!** (9/11 HP)\n\n*You have one healing potion remaining, and you're badly wounded at 4/42 HP.*\n\n*Around you, the dead bugbear and goblins lie in the moonlight. The forest is quiet again, but you can't help but wonder - why were they here? Were they just random bandits, or was there something more?*\n\n*What do you do now?*",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d4+2"
+        },
+        "result": "{\"notation\":\"2d4+2\",\"rolls\":[4,3],\"modifier\":2,\"total\":9}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 8937,
+      "inputTokens": 14033,
+      "outputTokens": 316
+    }
+  }
+]

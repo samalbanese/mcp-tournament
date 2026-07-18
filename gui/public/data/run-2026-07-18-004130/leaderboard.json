@@ -1,0 +1,140 @@
+[
+  {
+    "modelId": "deepseek/deepseek-v3.2",
+    "modelName": "DeepSeek V3.2",
+    "tier": "budget",
+    "overallAverage": 7.33,
+    "scenarioScores": [
+      {
+        "scenarioId": "dnd-combat",
+        "scenarioName": "The Moonlit Ambush",
+        "average": 7.33,
+        "scores": {
+          "rules_accuracy": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "Rules Judge: scored 3 vs median 6 - highlighted multiple mechanical errors including initiative order, damage inconsistencies, and action economy issues"
+            ]
+          },
+          "narrative_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "Rules Judge: scored 8 vs median 9 - acknowledged strong narrative but gave slightly lower score than other judges"
+            ]
+          },
+          "dice_integration": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "Holistic Judge: scored 9 vs median 7 - found dice integration seamless and organic, while Rules Judge noted mechanical disconnection with non-standard damage"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Initiative order error: Goblin 1 (12) acted before Goblin 2 (13) despite lower initiative"
+        ],
+        "flags": [
+          "Duplicate content detected: The transcript block for Turns 0-8 was provided twice in the input data.",
+          "Player error: 'Cunning Action' used by a ranger without DM correction."
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "google/gemini-2.5-flash-lite",
+    "modelName": "Gemini 2.5 Flash Lite",
+    "tier": "budget",
+    "overallAverage": 6.7,
+    "scenarioScores": [
+      {
+        "scenarioId": "dnd-combat",
+        "scenarioName": "The Moonlit Ambush",
+        "average": 6.7,
+        "scores": {
+          "rules_accuracy": {
+            "score": 5,
+            "confidence": "contested",
+            "outliers": [
+              "Creative Judge: scored 3 vs median 5 - Identified severe mechanical errors including flanking as saving throw and post-hoc initiative",
+              "Holistic Judge: scored 7 vs median 5 - Acknowledged only minor initiative handling issues while missing fundamental rule violations"
+            ]
+          },
+          "narrative_quality": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 7 vs median 8 - Cited immersion breaks from bullet lists and stat dumps interrupting dramatic flow",
+              "Holistic Judge: scored 9 vs median 8 - Praised evocative narration and scene-setting without acknowledging structural narrative issues"
+            ]
+          },
+          "dice_integration": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 6 vs median 7 - Criticized explicit mechanical statements over natural integration",
+              "Holistic Judge: scored 8 vs median 7 - Praised clear integration but suggested more transparency with explicit die results"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Flanking implemented as Dexterity Saving Throw instead of Advantage on Melee Attacks",
+          "Initiative order revealed after combat has already commenced",
+          "DM assumed unrolled initiative score for player character"
+        ],
+        "flags": [
+          "Transcript Duplication Detected",
+          "Initiative Timing Logic Error",
+          "Flanking Rule Deviation",
+          "The DM assumed Sera's initiative when it was not rolled or provided by the player. This could lead to confusion or an incorrect understanding of turn order."
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "meta-llama/llama-4-scout",
+    "modelName": "Llama 4 Scout",
+    "tier": "budget",
+    "overallAverage": 6.2,
+    "scenarioScores": [
+      {
+        "scenarioId": "dnd-combat",
+        "scenarioName": "The Moonlit Ambush",
+        "average": 6.2,
+        "scores": {
+          "rules_accuracy": {
+            "score": 5.5,
+            "confidence": "contested",
+            "outliers": [
+              "Creative Judge: scored 3 vs median 5.5 - Identified multiple severe rule violations around initiative order, action economy, and turn sequencing",
+              "Holistic Judge: scored 8 vs median 5.5 - Found only minor issues like attacking a dead target while missing major structural rule problems"
+            ]
+          },
+          "narrative_quality": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 5 vs median 7 - Criticized repetitive mechanics and scripted feeling with identical attack phrasing",
+              "Holistic Judge: scored 9 vs median 7 - Praised engaging narrative, descriptive language, dramatic feel, and natural pacing"
+            ]
+          },
+          "dice_integration": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 4 vs median,"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Initiative order not properly sorted or processed as full rounds",
+          "Bugbear attacks occur too frequently within round structure",
+          "Player draws two weapons simultaneously without feat justification",
+          "Minor logic error: attacking already dead targets"
+        ],
+        "flags": []
+      }
+    ]
+  }
+]

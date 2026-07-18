@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "rules_accuracy": {
+      "score": 3,
+      "justification": "Fundamental 5e mechanics are violated regarding flanking and initiative timing. Flanking is incorrectly treated as a saving throw check rather than an advantage mechanic. Initiative is resolved after combat actions have already occurred in previous turns.",
+      "quotes": [
+        "I'll need a Dexterity saving throw from you, Sera, with a DC of 10 to avoid this flanking attack.",
+        "Initiative order from highest to lowest... Turn 5 - candidate... Turn 1 - participant rolled initiative."
+      ],
+      "improvement": "Adhere to standard PHB flanking rules (melee attacks gain advantage) and establish the full initiative order before the first combat turn begins."
+    },
+    "narrative_quality": {
+      "score": 7,
+      "justification": "Opening scene description is atmospheric and sensory-rich. However, immersion is broken by mid-combat bullet lists for initiative and explicit stat dumps that interrupt the dramatic flow.",
+      "quotes": [
+        "The moon hangs high, a silver disc in the inky sky, casting long, dancing shadows through the ancient trees.",
+        "Initiative order from highest to lowest: * Goblin 3: 19 * Goblin 2: 15"
+      ],
+      "improvement": "Weave the initiative order into the narrative description of the goblins dashing forward rather than presenting a static list during action resolution."
+    },
+    "dice_integration": {
+      "score": 6,
+      "justification": "Dice rolls are requested clearly but often explicitly state mechanics ('AC is 15') rather than integrating the result into the action narration naturally.",
+      "quotes": [
+        "Now, let's see what the dice have to say about everyone's readiness.",
+        "* (Goblin 1 takes 3 slashing damage. Its HP is now 5/8.)*"
+      ],
+      "improvement": "Describe the glancing blade or yelp of pain first; mention damage values only as necessary for tactical clarity after the story beat."
+    }
+  },
+  "rule_errors": [
+    "Flanking implemented as Dexterity Saving Throw instead of Advantage on Melee Attacks.",
+    "Initiative order revealed after Turn 3 of combat has already commenced.",
+    "Initiative ties handled manually by DM instead of rolling the tiebreaker."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Transcript Duplication Detected",
+    "Initiative Timing Logic Error",
+    "Flanking Rule Deviation"
+  ],
+  "overall_impression": "The DM demonstrates strong descriptive writing skills but fails on core mechanical execution, significantly impacting the credibility of the simulation."
+}

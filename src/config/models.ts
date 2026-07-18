@@ -8,8 +8,8 @@ export interface CandidateModel {
 export const CANDIDATE_MODELS: CandidateModel[] = [
   // Budget (under $1/M output) — 10 models
   { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2', tier: 'budget', notes: 'Latest DeepSeek, strong tool use' },
-  { id: 'x-ai/grok-4.3', name: 'Grok 4.3', tier: 'budget', notes: 'Replaces Grok 4.1 Fast (deprecated on OpenRouter, 404s)' },
-  { id: 'x-ai/grok-4-fast', name: 'Grok 4 Fast', tier: 'budget', notes: 'Previous Grok, strong baseline' },
+  { id: 'x-ai/grok-4.3', name: 'Grok 4.3', tier: 'mid', notes: '$2.50/M output — replaces deprecated Grok 4.1 Fast' },
+  { id: 'mistralai/mistral-small-3.2-24b-instruct', name: 'Mistral Small 3.2', tier: 'budget', notes: 'Cheap open-weight all-rounder' },
   { id: 'meta-llama/llama-4-maverick', name: 'Llama 4 Maverick', tier: 'budget', notes: '1M context, open-weight' },
   { id: 'meta-llama/llama-4-scout', name: 'Llama 4 Scout', tier: 'budget', notes: '328K context, cheapest Llama' },
   { id: 'qwen/qwen3.5-flash-02-23', name: 'Qwen3.5 Flash', tier: 'budget', notes: 'Ultra-cheap, 65K output cap' },

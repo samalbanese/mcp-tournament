@@ -3,7 +3,7 @@
 // Uses the openai npm package pointed at OpenRouter's API.
 
 import OpenAI from 'openai';
-import { API_TIMEOUT_MS } from '../config/constants.js';
+import { API_TIMEOUT_MS, RETRY_ATTEMPTS, RETRY_BASE_DELAY_MS } from '../config/constants.js';
 import type {
   CreateMessageParams,
   ModelClient,
@@ -24,8 +24,8 @@ function getClient(): OpenAI {
       baseURL: 'https://openrouter.ai/api/v1',
       apiKey,
       defaultHeaders: {
-        'HTTP-Referer': 'https://diceoracle.com',
-        'X-Title': 'Dice Oracle Tournament',
+        'HTTP-Referer': 'https://github.com/samalbanese/mcp-tournament',
+        'X-Title': 'MCP Tournament',
       },
       timeout: API_TIMEOUT_MS,
     });
@@ -200,18 +200,41 @@ export async function createMessage(params: CreateMessageParams): Promise<ModelR
   };
   if (openaiTools) requestParams.tools = openaiTools;
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
-
-  try {
-    const response = await getClient().chat.completions.create(requestParams, {
-      signal: controller.signal,
-    });
-    const converted = convertResponse(response);
-    return converted;
-  } finally {
-    clearTimeout(timer);
+  // Long judge/synthesis generations on cheap models can take minutes and
+  // OpenRouter occasionally 429s/5xxs — retry transient failures with backoff
+  // instead of killing an entire candidate/scenario pair over one slow call.
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
+    if (attempt > 0) {
+      await new Promise(resolve =>
+        setTimeout(resolve, RETRY_BASE_DELAY_MS * 2 ** (attempt - 1)));
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+    try {
+      const response = await getClient().chat.completions.create(requestParams, {
+        signal: controller.signal,
+      });
+      return convertResponse(response);
+    } catch (error) {
+      lastError = error;
+      if (!isRetryable(error) || attempt === RETRY_ATTEMPTS) throw error;
+    } finally {
+      clearTimeout(timer);
+    }
   }
+  throw lastError;
+}
+
+function isRetryable(error: unknown): boolean {
+  if (error instanceof OpenAI.APIError) {
+    const status = error.status ?? 0;
+    return status === 408 || status === 429 || status >= 500;
+  }
+  // AbortError from our timeout, connection resets, and other transport
+  // failures arrive as plain errors — worth one more attempt.
+  return error instanceof Error &&
+    /abort|timeout|ECONNRESET|fetch failed/i.test(error.message);
 }
 
 export const openRouterClient: ModelClient = { createMessage };

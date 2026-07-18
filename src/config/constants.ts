@@ -9,8 +9,9 @@ export const MAX_TOOL_ROUNDS = 8;
 export const MAX_TURNS = 5;
 export const MIN_TURNS = 3;
 
-// Timeouts
-export const API_TIMEOUT_MS = 120_000;
+// Timeouts — judge/synthesis calls generate up to 16K tokens on budget models,
+// which regularly takes >2 minutes. 120s aborts killed real runs.
+export const API_TIMEOUT_MS = 300_000;
 export const RETRY_ATTEMPTS = 2;
 export const RETRY_BASE_DELAY_MS = 2000;
 

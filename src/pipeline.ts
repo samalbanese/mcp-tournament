@@ -16,6 +16,7 @@ export interface EvaluateOptions {
   judges?: number;
   outputRoot?: string;
   quick?: boolean;
+  runId?: string;
 }
 
 export interface TournamentRun {
@@ -51,14 +52,18 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
 
   const candidates = options.models.map(resolveCandidateModel);
   const outputRoot = path.resolve(options.outputRoot ?? path.join(process.cwd(), 'results'));
+  if (options.runId && (!/^run-[a-zA-Z0-9-]+$/.test(options.runId) || path.basename(options.runId) !== options.runId)) {
+    throw new Error('Invalid run ID');
+  }
   let collisionOffsetSeconds = 0;
-  let runId = createRunId();
+  let runId = options.runId ?? createRunId();
   let runDir = path.join(outputRoot, runId);
-  while (fs.existsSync(runDir)) {
+  while (!options.runId && fs.existsSync(runDir)) {
     collisionOffsetSeconds += 1;
     runId = createRunId(new Date(Date.now() + collisionOffsetSeconds * 1000));
     runDir = path.join(outputRoot, runId);
   }
+  if (options.runId && fs.existsSync(runDir)) throw new Error(`Run already exists: ${options.runId}`);
   const actualRunId = path.basename(runDir);
   fs.mkdirSync(runDir, { recursive: true });
   const selectedJudges = JUDGES.slice(0, judgeCount);

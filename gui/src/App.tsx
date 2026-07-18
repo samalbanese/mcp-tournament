@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { detectAppMode, loadModels, loadPlugins, loadRunProgress, startRun, type ApiModel, type ApiPlugin, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis, Turn } from './types';
@@ -20,17 +21,19 @@ function useLoad<T>(loader: (() => Promise<T>) | null, deps: unknown[]): LoadSta
 const label = (value: string) => value.replaceAll('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 const scoreClass = (score: number) => score <= 3 ? 'score-low' : score <= 6 ? 'score-mid' : 'score-high';
 
-function Shell({ children, runs, activeRun, route }: { children: ReactNode; runs: string[]; activeRun?: string; route: Route }) {
+function Shell({ children, runs, activeRun, route, appMode }: { children: ReactNode; runs: string[]; activeRun?: string; route: Route; appMode: boolean }) {
   const selectRun = (runId: string) => { location.hash = href({ view: 'home', runId }); };
   return <>
     <div className="ambient" aria-hidden="true" />
-    <header className="masthead">
-      <a className="brand" href={href({ view: 'home', runId: activeRun })}><span className="brand-mark">MCP</span><span>TOURNAMENT</span><small>RESULTS TERMINAL</small></a>
+    <header className={`masthead ${appMode ? 'app-mode' : ''}`}>
+      <a className="brand" href={href({ view: 'home', runId: activeRun })}><span className="brand-mark">MCP</span><span>TOURNAMENT</span><small>{appMode ? 'LOCAL RUNNER' : 'RESULTS TERMINAL'}</small></a>
       <div className="run-control"><label htmlFor="run-select">ACTIVE RUN</label><select id="run-select" value={activeRun ?? ''} onChange={(event) => selectRun(event.target.value)}>{runs.map((run) => <option key={run}>{run}</option>)}</select></div>
+      {appMode && <a className={route.view === 'new' ? 'nav-link active' : 'nav-link'} href="#/new">NEW RUN</a>}
+      {appMode && <a className={route.view === 'settings' ? 'nav-link active' : 'nav-link'} href="#/settings">SETTINGS</a>}
       <a className={route.view === 'about' ? 'nav-link active' : 'nav-link'} href="#/about">ABOUT</a>
     </header>
     <main>{children}</main>
-    <footer><span>MCP TOURNAMENT / STATIC RESULTS VIEWER</span><span>DATA LOCAL · NO TELEMETRY</span></footer>
+    <footer><span>MCP TOURNAMENT / {appMode ? 'LOCAL APP' : 'STATIC RESULTS VIEWER'}</span><span>DATA LOCAL · NO TELEMETRY</span></footer>
   </>;
 }
 
@@ -130,19 +133,117 @@ function formatMessage(text: string): ReactNode[] {
 function TurnCard({ turn }: { turn: Turn }) { return <article className={`turn ${turn.role}`}><header><span>{turn.role === 'candidate' ? 'CANDIDATE' : 'PARTICIPANT'}</span><b>TURN {String(turn.turn).padStart(2, '0')}</b></header><div className="message">{turn.content ? formatMessage(turn.content) : <em>[No text response]</em>}</div>{turn.toolCalls && turn.toolCalls.length > 0 && <div className="tools">{turn.toolCalls.map((tool, index) => <details className={tool.valid ? '' : 'invalid'} key={`${tool.name}-${index}`}><summary><span>{tool.valid ? '◇' : '⚠'} {tool.name}</span><small>{tool.valid ? 'VALID CALL' : 'INVALID CALL'}</small></summary><div><label>ARGUMENTS</label><pre>{JSON.stringify(tool.arguments, null, 2)}</pre><label>RESULT</label><pre>{tool.result}</pre></div></details>)}</div>}{turn.metrics && <footer><span>TTFB {turn.metrics.ttfbMs == null ? '—' : `${(turn.metrics.ttfbMs/1000).toFixed(2)}s`}</span><span>TOTAL {(turn.metrics.totalTimeMs/1000).toFixed(2)}s</span><span>IN {turn.metrics.inputTokens.toLocaleString()} tok</span><span>OUT {turn.metrics.outputTokens.toLocaleString()} tok</span></footer>}</article>; }
 
 function ViewHeader({ eyebrow, title, detail, back }: { eyebrow: string; title: string; detail: string; back: string }) { return <section className="view-heading"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{detail}</p></div><a href={back}>← SCORECARD</a></section>; }
+function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: string) => void }) {
+  const updateKey = (key: string) => {
+    localStorage.setItem('or-key', key);
+    onKeyChange(key);
+  };
+  return <div className="page app-page reveal">
+    <section className="app-heading"><div><p className="eyebrow">LOCAL CREDENTIALS</p><h1>Settings</h1><p>Connect this browser session to your OpenRouter account.</p></div>{apiKey && <span className="key-chip">● KEY SET</span>}</section>
+    <section className="settings-panel"><label htmlFor="or-key">OPENROUTER API KEY</label><input id="or-key" type="password" value={apiKey} onChange={(event) => updateKey(event.target.value)} placeholder="sk-or-v1-…" autoComplete="off"/><p>stays in your browser, sent only to your local server</p></section>
+  </div>;
+}
+
+function ModelPicker({ models, selected, search, onSearch, onToggle }: { models: ApiModel[]; selected: string[]; search: string; onSearch: (value: string) => void; onToggle: (id: string) => void }) {
+  const visible = models.filter((model) => `${model.name} ${model.id}`.toLowerCase().includes(search.toLowerCase())).slice(0, 80);
+  return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = selected.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={!checked && selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div><p className="pick-count">{selected.length}/4 MODELS SELECTED</p></div>;
+}
+
+function NewRun({ apiKey }: { apiKey: string }) {
+  const pluginsState = useLoad(loadPlugins, []);
+  const modelsState = useLoad(loadModels, []);
+  const plugins = pluginsState.data ?? [];
+  const [pluginName, setPluginName] = useState('');
+  const [scenarioId, setScenarioId] = useState('');
+  const [models, setModels] = useState<string[]>([]);
+  const [search, setSearch] = useState('');
+  const [judges, setJudges] = useState(3);
+  const [error, setError] = useState<string>();
+  const [submitting, setSubmitting] = useState(false);
+  useEffect(() => { if (!pluginName && plugins[0]) setPluginName(plugins[0].name); }, [pluginName, plugins]);
+  const plugin: ApiPlugin | undefined = plugins.find((item) => item.name === pluginName);
+  const toggleModel = (id: string) => setModels((current) => current.includes(id) ? current.filter((model) => model !== id) : current.length < 4 ? [...current, id] : current);
+  const submit = async () => {
+    setSubmitting(true); setError(undefined);
+    try {
+      const result = await startRun({ apiKey, plugin: pluginName, models, scenarioId: scenarioId || undefined, judges });
+      location.hash = href({ view: 'progress', runId: result.runId });
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+      setSubmitting(false);
+    }
+  };
+  return <div className="page app-page reveal">
+    <section className="app-heading"><div><p className="eyebrow">TOURNAMENT CONTROL</p><h1>New run</h1><p>Choose the field, the evidence scenario, and the size of the judge panel.</p></div><span className="step-mark">01 / CONFIGURE</span></section>
+    {(pluginsState.loading || modelsState.loading) ? <Skeleton/> : (pluginsState.error || modelsState.error) ? <Empty title="Local catalog unavailable" detail={pluginsState.error ?? modelsState.error}/> : <form className="run-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
+      <section className="form-block"><label htmlFor="plugin">PLUGIN</label><select id="plugin" value={pluginName} onChange={(event) => { setPluginName(event.target.value); setScenarioId(''); }}>{plugins.map((item) => <option value={item.name} key={item.name}>{item.name} — {item.description}</option>)}</select></section>
+      <section className="form-block"><label htmlFor="scenario">SCENARIO</label><select id="scenario" value={scenarioId} onChange={(event) => setScenarioId(event.target.value)}><option value="">ALL SCENARIOS</option>{plugin?.scenarios.map((scenario) => <option value={scenario.id} key={scenario.id}>{scenario.name}</option>)}</select></section>
+      <section className="form-block model-block"><div className="form-label"><label>MODEL FIELD</label><span>SELECT 1–4</span></div><ModelPicker models={modelsState.data ?? []} selected={models} search={search} onSearch={setSearch} onToggle={toggleModel}/></section>
+      <section className="form-block judge-block"><label htmlFor="judges">JUDGES</label><input id="judges" type="number" min="1" max="5" value={judges} onChange={(event) => setJudges(Number(event.target.value))}/><span>independent scoring perspectives</span></section>
+      <div className="run-submit"><p>budget defaults — a run like the demo costs cents</p>{!apiKey && <a href="#/settings">ADD YOUR OPENROUTER KEY →</a>}{error && <strong>{error}</strong>}<button type="submit" disabled={!apiKey || models.length < 1 || submitting}>{submitting ? 'STARTING…' : 'RUN TOURNAMENT'} <span>→</span></button></div>
+    </form>}
+  </div>;
+}
+
+function Progress({ runId, onViewResults }: { runId: string; onViewResults: (runId: string) => Promise<void> }) {
+  const [progress, setProgress] = useState<RunProgress>();
+  const [error, setError] = useState<string>();
+  const terminal = useRef<HTMLPreElement>(null);
+  useEffect(() => {
+    let active = true;
+    let timer: number | undefined;
+    const poll = async () => {
+      try {
+        const next = await loadRunProgress(runId);
+        if (!active) return;
+        setProgress(next);
+        if (next.status === 'running') timer = window.setTimeout(poll, 2000);
+      } catch (cause) {
+        if (active) { setError(cause instanceof Error ? cause.message : String(cause)); timer = window.setTimeout(poll, 2000); }
+      }
+    };
+    void poll();
+    return () => { active = false; if (timer) window.clearTimeout(timer); };
+  }, [runId]);
+  useEffect(() => { if (terminal.current) terminal.current.scrollTop = terminal.current.scrollHeight; }, [progress?.logTail]);
+  const status = progress?.status ?? 'running';
+  return <div className="page app-page reveal">
+    <section className="app-heading"><div><p className="eyebrow">LIVE EVALUATION</p><h1>{status === 'done' ? 'Run complete' : status === 'error' ? 'Run stopped' : 'Running'}</h1><p className="model-id">{runId}</p></div><span className={`status-chip ${status}`}>{status === 'running' ? '● IN PROGRESS' : status === 'done' ? '✓ DONE' : '× ERROR'}</span></section>
+    <section className="progress-panel"><div className="terminal-head"><span>TOURNAMENT LOG / LAST 50 LINES</span><b>{progress?.logTail.length ?? 0} LINES</b></div><pre ref={terminal}>{progress?.logTail.length ? progress.logTail.join('\n') : 'Waiting for pipeline output…'}</pre></section>
+    {(progress?.error || error) && <p className="run-error">{progress?.error ?? error}</p>}
+    {status === 'done' && <div className="progress-action"><button onClick={() => void onViewResults(runId)}>VIEW RESULTS <span>→</span></button></div>}
+  </div>;
+}
 function About() { return <div className="page about reveal"><p className="eyebrow">HOW SCORES BECOME SIGNAL</p><h1>One run.<br/>Four accountable stages.</h1><p className="about-copy">EXECUTE captures every candidate response, tool call, and timing metric. A multi-judge panel scores the evidence independently, then a synthesizer resolves disagreements and documents its reasoning. Finally, AGGREGATE ranks candidates across scenarios without hiding the underlying transcript.</p><Pipeline/><div className="about-grid"><article><b>01</b><h2>Evidence first</h2><p>Every score links back to the exact conversation and tool behavior that produced it.</p></article><article><b>02</b><h2>Disagreement visible</h2><p>Outliers are surfaced as signal, not averaged into silence.</p></article><article><b>03</b><h2>Static by design</h2><p>This viewer reads local JSON only. No backend, accounts, tracking, or live model calls.</p></article></div></div>; }
 
 export default function App() {
   const route = useRoute();
+  const [appMode, setAppMode] = useState<boolean | null>(null);
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('or-key') ?? '');
+  const [freshRuns, setFreshRuns] = useState<string[]>([]);
+  useEffect(() => { void detectAppMode().then((health) => setAppMode(Boolean(health))); }, []);
   const index = useLoad(loadIndex, []);
-  const runs = useMemo(() => [...(index.data?.runs ?? [])].sort().reverse(), [index.data]);
+  const runs = useMemo(() => [...new Set([...freshRuns, ...(index.data?.runs ?? [])])].sort().reverse(), [freshRuns, index.data]);
   const activeRun = route.runId ?? runs[0];
-  const runState = useLoad(activeRun ? () => loadRun(activeRun) : null, [activeRun]);
-  const leaderboardState = useLoad(activeRun ? () => loadLeaderboard(activeRun) : null, [activeRun]);
+  const isAppRoute = route.view === 'settings' || route.view === 'new' || route.view === 'progress';
+  const runState = useLoad(!isAppRoute && activeRun ? () => loadRun(activeRun) : null, [isAppRoute, activeRun]);
+  const leaderboardState = useLoad(!isAppRoute && activeRun ? () => loadLeaderboard(activeRun) : null, [isAppRoute, activeRun]);
   const entry = leaderboardState.data?.find((item) => item.modelId === route.modelId);
   const scenario = entry?.scenarioScores.find((item) => item.scenarioId === route.scenarioId) ?? entry?.scenarioScores[0];
+  const viewResults = async (runId: string) => {
+    const refreshed = await loadIndex();
+    setFreshRuns(refreshed.runs);
+    location.hash = href({ view: 'home', runId });
+  };
   const content = useMemo(() => {
     if (route.view === 'about') return <About/>;
+    if (isAppRoute) {
+      if (appMode === null) return <div className="page"><Skeleton/></div>;
+      if (!appMode) return <Empty title="Local app mode unavailable" detail="Start the viewer with the local GUI command to run tournaments."/>;
+      if (route.view === 'settings') return <Settings apiKey={apiKey} onKeyChange={setApiKey}/>;
+      if (route.view === 'new') return <NewRun apiKey={apiKey}/>;
+      return route.runId ? <Progress runId={route.runId} onViewResults={viewResults}/> : <Empty title="Run not found"/>;
+    }
     if (index.loading || runState.loading || leaderboardState.loading) return <div className="page"><Skeleton/></div>;
     if (!activeRun || index.error || runState.error || leaderboardState.error || !runState.data || !leaderboardState.data) return <Empty detail={index.error ?? runState.error ?? leaderboardState.error}/>;
     if (route.view === 'home') return <Leaderboard run={runState.data} entries={leaderboardState.data}/>;
@@ -150,6 +251,6 @@ export default function App() {
     if (route.view === 'model') return <ModelDetail run={runState.data} entry={entry} selectedScenario={route.scenarioId}/>;
     if (!scenario) return <Empty title="Scenario not found"/>;
     return route.view === 'judges' ? <JudgePanel run={runState.data} entry={entry} scenario={scenario}/> : <Transcript run={runState.data} entry={entry} scenario={scenario}/>;
-  }, [route, index, activeRun, runState, leaderboardState, entry, scenario]);
-  return <Shell runs={runs} activeRun={activeRun} route={route}>{content}</Shell>;
+  }, [route, isAppRoute, appMode, apiKey, index, activeRun, runState, leaderboardState, entry, scenario]);
+  return <Shell runs={runs} activeRun={activeRun} route={route} appMode={appMode === true}>{content}</Shell>;
 }

@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { spawn } from 'node:child_process';
 
 /**
  * CLI results are user-facing program output, so they belong on stdout —
@@ -9,6 +10,7 @@ function print(text: string): void {
   process.stdout.write(`${text}\n`);
 }
 import { serve } from './index.js';
+import { startServer } from './server.js';
 import {
   evaluateTournament,
   formatLeaderboard,
@@ -24,6 +26,26 @@ program.command('serve')
   .description('Start the MCP stdio server')
   .action(async () => serve());
 
+function openBrowser(url: string): void {
+  const command = process.platform === 'win32' ? 'cmd' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+  const args = process.platform === 'win32' ? ['/c', 'start', '', url] : [url];
+  try {
+    const child = spawn(command, args, { detached: true, stdio: 'ignore' });
+    child.on('error', () => undefined);
+    child.unref();
+  } catch {
+    // Opening a browser is a convenience; the printed URL is always usable.
+  }
+}
+
+program.command('gui')
+  .description('Start the local tournament GUI')
+  .option('--port <n>', 'Local HTTP port', value => Number.parseInt(value, 10), 4600)
+  .action(async options => {
+    const { url } = await startServer({ port: options.port });
+    print(url);
+    openBrowser(url);
+  });
 program.command('run')
   .description('Run a tournament evaluation')
   .requiredOption('--models <models>', 'Comma-separated OpenRouter model IDs')

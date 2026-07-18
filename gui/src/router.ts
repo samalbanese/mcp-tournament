@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
-export type Route = { view: 'home' | 'model' | 'judges' | 'transcript' | 'about' | 'settings' | 'new' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
+export type Route = { view: 'home' | 'model' | 'judges' | 'transcript' | 'about' | 'settings' | 'new' | 'build' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
 export function href(route: Route) {
   if (route.view === 'about') return '#/about';
   if (route.view === 'settings') return '#/settings';
   if (route.view === 'new') return '#/new';
+  if (route.view === 'build') return '#/build';
   if (route.view === 'progress') return `#/progress/${encodeURIComponent(route.runId ?? '')}`;
   const p = ['/'];
   if (route.runId) p.push('run', encodeURIComponent(route.runId));
@@ -18,6 +19,7 @@ function parse(): Route {
   if (parts[0] === 'about') return { view: 'about' };
   if (parts[0] === 'settings') return { view: 'settings' };
   if (parts[0] === 'new') return { view: 'new' };
+  if (parts[0] === 'build') return { view: 'build' };
   if (parts[0] === 'progress') return { view: 'progress', runId: parts[1] };
   const runAt = parts.indexOf('run'), modelAt = parts.indexOf('model'), scenarioAt = parts.indexOf('scenario');
   const tail = parts.at(-1);

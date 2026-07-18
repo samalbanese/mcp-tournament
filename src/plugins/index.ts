@@ -7,6 +7,13 @@ const plugins: Record<string, TournamentPlugin> = {
   coding: codingPlugin,
 };
 
+export function registerPlugin(plugin: TournamentPlugin): void {
+  if (plugins[plugin.name]) {
+    throw new Error(`Plugin "${plugin.name}" is already registered`);
+  }
+  plugins[plugin.name] = plugin;
+}
+
 export function getPlugin(name = 'dnd'): TournamentPlugin {
   const plugin = plugins[name];
   if (!plugin) {

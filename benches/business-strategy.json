@@ -1,0 +1,27 @@
+{
+  "name": "business-strategy",
+  "description": "Practical business decisions grounded in real operating constraints and measurable outcomes.",
+  "scenarios": [
+    {
+      "id": "pricing-pivot",
+      "name": "Free Shipping or Percentage Discount",
+      "description": "Recommend a margin-aware promotion strategy with a concrete test plan.",
+      "prompt": "I run an online home-goods store with a $72 average order value, a 42% gross margin, and $9 average shipping cost. About 38% of carts are abandoned after shoppers see shipping. I can either offer free shipping above a threshold or run a 15% sitewide discount, but I cannot afford both. Which should I test first, what exact threshold or offer would you use, and how would you measure whether it improved profit rather than just revenue over the next 30 days?",
+      "rounds": 1,
+      "criteria": [
+        {
+          "name": "practicality",
+          "description": "The recommendation is feasible for a small operator and includes a usable 30-day test plan."
+        },
+        {
+          "name": "specificity",
+          "description": "The answer uses the supplied economics to propose an exact offer, threshold, metrics, and decision rule."
+        },
+        {
+          "name": "risk_awareness",
+          "description": "The answer identifies margin, customer behavior, and experiment-design risks and explains how to control them."
+        }
+      ]
+    }
+  ]
+}

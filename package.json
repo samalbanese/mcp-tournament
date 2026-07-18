@@ -7,7 +7,7 @@
   "bin": {
     "mcp-tournament": "dist/cli.js"
   },
-  "files": ["dist", "gui/dist/**/*"],
+  "files": ["dist", "gui/dist/**/*", "benches"],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",

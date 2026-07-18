@@ -1,0 +1,28 @@
+{
+  "name": "creative-writing",
+  "description": "Iterative fiction writing evaluated for voice, sensory precision, and narrative control.",
+  "scenarios": [
+    {
+      "id": "opening-chapter",
+      "name": "The Last Ferry Opening",
+      "description": "Draft and refine an opening that establishes a distinctive voice, place, and narrative question.",
+      "prompt": "Write the opening 500–700 words of a literary mystery. On the final ferry to a storm-isolated island, a burned-out marine biologist recognizes a suitcase that belonged to her brother, who disappeared twelve years ago. Establish a distinctive first-person voice, make the ferry and weather tangible, and end on a discovery that forces her to act. Do not explain the brother's disappearance yet.",
+      "rounds": 3,
+      "participantPersona": "a discerning developmental editor who responds to the draft and requests one concrete, high-leverage revision each round",
+      "criteria": [
+        {
+          "name": "voice",
+          "description": "The narrator has a specific, consistent perspective with language that feels authored rather than generic."
+        },
+        {
+          "name": "imagery",
+          "description": "Sensory details make the ferry, storm, and emotional tension vivid without overcrowding the prose."
+        },
+        {
+          "name": "coherence",
+          "description": "Character motivation, pacing, clues, and revisions form a clear opening arc with a compelling final turn."
+        }
+      ]
+    }
+  ]
+}

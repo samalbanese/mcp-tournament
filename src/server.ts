@@ -4,7 +4,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
-import { listPlugins } from './plugins/index.js';
+import {
+  BenchDefinitionSchema,
+  createCustomPlugin,
+  loadBenches,
+  readBenchDefinitions,
+} from './plugins/custom.js';
+import { listPlugins, registerPlugin } from './plugins/index.js';
 import { logDebug, logError, logInfo, onLog } from './utils/logger.js';
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -53,6 +59,18 @@ const runRequestSchema = z.object({
   models: z.array(z.string().min(1)).min(1).max(4),
   scenarioId: z.string().min(1).optional(),
   judges: z.number().int().min(1).max(5).optional(),
+}).strict();
+
+const suggestCriteriaSchema = z.object({
+  apiKey: z.string().min(1),
+  question: z.string().min(1).max(4_000),
+}).strict();
+
+const suggestedCriteriaResponseSchema = z.object({
+  criteria: z.array(z.object({
+    name: z.string().regex(/^[a-z0-9_]+$/),
+    description: z.string().min(1),
+  }).strict()).length(3),
 }).strict();
 
 class HttpError extends Error {
@@ -175,6 +193,46 @@ async function getModels(fetcher: typeof fetch): Promise<ModelSummary[]> {
   return models;
 }
 
+function stripJsonFence(value: string): string {
+  return value.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+}
+
+async function suggestCriteria(fetcher: typeof fetch, apiKey: string, question: string): Promise<z.infer<typeof suggestedCriteriaResponseSchema>> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const response = await fetcher('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'deepseek/deepseek-v3.2',
+        max_tokens: 500,
+        messages: [{
+          role: 'user',
+          content: `Create exactly 3 distinct scoring criteria for judging AI answers to the question below. Criterion names must be concise snake_case. Descriptions must state what strong performance looks like. Return strict JSON only in this shape: {"criteria":[{"name":"snake_case","description":"..."}]}.\n\nQuestion:\n${question}`,
+        }],
+      }),
+    });
+    if (!response.ok) throw new Error(`OpenRouter criteria request failed (${response.status})`);
+    const body = await response.json() as { choices?: Array<{ message?: { content?: unknown } }> };
+    const content = body.choices?.[0]?.message?.content;
+    if (typeof content === 'string') {
+      try {
+        return suggestedCriteriaResponseSchema.parse(JSON.parse(stripJsonFence(content)) as unknown);
+      } catch {
+        // Retry once when the model returns malformed or shape-drifted JSON.
+      }
+    }
+  }
+  throw new Error('OpenRouter did not return three valid scoring criteria after one retry');
+}
+
+function benchFilename(name: string): string | null {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return slug ? `${slug}.json` : null;
+}
+
 function runInBackground(input: z.infer<typeof runRequestSchema>, runId: string, resultsDir: string, evaluate: typeof evaluateTournament): void {
   const state: ActiveRun = { runId, status: 'running', logTail: [] };
   runs.set(runId, state);
@@ -214,12 +272,14 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
   const guiDir = path.join(rootDir, 'gui', 'dist');
   const guiDataDir = path.join(guiDir, 'data');
   const resultsDir = path.join(rootDir, 'results');
+  const benchesDir = path.join(rootDir, 'benches');
   const fetcher = options.fetch ?? fetch;
   const evaluate = options.evaluate ?? evaluateTournament;
   const version = options.version ?? (() => {
     try { return (JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8')) as { version?: string }).version ?? 'unknown'; }
     catch { return 'unknown'; }
   })();
+  loadBenches(benchesDir);
 
   return async (request, response) => {
     try {
@@ -248,6 +308,49 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
           description: plugin.description,
           scenarios: plugin.scenarios.map(scenario => ({ id: scenario.id, name: scenario.name })),
         })));
+        return;
+      }
+      if (request.method === 'GET' && pathname === '/api/benches') {
+        sendJson(response, 200, readBenchDefinitions(benchesDir));
+        return;
+      }
+      if (request.method === 'POST' && pathname === '/api/benches') {
+        const parsed = BenchDefinitionSchema.safeParse(await readJsonBody(request));
+        if (!parsed.success) {
+          sendJson(response, 400, { error: 'invalid bench definition', details: parsed.error.flatten() });
+          return;
+        }
+        if (listPlugins().some(plugin => plugin.name === parsed.data.name)) {
+          sendJson(response, 409, { error: `plugin "${parsed.data.name}" already exists` });
+          return;
+        }
+        const filename = benchFilename(parsed.data.name);
+        if (!filename) {
+          sendJson(response, 400, { error: 'bench name must contain at least one letter or number' });
+          return;
+        }
+        fs.mkdirSync(benchesDir, { recursive: true });
+        const benchPath = path.join(benchesDir, filename);
+        if (fs.existsSync(benchPath)) {
+          sendJson(response, 409, { error: `a saved bench already uses the filename "${filename}"` });
+          return;
+        }
+        fs.writeFileSync(benchPath, `${JSON.stringify(parsed.data, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
+        registerPlugin(createCustomPlugin(parsed.data));
+        sendJson(response, 201, { name: parsed.data.name });
+        return;
+      }
+      if (request.method === 'POST' && pathname === '/api/suggest-criteria') {
+        const parsed = suggestCriteriaSchema.safeParse(await readJsonBody(request));
+        if (!parsed.success) {
+          sendJson(response, 400, { error: 'invalid criteria request', details: parsed.error.flatten() });
+          return;
+        }
+        try {
+          sendJson(response, 200, await suggestCriteria(fetcher, parsed.data.apiKey, parsed.data.question));
+        } catch (error) {
+          sendJson(response, 502, { error: scrub(error instanceof Error ? error.message : String(error), parsed.data.apiKey) });
+        }
         return;
       }
       if (request.method === 'POST' && pathname === '/api/runs') {

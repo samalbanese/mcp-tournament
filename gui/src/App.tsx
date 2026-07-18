@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { detectAppMode, loadModels, loadPlugins, loadRunProgress, startRun, type ApiModel, type ApiPlugin, type RunProgress } from './api';
+import { detectAppMode, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis, Turn } from './types';
@@ -29,6 +29,7 @@ function Shell({ children, runs, activeRun, route, appMode }: { children: ReactN
       <a className="brand" href={href({ view: 'home', runId: activeRun })}><span className="brand-mark">MCP</span><span>TOURNAMENT</span><small>{appMode ? 'LOCAL RUNNER' : 'RESULTS TERMINAL'}</small></a>
       <div className="run-control"><label htmlFor="run-select">ACTIVE RUN</label><select id="run-select" value={activeRun ?? ''} onChange={(event) => selectRun(event.target.value)}>{runs.map((run) => <option key={run}>{run}</option>)}</select></div>
       {appMode && <a className={route.view === 'new' ? 'nav-link active' : 'nav-link'} href="#/new">NEW RUN</a>}
+      {appMode && <a className={route.view === 'build' ? 'nav-link active' : 'nav-link'} href="#/build">BUILD BENCH</a>}
       {appMode && <a className={route.view === 'settings' ? 'nav-link active' : 'nav-link'} href="#/settings">SETTINGS</a>}
       <a className={route.view === 'about' ? 'nav-link active' : 'nav-link'} href="#/about">ABOUT</a>
     </header>
@@ -144,6 +145,77 @@ function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: 
   </div>;
 }
 
+function BenchBuilder({ apiKey }: { apiKey: string }) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [question, setQuestion] = useState('');
+  const [rounds, setRounds] = useState(1);
+  const [persona, setPersona] = useState('');
+  const [criteria, setCriteria] = useState<BenchCriterion[]>([{ name: '', description: '' }]);
+  const [error, setError] = useState<string>();
+  const [suggesting, setSuggesting] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const updateCriterion = (index: number, field: keyof BenchCriterion, value: string) => {
+    setCriteria((current) => current.map((criterion, criterionIndex) => criterionIndex === index ? { ...criterion, [field]: value } : criterion));
+  };
+  const getValidationError = () => {
+    if (!name.trim()) return 'Enter a bench name.';
+    if (!description.trim()) return 'Describe what this bench evaluates.';
+    if (!question.trim()) return 'Enter the candidate question or task.';
+    if (criteria.some((criterion) => !criterion.name.trim() || !criterion.description.trim())) return 'Give every criterion a name and description.';
+    if (criteria.some((criterion) => !/^[a-z0-9_]+$/.test(criterion.name))) return 'Criterion names must use lowercase letters, numbers, and underscores.';
+    return undefined;
+  };
+  const requestSuggestions = async () => {
+    setSuggesting(true); setError(undefined);
+    try {
+      const result = await suggestCriteria(apiKey, question.trim());
+      setCriteria(result.criteria);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setSuggesting(false);
+    }
+  };
+  const submit = async () => {
+    const validationError = getValidationError();
+    if (validationError) { setError(validationError); return; }
+    setSaving(true); setError(undefined);
+    const trimmedName = name.trim();
+    try {
+      const result = await saveBench({
+        name: trimmedName,
+        description: description.trim(),
+        scenarios: [{
+          id: 'primary-scenario',
+          name: `${trimmedName} Scenario`,
+          description: description.trim(),
+          prompt: question.trim(),
+          rounds,
+          ...(rounds > 1 && persona.trim() ? { participantPersona: persona.trim() } : {}),
+          criteria: criteria.map((criterion) => ({ name: criterion.name.trim(), description: criterion.description.trim() })),
+        }],
+      });
+      localStorage.setItem('bench-plugin-preset', result.name);
+      location.hash = '#/new';
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+      setSaving(false);
+    }
+  };
+
+  return <div className="page app-page reveal">
+    <section className="app-heading"><div><p className="eyebrow">DECLARATIVE EVALUATION</p><h1>Build bench</h1><p>Turn one real task into a repeatable model benchmark.</p></div><span className="step-mark">01 / DEFINE</span></section>
+    <form className="bench-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
+      <section className="bench-section bench-identity"><div className="section-label"><span>BENCH IDENTITY</span><b>REQUIRED</b></div><div className="bench-fields"><div className="form-block"><label htmlFor="bench-name">BENCH NAME</label><input id="bench-name" value={name} maxLength={60} onChange={(event) => setName(event.target.value)} placeholder="sales-coaching"/></div><div className="form-block"><label htmlFor="bench-description">DESCRIPTION</label><textarea id="bench-description" value={description} maxLength={200} onChange={(event) => setDescription(event.target.value)} placeholder="Tests consultative discovery and practical recommendations."/></div></div></section>
+      <section className="bench-section"><div className="section-label"><span>SCENARIO / 01</span><b>SINGLE SCENARIO V1</b></div><div className="form-block"><label htmlFor="bench-question">QUESTION OR TASK</label><textarea className="question-input" id="bench-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Give the candidate a specific situation, constraints, and a clear outcome to address."/></div><div className="bench-rounds"><div className="form-block"><label htmlFor="bench-rounds">ROUNDS</label><select id="bench-rounds" value={rounds} onChange={(event) => setRounds(Number(event.target.value))}>{[1,2,3,4,5].map((round) => <option value={round} key={round}>{round}</option>)}</select></div>{rounds > 1 && <div className="form-block persona-block"><label htmlFor="bench-persona">PARTICIPANT PERSONA</label><textarea id="bench-persona" value={persona} onChange={(event) => setPersona(event.target.value)} placeholder="a skeptical small business owner who pushes back and asks for specifics"/></div>}</div></section>
+      <section className="bench-section criteria-section"><div className="section-label"><span>SCORING CRITERIA</span><b>{criteria.length} / 6</b></div><div className="criteria-actions"><p>Use exact score keys that describe what a strong answer must do.</p><button type="button" className="secondary-action" disabled={!apiKey || !question.trim() || suggesting} onClick={() => void requestSuggestions()}>{suggesting ? 'SUGGESTING…' : 'SUGGEST CRITERIA'}</button></div><div className="criteria-editor">{criteria.map((criterion, index) => <div className="criteria-row" key={index}><span>{String(index + 1).padStart(2, '0')}</span><input aria-label={`Criterion ${index + 1} name`} value={criterion.name} onChange={(event) => updateCriterion(index, 'name', event.target.value.toLowerCase().replace(/\s+/g, '_'))} placeholder="specificity"/><textarea aria-label={`Criterion ${index + 1} description`} value={criterion.description} onChange={(event) => updateCriterion(index, 'description', event.target.value)} placeholder="What strong performance looks like…"/><button type="button" aria-label={`Remove criterion ${index + 1}`} disabled={criteria.length === 1} onClick={() => setCriteria((current) => current.filter((_, criterionIndex) => criterionIndex !== index))}>×</button></div>)}</div>{criteria.length < 6 && <button type="button" className="add-criterion" onClick={() => setCriteria((current) => [...current, { name: '', description: '' }])}>+ ADD CRITERION</button>}{!apiKey && <p className="bench-hint">Add an OpenRouter key in Settings to use suggested criteria. Manual criteria work without a key.</p>}</section>
+      <div className="run-submit bench-submit"><p>Saves a JSON bench locally and makes it available immediately.</p>{error && <strong>{error}</strong>}<button type="submit" disabled={saving}>{saving ? 'SAVING…' : 'SAVE BENCH'} <span>→</span></button></div>
+    </form>
+  </div>;
+}
+
 function ModelPicker({ models, selected, search, onSearch, onToggle }: { models: ApiModel[]; selected: string[]; search: string; onSearch: (value: string) => void; onToggle: (id: string) => void }) {
   const visible = models.filter((model) => `${model.name} ${model.id}`.toLowerCase().includes(search.toLowerCase())).slice(0, 80);
   return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = selected.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={!checked && selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div><p className="pick-count">{selected.length}/4 MODELS SELECTED</p></div>;
@@ -160,7 +232,13 @@ function NewRun({ apiKey }: { apiKey: string }) {
   const [judges, setJudges] = useState(3);
   const [error, setError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);
-  useEffect(() => { if (!pluginName && plugins[0]) setPluginName(plugins[0].name); }, [pluginName, plugins]);
+  useEffect(() => {
+    if (!pluginName && plugins[0]) {
+      const preset = localStorage.getItem('bench-plugin-preset');
+      setPluginName(plugins.find((item) => item.name === preset)?.name ?? plugins[0].name);
+      localStorage.removeItem('bench-plugin-preset');
+    }
+  }, [pluginName, plugins]);
   const plugin: ApiPlugin | undefined = plugins.find((item) => item.name === pluginName);
   const toggleModel = (id: string) => setModels((current) => current.includes(id) ? current.filter((model) => model !== id) : current.length < 4 ? [...current, id] : current);
   const submit = async () => {
@@ -225,7 +303,7 @@ export default function App() {
   const index = useLoad(loadIndex, []);
   const runs = useMemo(() => [...new Set([...freshRuns, ...(index.data?.runs ?? [])])].sort().reverse(), [freshRuns, index.data]);
   const activeRun = route.runId ?? runs[0];
-  const isAppRoute = route.view === 'settings' || route.view === 'new' || route.view === 'progress';
+  const isAppRoute = route.view === 'settings' || route.view === 'new' || route.view === 'build' || route.view === 'progress';
   const runState = useLoad(!isAppRoute && activeRun ? () => loadRun(activeRun) : null, [isAppRoute, activeRun]);
   const leaderboardState = useLoad(!isAppRoute && activeRun ? () => loadLeaderboard(activeRun) : null, [isAppRoute, activeRun]);
   const entry = leaderboardState.data?.find((item) => item.modelId === route.modelId);
@@ -241,6 +319,7 @@ export default function App() {
       if (appMode === null) return <div className="page"><Skeleton/></div>;
       if (!appMode) return <Empty title="Local app mode unavailable" detail="Start the viewer with the local GUI command to run tournaments."/>;
       if (route.view === 'settings') return <Settings apiKey={apiKey} onKeyChange={setApiKey}/>;
+      if (route.view === 'build') return <BenchBuilder apiKey={apiKey}/>;
       if (route.view === 'new') return <NewRun apiKey={apiKey}/>;
       return route.runId ? <Progress runId={route.runId} onViewResults={viewResults}/> : <Empty title="Run not found"/>;
     }

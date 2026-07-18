@@ -19,6 +19,22 @@ matching this shape:
   "overall_impression": "brief assessment"
 }`;
 
+export function buildCriteriaJsonInstruction(criteria: Array<{ name: string }>): string {
+  const scores = Object.fromEntries(criteria.map(criterion => [criterion.name, {
+    score: 7,
+    justification: `Evidence-based reason for ${criterion.name}`,
+    quotes: ['supporting quote'],
+    improvement: `specific improvement for ${criterion.name}`,
+  }]));
+  return `Return only JSON. The scores object must use exactly these criterion names as keys:\n${JSON.stringify({
+    scores,
+    rule_errors: [],
+    tool_errors: [],
+    flags: [],
+    overall_impression: 'brief assessment',
+  }, null, 2)}`;
+}
+
 export const JUDGE_SYSTEM_PROMPTS: Record<string, string> = {
   rules: `You are a precise correctness and tool-use evaluator. Check factual,
 logical, procedural, and domain-rule accuracy. ${JSON_INSTRUCTION}`,
@@ -61,7 +77,7 @@ ${pluginPrompt}
 Transcript:
 ${transcript}
 
-${JSON_INSTRUCTION}`;
+${criteria.length ? buildCriteriaJsonInstruction(criteria) : JSON_INSTRUCTION}`;
 }
 
 export function buildSynthesisPrompt(

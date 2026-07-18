@@ -1,12 +1,15 @@
 # mcp-tournament
 
-> LLM evaluation as an MCP server. Multi-judge panels, arbiter synthesis, pluggable
-> domains, and a static results viewer — all routed through OpenRouter for pennies.
+> Build your own LLM benchmark in a form, run it from a local GUI or MCP — bring
+> your own OpenRouter key. Multi-judge panels, arbiter synthesis, ranked results,
+> all for pennies per run.
 
-Submit any model to a structured tournament: it plays through domain scenarios, a
-panel of specialist AI judges scores it independently, an arbiter resolves their
-disagreements, and the results land on a ranked leaderboard — from your AI
-assistant (MCP) or the CLI.
+Describe a task in plain language, define (or AI-suggest) the judging criteria,
+and submit any models to a structured tournament: each candidate plays through
+your scenario, a panel of specialist AI judges scores it independently, an
+arbiter resolves their disagreements, and the results land on a ranked
+leaderboard. Run it from the bundled local web app, your AI assistant (MCP), or
+the CLI — no code required to add a new benchmark.
 
 ![Leaderboard view](docs/images/leaderboard-1440.png)
 
@@ -29,15 +32,19 @@ rendered in the viewer:
 4. AGGREGATE   ranked leaderboard + full JSON audit trail (docs/RESULTS_FORMAT.md)
 ```
 
-Domain logic is pluggable; the pipeline is not. A plugin supplies scenarios,
-prompts, a simulated participant, and optional tools — see
-[docs/PLUGINS.md](docs/PLUGINS.md).
+Domain logic is pluggable; the pipeline is not. Benches are declarative plugins —
+a JSON file (or the Build Bench form) defines scenarios, rounds, an optional
+simulated participant persona, and judging criteria. Code plugins can go further
+with custom tools — see [docs/PLUGINS.md](docs/PLUGINS.md).
 
-| Plugin | Domain | Status |
-|--------|--------|--------|
-| `dnd` | D&D 5e Dungeon Master (scenarios, dice/damage tools, LLM player) | ✅ included |
-| `coding` | Code generation & review | ✅ included (minimal) |
-| Your domain | One TypeScript file | 📦 [guide](docs/PLUGINS.md) |
+| Plugin | Domain | Kind |
+|--------|--------|------|
+| `business-strategy` | SMB pricing decision with real numbers to reason about | 📄 bench (JSON) |
+| `creative-writing` | Opening chapter + 3 rounds with a developmental-editor persona | 📄 bench (JSON) |
+| `customer-support` | Billing dispute with an escalating customer persona | 📄 bench (JSON) |
+| `dnd` | Showcase: D&D 5e Dungeon Master with dice/damage tools and an LLM player | ⚙️ code plugin |
+| `coding` | Code generation & review | ⚙️ code plugin |
+| **Yours** | Build in the GUI (`#/build`), drop a JSON in `benches/`, or write TypeScript | 🛠 you |
 
 ## Quick start
 
@@ -45,6 +52,19 @@ prompts, a simulated participant, and optional tools — see
 npm install && npm run build
 export OPENROUTER_API_KEY=sk-or-...   # one key, every role
 ```
+
+### As a local app (BYOK GUI)
+
+```bash
+npm --prefix gui install && npm --prefix gui run build
+node dist/cli.js gui              # http://localhost:4600
+```
+
+Paste your OpenRouter key in **Settings** (stored in your browser, sent only to
+this local server, never written to disk), pick models from the live catalog
+with prices, and start a run from **NEW RUN**. **BUILD BENCH** creates a new
+benchmark from a form — question, rounds, persona, judging criteria (with an
+AI-suggest button) — and saves it as a JSON plugin, live immediately.
 
 ### As an MCP server (Claude Desktop, Cursor, Windsurf)
 

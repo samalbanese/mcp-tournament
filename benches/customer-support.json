@@ -1,0 +1,28 @@
+{
+  "name": "customer-support",
+  "description": "Multi-turn support conversations that test empathy, ownership, and clear resolution paths.",
+  "scenarios": [
+    {
+      "id": "billing-dispute",
+      "name": "Duplicate Subscription Charge",
+      "description": "Resolve a duplicate charge without making the customer repeat work or accept vague promises.",
+      "prompt": "I was charged $49.99 twice for the same monthly subscription this morning. My account shows only one active plan, and I need the extra charge reversed because it affects a bill due tomorrow. I have both transaction IDs ready. Can you fix this?",
+      "rounds": 3,
+      "participantPersona": "a polite but frustrated customer who was double-charged $49.99 and becomes more direct if given runaround, vague timelines, or repeated requests",
+      "criteria": [
+        {
+          "name": "empathy",
+          "description": "The response acknowledges the urgency and frustration naturally while avoiding empty or repetitive apologies."
+        },
+        {
+          "name": "resolution_quality",
+          "description": "The agent takes ownership, gathers only necessary information, and provides a concrete path to reverse or escalate the duplicate charge."
+        },
+        {
+          "name": "policy_clarity",
+          "description": "Timelines, verification needs, refund behavior, and any limits are explained plainly without inventing policy."
+        }
+      ]
+    }
+  ]
+}

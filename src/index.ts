@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'node:url';
+import path from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
@@ -10,6 +11,7 @@ import {
   readLeaderboard,
 } from './pipeline.js';
 import { logError, logInfo } from './utils/logger.js';
+import { loadBenches } from './plugins/custom.js';
 
 export function createServer(): McpServer {
   const server = new McpServer({ name: 'mcp-tournament', version: '0.1.0' });
@@ -61,6 +63,7 @@ export function createServer(): McpServer {
 }
 
 export async function serve(): Promise<void> {
+  loadBenches(path.join(process.cwd(), 'benches'));
   await createServer().connect(new StdioServerTransport());
   logInfo('MCP Tournament server running on stdio');
 }

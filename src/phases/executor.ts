@@ -89,6 +89,7 @@ export async function runScenario(
       const textParts: string[] = [];
       let inputTokens = 0;
       let outputTokens = 0;
+      let toolBudgetExhausted = false;
 
       for (let toolRound = 0; toolRound <= MAX_TOOL_ROUNDS; toolRound++) {
         const response = await client.createMessage({
@@ -108,7 +109,14 @@ export async function runScenario(
           break;
         }
         if (toolRound === MAX_TOOL_ROUNDS) {
-          throw new Error(`Candidate exceeded ${MAX_TOOL_ROUNDS} tool rounds`);
+          // Tool budget exhausted mid-turn: record a degraded turn and keep the
+          // conversation going — judges score the failure; it must not kill the run.
+          messages.push({
+            role: 'assistant',
+            content: response.text || `[MAX_TOOL_ROUNDS exceeded — no text response]`,
+          });
+          toolBudgetExhausted = true;
+          break;
         }
 
         messages.push({ role: 'assistant', content: response.content });
@@ -129,7 +137,8 @@ export async function runScenario(
       const candidateTurn: Turn = {
         turn: turnNumber,
         role: 'candidate',
-        content: textParts.join('\n').trim(),
+        content: textParts.join('\n').trim()
+          || (toolBudgetExhausted ? `[MAX_TOOL_ROUNDS exceeded — no text response]` : ''),
         ...(turnToolCalls.length ? { toolCalls: turnToolCalls } : {}),
         metrics: { ttfbMs: null, totalTimeMs, inputTokens, outputTokens },
       };

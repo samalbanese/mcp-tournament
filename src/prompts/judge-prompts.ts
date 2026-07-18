@@ -74,8 +74,16 @@ export function buildSynthesisPrompt(
 ): string {
   return `Synthesize these independent evaluations for "${scenario.name}".
 Use the median where possible. Confidence must be "high", "medium", or "contested".
-Return only JSON with final_scores, average_score, rule_errors_confirmed, assessment,
-and judge_agreement.
+Return only JSON in EXACTLY this shape (every final_scores value is an object, never a bare number):
+{
+  "final_scores": {
+    "<criterion>": { "score": 7, "confidence": "high", "outliers": ["<judge name>: scored N vs median M - <why>"] }
+  },
+  "average_score": 6.5,
+  "rule_errors_confirmed": ["<error>"],
+  "assessment": "<2-5 sentence overall assessment>",
+  "judge_agreement": "<where judges agreed and disagreed>"
+}
 
 ${judgeEvaluations.map(evaluation =>
     `${evaluation.judgeName} (${evaluation.judgeModel}):\n${JSON.stringify(evaluation.parsed, null, 2)}`

@@ -13,11 +13,33 @@ export interface SynthesisResult {
   metrics: { inputTokens: number; outputTokens: number; timeMs: number };
 }
 
+/**
+ * Models sometimes flatten final_scores to bare numbers despite the prompt
+ * skeleton (observed with kimi-k2.5). Coerce that near-miss shape into the
+ * schema instead of failing the whole synthesis phase over it.
+ */
+export function normalizeSynthesisPayload(payload: unknown): unknown {
+  if (!payload || typeof payload !== 'object') return payload;
+  const candidate = payload as Record<string, unknown>;
+  const scores = candidate.final_scores;
+  if (!scores || typeof scores !== 'object') return payload;
+  const normalized = Object.fromEntries(Object.entries(scores as Record<string, unknown>)
+    .map(([criterion, value]) => [
+      criterion,
+      typeof value === 'number'
+        ? { score: value, confidence: 'medium', outliers: [] }
+        : value,
+    ]));
+  return { ...candidate, final_scores: normalized };
+}
+
 function parseSynthesis(text: string): Synthesis | null {
   const match = text.match(/\`\`\`json\s*([\s\S]*?)\`\`\`/) ?? text.match(/\{[\s\S]*\}/);
   if (!match) return null;
   try {
-    const result = SynthesisSchema.safeParse(JSON.parse(match[1] ?? match[0]));
+    const result = SynthesisSchema.safeParse(
+      normalizeSynthesisPayload(JSON.parse(match[1] ?? match[0])),
+    );
     return result.success ? result.data : null;
   } catch {
     return null;

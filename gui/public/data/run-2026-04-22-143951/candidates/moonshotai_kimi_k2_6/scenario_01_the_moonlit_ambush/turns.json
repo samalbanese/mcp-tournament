@@ -1,0 +1,332 @@
+[
+  {
+    "turn": 0,
+    "role": "participant",
+    "content": "You are mid-campaign. The player is traveling through a dense forest at night. Three bandits are about to spring an ambush."
+  },
+  {
+    "turn": 1,
+    "role": "candidate",
+    "content": "The darkness explodes into violence.\n\n**Initiative Order — Round 1**\n- **Ghost** (20)\n- Bandit 2 (17)\n- Bandit 1 (15)\n- Bandit 3 (9)\n- **Sera** (8)\n\nGhost is fastest to react, his predatory instincts sharper than the bandits' greed. The wolf fixes his amber eyes on the nearest brigand—the one who dropped from the tree, **Bandit 2**—and tenses to spring.\n\n**Ghost's Turn.** What does Sera command Ghost to do?\n\n*(Ghost can use the Bite attack: +4 to hit, 2d4+2 piercing damage, and on a hit the target must succeed a DC 11 Strength saving throw or be knocked prone.)*",
+    "toolCalls": [
+      {
+        "name": "play_music",
+        "arguments": {
+          "music_type": "tense"
+        },
+        "result": "Background music \"tense\" now playing.",
+        "valid": true
+      },
+      {
+        "name": "play_sound",
+        "arguments": {
+          "sound_type": "combat_start"
+        },
+        "result": "Sound effect \"combat_start\" played.",
+        "valid": true
+      },
+      {
+        "name": "update_location",
+        "arguments": {
+          "action": "add_location",
+          "location": {
+            "name": "Whisperroot Forest - Night",
+            "description": "Dense, ancient woodland. Towering oaks block the moonlight. The forest floor is thick with ferns and fallen needles. Perfect ambush territory.",
+            "type": "forest",
+            "position": {
+              "x": 5,
+              "y": 10
+            }
+          }
+        },
+        "result": "Location updated: add_location Whisperroot Forest - Night",
+        "valid": true
+      },
+      {
+        "name": "start_combat",
+        "arguments": {
+          "enemies": [
+            {
+              "srd_id": "bandit",
+              "count": 3
+            }
+          ]
+        },
+        "result": "{\"combat_started\":true,\"round\":1,\"initiative_order\":[{\"id\":\"pc_ghost\",\"name\":\"Ghost\",\"type\":\"player\",\"initiative\":20,\"hp\":{\"current\":11,\"max\":11},\"ac\":13},{\"id\":\"npc_bandit_2\",\"name\":\"Bandit 2\",\"type\":\"enemy\",\"initiative\":17,\"hp\":{\"current\":11,\"max\":11},\"ac\":12},{\"id\":\"npc_bandit_1\",\"name\":\"Bandit 1\",\"type\":\"enemy\",\"initiative\":15,\"hp\":{\"current\":11,\"max\":11},\"ac\":12},{\"id\":\"npc_bandit_3\",\"name\":\"Bandit 3\",\"type\":\"enemy\",\"initiative\":9,\"hp\":{\"current\":11,\"max\":11},\"ac\":12},{\"id\":\"pc_sera\",\"name\":\"Sera Nightbloom\",\"type\":\"player\",\"initiative\":8,\"hp\":{\"current\":42,\"max\":42},\"ac\":15}],\"first_turn\":{\"id\":\"pc_ghost\",\"name\":\"Ghost\",\"type\":\"player\"}}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": 40665,
+      "totalTimeMs": 60208,
+      "inputTokens": 7212,
+      "outputTokens": 1390
+    }
+  },
+  {
+    "turn": 2,
+    "role": "participant",
+    "content": "\"Ghost — take him *down*.\"\n\nSera hisses the command as her hand finds the grip of her longbow by instinct, eyes cutting through the dark to count shadows — *three, just three* — and she rolls left behind the nearest trunk, back against bark, arrow already nocked.\n\n\"Pin him so I can work,\" she breathes, more to herself than the wolf."
+  },
+  {
+    "turn": 3,
+    "role": "candidate",
+    "content": "[MAX_TOOL_ROUNDS exceeded — no text response]",
+    "toolCalls": [
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "pc_ghost",
+          "target_id": "npc_bandit_2",
+          "attack_id": "bite"
+        },
+        "result": "{\"error\":\"\\\"bite\\\" is not a valid attack for Ghost. Valid attacks: \",\"legal_actions\":[]}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "pc_ghost",
+          "target_id": "npc_bandit_2",
+          "attack_id": "Bite"
+        },
+        "result": "{\"error\":\"\\\"Bite\\\" is not a valid attack for Ghost. Valid attacks: \",\"legal_actions\":[]}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+4",
+          "reason": "Ghost's Bite attack against Bandit 2"
+        },
+        "result": "{\"notation\":\"1d20+4\",\"rolls\":[9],\"total\":13,\"reason\":\"Ghost's Bite attack against Bandit 2\",\"breakdown\":\"[9] + 4 = 13\"}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d4+2",
+          "reason": "Ghost's Bite damage to Bandit 2"
+        },
+        "result": "{\"notation\":\"2d4+2\",\"rolls\":[1,3],\"total\":6,\"reason\":\"Ghost's Bite damage to Bandit 2\",\"breakdown\":\"[1, 3] + 2 = 6\"}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d20+1",
+          "reason": "Bandit 2 STR save vs Ghost's knock prone (DC 11)"
+        },
+        "result": "{\"notation\":\"1d20+1\",\"rolls\":[7],\"total\":8,\"reason\":\"Bandit 2 STR save vs Ghost's knock prone (DC 11)\",\"breakdown\":\"[7] + 1 = 8\"}",
+        "valid": true
+      },
+      {
+        "name": "advance_turn",
+        "arguments": {},
+        "result": "{\"round\":1,\"turn_index\":1,\"current_combatant\":{\"id\":\"npc_bandit_2\",\"name\":\"Bandit 2\",\"type\":\"enemy\",\"hp\":{\"current\":11,\"max\":11},\"conditions\":[]},\"events\":[]}",
+        "valid": true
+      },
+      {
+        "name": "apply_damage",
+        "arguments": {
+          "target_id": "npc_bandit_2",
+          "damage": 6,
+          "damage_type": "piercing",
+          "source": "Ghost's Bite"
+        },
+        "result": "{\"target_id\":\"npc_bandit_2\",\"target_name\":\"Bandit 2\",\"damage_dealt\":6,\"damage_type\":\"piercing\",\"hp\":{\"current\":5,\"max\":11},\"source\":\"Ghost's Bite\",\"target_status\":\"bloodied\"}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "npc_bandit_2",
+          "target_id": "pc_ghost",
+          "attack_id": "scimitar",
+          "disadvantage": true
+        },
+        "result": "{\"hit\":true,\"critical\":false,\"attack_roll\":{\"dice\":\"2d20\",\"results\":[15],\"total\":18,\"modifier\":3},\"effective_ac\":13,\"damage\":{\"total\":4,\"type\":\"slashing\",\"breakdown\":\"[3+1]\",\"primary_total\":4},\"target_hp\":{\"current\":7,\"max\":11},\"attacker_name\":\"Bandit 2\",\"target_name\":\"Ghost\",\"target_status\":\"healthy\"}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "npc_bandit_1",
+          "target_id": "pc_ghost",
+          "attack_id": "scimitar"
+        },
+        "result": "{\"hit\":true,\"critical\":false,\"attack_roll\":{\"dice\":\"1d20\",\"results\":[16],\"total\":19,\"modifier\":3},\"effective_ac\":13,\"damage\":{\"total\":2,\"type\":\"slashing\",\"breakdown\":\"[1+1]\",\"primary_total\":2},\"target_hp\":{\"current\":5,\"max\":11},\"attacker_name\":\"Bandit 1\",\"target_name\":\"Ghost\",\"target_status\":\"bloodied\"}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": 13668,
+      "totalTimeMs": 111843,
+      "inputTokens": 42052,
+      "outputTokens": 2277
+    }
+  },
+  {
+    "turn": 4,
+    "role": "participant",
+    "content": "*From the shadow of the trunk, Sera exhales slow — finds the gap between branches, fixes the mark on Bandit 1 while Ghost tangles with his partner.* \"You picked the wrong road tonight,\" she mutters, fingers releasing.\n\nShe looses the arrow, already reaching for a second, her pale eyes tracking which bandit is still standing free — Ghost handles one, but two more is two too many, and she stays tight against the bark, using the tree as a wall at her back.\n\n*She whispers the Hunter's Mark, feeling the spell settle like a cold weight on her chosen quarry — a faint shimmer that only she can see.*"
+  },
+  {
+    "turn": 5,
+    "role": "candidate",
+    "content": "The leader staggers, shoulder pinned by your shaft, dark blood bubbling between his knuckles. His eyes find yours across the gloom—first shock, then cold fury. The Hunter's Mark flares in your sight alone, an invisible brand promising the next arrow will find him again.\n\n**End of Round 1.** The forest breathes violence.\n\n---\n\n**Round 2**\n\n**Ghost's turn.** The wolf still has Bandit 2 pinned beneath him in the ferns. Bloodied but unbroken, Ghost shakes the prone brigand and bites down again.\n\nWhat is your command for Ghost this round, Sera?\n\n*(Ghost currently: 5/11 HP, attacking a prone Bandit 2 at 5/11 HP. Advantage on attacks against prone targets.)*",
+    "toolCalls": [
+      {
+        "name": "advance_turn",
+        "arguments": {},
+        "result": "{\"round\":1,\"turn_index\":2,\"current_combatant\":{\"id\":\"npc_bandit_1\",\"name\":\"Bandit 1\",\"type\":\"enemy\",\"hp\":{\"current\":11,\"max\":11},\"conditions\":[]},\"events\":[]}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "npc_bandit_3",
+          "target_id": "pc_sera",
+          "attack_id": "scimitar"
+        },
+        "result": "{\"hit\":false,\"critical\":false,\"attack_roll\":{\"dice\":\"1d20\",\"results\":[3],\"total\":6,\"modifier\":3},\"effective_ac\":15,\"damage\":{\"total\":0,\"type\":\"slashing\",\"breakdown\":\"\",\"primary_total\":0},\"target_hp\":{\"current\":42,\"max\":42},\"attacker_name\":\"Bandit 3\",\"target_name\":\"Sera Nightbloom\",\"target_status\":\"healthy\"}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "pc_sera",
+          "target_id": "npc_bandit_1",
+          "attack_id": "longbow"
+        },
+        "result": "{\"hit\":true,\"critical\":false,\"attack_roll\":{\"dice\":\"1d20\",\"results\":[10],\"total\":17,\"modifier\":7},\"effective_ac\":12,\"damage\":{\"total\":5,\"type\":\"piercing\",\"breakdown\":\"[1+4]\",\"primary_total\":5},\"target_hp\":{\"current\":6,\"max\":11},\"attacker_name\":\"Sera Nightbloom\",\"target_name\":\"Bandit 1\",\"target_status\":\"healthy\"}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "1d6",
+          "reason": "Hunter's Mark bonus damage against Bandit 1"
+        },
+        "result": "{\"notation\":\"1d6\",\"rolls\":[1],\"total\":1,\"reason\":\"Hunter's Mark bonus damage against Bandit 1\",\"breakdown\":\"[1] = 1\"}",
+        "valid": true
+      },
+      {
+        "name": "apply_damage",
+        "arguments": {
+          "target_id": "npc_bandit_1",
+          "damage": 1,
+          "damage_type": "force",
+          "source": "Hunter's Mark"
+        },
+        "result": "{\"target_id\":\"npc_bandit_1\",\"target_name\":\"Bandit 1\",\"damage_dealt\":1,\"damage_type\":\"force\",\"hp\":{\"current\":5,\"max\":11},\"source\":\"Hunter's Mark\",\"target_status\":\"bloodied\"}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": 33434,
+      "totalTimeMs": 98739,
+      "inputTokens": 37177,
+      "outputTokens": 2262
+    }
+  },
+  {
+    "turn": 6,
+    "role": "participant",
+    "content": "\"Finish it, Ghost — *end him*,\" Sera breathes, trusting the wolf to close what he's already won.\n\nHer eyes don't stay on Ghost — they sweep left, hunting for Bandit 3's silhouette in the dark. *Two accounted for, but three means one's still moving free,* and a bandit she can't see is worse than the one glaring daggers at her across the clearing. She keeps the marked leader in her peripheral vision, arrow half-drawn, but turns her ear to the forest — listening for footfall, a snapped twig, breathing that doesn't belong to her wolf."
+  },
+  {
+    "turn": 7,
+    "role": "candidate",
+    "content": "Steel bites through leather at your side—a hot line of pain as Bandit 3's scimitar finds the gap between tree and arm. You grit your teeth, tasting iron. **5 slashing damage. (37/42 HP)** His blade comes away red.\n\nTwo of them now, close and pressing. Ghost is bloodied but free, the ferns behind him silent where Bandit 2 lies.\n\nAnd now—**your turn, Sera.**\n\n---\n\n**Sera Nightbloom's Turn — Round 2**\n\nYou're flanked. The leader (Bandit 1) is marked and bloodied at 5 HP, barely an arm's reach before you. Bandit 3 is at your left, untouched, grinning with rotted teeth. You have half cover from the tree against one, but not both.\n\nWhat do you do?",
+    "toolCalls": [
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d20kh1+4",
+          "reason": "Ghost's Bite attack with advantage vs prone Bandit 2"
+        },
+        "result": "{\"error\":\"Invalid dice notation: 2d20kh1+4\"}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d20",
+          "reason": "Ghost's advantage attack roll — taking the higher die"
+        },
+        "result": "{\"notation\":\"2d20\",\"rolls\":[8,4],\"total\":12,\"reason\":\"Ghost's advantage attack roll — taking the higher die\",\"breakdown\":\"[8, 4] = 12\"}",
+        "valid": true
+      },
+      {
+        "name": "roll_dice",
+        "arguments": {
+          "notation": "2d4+2",
+          "reason": "Ghost's Bite damage to finish Bandit 2"
+        },
+        "result": "{\"notation\":\"2d4+2\",\"rolls\":[1,3],\"total\":6,\"reason\":\"Ghost's Bite damage to finish Bandit 2\",\"breakdown\":\"[1, 3] + 2 = 6\"}",
+        "valid": true
+      },
+      {
+        "name": "advance_turn",
+        "arguments": {},
+        "result": "{\"round\":1,\"turn_index\":3,\"current_combatant\":{\"id\":\"npc_bandit_3\",\"name\":\"Bandit 3\",\"type\":\"enemy\",\"hp\":{\"current\":11,\"max\":11},\"conditions\":[]},\"events\":[]}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "npc_bandit_1",
+          "target_id": "pc_sera",
+          "attack_id": "scimitar"
+        },
+        "result": "{\"hit\":false,\"critical\":false,\"attack_roll\":{\"dice\":\"1d20\",\"results\":[10],\"total\":13,\"modifier\":3},\"effective_ac\":15,\"damage\":{\"total\":0,\"type\":\"slashing\",\"breakdown\":\"\",\"primary_total\":0},\"target_hp\":{\"current\":42,\"max\":42},\"attacker_name\":\"Bandit 1\",\"target_name\":\"Sera Nightbloom\",\"target_status\":\"healthy\"}",
+        "valid": true
+      },
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "npc_bandit_3",
+          "target_id": "pc_sera",
+          "attack_id": "scimitar"
+        },
+        "result": "{\"hit\":true,\"critical\":false,\"attack_roll\":{\"dice\":\"1d20\",\"results\":[12],\"total\":15,\"modifier\":3},\"effective_ac\":15,\"damage\":{\"total\":5,\"type\":\"slashing\",\"breakdown\":\"[4+1]\",\"primary_total\":5},\"target_hp\":{\"current\":37,\"max\":42},\"attacker_name\":\"Bandit 3\",\"target_name\":\"Sera Nightbloom\",\"target_status\":\"healthy\"}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": 39921,
+      "totalTimeMs": 174713,
+      "inputTokens": 52049,
+      "outputTokens": 5390
+    }
+  },
+  {
+    "turn": 8,
+    "role": "participant",
+    "content": "\"Ghost — *left*, the new one!\" She snarls it through clenched teeth, pivoting hard off the tree to put her back to solid bark again — one threat, not two.\n\nThe bow goes to her off-hand in the same motion, shortsword clearing its scabbard as she drives forward into Bandit 1's guard, using his own wounded hesitation against him; five hit points and a hole in his shoulder means he's already dead, he just doesn't know it yet. *She intends to remind him.*"
+  },
+  {
+    "turn": 9,
+    "role": "candidate",
+    "content": "",
+    "toolCalls": [
+      {
+        "name": "resolve_attack",
+        "arguments": {
+          "attacker_id": "pc_sera",
+          "target_id": "npc_bandit_1",
+          "attack_id": "shortsword"
+        },
+        "result": "{\"hit\":false,\"critical\":false,\"attack_roll\":{\"dice\":\"1d20\",\"results\":[1],\"total\":8,\"modifier\":7},\"effective_ac\":12,\"damage\":{\"total\":0,\"type\":\"piercing\",\"breakdown\":\"\",\"primary_total\":0},\"target_hp\":{\"current\":5,\"max\":11},\"attacker_name\":\"Sera Nightbloom\",\"target_name\":\"Bandit 1\",\"target_status\":\"bloodied\"}",
+        "valid": true
+      }
+    ],
+    "metrics": {
+      "ttfbMs": 106528,
+      "totalTimeMs": 130051,
+      "inputTokens": 8423,
+      "outputTokens": 932
+    }
+  }
+]

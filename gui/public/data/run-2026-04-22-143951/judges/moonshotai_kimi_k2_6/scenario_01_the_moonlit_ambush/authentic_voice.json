@@ -1,0 +1,85 @@
+{
+  "scores": {
+    "atmosphere": {
+      "score": 7,
+      "justification": "Several lines break genuinely above AI-median — 'dark blood bubbling between his knuckles,' 'the forest breathes violence,' and 'steel bites through leather at your side—a hot line of pain' all demonstrate selective sensory focus rather than simultaneous perfect description. The hunter's mark rendered as 'an invisible brand promising the next arrow will find him again' is earned imagery. However, 'his predatory instincts sharper than the bandits' greed' is a constructed parallel that reads slightly manufactured, and 'tasting iron' is a cliché that costs the DM nothing to use.",
+      "quotes": [
+        "The darkness explodes into violence.",
+        "dark blood bubbling between his knuckles. His eyes find yours across the gloom—first shock, then cold fury.",
+        "The forest breathes violence.",
+        "Steel bites through leather at your side—a hot line of pain as Bandit 3's scimitar finds the gap between tree and arm."
+      ],
+      "improvement": "Anchor one or two sensory details to the forest environment itself — moonlight through canopy gaps, the smell of wet bark, sound of Ghost's claws in the leaf litter — rather than focusing exclusively on wound descriptions. The setting disappears once combat starts."
+    },
+    "tool_usage": {
+      "score": 3,
+      "justification": "Multiple cascading failures undermine this session's mechanical backbone. The DM attempted 'bite' then 'Bite' as attack IDs against a tool that rejected both, then improvised manual dice rolls — a reasonable recovery but indicative of insufficient pre-session tool validation. More critically, the longbow hit in Turn 2 generated a successful attack roll and a Hunter's Mark roll, but the primary arrow damage (1d8 + modifier) was never applied via apply_damage — only the 1d mark bonus was applied, leaving Bandit 1 at incorrect HP. The Turn 3 advantage roll used 'notation:2d20kh1+4' which failed, then correctly pivoted to separate '2d20' with manual highest-die selection, but lost the +4 modifier from the final result entirely.",
+      "quotes": [
+        "resolve_attack({\"attacker_id\":\"pc_ghost\",\"target_id\":\"npc_bandit_2\",\"attack_id\":\"bite\"}) -> {\"error\":\"\\\"bite\\\" is not a valid attack for Ghost. Valid attacks: \"}",
+        "roll_dice({\"notation\":\"2d20kh1+4\",\"reason\":\"Ghost's Bite attack with advantage vs prone Bandit 2\"}) -> {\"error\":\"Invalid dice notation: 2d20kh1+4\"}",
+        "apply_damage({\"target_id\":\"npc_bandit_1\",\"damage\":1,\"damage_type\":\"force\",\"source\":\"Hunter's Mark\"})"
+      ],
+      "improvement": "Hunter's Mark adds 1d6 of the weapon's damage type — not force damage — and should be bundled into a single apply_damage call with the base weapon damage. Before narrating an outcome, confirm apply_damage resolves correctly for every hit; a hit that only applies mark damage misrepresents HP state to the entire session."
+    },
+    "tactical_narration": {
+      "score": 6,
+      "justification": "Bandit 2 fighting back at disadvantage while prone is mechanically sound and narratively credible; Bandit 1 immediately attacking Ghost rather than chasing Sera shows coalition logic. 'Grinning with rotted teeth' for Bandit 3 is the session's best NPC characterization — a single physical detail that implies class, confidence, and menace without any monologue. What's missing is bandits using the terrain: no one retreats to better cover, circles to a flank, or calls to each other. These three behave as independent health-bar targets rather than people who planned an ambush together.",
+      "quotes": [
+        "grinning with rotted teeth",
+        "resolve_attack({\"attacker_id\":\"npc_bandit_2\",\"target_id\":\"pc_ghost\",\"attack_id\":\"scimitar\",\"disadvantage\":true})",
+        "Bloodied but unbroken, Ghost shakes the prone brigand and bites down again."
+      ],
+      "improvement": "Give one bandit a spoken line mid-combat — not to explain motivation, but to coordinate or panic. A bandit shouting 'The wolf — get the wolf!' or falling silent when the marked leader takes an arrow costs nothing and makes them feel like agents rather than encounter furniture."
+    },
+    "pacing": {
+      "score": 5,
+      "justification": "Turn 2 is the session's pacing highlight — it resolves action, delivers consequence immediately ('the leader staggers, shoulder pinned'), holds a beat ('The forest breathes violence'), and transitions cleanly into the next round. But Turn 1 produced NO text response whatsoever (MAX_TOOL_ROUNDS exceeded), which is a hard stop in dramatic momentum. Turn 3 ends with a mechanical status dump — HP, cover conditions, enemy positions — that reads like a spreadsheet footnote appended to what was otherwise a cinematic sequence. Every turn ends with an explicit prompt question.",
+      "quotes": [
+        "[Turn 1] [MAX_TOOL_ROUNDS exceeded — no text response]",
+        "You're flanked. The leader (Bandit 1) is marked and bloodied at 5 HP, barely an arm's reach before you. Bandit 3 is at your left, untouched, grinning with rotted teeth. You have half cover from the tree against one, but not both.",
+        "What is your command for Ghost this round, Sera?"
+      ],
+      "improvement": "Eliminate the mechanical status summary at turn end — the player can track their own HP and cover. Trust the narrative to convey tactical state: 'Ghost is still standing, barely' does more work than '5/11 HP.' The explicit status block is the clearest AI tell in this session."
+    },
+    "music_sfx": {
+      "score": 4,
+      "justification": "Two appropriate calls at session start — tense music and a combat_start sound — establish the scene correctly and show the DM knew the tools existed. Nothing follows for the remainder of a four-round combat. A kill, a near-miss that draws blood, a wolf finishing its prey — each is a natural trigger for a sound cue. The static ambient track with no escalation or punctuation makes the tool usage feel like a checkbox rather than a craft choice.",
+      "quotes": [
+        "play_music({\"music_type\":\"tense\"}) -> Background music \"tense\" now playing.",
+        "play_sound({\"sound_type\":\"combat_start\"}) -> Sound effect \"combat_start\" played."
+      ],
+      "improvement": "Add a sound cue when Bandit 2 goes down under Ghost (kill_sound or impact), and consider escalating the music type when Sera takes damage and the situation turns dire — 'tense' to 'danger' or equivalent. Sound design is pacing design; use it mid-encounter, not just as pre-roll flavor."
+    },
+    "authentic_voice": {
+      "score": 6,
+      "justification": "The session contains genuine above-median lines — 'The forest breathes violence' is terse and opinionated in a way language models rarely achieve unprompted, and 'first shock, then cold fury' reads the bandit leader's interiority through behavior rather than narrating his feelings. But every single turn ends with an explicit prompt question ('What does Sera command Ghost to do?', 'What is your command for Ghost this round, Sera?', 'What do you do?'), which is the most reliably AI-coded pattern in this rubric. The Turn 3 tactical status block — HP values, cover conditions, tooth count — is a second-person mechanical recitation that no human DM would deliver verbatim. These two patterns repeatedly break the illusion the atmospheric lines work to build.",
+      "quotes": [
+        "What does Sera command Ghost to do?",
+        "What is your command for Ghost this round, Sera?",
+        "You're flanked. The leader (Bandit 1) is marked and bloodied at 5 HP, barely an arm's reach before you. Bandit 3 is at your left, untouched, grinning with rotted teeth. You have half cover from the tree against one, but not both.\n\nWhat do you do?",
+        "The forest breathes violence.",
+        "His eyes find yours across the gloom—first shock, then cold fury."
+      ],
+      "improvement": "Stop ending turns with explicit questions. A real DM ends on consequence, image, or pressure — not a prompt. 'Bandit 3's blade comes away red. Somewhere behind you, Ghost is still moving.' That's a turn handoff. The player knows it's their move. Trust them."
+    }
+  },
+  "rule_errors": [
+    "Hunter's Mark (PHB p.251) adds 1d6 damage of the same type as the triggering weapon attack — it is not force damage and is not applied as a separate damage event. The DM applied 1 force damage separately via apply_damage rather than adding it to the longbow's piercing damage total.",
+    "The primary longbow hit in Turn 2 (attack roll 17 vs Bandit 1) never had its base damage (1d8 + DEX modifier) applied via apply_damage. Only the Hunter's Mark bonus (1d6 = 1) was applied, leaving Bandit 1's HP value incorrect for all subsequent turns.",
+    "Turn 3 Ghost advantage roll: the DM manually rolled 2d20 and noted 'taking the higher die' but then did not add +4 to the result (2d20 result: 12 raw) before comparing to Bandit 2's AC. The higher die result plus +4 modifier was not reflected in a final to-hit number in the narration or tool output."
+  ],
+  "tool_errors": [
+    "resolve_attack called with attack_id 'bite' (Turn 1, attempt 1) — invalid. Tool returned error listing no valid attacks for Ghost.",
+    "resolve_attack called with attack_id 'Bite' (Turn 1, attempt 2) — still invalid. Suggests the DM did not inspect the legal_actions list before retrying with a capitalization variant.",
+    "roll_dice called with notation '2d20kh1+4' (Turn 3) — invalid syntax. The tool does not support keep-highest notation. DM recovered correctly by separating into '2d20' then manually applying the modifier, but lost the modifier in the final narrated result.",
+    "Turn 1 produced MAX_TOOL_ROUNDS exceeded with no text response — player received zero narrative feedback for an entire combat turn. This is a session-breaking failure.",
+    "Turn 4: resolve_attack was called (shortsword vs Bandit 1, result: miss, roll 1 = natural 1) but no text response was generated. A natural 1 — a critical miss — was completely silently discarded."
+  ],
+  "flags": [
+    "Turn 1 produced no player-facing text due to MAX_TOOL_ROUNDS exceeded. An entire initiative round — including Ghost's successful bite, two bandit counterattacks on Ghost, and round transition — was delivered without any narrative. This is a critical gap.",
+    "Turn 4 produced no player-facing text despite a successful tool call. A natural 1 on Sera's shortsword attack went unnarrated — a missed opportunity and a functional non-response.",
+    "The DM tracked Bandit 1 at 5 HP entering Turn 4 (from Turn 3 narration) but this HP value is unreliable given the missing longbow damage application in Turn 2.",
+    "All three turns that received responses end with explicit 'What do you do?' variants — a pattern flagged in the rubric as an AI-cadence tell. No variation or omission was attempted across the session."
+  ],
+  "overall_impression": "A session with a genuine ceiling and a broken floor: the atmospheric writing contains real craft — selective sensory focus, terse opinionated lines, one strong NPC physical detail — but tool execution failures in Turns 1 and 4 left the player staring at silence twice in four turns, and a missing damage application corrupted the combat's HP state from Round 1 onward. The authentic voice score of 6 is generous given the mechanical prompt-question endings; fix those two patterns and this DM clears 7 on voice alone."
+}

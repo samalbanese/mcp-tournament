@@ -1,0 +1,81 @@
+{
+  "scores": {
+    "atmosphere": {
+      "score": 5,
+      "justification": "The combat is functional and clearly staged, but the imagery is generic and often defaults to broad abstractions instead of specific sensory detail. There is some scene-setting, yet the narration rarely deepens the moonlit ambush beyond standard combat framing.",
+      "quotes": [
+        "The darkness explodes into violence.",
+        "The forest breathes violence.",
+        "Steel bites through leather at your side—a hot line of pain as Bandit 3's scimitar finds the gap between tree and arm."
+      ],
+      "improvement": "Use one or two concrete environmental details per round, such as moonlight through needles, wet bark, or the sound of boots in leaf-litter, instead of broad phrases like \"violence\" and \"gloom.\""
+    },
+    "tool_usage": {
+      "score": 3,
+      "justification": "The DM used tools repeatedly, but there is a clear invalid dice-notion attempt and several awkward workarounds. The Ghost attack sequence is especially suspect: the DM first tried invalid attack identifiers, then rolled an attack and damage despite the tool rejecting the attack definition, which suggests poor tool discipline.",
+      "quotes": [
+        "resolve_attack({\"attacker_id\":\"pc_ghost\",\"target_id\":\"npc_bandit_2\",\"attack_id\":\"bite\"}) -> {\"error\":\"\\\"bite\\\" is not a valid attack for Ghost. Valid attacks: \",\"legal_actions\":[]}",
+        "roll_dice({\"notation\":\"2d20kh1+4\",\"reason\":\"Ghost's Bite attack with advantage vs prone Bandit 2\"}) -> {\"error\":\"Invalid dice notation: 2d20kh1+4\"}",
+        "roll_dice({\"notation\":\"2d20\",\"reason\":\"Ghost's advantage attack roll — taking the higher die\"}) -> {\"notation\":\"2d20\",\"rolls\":[8,4],\"total\":12,\"reason\":\"Ghost's advantage attack roll — taking the higher die\"}"
+      ],
+      "improvement": "Use a valid advantage format supported by the tool or avoid manual dice reconstruction; do not proceed as if an invalid attack call succeeded."
+    },
+    "tactical_narration": {
+      "score": 6,
+      "justification": "Enemy positioning and target selection are mostly coherent, and the DM tracks prone status, injury, and initiative in a usable way. However, the tactical narration is partly mechanical and there are odd assertions, like the wolf being both pinned and free across turns without a clear transition in the fiction.",
+      "quotes": [
+        "The wolf fixes his amber eyes on the nearest brigand—the one who dropped from the tree, Bandit 2— and tenses to spring.",
+        "The wolf still has Bandit 2 pinned beneath him in the ferns.",
+        "You have half cover from the tree against one, but not both."
+      ],
+      "improvement": "State the battlefield changes cleanly after each resolution, especially when a creature changes from prone to standing or from engaged to free, so the tactical state matches the narration."
+    },
+    "pacing": {
+      "score": 4,
+      "justification": "The round structure is clear, but the flow is interrupted by tool failures and abrupt summaries that feel like state dumps. The sequence frequently pauses to ask for commands in a way that is mechanically correct, yet narratively stiff and repetitive.",
+      "quotes": [
+        "Ghost's Turn. What does Sera command Ghost to do?",
+        "And now—your turn, Sera.",
+        "What do you do?"
+      ],
+      "improvement": "Reduce repeated prompt phrasing and integrate turn prompts into the fiction with one concise sentence, rather than stopping the scene with a repeated query every turn."
+    },
+    "music_sfx": {
+      "score": 6,
+      "justification": "The soundscape setup is appropriate and not excessive. The calls are simple and relevant to combat, though the implementation is basic and not especially evocative or adaptive to the scene.",
+      "quotes": [
+        "play_music({\"music_type\":\"tense\"}) -> Background music \"tense\" now playing.",
+        "play_sound({\"sound_type\":\"combat_start\"}) -> Sound effect \"combat_start\" played."
+      ],
+      "improvement": "Tie audio cues more directly to scene transitions, such as escalating from tension to sudden strike, rather than only using generic combat-start ambience."
+    },
+    "authentic_voice": {
+      "score": 4,
+      "justification": "The voice is competent but obviously AI-shaped, with repeated turn prompts and formulaic phrasing. It often narrates states instead of dramatizing actions, and it leans on stock lines like \"What do you do?\" rather than a distinctive DM voice.",
+      "quotes": [
+        "The forest breathes violence.",
+        "What does Sera command Ghost to do?",
+        "What do you do?"
+      ],
+      "improvement": "Replace generic prompt endings with scene-specific consequences or questions, and vary sentence rhythm so the narration does not read like a template."
+    }
+  },
+  "rule_errors": [
+    "Hunter's Mark damage was applied as force damage; in 5e it deals extra damage of the same type as the weapon attack, not force.",
+    "The DM treated Ghost's Bite as though it were a validated attack after tool rejection; if Ghost is the Beast Master companion, the attack should come from a legally defined stat block or a correctly modeled feature.",
+    "The advantage attack roll was attempted with invalid notation: 2d20kh1+4 is not valid in the provided tool system.",
+    "The DM appears to have advanced combat state while using a failed/invalid attack tool call sequence, which risks desynchronizing rules resolution."
+  ],
+  "tool_errors": [
+    "resolve_attack called with invalid attack_id values \"bite\" and \"Bite\" for Ghost; tool returned no valid attacks.",
+    "roll_dice used invalid notation \"2d20kh1+4\".",
+    "roll_dice with notation \"2d20\" was used as a manual replacement for advantage, but the tool output does not indicate which die was selected; this is incomplete for a valid advantage resolution.",
+    "The DM continued with damage and turn advancement after invalid attack resolution, indicating poor tool-state handling."
+  ],
+  "flags": [
+    "No content boundary violation detected; content remains PG-13 combat narration.",
+    "Some railroading risk: the DM repeatedly dictates the enemy and companion state while asking for commands, but this is minor.",
+    "The narration is repetitive and template-like, especially in turn prompts."
+  ],
+  "overall_impression": "Mechanically serviceable in broad combat structure, but weakened by a real tool-notation error and shaky state handling. The scene has the bones of a decent ambush, yet it reads more like a combat log with flavor text than a confident 5e DM."
+}

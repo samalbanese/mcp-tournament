@@ -1,0 +1,60 @@
+[
+  {
+    "modelId": "moonshotai/kimi-k2.6",
+    "modelName": "Kimi K2.6",
+    "tier": "mid",
+    "overallAverage": 5.33,
+    "scenarioScores": [
+      {
+        "scenarioId": "1",
+        "scenarioName": "The Moonlit Ambush",
+        "average": 5.33,
+        "scores": {
+          "atmosphere": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          },
+          "tool_usage": {
+            "score": 3,
+            "confidence": "medium",
+            "outliers": [
+              "NPC & World Judge: scored 5 vs median 3 - gave partial credit for correct roll_dice usage, but underweighted the cascading failures (MAX_TOOL_ROUNDS, missing base damage application, invalid notation) that two other judges documented with specific tool output evidence"
+            ]
+          },
+          "tactical_narration": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": []
+          },
+          "pacing": {
+            "score": 5,
+            "confidence": "high",
+            "outliers": []
+          },
+          "music_sfx": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "Authentic Voice Judge: scored 4 vs median 7 - argues only 2 calls at session start with zero mid-combat sound cues is checkbox behavior, citing specific missed opportunities (kill, critical miss, damage taken). Evidence is strong and NPC & World Judge's own improvement section contradicts their score of 8. Final adjusted downward from median to 6.",
+              "NPC & World Judge: scored 8 vs median 7 - improvement section ('integrate sound cues into narration', 'use music to underscore shifts in tone') contradicts the high score; only 2 generic calls were made"
+            ]
+          },
+          "authentic_voice": {
+            "score": 5,
+            "confidence": "high",
+            "outliers": []
+          }
+        },
+        "ruleErrors": [
+          "Hunter's Mark was applied as 'force' damage in a separate apply_damage call; PHB specifies it adds 1d6 of the weapon's damage type (piercing for longbow) and should be bundled with the weapon damage",
+          "Advantage roll used invalid dice notation '2d20kh1+4' which failed; DM recovered with separate 2d20 roll but lost the +4 modifier in the final to-hit calculation",
+          "Ghost's attack ID was guessed as 'bite' then 'Bite' without checking the valid attacks list, causing cascading tool failures and a MAX_TOOL_ROUNDS exceeded with zero narrative output for Turn 1",
+          "Primary longbow base damage (1d8 + DEX modifier) was never applied via apply_damage in Turn 2; only the Hunter's Mark bonus (1d6 = 1) was applied, leaving Bandit 1's HP incorrect for all subsequent turns",
+          "Turn 4 natural 1 on Sera's shortsword was resolved by the tool but received no narrative description or consequences"
+        ],
+        "flags": []
+      }
+    ]
+  }
+]

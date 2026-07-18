@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": ".vite-src",
+    "rootDir": "src",
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false
+  }
+}

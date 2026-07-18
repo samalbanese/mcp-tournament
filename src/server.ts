@@ -96,15 +96,20 @@ export function mergeRunIndex(resultsDir: string, guiDataDir: string): { runs: s
   return { runs: [...new Set([...readResultRuns(resultsDir), ...readSeedRuns(guiDataDir)])] };
 }
 
+const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]']);
+
 export function isAllowedOrigin(origin: string | undefined, port: number): boolean {
   if (!origin) return true;
-  // Plain http is correct here: these are loopback-only origins for a local
-  // server that never leaves the machine — there is no TLS on 127.0.0.1.
-  return new Set([
-    `http://localhost:${port}`,
-    `http://127.0.0.1:${port}`,
-    `http://[::1]:${port}`,
-  ]).has(origin);
+  // Loopback-only server: accept same-port requests from any loopback host.
+  // Plain-http origins are correct here — loopback addresses carry no TLS.
+  try {
+    const parsed = new URL(origin);
+    return parsed.protocol === 'http:'
+      && LOOPBACK_HOSTNAMES.has(parsed.hostname)
+      && Number(parsed.port || 80) === port;
+  } catch {
+    return false;
+  }
 }
 
 function serveFile(response: ServerResponse, file: string): boolean {

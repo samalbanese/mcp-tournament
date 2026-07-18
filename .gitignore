@@ -5,6 +5,7 @@ gui/node_modules/
 # Build output
 dist/
 gui/dist/
+demo-dist/
 tsconfig.tsbuildinfo
 
 # Local tournament runs (the demo run ships via gui/public/data/)

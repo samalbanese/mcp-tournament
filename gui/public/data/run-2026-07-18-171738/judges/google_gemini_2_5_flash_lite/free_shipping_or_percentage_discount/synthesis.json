@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "Rules Judge: scored 6 vs median 8 - scored lower due to emphasis on missing operational details for small operators and spreadsheet tracking recommendations, while other judges focused on the clear 30-day timeline and feasible profit calculation"
+      ]
+    },
+    "specificity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "Holistic Judge: scored 9 vs median 8 - gave highest score for providing specific metrics, decision rule, and example calculation, though noted assumptions about order distribution could be more grounded"
+      ]
+    },
+    "risk_awareness": {
+      "score": 7,
+      "confidence": "contested",
+      "outliers": [
+        "Rules Judge: scored 4 vs median 7 - scored significantly lower for lacking explicit discussion of margin risk, experiment design risk, and cannibalization risk, while other judges saw adequate risk identification with room for improvement"
+      ]
+    }
+  },
+  "average_score": 7.67,
+  "rule_errors_confirmed": [],
+  "assessment": "The evaluation presents a strong, actionable free shipping test plan with a clear profit-focused measurement framework. Judges consistently praised the specific $72 threshold based on provided economics, the detailed 30-day baseline/test comparison, and concrete profit calculation formulas. While practicality and specificity scores show strong agreement, risk awareness reveals a significant divergence between judges regarding the depth of risk identification and mitigation strategies.",
+  "judge_agreement": "Judges strongly agreed on the response's specificity (scores 8-9) and practicality (6-8), with consensus on the clear metrics, threshold calculation, and executable timeline. They disagreed significantly on risk awareness, where the Rules Judge found critical omissions in margin and experiment design risks that other judges considered adequately addressed or implicitly covered. All judges noted the plan could be improved with better experimental controls and more explicit risk mitigation strategies."
+}

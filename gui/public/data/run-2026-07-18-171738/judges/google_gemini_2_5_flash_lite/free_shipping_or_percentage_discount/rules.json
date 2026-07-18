@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 6,
+      "justification": "Provides a complete 30-day test plan with tracking metrics and baseline comparison. Plan is executable by a small operator with basic analytics.",
+      "quotes": [
+        "**Baseline Period (e.g., 30 days prior to the test):** Record all the above metrics for a 30-day period...",
+        "**Test Period (30 days with free shipping over $72):** Record all the above metrics.",
+        "By tracking these specific metrics, you can definitively say whether the free shipping offer improved your *profit*"
+      ],
+      "improvement": "Add operational details for a small operator: how to easily set the free shipping threshold on common platforms (Shopify, WooCommerce), and recommend using a simple spreadsheet to track the daily metrics."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "Uses the supplied economics ($72 AOV, $9 shipping, 42% margin) to propose an exact offer and threshold. Provides a concrete decision rule based on comparing total profit. The profit calculation formula is precise and uses the given margin.",
+      "quotes": [
+        "**Threshold:** $72 (your current average order value)",
+        "**Total Profit:**\n*   **Calculation:** Total Revenue - COGS - Total Shipping Cost",
+        "**COGS:** For each order, (1 - Gross Margin) * Order Total. Sum this for all orders.",
+        "The most crucial comparison is the Total Profit during the test period versus the baseline period."
+      ],
+      "improvement": "Define a clearer quantitative 'success threshold' for the decision rule (e.g., 'implement the offer permanently if test-period profit is ≥ 10% higher than baseline profit')."
+    },
+    "risk_awareness": {
+      "score": 4,
+      "justification": "Identifies the core profitability risk (revenue increase must outweigh shipping cost) and mentions investigating AOV. However, it lacks explicit discussion of other critical risks: margin risk from customers buying lower-margin items to hit the threshold, seasonality/experiment-design risk in the baseline comparison, and the risk of cannibalizing future full-price sales.",
+      "quotes": [
+        "**Key to Profitability:** For the free shipping offer to be *profitable*, the increase in revenue driven by more orders and/or higher AOV must be greater than the cost of the shipping you absorb.",
+        "Did AOV increase enough to offset the shipping cost? (This is key to profitability)"
+      ],
+      "improvement": "Explicitly name and explain controls for: 1) **Margin Risk**: Monitor product mix to ensure customers aren't just adding low-margin items. 2) **Experiment Design Risk**: Control for seasonality by using a year-over-year baseline or a concurrent control group if traffic allows. 3) **Behavior Risk**: Note that the offer might train customers to only purchase when free shipping is available."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A solid, actionable plan with a clear profit-focused measurement framework. It is specific and practical but lacks depth in identifying and controlling for several non-obvious risks inherent in the proposed promotion and test design."
+}

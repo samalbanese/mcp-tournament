@@ -1,0 +1,114 @@
+[
+  {
+    "modelId": "google/gemini-2.5-flash-lite",
+    "modelName": "Gemini 2.5 Flash Lite",
+    "tier": "budget",
+    "overallAverage": 7.67,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 7.67,
+        "scores": {
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "Rules Judge: scored 6 vs median 8 - scored lower due to emphasis on missing operational details for small operators and spreadsheet tracking recommendations, while other judges focused on the clear 30-day timeline and feasible profit calculation"
+            ]
+          },
+          "specificity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "Holistic Judge: scored 9 vs median 8 - gave highest score for providing specific metrics, decision rule, and example calculation, though noted assumptions about order distribution could be more grounded"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "Rules Judge: scored 4 vs median 7 - scored significantly lower for lacking explicit discussion of margin risk, experiment design risk, and cannibalization risk, while other judges saw adequate risk identification with room for improvement"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "deepseek/deepseek-v3.2",
+    "modelName": "DeepSeek V3.2",
+    "tier": "budget",
+    "overallAverage": 7.33,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 7.33,
+        "scores": {
+          "practicality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          },
+          "specificity": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "Holistic Judge: scored 9 vs median 8 - scored highest due to emphasis on exact offer details and comprehensive metric tracking"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "Holistic Judge: scored 8 vs median 7 - gave higher score for more comprehensive risk identification including margin erosion and experiment design considerations"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "meta-llama/llama-4-scout",
+    "modelName": "Llama 4 Scout",
+    "tier": "budget",
+    "overallAverage": 6.33,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 6.33,
+        "scores": {
+          "practicality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          },
+          "specificity": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "Rules Judge: scored 6 vs median 7 - considered decision rule too generic and profit calculation incomplete compared to other judges"
+            ]
+          },
+          "risk_awareness": {
+            "score": 5,
+            "confidence": "contested",
+            "outliers": [
+              "Holistic Judge: scored 6 vs median 5 - found more risk acknowledgement than other judges, though still identified gaps"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "The candidate's example calculation contains an error: 'New conversion rate: 62% (assuming 20% decrease in cart abandonment rate)' incorrectly assumes a baseline conversion rate. The scenario states 38% abandonment after seeing shipping, not overall conversion rate."
+        ]
+      }
+    ]
+  }
+]

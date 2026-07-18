@@ -1,36 +1,38 @@
 # mcp-tournament
 
-> Build your own LLM benchmark in a form, run it from a local GUI or MCP — bring
-> your own OpenRouter key. Multi-judge panels, arbiter synthesis, ranked results,
-> all for pennies per run.
+[![CI](https://github.com/samalbanese/mcp-tournament/actions/workflows/ci.yml/badge.svg)](https://github.com/samalbanese/mcp-tournament/actions/workflows/ci.yml)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Node >= 20](https://img.shields.io/badge/Node-%3E%3D%2020-339933?logo=nodedotjs&logoColor=white)
+![MCP server](https://img.shields.io/badge/MCP-server-5A67D8)
 
-Describe a task in plain language, define (or AI-suggest) the judging criteria,
-and submit any models to a structured tournament: each candidate plays through
-your scenario, a panel of specialist AI judges scores it independently, an
-arbiter resolves their disagreements, and the results land on a ranked
-leaderboard. Run it from the bundled local web app, your AI assistant (MCP), or
-the CLI — no code required to add a new benchmark.
+Build a custom LLM benchmark in a form, run it from a local GUI, MCP client, or CLI, and turn independent judge opinions into ranked, auditable results.
 
-![Leaderboard view](docs/images/leaderboard-1440.png)
+![Demo — build a bench, run it, inspect judge disagreements](docs/images/demo.gif)
 
-## Why multi-judge?
+**[▶ Live demo](https://mcp-tournament.pages.dev)** — the results viewer with real runs (including the `business-strategy` bench below), no key needed.
 
-Single evaluators miss things. A Rules judge catches mechanical errors; a Creative
-judge catches boring output; a Holistic judge catches "would I keep using this?"
-The synthesizer never scores independently — it arbitrates, flags outlier judges,
-and records **why** they disagreed. Judge disagreements are first-class data,
-rendered in the viewer:
+Why this is interesting:
 
-![Model scorecard with judge disagreements](docs/images/scorecard-1440.png)
+- **Disagreement is data:** multiple specialist judges score independently; the arbiter preserves outliers and explains where they diverged.
+- **Benches are declarative:** anyone can define scenarios and criteria as JSON or build them in a form — no pipeline code required.
+- **BYOK and local-first:** bring one OpenRouter key, keep the GUI on your machine, and run budget-tier tournaments for cents.
 
 ## How it works
 
+```mermaid
+flowchart LR
+    A["Scenario + criteria<br/>plugin / bench JSON"] --> B["EXECUTE<br/>candidate + tool calls"]
+    B --> C["JUDGE<br/>N specialists in parallel"]
+    C --> D["SYNTHESIZE<br/>merge + flag outliers<br/>never scores independently"]
+    D --> E["AGGREGATE<br/>leaderboard + JSON audit trail"]
 ```
-1. EXECUTE     candidate model plays the scenario (tool calls included)
-2. JUDGE       N specialist judges score independently against plugin criteria
-3. SYNTHESIZE  arbiter merges scores, confidence-rates every criterion, keeps outlier notes
-4. AGGREGATE   ranked leaderboard + full JSON audit trail (docs/RESULTS_FORMAT.md)
-```
+
+Three entry points feed the same pipeline:
+
+- **GUI:** build benches, launch runs, and inspect results locally.
+- **MCP client:** evaluate models from Claude Desktop, Cursor, or Windsurf.
+- **CLI:** script runs, serve MCP over stdio, or print the leaderboard.
 
 Domain logic is pluggable; the pipeline is not. Benches are declarative plugins —
 a JSON file (or the Build Bench form) defines scenarios, rounds, an optional
@@ -45,6 +47,16 @@ with custom tools — see [docs/PLUGINS.md](docs/PLUGINS.md).
 | `dnd` | Showcase: D&D 5e Dungeon Master with dice/damage tools and an LLM player | ⚙️ code plugin |
 | `coding` | Code generation & review | ⚙️ code plugin |
 | **Yours** | Build in the GUI (`#/build`), drop a JSON in `benches/`, or write TypeScript | 🛠 you |
+
+## Why multi-judge?
+
+Single evaluators miss things. A Rules judge catches mechanical errors; a Creative
+judge catches boring output; a Holistic judge catches "would I keep using this?"
+The synthesizer never scores independently — it arbitrates, flags outlier judges,
+and records **why** they disagreed. Judge disagreements are first-class data,
+rendered in the viewer:
+
+![Model scorecard with judge disagreements](docs/images/scorecard-1440.png)
 
 ## Quick start
 
@@ -89,9 +101,13 @@ AI-suggest button) — and saves it as a JSON plugin, live immediately.
 ### As a CLI
 
 ```bash
-# The demo: 3 cheap models, 1 scenario, 3 judges (~a few cents)
-node dist/cli.js run --plugin dnd \
+# The demo: 3 cheap models, 1 bench scenario, 3 judges (~a few cents)
+node dist/cli.js run --plugin business-strategy \
   --models "deepseek/deepseek-v3.2,google/gemini-2.5-flash-lite,meta-llama/llama-4-scout" \
+  --scenario pricing-pivot --judges 3
+
+# Or the tool-calling showcase: D&D DM with dice/damage tools and an LLM player
+node dist/cli.js run --plugin dnd --models "deepseek/deepseek-v3.2" \
   --scenario dnd-combat --judges 3
 
 node dist/cli.js leaderboard
@@ -104,6 +120,8 @@ node dist/cli.js serve          # MCP stdio server
 static host (Cloudflare Pages works as-is). It reads committed run JSON and
 renders rankings, per-judge breakdowns, disagreement callouts, and full
 transcripts with tool-call inspection.
+
+![Leaderboard view](docs/images/leaderboard-1440.png)
 
 ```bash
 cd gui && npm install
@@ -147,8 +165,8 @@ stderr (stdout is reserved for JSON-RPC).
 ## Roadmap
 
 Deferred deliberately: `tournament.compare` / `report` / `plugins` / `scenarios` /
-`judges` tools, customer-support and creative-writing plugins, plugin
-auto-discovery, npm publish, MCP registry submission, CI. Tracked in `TODO.md`.
+`judges` tools, plugin auto-discovery, npm publish, and MCP registry submission.
+Tracked in `TODO.md`.
 
 ## Provenance
 

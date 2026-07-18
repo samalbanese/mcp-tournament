@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { detectAppMode, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
+import { detectAppMode, loadDefaults, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiDefaults, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
@@ -21,6 +21,57 @@ function useLoad<T>(loader: (() => Promise<T>) | null, deps: unknown[]): LoadSta
 }
 const label = (value: string) => value.replaceAll('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 const scoreClass = (score: number) => score <= 3 ? 'score-low' : score <= 6 ? 'score-mid' : 'score-high';
+const ROUTING_STORAGE_KEY = 'tournament.routing';
+
+interface RoutingSettings {
+  candidates: string[];
+  judgeModels: Record<string, string>;
+  synthesizerModel: string;
+}
+
+function readStoredRouting(): RoutingSettings | undefined {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(ROUTING_STORAGE_KEY) ?? '') as Partial<RoutingSettings>;
+    if (!Array.isArray(parsed.candidates)
+      || parsed.candidates.length < 1
+      || parsed.candidates.length > 4
+      || !parsed.candidates.every(model => typeof model === 'string' && model.length > 0)
+      || !parsed.judgeModels
+      || typeof parsed.judgeModels !== 'object'
+      || Array.isArray(parsed.judgeModels)
+      || !Object.values(parsed.judgeModels).every(model => typeof model === 'string' && model.length > 0)
+      || typeof parsed.synthesizerModel !== 'string'
+      || !parsed.synthesizerModel) return undefined;
+    return parsed as RoutingSettings;
+  } catch {
+    return undefined;
+  }
+}
+
+function routingFromDefaults(defaults: ApiDefaults): RoutingSettings {
+  const stored = readStoredRouting();
+  return {
+    candidates: stored?.candidates ?? defaults.candidates,
+    judgeModels: Object.fromEntries(defaults.judges.map(judge => [
+      judge.role,
+      stored?.judgeModels[judge.role] ?? judge.model,
+    ])),
+    synthesizerModel: stored?.synthesizerModel ?? defaults.synthesizer,
+  };
+}
+
+function routingOverrides(routing: RoutingSettings, defaults: ApiDefaults) {
+  const judgeModels = Object.fromEntries(defaults.judges.flatMap(judge =>
+    routing.judgeModels[judge.role] !== judge.model
+      ? [[judge.role, routing.judgeModels[judge.role]]]
+      : []));
+  return {
+    ...(Object.keys(judgeModels).length ? { judgeModels } : {}),
+    ...(routing.synthesizerModel !== defaults.synthesizer
+      ? { synthesizerModel: routing.synthesizerModel }
+      : {}),
+  };
+}
 
 function Shell({ children, runs, activeRun, route, appMode }: { children: ReactNode; runs: string[]; activeRun?: string; route: Route; appMode: boolean }) {
   const selectRun = (runId: string) => { location.hash = href({ view: 'home', runId }); };
@@ -136,14 +187,73 @@ function formatMessage(text: string): ReactNode[] {
 function TurnCard({ turn }: { turn: Turn }) { return <article className={`turn ${turn.role}`}><header><span>{turn.role === 'candidate' ? 'CANDIDATE' : 'PARTICIPANT'}</span><b>TURN {String(turn.turn).padStart(2, '0')}</b></header><div className="message">{turn.content ? formatMessage(turn.content) : <em>[No text response]</em>}</div>{turn.toolCalls && turn.toolCalls.length > 0 && <div className="tools">{turn.toolCalls.map((tool, index) => <details className={tool.valid ? '' : 'invalid'} key={`${tool.name}-${index}`}><summary><span>{tool.valid ? '◇' : '⚠'} {tool.name}</span><small>{tool.valid ? 'VALID CALL' : 'INVALID CALL'}</small></summary><div><label>ARGUMENTS</label><pre>{JSON.stringify(tool.arguments, null, 2)}</pre><label>RESULT</label><pre>{tool.result}</pre></div></details>)}</div>}{turn.metrics && <footer><span>TTFB {turn.metrics.ttfbMs == null ? '—' : `${(turn.metrics.ttfbMs/1000).toFixed(2)}s`}</span><span>TOTAL {(turn.metrics.totalTimeMs/1000).toFixed(2)}s</span><span>IN {turn.metrics.inputTokens.toLocaleString()} tok</span><span>OUT {turn.metrics.outputTokens.toLocaleString()} tok</span></footer>}</article>; }
 
 function ViewHeader({ eyebrow, title, detail, back }: { eyebrow: string; title: string; detail: string; back: string }) { return <section className="view-heading"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{detail}</p></div><a href={back}>← SCORECARD</a></section>; }
+
+function ModelRouteSelect({ id, models, value, onChange }: { id: string; models: ApiModel[]; value: string; onChange: (model: string) => void }) {
+  const selectedInCatalog = models.some(model => model.id === value);
+  return <select id={id} value={value} onChange={(event) => onChange(event.target.value)}>
+    {!selectedInCatalog && <option value={value}>{value}</option>}
+    {models.map(model => <option value={model.id} key={model.id}>{model.name} — {model.id}</option>)}
+  </select>;
+}
+
 function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: string) => void }) {
+  const defaultsState = useLoad(loadDefaults, []);
+  const modelsState = useLoad(loadModels, []);
+  const [routing, setRouting] = useState<RoutingSettings>();
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    if (!routing && defaultsState.data) setRouting(routingFromDefaults(defaultsState.data));
+  }, [routing, defaultsState.data]);
   const updateKey = (key: string) => {
     localStorage.setItem('or-key', key);
     onKeyChange(key);
   };
+  const updateRouting = (update: (current: RoutingSettings) => RoutingSettings) => {
+    setRouting(current => {
+      if (!current) return current;
+      const next = update(current);
+      localStorage.setItem(ROUTING_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  };
+  const toggleCandidate = (model: string) => updateRouting(current => {
+    if (current.candidates.includes(model)) {
+      return current.candidates.length === 1
+        ? current
+        : { ...current, candidates: current.candidates.filter(candidate => candidate !== model) };
+    }
+    return current.candidates.length < 4
+      ? { ...current, candidates: [...current.candidates, model] }
+      : current;
+  });
+  const resetRouting = () => {
+    if (!defaultsState.data) return;
+    localStorage.removeItem(ROUTING_STORAGE_KEY);
+    setRouting(routingFromDefaults(defaultsState.data));
+  };
+  const routingError = defaultsState.error ?? modelsState.error;
   return <div className="page app-page reveal">
-    <section className="app-heading"><div><p className="eyebrow">LOCAL CREDENTIALS</p><h1>Settings</h1><p>Connect this browser session to your OpenRouter account.</p></div>{apiKey && <span className="key-chip">● KEY SET</span>}</section>
+    <section className="app-heading"><div><p className="eyebrow">LOCAL CONTROL</p><h1>Settings</h1><p>1. paste key → 2. set routing below (optional) → 3. NEW RUN or BUILD BENCH</p></div>{apiKey && <span className="key-chip">● KEY SET</span>}</section>
     <section className="settings-panel"><label htmlFor="or-key">OPENROUTER API KEY</label><input id="or-key" type="password" value={apiKey} onChange={(event) => updateKey(event.target.value)} placeholder="sk-or-v1-…" autoComplete="off"/><p>stays in your browser, sent only to your local server</p></section>
+    <section className="routing-panel">
+      <div className="routing-head"><div><p className="eyebrow">MODEL ROUTING</p><h2>Defaults for every new run</h2><p>Choose the field and the models that score it. You can still edit candidates on New Run.</p></div><button type="button" className="routing-reset" disabled={!routing || !defaultsState.data} onClick={resetRouting}>RESET TO DEFAULTS</button></div>
+      {routingError ? <p className="run-error">{routingError}</p> : (defaultsState.loading || modelsState.loading || !routing) ? <Skeleton/> : <>
+        <div className="routing-block candidates-routing">
+          <div className="section-label"><span>DEFAULT CANDIDATES</span><b>SELECT 1–4</b></div>
+          <ModelPicker models={modelsState.data ?? []} selected={routing.candidates} search={search} onSearch={setSearch} onToggle={toggleCandidate} minimum={1}/>
+        </div>
+        <div className="routing-block">
+          <div className="section-label"><span>JUDGE PANEL</span><b>ORDERED / FIRST N RUN</b></div>
+          <p className="routing-note">New Run's judge count selects the first N roles in this order.</p>
+          <div className="judge-routes">{defaultsState.data?.judges.map((judge, index) => <div className="judge-route" key={judge.role}><div><span>{String(index + 1).padStart(2, '0')}</span><label htmlFor={`judge-${judge.role}`}>{judge.name}</label><small>{judge.role.replaceAll('_', ' ')}</small></div><ModelRouteSelect id={`judge-${judge.role}`} models={modelsState.data ?? []} value={routing.judgeModels[judge.role]} onChange={(model) => updateRouting(current => ({ ...current, judgeModels: { ...current.judgeModels, [judge.role]: model } }))}/></div>)}</div>
+        </div>
+        <div className="routing-block synthesizer-routing">
+          <div className="section-label"><span>SYNTHESIZER</span><b>FINAL ARBITRATION</b></div>
+          <label htmlFor="synthesizer-model">SYNTHESIS MODEL</label>
+          <ModelRouteSelect id="synthesizer-model" models={modelsState.data ?? []} value={routing.synthesizerModel} onChange={(model) => updateRouting(current => ({ ...current, synthesizerModel: model }))}/>
+        </div>
+      </>}
+    </section>
   </div>;
 }
 
@@ -218,18 +328,23 @@ function BenchBuilder({ apiKey }: { apiKey: string }) {
   </div>;
 }
 
-function ModelPicker({ models, selected, search, onSearch, onToggle }: { models: ApiModel[]; selected: string[]; search: string; onSearch: (value: string) => void; onToggle: (id: string) => void }) {
-  const visible = models.filter((model) => `${model.name} ${model.id}`.toLowerCase().includes(search.toLowerCase())).slice(0, 80);
-  return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = selected.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={!checked && selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div><p className="pick-count">{selected.length}/4 MODELS SELECTED</p></div>;
+function ModelPicker({ models, selected, search, onSearch, onToggle, minimum = 0 }: { models: ApiModel[]; selected: string[]; search: string; onSearch: (value: string) => void; onToggle: (id: string) => void; minimum?: number }) {
+  // Selected models sort to the top so current picks stay visible in a 300+ model catalog.
+  const visible = models.filter((model) => `${model.name} ${model.id}`.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => Number(selected.includes(b.id)) - Number(selected.includes(a.id)))
+    .slice(0, 80);
+  return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = selected.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={checked ? selected.length <= minimum : selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div><p className="pick-count">{selected.length}/4 MODELS SELECTED</p></div>;
 }
 
 function NewRun({ apiKey }: { apiKey: string }) {
   const pluginsState = useLoad(loadPlugins, []);
   const modelsState = useLoad(loadModels, []);
+  const defaultsState = useLoad(loadDefaults, []);
   const plugins = pluginsState.data ?? [];
   const [pluginName, setPluginName] = useState('');
   const [scenarioId, setScenarioId] = useState('');
   const [models, setModels] = useState<string[]>([]);
+  const [routing, setRouting] = useState<RoutingSettings>();
   const [search, setSearch] = useState('');
   const [judges, setJudges] = useState(3);
   const [error, setError] = useState<string>();
@@ -241,12 +356,26 @@ function NewRun({ apiKey }: { apiKey: string }) {
       localStorage.removeItem('bench-plugin-preset');
     }
   }, [pluginName, plugins]);
+  useEffect(() => {
+    if (!routing && defaultsState.data) {
+      const effective = routingFromDefaults(defaultsState.data);
+      setRouting(effective);
+      setModels(effective.candidates);
+    }
+  }, [routing, defaultsState.data]);
   const plugin: ApiPlugin | undefined = plugins.find((item) => item.name === pluginName);
   const toggleModel = (id: string) => setModels((current) => current.includes(id) ? current.filter((model) => model !== id) : current.length < 4 ? [...current, id] : current);
   const submit = async () => {
     setSubmitting(true); setError(undefined);
     try {
-      const result = await startRun({ apiKey, plugin: pluginName, models, scenarioId: scenarioId || undefined, judges });
+      const result = await startRun({
+        apiKey,
+        plugin: pluginName,
+        models,
+        scenarioId: scenarioId || undefined,
+        judges,
+        ...(routing && defaultsState.data ? routingOverrides(routing, defaultsState.data) : {}),
+      });
       location.hash = href({ view: 'progress', runId: result.runId });
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
@@ -255,11 +384,11 @@ function NewRun({ apiKey }: { apiKey: string }) {
   };
   return <div className="page app-page reveal">
     <section className="app-heading"><div><p className="eyebrow">TOURNAMENT CONTROL</p><h1>New run</h1><p>Choose the field, the evidence scenario, and the size of the judge panel.</p></div><span className="step-mark">01 / CONFIGURE</span></section>
-    {(pluginsState.loading || modelsState.loading) ? <Skeleton/> : (pluginsState.error || modelsState.error) ? <Empty title="Local catalog unavailable" detail={pluginsState.error ?? modelsState.error}/> : <form className="run-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
+    {(pluginsState.error || modelsState.error || defaultsState.error) ? <Empty title="Local catalog unavailable" detail={pluginsState.error ?? modelsState.error ?? defaultsState.error}/> : (pluginsState.loading || modelsState.loading || defaultsState.loading || !routing) ? <Skeleton/> : <form className="run-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
       <section className="form-block"><label htmlFor="plugin">PLUGIN</label><select id="plugin" value={pluginName} onChange={(event) => { setPluginName(event.target.value); setScenarioId(''); }}>{plugins.map((item) => <option value={item.name} key={item.name}>{item.name} — {item.description}</option>)}</select></section>
       <section className="form-block"><label htmlFor="scenario">SCENARIO</label><select id="scenario" value={scenarioId} onChange={(event) => setScenarioId(event.target.value)}><option value="">ALL SCENARIOS</option>{plugin?.scenarios.map((scenario) => <option value={scenario.id} key={scenario.id}>{scenario.name}</option>)}</select></section>
       <section className="form-block model-block"><div className="form-label"><label>MODEL FIELD</label><span>SELECT 1–4</span></div><ModelPicker models={modelsState.data ?? []} selected={models} search={search} onSearch={setSearch} onToggle={toggleModel}/></section>
-      <section className="form-block judge-block"><label htmlFor="judges">JUDGES</label><input id="judges" type="number" min="1" max="5" value={judges} onChange={(event) => setJudges(Number(event.target.value))}/><span>independent scoring perspectives</span></section>
+      <section className="form-block judge-block"><label htmlFor="judges">JUDGES</label><input id="judges" type="number" min="1" max="5" value={judges} onChange={(event) => setJudges(Number(event.target.value))}/><span>independent scoring perspectives</span><a href="#/settings">judge models set in SETTINGS</a></section>
       <div className="run-submit"><p>budget defaults — a run like the demo costs cents</p>{!apiKey && <a href="#/settings">ADD YOUR OPENROUTER KEY →</a>}{error && <strong>{error}</strong>}<button type="submit" disabled={!apiKey || models.length < 1 || submitting}>{submitting ? 'STARTING…' : 'RUN TOURNAMENT'} <span>→</span></button></div>
     </form>}
   </div>;

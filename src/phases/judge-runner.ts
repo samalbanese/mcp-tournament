@@ -41,6 +41,7 @@ export async function evaluateWithJudges(
   outputDir: string,
   judges: JudgeConfig[] = JUDGES,
   useSynthesizer = true,
+  synthesizerModel?: string,
 ): Promise<JudgePhaseResult> {
   const judgeDir = path.join(outputDir, 'judges', modelSlug(modelId), scenarioSlug(scenario));
   fs.mkdirSync(judgeDir, { recursive: true });
@@ -67,7 +68,7 @@ export async function evaluateWithJudges(
 
   let synthesis: SynthesisResult;
   if (useSynthesizer) {
-    synthesis = await runSynthesis(scenario, judgeResults);
+    synthesis = await runSynthesis(scenario, judgeResults, synthesizerModel);
     if (!synthesis.synthesis) throw new Error(`Synthesis failed: ${synthesis.raw}`);
   } else {
     const derived = singleJudgeSynthesis(judgeResults[0]);

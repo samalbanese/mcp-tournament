@@ -73,8 +73,9 @@ node dist/cli.js gui              # http://localhost:4600
 ```
 
 Paste your OpenRouter key in **Settings** (stored in your browser, sent only to
-this local server, never written to disk), pick models from the live catalog
-with prices, and start a run from **NEW RUN**. **BUILD BENCH** creates a new
+this local server, never written to disk), then set your model routing right
+below it — default candidates from the live catalog with prices, plus the
+model behind each judge and the synthesizer — and start a run from **NEW RUN**. **BUILD BENCH** creates a new
 benchmark from a form — question, rounds, persona, judging criteria (with an
 AI-suggest button) — and saves it as a JSON plugin, live immediately.
 

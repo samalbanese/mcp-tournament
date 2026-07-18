@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { JUDGES, SYNTHESIZER } from './config/judges.js';
+import { JUDGES, SYNTHESIZER, type JudgeConfig } from './config/judges.js';
 import { resolveCandidateModel } from './config/models.js';
 import { buildLeaderboard, type LeaderboardEntry } from './phases/aggregator.js';
 import { runScenario } from './phases/executor.js';
@@ -14,6 +14,8 @@ export interface EvaluateOptions {
   plugin?: string;
   scenarios?: string[];
   judges?: number;
+  judgeModels?: Record<string, string>;
+  synthesizerModel?: string;
   outputRoot?: string;
   quick?: boolean;
   runId?: string;
@@ -37,6 +39,15 @@ function selectScenarios(all: TestCase[], requested?: string[]): TestCase[] {
   const missing = requested.filter((_id, index) => !selected[index]);
   if (missing.length) throw new Error(`Unknown scenario ID(s): ${missing.join(', ')}`);
   return selected as TestCase[];
+}
+
+export function selectJudges(
+  judgeCount: number,
+  judgeModels?: Record<string, string>,
+): JudgeConfig[] {
+  return JUDGES.slice(0, judgeCount).map(judge => judgeModels?.[judge.role]
+    ? { ...judge, model: judgeModels[judge.role] }
+    : judge);
 }
 
 export async function evaluateTournament(options: EvaluateOptions): Promise<TournamentRun> {
@@ -67,7 +78,8 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   if (options.runId && fs.existsSync(runDir)) throw new Error(`Run already exists: ${options.runId}`);
   const actualRunId = path.basename(runDir);
   fs.mkdirSync(runDir, { recursive: true });
-  const selectedJudges = JUDGES.slice(0, judgeCount);
+  const selectedJudges = selectJudges(judgeCount, options.judgeModels);
+  const synthesizerModel = options.synthesizerModel ?? SYNTHESIZER.model;
 
   const manifest = {
     runId: actualRunId,
@@ -75,7 +87,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
     createdAt: new Date().toISOString(),
     candidates: candidates.map(({ id, name, tier }) => ({ id, name, tier })),
     judges: selectedJudges.map(({ role, name, model }) => ({ role, name, model })),
-    synthesizer: options.quick ? null : { model: SYNTHESIZER.model },
+    synthesizer: options.quick ? null : { model: synthesizerModel },
     scenarios: scenarios.map(({ id, name }) => ({ id, name })),
   };
   fs.writeFileSync(path.join(runDir, 'run.json'), JSON.stringify(manifest, null, 2));
@@ -99,6 +111,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
           runDir,
           selectedJudges,
           !options.quick,
+          synthesizerModel,
         );
         for (const failure of judgePhase.failedJudges) {
           const message = `judge ${failure.judge}: ${failure.error}`;

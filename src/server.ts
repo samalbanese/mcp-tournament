@@ -3,6 +3,7 @@ import http, { type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { JUDGES, SYNTHESIZER } from './config/judges.js';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
 import {
   BenchDefinitionSchema,
@@ -16,6 +17,11 @@ import { logDebug, logError, logInfo, onLog } from './utils/logger.js';
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MAX_BODY_BYTES = 64 * 1024;
 const MODEL_CACHE_MS = 10 * 60 * 1000;
+const DEFAULT_CANDIDATE_MODELS = [
+  'deepseek/deepseek-v3.2',
+  'google/gemini-2.5-flash-lite',
+  'meta-llama/llama-4-scout',
+];
 const CONTENT_TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -59,6 +65,8 @@ const runRequestSchema = z.object({
   models: z.array(z.string().min(1)).min(1).max(4),
   scenarioId: z.string().min(1).optional(),
   judges: z.number().int().min(1).max(5).optional(),
+  judgeModels: z.record(z.string().min(1)).optional(),
+  synthesizerModel: z.string().min(1).optional(),
 }).strict();
 
 const suggestCriteriaSchema = z.object({
@@ -171,6 +179,14 @@ function scrub(message: string, apiKey: string): string {
   return apiKey ? message.replaceAll(apiKey, '[redacted]') : message;
 }
 
+export function findUnknownModelId(
+  requestedModelIds: string[],
+  availableModelIds: Iterable<string>,
+): string | undefined {
+  const available = new Set(availableModelIds);
+  return requestedModelIds.find(modelId => !available.has(modelId));
+}
+
 async function getModels(fetcher: typeof fetch): Promise<ModelSummary[]> {
   if (modelCache && modelCache.expiresAt > Date.now()) return modelCache.models;
   const response = await fetcher('https://openrouter.ai/api/v1/models');
@@ -249,6 +265,8 @@ function runInBackground(input: z.infer<typeof runRequestSchema>, runId: string,
     plugin: input.plugin,
     scenarios: input.scenarioId ? [input.scenarioId] : undefined,
     judges: input.judges,
+    judgeModels: input.judgeModels,
+    synthesizerModel: input.synthesizerModel,
     outputRoot: resultsDir,
     runId,
   }).then(run => {
@@ -300,6 +318,14 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
         } catch (error) {
           sendJson(response, 502, { error: error instanceof Error ? error.message : String(error) });
         }
+        return;
+      }
+      if (request.method === 'GET' && pathname === '/api/defaults') {
+        sendJson(response, 200, {
+          candidates: DEFAULT_CANDIDATE_MODELS,
+          judges: JUDGES.map(({ role, name, model }) => ({ role, name, model })),
+          synthesizer: SYNTHESIZER.model,
+        });
         return;
       }
       if (request.method === 'GET' && pathname === '/api/plugins') {
@@ -354,13 +380,34 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
         return;
       }
       if (request.method === 'POST' && pathname === '/api/runs') {
-        const parsed = runRequestSchema.safeParse(await readJsonBody(request));
+        const body = await readJsonBody(request);
+        const parsed = runRequestSchema.safeParse(body);
         if (!parsed.success) {
           sendJson(response, 400, { error: 'invalid run request', details: parsed.error.flatten() });
           return;
         }
         if (activeApiKey !== null) {
           sendJson(response, 409, { error: 'a run is already in progress' });
+          return;
+        }
+        try {
+          const catalog = await getModels(fetcher);
+          const requestedModels = [
+            ...parsed.data.models,
+            ...Object.values(parsed.data.judgeModels ?? {}),
+            ...(parsed.data.synthesizerModel ? [parsed.data.synthesizerModel] : []),
+          ];
+          const unknownModel = findUnknownModelId(requestedModels, catalog.map(model => model.id));
+          if (unknownModel) {
+            sendJson(response, 400, {
+              error: scrub(`Unknown OpenRouter model ID: "${unknownModel}"`, parsed.data.apiKey),
+            });
+            return;
+          }
+        } catch (error) {
+          sendJson(response, 502, {
+            error: scrub(error instanceof Error ? error.message : String(error), parsed.data.apiKey),
+          });
           return;
         }
         const runId = allocateRunId(resultsDir);

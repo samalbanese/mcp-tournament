@@ -49,6 +49,7 @@ function parseSynthesis(text: string): Synthesis | null {
 export async function runSynthesis(
   scenario: TestCase,
   judgeResults: JudgeResult[],
+  model = SYNTHESIZER.model,
 ): Promise<SynthesisResult> {
   const parsedJudges = judgeResults.filter(result => result.parsed);
   if (parsedJudges.length < 2) {
@@ -74,7 +75,7 @@ export async function runSynthesis(
   let outputTokens = 0;
   for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
     const response = await getModelClient(SYNTHESIZER.route).createMessage({
-      model: SYNTHESIZER.model,
+      model,
       max_tokens: MAX_TOKENS_SYNTHESIS,
       system: 'Synthesize independent evaluations into final scores. Return only valid JSON.',
       messages: [{ role: 'user', content: prompt }],

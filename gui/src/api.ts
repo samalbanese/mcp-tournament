@@ -4,7 +4,17 @@ export interface Health { ok: true; version: string }
 export interface ApiModel { id: string; name: string; contextLength: number; promptPrice: number; completionPrice: number }
 export interface ApiScenario { id: string; name: string }
 export interface ApiPlugin { name: string; description: string; scenarios: ApiScenario[] }
-export interface RunRequest { apiKey: string; plugin: string; models: string[]; scenarioId?: string; judges: number }
+export interface ApiJudgeDefault { role: string; name: string; model: string }
+export interface ApiDefaults { candidates: string[]; judges: ApiJudgeDefault[]; synthesizer: string }
+export interface RunRequest {
+  apiKey: string;
+  plugin: string;
+  models: string[];
+  scenarioId?: string;
+  judges: number;
+  judgeModels?: Record<string, string>;
+  synthesizerModel?: string;
+}
 export interface RunProgress { runId: string; status: 'running' | 'done' | 'error'; logTail: string[]; leaderboard?: LeaderboardEntry[]; error?: string }
 export interface BenchCriterion { name: string; description: string }
 export interface BenchDefinition {
@@ -39,6 +49,7 @@ export async function detectAppMode(): Promise<Health | null> {
   }
 }
 export const loadModels = () => request<ApiModel[]>('/api/models');
+export const loadDefaults = () => request<ApiDefaults>('/api/defaults');
 export const loadPlugins = () => request<ApiPlugin[]>('/api/plugins');
 export const saveBench = (body: BenchDefinition) => request<{ name: string }>('/api/benches', {
   method: 'POST',

@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { isAllowedOrigin, mergeRunIndex } from '../../src/server.js';
+import { findUnknownModelId, isAllowedOrigin, mergeRunIndex } from '../../src/server.js';
 
 const tempDirs: string[] = [];
 afterEach(() => {
@@ -33,5 +33,11 @@ describe('local GUI server', () => {
     expect(isAllowedOrigin('http://[::1]:4600', 4600)).toBe(true);
     expect(isAllowedOrigin('https://example.com', 4600)).toBe(false);
     expect(isAllowedOrigin('http://localhost:9999', 4600)).toBe(false);
+  });
+
+  it('identifies the first requested model missing from the live catalog', () => {
+    const requested = ['candidate/known', 'judge/missing', 'synthesizer/missing'];
+    expect(findUnknownModelId(requested, ['candidate/known'])).toBe('judge/missing');
+    expect(findUnknownModelId(requested, requested)).toBeUndefined();
   });
 });

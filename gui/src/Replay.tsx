@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { loadJudges, loadSynthesis, loadTurns } from './data';
+import { humanizePlugin } from './format';
 import { href } from './router';
 import type { JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis } from './types';
 
@@ -15,6 +16,7 @@ type JudgeRecord = { role: string; score: JudgeScore };
 interface ReplayLane {
   entry: LeaderboardEntry;
   scenario: ScenarioScore;
+  prompt?: string;
   response: string;
   judges: JudgeRecord[];
   synthesis?: Synthesis;
@@ -243,8 +245,9 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
         loadJudges(run.runId, entry.modelId, scenario.scenarioId, scenario.scenarioName, run.judges.map((judge) => judge.role)),
         loadSynthesis(run.runId, entry.modelId, scenario.scenarioId, scenario.scenarioName).catch(() => undefined),
       ]);
+      const prompt = turns.find((turn) => turn.role === 'participant')?.content;
       const response = [...turns].reverse().find((turn) => turn.role === 'candidate')?.content ?? '[No candidate text response was recorded.]';
-      return { entry, scenario, response, judges, synthesis };
+      return { entry, scenario, prompt, response, judges, synthesis };
     })).then((loaded) => {
       if (!active) return;
       const available = loaded.filter((lane): lane is ReplayLane => lane !== null);
@@ -286,6 +289,7 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
   if (!timeline) return <div className="page replay-page"><div className="skeleton-stack" aria-label="Loading replay"><span/><span/><span/></div></div>;
 
   const stage = elapsed < timeline.candidatesEnd ? 1 : elapsed < timeline.arbiterStart ? 2 : elapsed < timeline.arbiterEnd ? 3 : elapsed < timeline.ctaAt ? 4 : 5;
+  const promptLane = timeline.lanes.find((lane) => lane.prompt);
   const skip = () => {
     elapsedRef.current = timeline.total;
     setElapsed(timeline.total);
@@ -305,7 +309,7 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
 
   return <div className="page replay-page reveal">
     <nav className="crumbs"><a href={href({ view: 'home', runId: run.runId })}>{run.runId}</a><i>/</i><span>Replay theater</span></nav>
-    <section className="replay-hero"><div><p className="eyebrow">REAL RUN / STAGED PLAYBACK</p><h1>Replay theater</h1><p>{run.plugin.toUpperCase()} · {entries.length} models · {run.judges.length} judges · no simulation</p></div><span className="replay-live">● STAGE 0{stage} / 05</span></section>
+    <section className="replay-hero"><div><p className="eyebrow">REAL RUN / STAGED PLAYBACK</p><h1>Replay theater</h1><p>{humanizePlugin(run.plugin)} · {entries.length} models · {run.judges.length} judges · no simulation</p></div><span className="replay-live">● STAGE 0{stage} / 05</span></section>
     <div className={`replay-controls ${reducedMotion ? 'reduced' : ''}`}>
       {reducedMotion ? <p>REDUCED MOTION ENABLED / COMPLETE RUN SHOWN</p> : <>
         <button type="button" onClick={togglePlayback} aria-pressed={!playing}>{playing ? 'Ⅱ PAUSE' : '▶ PLAY'}</button>
@@ -313,6 +317,11 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
         <button type="button" onClick={skip}>SKIP TO END <span>→</span></button>
       </>}
     </div>
+    {promptLane?.prompt && <section className="replay-prompt" aria-labelledby="replay-prompt-title">
+      <header><p className="eyebrow">THE PROMPT</p><span>WHAT EVERY MODEL WAS ASKED</span></header>
+      <h2 id="replay-prompt-title">{promptLane.scenario.scenarioName}</h2>
+      <p>{promptLane.prompt}</p>
+    </section>}
     <section className="replay-candidates">
       <div className="stage-heading"><div><p className="eyebrow">STAGE 01 + 02 / EXECUTE → JUDGE PANEL</p><h2>Candidate field</h2></div><span>WORD STREAM / REAL OUTPUT</span></div>
       <div className="replay-lanes">{timeline.lanes.map((lane) => <CandidateLane lane={lane} run={run} elapsed={elapsed} renderInline={renderInline} key={lane.entry.modelId}/>)}</div>

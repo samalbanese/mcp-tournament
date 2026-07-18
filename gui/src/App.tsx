@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { detectAppMode, loadDefaults, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiDefaults, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
+import { humanizePlugin } from './format';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis, Turn } from './types';
@@ -107,7 +108,7 @@ function Leaderboard({ run, entries }: { run: RunManifest; entries: LeaderboardE
   const spotlight = entries.length === 1;
   return <div className="page reveal">
     <Breadcrumbs run={run.runId}/>
-    <section className="page-heading"><div><p className="eyebrow">AGGREGATED MODEL RANKING</p><h1>{spotlight ? 'Scorecard spotlight' : 'Leaderboard'}</h1><p>{run.plugin.toUpperCase()} evaluation · {run.scenarios.length} scenario{run.scenarios.length === 1 ? '' : 's'} · {run.judges.length} independent judges</p></div><div className="run-stamp"><span>RUN CREATED</span><b>{new Date(run.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' })}</b><small>{new Date(run.createdAt).toLocaleTimeString()}</small></div></section>
+    <section className="page-heading"><div><p className="eyebrow">AGGREGATED MODEL RANKING</p><h1>{spotlight ? 'Scorecard spotlight' : 'Leaderboard'}</h1><p>{humanizePlugin(run.plugin)} evaluation · {run.scenarios.length} scenario{run.scenarios.length === 1 ? '' : 's'} · {run.judges.length} independent judges</p></div><div className="run-stamp"><span>RUN CREATED</span><b>{new Date(run.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' })}</b><small>{new Date(run.createdAt).toLocaleTimeString()}</small></div></section>
     {spotlight && <p className="spotlight-note"><span>SOLE CANDIDATE</span> One model was evaluated in this run. Its scorecard is shown at full resolution.</p>}
     <div className="leaderboard-entry"><a className="watch-replay" href={href({ view: 'replay', runId: run.runId })}>▶ WATCH THIS RUN HAPPEN <span>→</span></a></div>
     <section className={`leaderboard ${spotlight ? 'spotlight' : ''}`}>

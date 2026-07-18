@@ -1,6 +1,5 @@
 import { Command } from 'commander';
 import { spawn } from 'node:child_process';
-import path from 'node:path';
 
 /**
  * CLI results are user-facing program output, so they belong on stdout —
@@ -12,7 +11,7 @@ function print(text: string): void {
 }
 import { serve } from './index.js';
 import { startServer } from './server.js';
-import { loadBenches } from './plugins/custom.js';
+import { loadDiscoveredBenches } from './plugins/custom.js';
 import {
   evaluateTournament,
   formatLeaderboard,
@@ -56,7 +55,7 @@ program.command('run')
   .option('--judges <count>', 'Number of judges', value => Number.parseInt(value, 10), 3)
   .option('--out <directory>', 'Root directory for result runs')
   .action(async options => {
-    loadBenches(path.join(process.cwd(), 'benches'));
+    loadDiscoveredBenches();
     const run = await evaluateTournament({
       models: String(options.models).split(',').map(model => model.trim()).filter(Boolean),
       plugin: options.plugin,
@@ -74,7 +73,7 @@ program.command('leaderboard')
   .option('--limit <count>', 'Maximum rows', value => Number.parseInt(value, 10), 10)
   .option('--out <directory>', 'Root directory containing result runs')
   .action(options => {
-    loadBenches(path.join(process.cwd(), 'benches'));
+    loadDiscoveredBenches();
     print(formatLeaderboard(readLeaderboard({
       plugin: options.plugin,
       limit: options.limit,

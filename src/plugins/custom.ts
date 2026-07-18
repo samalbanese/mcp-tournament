@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { getModelClient } from '../clients/index.js';
 import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
@@ -116,6 +117,30 @@ ${buildCriteriaJsonInstruction(criteria)}`;
 export interface LoadBenchesResult {
   loaded: string[];
   errors: Array<{ file: string; error: string }>;
+}
+
+export function getPackageBenchesDir(): string {
+  return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'benches');
+}
+
+function isSameDirectory(left: string, right: string): boolean {
+  const normalize = (directory: string): string => {
+    const resolved = path.resolve(directory);
+    return process.platform === 'win32' ? resolved.toLowerCase() : resolved;
+  };
+  return normalize(left) === normalize(right);
+}
+
+export function loadDiscoveredBenches(cwd = process.cwd()): LoadBenchesResult {
+  const packageBenchesDir = getPackageBenchesDir();
+  const result = loadBenches(packageBenchesDir);
+  const cwdBenchesDir = path.join(cwd, 'benches');
+  if (!isSameDirectory(packageBenchesDir, cwdBenchesDir)) {
+    const overlay = loadBenches(cwdBenchesDir);
+    result.loaded.push(...overlay.loaded);
+    result.errors.push(...overlay.errors);
+  }
+  return result;
 }
 
 export function readBenchDefinitions(benchesDir: string): BenchDefinition[] {

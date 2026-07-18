@@ -5,7 +5,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   BenchDefinitionSchema,
   createCustomPlugin,
+  getPackageBenchesDir,
   loadBenches,
+  loadDiscoveredBenches,
   type BenchDefinition,
 } from '../../src/plugins/custom.js';
 import type { Turn } from '../../src/plugins/base.js';
@@ -33,12 +35,34 @@ const definition: BenchDefinition = {
 
 describe('custom benches', () => {
   it('keeps every shipped bench definition valid', () => {
-    const benchesDir = path.resolve(process.cwd(), 'benches');
+    const benchesDir = getPackageBenchesDir();
     const files = fs.readdirSync(benchesDir).filter(file => file.endsWith('.json'));
     expect(files).toHaveLength(3);
     for (const file of files) {
       expect(() => BenchDefinitionSchema.parse(JSON.parse(fs.readFileSync(path.join(benchesDir, file), 'utf8')))).not.toThrow();
     }
+  });
+
+  it('loads shipped benches and a cwd overlay when launched elsewhere', () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-tournament-cwd-'));
+    tempDirs.push(directory);
+    const benchesDir = path.join(directory, 'benches');
+    fs.mkdirSync(benchesDir);
+    const overlay = { ...definition, name: `cwd-overlay-${Date.now()}` };
+    fs.writeFileSync(path.join(benchesDir, 'duplicate.json'), JSON.stringify({ ...definition, name: 'business-strategy' }));
+    fs.writeFileSync(path.join(benchesDir, 'overlay.json'), JSON.stringify(overlay));
+
+    const result = loadDiscoveredBenches(directory);
+
+    expect(result.loaded).toEqual([
+      'business-strategy',
+      'creative-writing',
+      'customer-support',
+      overlay.name,
+    ]);
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0]).toMatchObject({ file: 'duplicate.json' });
+    expect(result.errors[0].error).toContain('already registered');
   });
 
   it('maps rounds and names every criterion explicitly in the judge prompt', () => {

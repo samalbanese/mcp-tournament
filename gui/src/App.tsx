@@ -202,12 +202,20 @@ function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: 
   const modelsState = useLoad(loadModels, []);
   const [routing, setRouting] = useState<RoutingSettings>();
   const [search, setSearch] = useState('');
+  const [keyStorageError, setKeyStorageError] = useState<string>();
+  const secureStorage = window.tournamentSecure;
   useEffect(() => {
     if (!routing && defaultsState.data) setRouting(routingFromDefaults(defaultsState.data));
   }, [routing, defaultsState.data]);
-  const updateKey = (key: string) => {
-    localStorage.setItem('or-key', key);
+  const updateKey = async (key: string) => {
     onKeyChange(key);
+    setKeyStorageError(undefined);
+    try {
+      if (secureStorage) await secureStorage.setApiKey(key || null);
+      else localStorage.setItem('or-key', key);
+    } catch {
+      setKeyStorageError('The key is available for this session, but could not be saved securely.');
+    }
   };
   const updateRouting = (update: (current: RoutingSettings) => RoutingSettings) => {
     setRouting(current => {
@@ -235,7 +243,7 @@ function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: 
   const routingError = defaultsState.error ?? modelsState.error;
   return <div className="page app-page reveal">
     <section className="app-heading"><div><p className="eyebrow">LOCAL CONTROL</p><h1>Settings</h1><p>1. paste key → 2. set routing below (optional) → 3. NEW RUN or BUILD BENCH</p></div>{apiKey && <span className="key-chip">● KEY SET</span>}</section>
-    <section className="settings-panel"><label htmlFor="or-key">OPENROUTER API KEY</label><input id="or-key" type="password" value={apiKey} onChange={(event) => updateKey(event.target.value)} placeholder="sk-or-v1-…" autoComplete="off"/><p>stays in your browser, sent only to your local server</p></section>
+    <section className="settings-panel"><label htmlFor="or-key">OPENROUTER API KEY</label><input id="or-key" type="password" value={apiKey} onChange={(event) => void updateKey(event.target.value)} placeholder="sk-or-v1-…" autoComplete="off"/><p>{secureStorage ? 'stored with OS encryption when available, otherwise kept for this session only; sent only to your local server' : 'stays in your browser, sent only to your local server'}</p>{keyStorageError && <strong className="run-error">{keyStorageError}</strong>}</section>
     <section className="routing-panel">
       <div className="routing-head"><div><p className="eyebrow">MODEL ROUTING</p><h2>Defaults for every new run</h2><p>Choose the field and the models that score it. You can still edit candidates on New Run.</p></div><button type="button" className="routing-reset" disabled={!routing || !defaultsState.data} onClick={resetRouting}>RESET TO DEFAULTS</button></div>
       {routingError ? <p className="run-error">{routingError}</p> : (defaultsState.loading || modelsState.loading || !routing) ? <Skeleton/> : <>
@@ -429,8 +437,18 @@ function About() { return <div className="page about reveal"><p className="eyebr
 export default function App() {
   const route = useRoute();
   const [appMode, setAppMode] = useState<boolean | null>(null);
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('or-key') ?? '');
+  const [apiKey, setApiKey] = useState(() => window.tournamentSecure ? '' : localStorage.getItem('or-key') ?? '');
   const [freshRuns, setFreshRuns] = useState<string[]>([]);
+  useEffect(() => {
+    const secureStorage = window.tournamentSecure;
+    if (!secureStorage) return;
+    localStorage.removeItem('or-key');
+    let active = true;
+    void secureStorage.getApiKey()
+      .then((key) => { if (active) setApiKey(key ?? ''); })
+      .catch(() => { if (active) setApiKey(''); });
+    return () => { active = false; };
+  }, []);
   useEffect(() => { void detectAppMode().then((health) => setAppMode(Boolean(health))); }, []);
   const index = useLoad(loadIndex, []);
   const runs = useMemo(() => [...new Set([...freshRuns, ...(index.data?.runs ?? [])])].sort().reverse(), [freshRuns, index.data]);

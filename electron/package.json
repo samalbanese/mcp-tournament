@@ -1,0 +1,57 @@
+{
+  "name": "mcp-tournament-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Windows desktop shell for MCP Tournament",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis portable"
+  },
+  "devDependencies": {
+    "electron": "43.1.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.samalbanese.mcptournament",
+    "productName": "MCP Tournament",
+    "asar": true,
+    "forceCodeSigning": false,
+    "directories": {
+      "output": "dist-app"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../dist",
+        "to": "app-core/dist"
+      },
+      {
+        "from": "../package.json",
+        "to": "app-core/package.json"
+      },
+      {
+        "from": "../gui/dist",
+        "to": "app-core/gui/dist"
+      },
+      {
+        "from": "../benches",
+        "to": "app-core/benches"
+      },
+      {
+        "from": "../node_modules",
+        "to": "app-core/node_modules"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  }
+}

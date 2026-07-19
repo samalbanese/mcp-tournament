@@ -1,10 +1,12 @@
 # Dependencies
 node_modules/
 gui/node_modules/
+electron/node_modules/
 
 # Build output
 dist/
 gui/dist/
+electron/dist-app/
 demo-dist/
 tsconfig.tsbuildinfo
 
@@ -25,3 +27,6 @@ artifacts/
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Local tooling (mcp-publisher binary)
+.tools/

@@ -468,19 +468,28 @@ function listen(server: http.Server, port: number, host: string): Promise<void> 
   });
 }
 
-export async function startServer(options: { port?: number; rootDir?: string } = {}): Promise<{ server: http.Server; url: string }> {
-  const port = options.port ?? 4600;
-  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Port must be an integer between 1 and 65535');
+export async function startServer(options: { port?: number; rootDir?: string; listenIPv6?: boolean } = {}): Promise<{ server: http.Server; url: string }> {
+  const requestedPort = options.port ?? 4600;
+  if (!Number.isInteger(requestedPort) || requestedPort < 0 || requestedPort > 65535) throw new Error('Port must be an integer between 0 and 65535');
+  const server = http.createServer();
+  await listen(server, requestedPort, '127.0.0.1');
+  const address = server.address();
+  if (!address || typeof address === 'string') {
+    server.close();
+    throw new Error('Could not determine the local GUI port');
+  }
+  const port = address.port;
   const handler = createRequestHandler({ port, rootDir: options.rootDir });
-  const server = http.createServer(handler);
-  await listen(server, port, '127.0.0.1');
+  server.on('request', handler);
   // Browsers on Windows often resolve localhost to ::1 first; listen on both
   // loopbacks so neither address family gets connection-refused. IPv6 loopback
   // is best-effort — some machines have IPv6 disabled entirely.
-  try {
-    await listen(http.createServer(handler), port, '::1');
-  } catch (error) {
-    logDebug(`IPv6 loopback bind skipped (IPv4-only host?): ${error instanceof Error ? error.message : String(error)}`);
+  if (options.listenIPv6 !== false) {
+    try {
+      await listen(http.createServer(handler), port, '::1');
+    } catch (error) {
+      logDebug(`IPv6 loopback bind skipped (IPv4-only host?): ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
   return { server, url: `http://localhost:${port}` };
 }

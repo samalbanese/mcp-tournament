@@ -2,6 +2,14 @@
   "name": "mcp-tournament",
   "version": "0.1.0",
   "description": "AI model evaluation as an MCP server. Multi-judge panels, structured scoring, pluggable domains.",
+  "mcpName": "io.github.samalbanese/mcp-tournament",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samalbanese/mcp-tournament.git"
+  },
+  "homepage": "https://mcp-tournament.pages.dev",
+  "bugs": "https://github.com/samalbanese/mcp-tournament/issues",
+  "author": "Sam Albanese",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -10,6 +18,7 @@
   "files": ["dist", "gui/dist/**/*", "benches"],
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build && npm run test:unit",
     "demo:bundle": "node scripts/demo-bundle.mjs",
     "dev": "tsc --watch",
     "start": "node dist/index.js",

@@ -61,6 +61,11 @@ rendered in the viewer:
 ## Quick start
 
 ```bash
+# Windows only, once: the committed demo-run data has deep folders
+git config --global core.longpaths true
+
+git clone https://github.com/samalbanese/mcp-tournament.git
+cd mcp-tournament
 npm install && npm run build
 export OPENROUTER_API_KEY=sk-or-...   # one key, every role
 ```
@@ -187,6 +192,11 @@ Tracked in `TODO.md`.
 Generalized from [oracle-tournament](https://github.com/samalbanese/oracle-tournament),
 a D&D-specific model evaluator — its pipeline proved out the multi-judge +
 arbiter design; this repo makes the domain pluggable.
+
+## Contributing
+
+Issues and PRs welcome — the easiest contribution is a new bench JSON.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

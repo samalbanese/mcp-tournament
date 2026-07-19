@@ -79,6 +79,19 @@ model behind each judge and the synthesizer — and start a run from **NEW RUN**
 benchmark from a form — question, rounds, persona, judging criteria (with an
 AI-suggest button) — and saves it as a JSON plugin, live immediately.
 
+### As a desktop app (Windows, unsigned preview)
+
+The same server + GUI wrapped in an Electron window, with the API key stored
+via OS-level encryption (`safeStorage`) instead of the browser:
+
+```bash
+npm --prefix electron install
+npm --prefix electron run dist   # unsigned NSIS installer + portable exe → electron/dist-app/
+```
+
+Builds are unsigned for now, so Windows SmartScreen will warn on first run —
+see [electron/README.md](electron/README.md).
+
 ### As an MCP server (Claude Desktop, Cursor, Windsurf)
 
 ```json

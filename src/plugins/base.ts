@@ -6,6 +6,8 @@
  * for a specific evaluation domain (D&D, coding, customer support, etc.).
  */
 
+import { shortSlug } from '../utils/slug.js';
+
 /** A single test case the candidate model must handle. */
 export interface TestCase {
   id: string;
@@ -144,10 +146,10 @@ export type BuiltinPlugin = typeof BUILTIN_PLUGINS[number];
 
 /** Slugify a model name for file paths */
 export function modelSlug(model: string): string {
-  return model.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  return shortSlug(model);
 }
 
 /** Slugify a scenario name for file paths */
 export function scenarioSlug(scenario: TestCase | { name: string }): string {
-  return scenario.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  return shortSlug(scenario.name);
 }

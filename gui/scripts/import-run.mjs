@@ -11,6 +11,18 @@ const input = args.find((arg) => !arg.startsWith('--'));
 if (!input) { console.error('Usage: node scripts/import-run.mjs <runId|source-directory> [--from-oracle]'); process.exit(1); }
 
 const slugify = (value) => String(value).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+const shortSlug = (value, max = 24) => {
+  const slug = slugify(value);
+  if (slug.length <= max) return slug;
+  // Hash-suffixed truncation — must stay identical to src/utils/slug.ts.
+  let hash = 5381;
+  for (let i = 0; i < slug.length; i++) hash = ((hash * 33) ^ slug.charCodeAt(i)) >>> 0;
+  const suffix = hash.toString(36).slice(0, 4).padStart(4, '0');
+  const prefix = slug.slice(0, max - 5);
+  const boundary = prefix.lastIndexOf('_');
+  const base = (boundary > 0 ? prefix.slice(0, boundary) : prefix).replace(/_+$/, '');
+  return `${base}_${suffix}`;
+};
 const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
 const writeJson = async (file, value) => { await mkdir(path.dirname(file), { recursive: true }); await writeFile(file, `${JSON.stringify(value, null, 2)}\n`); };
 
@@ -53,8 +65,8 @@ async function importOracle(source) {
     for (const scenarioDir of (await readdir(path.join(judgeRoot, modelDir.name), { withFileTypes: true })).filter((entry) => entry.isDirectory())) {
       const sourceScenario = path.join(judgeRoot, modelDir.name, scenarioDir.name);
       const match = legacyLeaderboard.find((entry) => slugify(entry.modelId) === slugify(modelDir.name));
-      const modelSlug = slugify(match?.modelId ?? modelDir.name);
-      const scenarioSlug = slugify(scenarioDir.name);
+      const modelSlug = shortSlug(match?.modelId ?? modelDir.name);
+      const scenarioSlug = shortSlug(scenarioDir.name);
       for (const file of await readdir(sourceScenario)) {
         const legacy = await readJson(path.join(sourceScenario, file));
         if (file === 'synthesis.json') { await writeJson(path.join(target, 'judges', modelSlug, scenarioSlug, 'synthesis.json'), legacy.synthesis ?? legacy); continue; }
@@ -71,10 +83,10 @@ async function importOracle(source) {
   const candidateRoot = path.join(source, 'candidates');
   for (const modelDir of (await readdir(candidateRoot, { withFileTypes: true })).filter((entry) => entry.isDirectory())) {
     const match = legacyLeaderboard.find((entry) => slugify(entry.modelId) === slugify(modelDir.name));
-    const modelSlug = slugify(match?.modelId ?? modelDir.name);
+    const modelSlug = shortSlug(match?.modelId ?? modelDir.name);
     for (const scenarioDir of (await readdir(path.join(candidateRoot, modelDir.name), { withFileTypes: true })).filter((entry) => entry.isDirectory())) {
       const sourceScenario = path.join(candidateRoot, modelDir.name, scenarioDir.name);
-      const scenarioSlug = slugify(scenarioDir.name);
+      const scenarioSlug = shortSlug(scenarioDir.name);
       const legacyTurns = await readJson(path.join(sourceScenario, 'turns.json'));
       const turns = legacyTurns.flatMap((turn, index) => [
         { turn: index * 2, role: 'participant', content: turn.playerMessage },
@@ -106,7 +118,24 @@ async function importContractRun(source) {
   const manifest = await readJson(path.join(source, 'run.json'));
   const target = path.join(dataDir, manifest.runId);
   await rm(target, { recursive: true, force: true });
-  await cp(source, target, { recursive: true });
+  await mkdir(target, { recursive: true });
+  for (const entry of await readdir(source, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !['candidates', 'judges'].includes(entry.name)) {
+      await cp(path.join(source, entry.name), path.join(target, entry.name), { recursive: true });
+      continue;
+    }
+    const areaSource = path.join(source, entry.name);
+    for (const modelDir of (await readdir(areaSource, { withFileTypes: true })).filter((item) => item.isDirectory())) {
+      const modelSource = path.join(areaSource, modelDir.name);
+      for (const scenarioDir of (await readdir(modelSource, { withFileTypes: true })).filter((item) => item.isDirectory())) {
+        await cp(
+          path.join(modelSource, scenarioDir.name),
+          path.join(target, entry.name, shortSlug(modelDir.name), shortSlug(scenarioDir.name)),
+          { recursive: true },
+        );
+      }
+    }
+  }
   await updateIndex(manifest.runId);
   return manifest.runId;
 }

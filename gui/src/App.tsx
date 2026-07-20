@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { detectAppMode, loadDefaults, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiDefaults, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
 import { humanizePlugin } from './format';
+import JudgeSpread from './JudgeSpread';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
-import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis, Turn } from './types';
+import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Turn } from './types';
 
 type LoadState<T> = { data?: T; error?: string; loading: boolean };
 function useLoad<T>(loader: (() => Promise<T>) | null, deps: unknown[]): LoadState<T> {
@@ -84,6 +85,7 @@ function Shell({ children, runs, activeRun, route, appMode }: { children: ReactN
       {appMode && <a className={route.view === 'new' ? 'nav-link active' : 'nav-link'} href="#/new">NEW RUN</a>}
       {appMode && <a className={route.view === 'build' ? 'nav-link active' : 'nav-link'} href="#/build">BUILD BENCH</a>}
       {appMode && <a className={route.view === 'settings' ? 'nav-link active' : 'nav-link'} href="#/settings">SETTINGS</a>}
+      <a className={route.view === 'why' ? 'nav-link active' : 'nav-link'} href="#/why">WHY</a>
       <a className={route.view === 'about' ? 'nav-link active' : 'nav-link'} href="#/about">ABOUT</a>
     </header>
     <main>{children}</main>
@@ -122,8 +124,10 @@ function Leaderboard({ run, entries }: { run: RunManifest; entries: LeaderboardE
   </div>;
 }
 
-function ScenarioSynthesis({ runId, modelId, scenario }: { runId: string; modelId: string; scenario: ScenarioScore }) {
+function ScenarioSynthesis({ run, modelId, scenario }: { run: RunManifest; modelId: string; scenario: ScenarioScore }) {
+  const runId = run.runId;
   const state = useLoad(() => loadSynthesis(runId, modelId, scenario.scenarioId, scenario.scenarioName), [runId, modelId, scenario.scenarioId]);
+  const judgesState = useLoad(() => loadJudges(runId, modelId, scenario.scenarioId, scenario.scenarioName, run.judges.map((judge) => judge.role)), [runId, modelId, scenario.scenarioId]);
   if (state.loading) return <Skeleton/>;
   const synthesis = state.data;
   if (!synthesis) return <div className="inline-empty">Synthesizer record unavailable for this scenario.</div>;
@@ -131,7 +135,7 @@ function ScenarioSynthesis({ runId, modelId, scenario }: { runId: string; modelI
   return <>
     {outliers.length > 0 && <section className="outliers"><div className="section-label"><span>JUDGE DISAGREEMENTS</span><b>{outliers.length} MATERIAL OUTLIER{outliers.length === 1 ? '' : 'S'}</b></div>{outliers.map((item, index) => <article className="outlier" key={`${item.criterion}-${index}`}><span>{label(item.criterion)}</span><p>{item.note}</p></article>)}</section>}
     <div className="detail-grid">
-      <section className="score-panel"><div className="section-label"><span>FINAL CRITERIA</span><b>{synthesis.average_score.toFixed(2)} AVG</b></div>{Object.entries(synthesis.final_scores).map(([criterion, score]) => <div className="criterion-score" key={criterion}><div><b>{label(criterion)}</b><ConfidenceChip value={score.confidence}/></div><ScoreBar score={score.score}/></div>)}</section>
+      <section className="score-panel"><div className="section-label"><span>FINAL CRITERIA</span><b>{synthesis.average_score.toFixed(2)} AVG</b></div>{Object.entries(synthesis.final_scores).map(([criterion, score]) => { const notes = score.outliers.join(' ').toLowerCase(); const spreadJudges = (judgesState.data ?? []).flatMap(({ role, score: judgeScore }) => { const value = judgeScore.scores[criterion]?.score; const manifest = run.judges.find((judge) => judge.role === role); return value == null ? [] : [{ role, name: manifest?.name, score: value }]; }); const outlierRoles = spreadJudges.filter(({ role, name }) => [role, role.replaceAll('_', ' '), name].some((candidate) => candidate && notes.includes(candidate.toLowerCase()))).map(({ role }) => role); return <div className="criterion-score" key={criterion}><div><b>{label(criterion)}</b><ConfidenceChip value={score.confidence}/></div><div className="criterion-signal"><ScoreBar score={score.score}/><JudgeSpread judges={spreadJudges} final={score.score} outlierRoles={outlierRoles}/></div></div>; })}</section>
       <section className="assessment"><p className="eyebrow">SYNTHESIZER ASSESSMENT</p><blockquote>{synthesis.assessment}</blockquote><div className="agreement"><span>JUDGE AGREEMENT</span><b>{synthesis.judge_agreement}</b></div></section>
     </div>
     <section className="errors"><div className="section-label"><span>CONFIRMED RULE ERRORS</span><b>{synthesis.rule_errors_confirmed.length}</b></div>{synthesis.rule_errors_confirmed.length ? <ol>{synthesis.rule_errors_confirmed.map((error, index) => <li key={index}>{error}</li>)}</ol> : <p className="clean">No confirmed rule errors.</p>}</section>
@@ -145,7 +149,7 @@ function ModelDetail({ run, entry, selectedScenario }: { run: RunManifest; entry
     <section className="model-hero"><div><p className="eyebrow">CANDIDATE SCORECARD / {entry.tier.toUpperCase()} TIER</p><h1>{entry.modelName}</h1><p className="model-id">{entry.modelId}</p></div><div className={`hero-score ${scoreClass(entry.overallAverage)}`}><span>OVERALL</span><b>{entry.overallAverage.toFixed(2)}</b><small>OUT OF 10</small></div></section>
     <div className="scenario-tabs" role="navigation" aria-label="Scenarios">{entry.scenarioScores.map((item) => <a className={item.scenarioId === scenario.scenarioId ? 'active' : ''} href={href({ view: 'model', runId: run.runId, modelId: entry.modelId, scenarioId: item.scenarioId })} key={item.scenarioId}><span>{item.scenarioName}</span><b>{item.average.toFixed(2)}</b></a>)}</div>
     <div className="view-switch"><a href={href({ view: 'judges', runId: run.runId, modelId: entry.modelId, scenarioId: scenario.scenarioId })}>JUDGE MATRIX <span>↗</span></a><a href={href({ view: 'transcript', runId: run.runId, modelId: entry.modelId, scenarioId: scenario.scenarioId })}>READ TRANSCRIPT <span>↗</span></a></div>
-    <ScenarioSynthesis runId={run.runId} modelId={entry.modelId} scenario={scenario}/>
+    <ScenarioSynthesis run={run} modelId={entry.modelId} scenario={scenario}/>
   </div>;
 }
 
@@ -155,7 +159,7 @@ function JudgePanel({ run, entry, scenario }: { run: RunManifest; entry: Leaderb
   const criteria = [...new Set(judges.flatMap((judge) => Object.keys(judge.score.scores)))];
   return <div className="page reveal"><Breadcrumbs run={run.runId} model={entry} scenario={scenario}/><ViewHeader eyebrow="INDEPENDENT EVALUATION" title="Judge panel" detail="Scores before synthesizer arbitration" back={href({ view: 'model', runId: run.runId, modelId: entry.modelId, scenarioId: scenario.scenarioId })}/>
     {state.loading ? <Skeleton/> : state.error ? <Empty title="Judge panel unavailable" detail={state.error}/> : <>
-      <section className="matrix-wrap"><table className="matrix"><thead><tr><th>CRITERION</th>{judges.map(({role}) => <th key={role}><span>{run.judges.find((j) => j.role === role)?.name ?? label(role)}</span><small>{run.judges.find((j) => j.role === role)?.model}</small></th>)}</tr></thead><tbody>{criteria.map((criterion) => { const values = judges.map((judge) => judge.score.scores[criterion]?.score).filter((v): v is number => v != null); const spread = Math.max(...values)-Math.min(...values); return <tr className={spread >= 3 ? 'disputed' : ''} key={criterion}><th>{label(criterion)}{spread >= 3 && <small>▲ {spread} PT SPREAD</small>}</th>{judges.map(({ role, score }) => <td key={role} className={scoreClass(score.scores[criterion]?.score ?? 0)}><b>{score.scores[criterion]?.score ?? '—'}</b></td>)}</tr>; })}</tbody></table></section>
+      <section className="matrix-wrap"><table className="matrix"><thead><tr><th>CRITERION</th>{judges.map(({role}) => <th key={role}><span>{run.judges.find((j) => j.role === role)?.name ?? label(role)}</span><small>{run.judges.find((j) => j.role === role)?.model}</small></th>)}</tr></thead><tbody>{criteria.flatMap((criterion) => { const values = judges.map((judge) => judge.score.scores[criterion]?.score).filter((v): v is number => v != null); const spread = Math.max(...values)-Math.min(...values); const spreadJudges = judges.flatMap(({ role, score }) => { const value = score.scores[criterion]?.score; return value == null ? [] : [{ role, name: run.judges.find((judge) => judge.role === role)?.name, score: value }]; }); return [<tr className={spread >= 3 ? 'disputed' : ''} key={criterion}><th>{label(criterion)}{spread >= 3 && <small>▲ {spread} PT SPREAD</small>}</th>{judges.map(({ role, score }) => <td key={role} className={scoreClass(score.scores[criterion]?.score ?? 0)}><b>{score.scores[criterion]?.score ?? '—'}</b></td>)}</tr>, <tr className="matrix-spread-row" key={`${criterion}-spread`}><td colSpan={judges.length + 1}><JudgeSpread judges={spreadJudges} compact/></td></tr>]; })}</tbody></table></section>
       <section className="judge-notes"><div className="section-label"><span>JUDGE EVIDENCE</span><b>EXPAND TO INSPECT</b></div>{judges.map(({role, score}) => <JudgeNotes key={role} role={role} score={score} name={run.judges.find((judge) => judge.role === role)?.name}/>)}</section>
     </>}
   </div>;
@@ -164,8 +168,10 @@ function JudgeNotes({ role, score, name }: { role: string; score: JudgeScore; na
 
 function Transcript({ run, entry, scenario }: { run: RunManifest; entry: LeaderboardEntry; scenario: ScenarioScore }) {
   const state = useLoad(() => loadTurns(run.runId, entry.modelId, scenario.scenarioId, scenario.scenarioName), [run.runId, entry.modelId, scenario.scenarioId]);
+  const turns = state.data ?? [];
+  const jumpToTurn = (turn: number) => document.getElementById(`turn-${String(turn).padStart(2, '0')}`)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   return <div className="page transcript-page reveal"><Breadcrumbs run={run.runId} model={entry} scenario={scenario}/><ViewHeader eyebrow="RAW EXECUTION RECORD" title="Transcript" detail={`${entry.modelName} × ${scenario.scenarioName}`} back={href({ view: 'model', runId: run.runId, modelId: entry.modelId, scenarioId: scenario.scenarioId })}/>
-    {state.loading ? <Skeleton/> : state.error ? <Empty title="Transcript unavailable" detail={state.error}/> : <section className="transcript">{state.data?.map((turn) => <TurnCard turn={turn} key={turn.turn}/>)}</section>}
+    {state.loading ? <Skeleton/> : state.error ? <Empty title="Transcript unavailable" detail={state.error}/> : <div className="transcript-layout"><nav className="turn-rail" aria-label="Transcript turns">{turns.map((turn) => { const invalid = turn.toolCalls?.some((tool) => !tool.valid); const hasTools = Boolean(turn.toolCalls?.length); return <a href={`#turn-${String(turn.turn).padStart(2, '0')}`} onClick={(event) => { event.preventDefault(); jumpToTurn(turn.turn); }} title={`Jump to turn ${turn.turn}`} key={turn.turn}><span>{String(turn.turn).padStart(2, '0')}</span>{hasTools && <b className={invalid ? 'invalid' : ''}>{invalid ? '⚠' : '◇'}</b>}</a>; })}</nav><section className="transcript">{turns.map((turn) => <TurnCard turn={turn} key={turn.turn}/>)}</section></div>}
   </div>;
 }
 /**
@@ -185,7 +191,7 @@ function formatMessage(text: string): ReactNode[] {
   });
 }
 
-function TurnCard({ turn }: { turn: Turn }) { return <article className={`turn ${turn.role}`}><header><span>{turn.role === 'candidate' ? 'CANDIDATE' : 'PARTICIPANT'}</span><b>TURN {String(turn.turn).padStart(2, '0')}</b></header><div className="message">{turn.content ? formatMessage(turn.content) : <em>[No text response]</em>}</div>{turn.toolCalls && turn.toolCalls.length > 0 && <div className="tools">{turn.toolCalls.map((tool, index) => <details className={tool.valid ? '' : 'invalid'} key={`${tool.name}-${index}`}><summary><span>{tool.valid ? '◇' : '⚠'} {tool.name}</span><small>{tool.valid ? 'VALID CALL' : 'INVALID CALL'}</small></summary><div><label>ARGUMENTS</label><pre>{JSON.stringify(tool.arguments, null, 2)}</pre><label>RESULT</label><pre>{tool.result}</pre></div></details>)}</div>}{turn.metrics && <footer><span>TTFB {turn.metrics.ttfbMs == null ? '—' : `${(turn.metrics.ttfbMs/1000).toFixed(2)}s`}</span><span>TOTAL {(turn.metrics.totalTimeMs/1000).toFixed(2)}s</span><span>IN {turn.metrics.inputTokens.toLocaleString()} tok</span><span>OUT {turn.metrics.outputTokens.toLocaleString()} tok</span></footer>}</article>; }
+function TurnCard({ turn }: { turn: Turn }) { const long = turn.content.length > 1_400; const [expanded, setExpanded] = useState(() => Boolean(turn.toolCalls?.some((tool) => !tool.valid))); const id = `turn-${String(turn.turn).padStart(2, '0')}`; return <article id={id} className={`turn ${turn.role} ${long ? 'long' : ''} ${long && !expanded ? 'collapsed' : ''}`}><header><span>{turn.role === 'candidate' ? 'CANDIDATE' : 'PARTICIPANT'}</span><b>TURN {String(turn.turn).padStart(2, '0')}</b></header><div className="turn-content"><div className="message">{turn.content ? formatMessage(turn.content) : <em>[No text response]</em>}</div>{turn.toolCalls && turn.toolCalls.length > 0 && <div className="tools">{turn.toolCalls.map((tool, index) => <details className={tool.valid ? '' : 'invalid'} key={`${tool.name}-${index}`}><summary><span>{tool.valid ? '◇' : '⚠'} {tool.name}</span><small>{tool.valid ? 'VALID CALL' : 'INVALID CALL'}</small></summary><div><label>ARGUMENTS</label><pre>{JSON.stringify(tool.arguments, null, 2)}</pre><label>RESULT</label><pre>{tool.result}</pre></div></details>)}</div>}</div>{long && <button className="turn-expand" type="button" aria-expanded={expanded} onClick={() => setExpanded((current) => !current)}>{expanded ? 'COLLAPSE TURN ▴' : 'EXPAND TURN ▾'}</button>}{turn.metrics && <footer><span>TTFB {turn.metrics.ttfbMs == null ? '—' : `${(turn.metrics.ttfbMs/1000).toFixed(2)}s`}</span><span>TOTAL {(turn.metrics.totalTimeMs/1000).toFixed(2)}s</span><span>IN {turn.metrics.inputTokens.toLocaleString()} tok</span><span>OUT {turn.metrics.outputTokens.toLocaleString()} tok</span></footer>}</article>; }
 
 function ViewHeader({ eyebrow, title, detail, back }: { eyebrow: string; title: string; detail: string; back: string }) { return <section className="view-heading"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{detail}</p></div><a href={back}>← SCORECARD</a></section>; }
 
@@ -432,6 +438,7 @@ function Progress({ runId, onViewResults }: { runId: string; onViewResults: (run
     {status === 'done' && <div className="progress-action"><button onClick={() => void onViewResults(runId)}>VIEW RESULTS <span>→</span></button></div>}
   </div>;
 }
+function Why() { return <div className="page about why reveal"><p className="eyebrow">WHY A PANEL / NOT A SCORE</p><h1>One judge lies.<br/>A panel argues.</h1><p className="about-copy">Single-evaluator scores average away exactly the information you need — <strong>where</strong> models fail. Disagreement is not noise to remove. It is evidence about the boundary between plausible output and dependable behavior.</p><section className="why-example outliers"><div className="section-label"><span>COMMITTED RUN / D&amp;D DEMO</span><b>REAL DISSENT</b></div><article className="outlier"><span>RULES ACCURACY</span><div><strong>Rules Judge / 3.0</strong><p>The Rules Judge scored Rules Accuracy 3/10, citing initiative-order violations, while the panel median was 6. The confirmed error list proves the dissent right: “Initiative order error: Goblin 1 (12) acted before Goblin 2 (13).”</p><small>A mean would have buried it at 5.3. The synthesizer surfaced it as contested and kept the dissent on the record.</small></div></article></section><div className="about-grid"><article><b>01</b><h2>Independent first</h2><p>Judges never see each other’s scores. Each perspective reaches its verdict without social pressure from the panel.</p></article><article><b>02</b><h2>Arbitrated, not averaged</h2><p>The synthesizer resolves conflicts with reasons, flags outliers, and preserves contested signals.</p></article><article><b>03</b><h2>Evidence attached</h2><p>Every score links back to the transcript and tool calls that produced it.</p></article></div><a className="why-replay-link" href="#/replay/run-2026-07-18-194500">WATCH A COMMITTED RUN UNFOLD <span>→</span></a><RunItYourself/></div>; }
 function About() { return <div className="page about reveal"><p className="eyebrow">HOW SCORES BECOME SIGNAL</p><h1>One run.<br/>Four accountable stages.</h1><p className="about-copy">EXECUTE captures every candidate response, tool call, and timing metric. A multi-judge panel scores the evidence independently, then a synthesizer resolves disagreements and documents its reasoning. Finally, AGGREGATE ranks candidates across scenarios without hiding the underlying transcript.</p><Pipeline/><div className="about-grid"><article><b>01</b><h2>Evidence first</h2><p>Every score links back to the exact conversation and tool behavior that produced it.</p></article><article><b>02</b><h2>Disagreement visible</h2><p>Outliers are surfaced as signal, not averaged into silence.</p></article><article><b>03</b><h2>Static by design</h2><p>This viewer reads local JSON only. No backend, accounts, tracking, or live model calls.</p></article></div><RunItYourself/></div>; }
 
 export default function App() {
@@ -464,6 +471,7 @@ export default function App() {
     location.hash = href({ view: 'home', runId });
   };
   const content = useMemo(() => {
+    if (route.view === 'why') return <Why/>;
     if (route.view === 'about') return <About/>;
     if (isAppRoute) {
       if (appMode === null) return <div className="page"><Skeleton/></div>;

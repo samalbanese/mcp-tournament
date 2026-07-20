@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { loadJudges, loadSynthesis, loadTurns } from './data';
 import { humanizePlugin } from './format';
+import JudgeSpread from './JudgeSpread';
 import { href } from './router';
 import type { JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis } from './types';
 
@@ -186,7 +187,7 @@ function CandidateLane({ lane, run, elapsed, renderInline }: { lane: TimedLane; 
   </article>;
 }
 
-function ArbiterPanel({ timeline, elapsed, renderInline }: { timeline: Timeline; elapsed: number; renderInline: InlineRenderer }) {
+function ArbiterPanel({ timeline, run, elapsed, renderInline }: { timeline: Timeline; run: RunManifest; elapsed: number; renderInline: InlineRenderer }) {
   const progress = clamp((elapsed - timeline.arbiterStart) / (timeline.arbiterEnd - timeline.arbiterStart));
   const visibleWords = Math.floor(progress * timeline.synthesisWords);
   const complete = elapsed >= timeline.arbiterEnd;
@@ -199,9 +200,12 @@ function ArbiterPanel({ timeline, elapsed, renderInline }: { timeline: Timeline;
         const laneVisible = clamp(visibleWords - lane.synthesisWordStart, 0, lane.synthesisChunks.length);
         const laneStarted = visibleWords >= lane.synthesisWordStart;
         const laneComplete = complete || laneVisible >= lane.synthesisChunks.length;
+        const notes = Object.values(lane.synthesis?.final_scores ?? {}).flatMap((score) => score.outliers).join(' ').toLowerCase();
+        const spreadJudges = lane.judges.map(({ role, score }) => ({ role, name: run.judges.find((judge) => judge.role === role)?.name, score: averageJudgeScore(score) }));
+        const outlierRoles = spreadJudges.filter(({ role, name }) => [role, role.replaceAll('_', ' '), name].some((candidate) => candidate && notes.includes(candidate.toLowerCase()))).map(({ role }) => role);
         return <article key={lane.entry.modelId}><header><span>{lane.entry.modelName}</span><b>{lane.synthesis?.average_score.toFixed(2) ?? '—'}</b></header><p>{lane.synthesis
           ? laneComplete ? renderInline(lane.synthesis.assessment) : lane.synthesisChunks.slice(0, laneVisible).join('')
-          : <em>Synthesis record unavailable.</em>}{lane.synthesis && laneStarted && !laneComplete && <span className="block-cursor" aria-hidden="true">▮</span>}</p></article>;
+          : <em>Synthesis record unavailable.</em>}{lane.synthesis && laneStarted && !laneComplete && <span className="block-cursor" aria-hidden="true">▮</span>}</p>{laneComplete && <div className="replay-arbiter-spread"><JudgeSpread judges={spreadJudges} final={lane.synthesis?.average_score} outlierRoles={outlierRoles}/></div>}</article>;
       })}
     </div>
     {complete && outliers.length > 0 && <div className="replay-outliers"><div className="section-label"><span>OUTLIER NOTES</span><b>{outliers.length} FLAGGED</b></div>{outliers.map((item, index) => <article className="outlier" key={`${item.model}-${item.criterion}-${index}`}><span>▲ {item.criterion.replaceAll('_', ' ')}</span><p><b>{item.model}</b> — {item.note}</p></article>)}</div>}
@@ -209,19 +213,34 @@ function ArbiterPanel({ timeline, elapsed, renderInline }: { timeline: Timeline;
 }
 
 function ReplayLeaderboard({ timeline, entries, elapsed, runId }: { timeline: Timeline; entries: LeaderboardEntry[]; elapsed: number; runId: string }) {
+  const finale = elapsed >= timeline.ctaAt;
   return <section className="replay-ranking stage-arrival">
     <div className="stage-heading"><div><p className="eyebrow">STAGE 04 / AGGREGATE</p><h2>Leaderboard assembled</h2></div><span>FINAL / {entries.length} CANDIDATES</span></div>
-    <div className="replay-ranks">
+    <div className={`replay-ranks ${finale ? 'finale' : ''}`}>
       {entries.map((entry, index) => {
         const revealAt = timeline.leaderboardStart + index * 420;
         if (elapsed < revealAt) return null;
         const scoreProgress = clamp((elapsed - revealAt) / 700);
-        return <a className="replay-rank-row" href={href({ view: 'model', runId, modelId: entry.modelId })} key={entry.modelId}>
-          <span className="rank">{String(index + 1).padStart(2, '0')}</span><div><h3>{entry.modelName}</h3><small>{entry.modelId}</small></div><div className={`replay-overall ${scoreClass(entry.overallAverage)}`}><b>{(entry.overallAverage * scoreProgress).toFixed(2)}</b><span>/ 10</span></div>
+        return <a className={`replay-rank-row ${finale && index === 0 ? 'champion' : ''}`} href={href({ view: 'model', runId, modelId: entry.modelId })} key={entry.modelId}>
+          <span className="rank">{String(index + 1).padStart(2, '0')}{finale && index === 0 && <small className="champion-chip">CHAMPION</small>}</span><div><h3>{entry.modelName}</h3><small>{entry.modelId}</small></div><div className={`replay-overall ${scoreClass(entry.overallAverage)}`}><b>{(entry.overallAverage * scoreProgress).toFixed(2)}</b><span>/ 10</span></div>
         </a>;
       })}
     </div>
   </section>;
+}
+
+function ReplayScrubber({ timeline, elapsed, onSeek }: { timeline: Timeline; elapsed: number; onSeek: (elapsed: number) => void }) {
+  const marks = [
+    { at: timeline.candidatesEnd, label: '01 EXECUTE' },
+    { at: timeline.arbiterStart, label: '02 JUDGE' },
+    { at: timeline.arbiterEnd, label: '03 SYNTH' },
+    { at: timeline.leaderboardStart, label: '04 RANK' },
+  ];
+  return <div className="replay-scrubber">
+    <div className="replay-scrubber-track"><span style={{ width: `${clamp(elapsed / timeline.total) * 100}%` }}/></div>
+    {marks.map((mark) => <i className="replay-scrubber-mark" style={{ left: `${clamp(mark.at / timeline.total) * 100}%` }} key={mark.label}><span>{mark.label}</span></i>)}
+    <input type="range" min={0} max={timeline.total} step={10} value={Math.min(elapsed, timeline.total)} aria-label="Replay timeline" onChange={(event) => onSeek(Number(event.currentTarget.value))}/>
+  </div>;
 }
 
 export default function Replay({ run, entries, renderInline }: { run: RunManifest; entries: LeaderboardEntry[]; renderInline: InlineRenderer }) {
@@ -295,6 +314,12 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
     setElapsed(timeline.total);
     setPlaying(false);
   };
+  const seek = (position: number) => {
+    const next = Math.min(timeline.total, Math.max(0, position));
+    elapsedRef.current = next;
+    setElapsed(next);
+    if (next >= timeline.total) setPlaying(false);
+  };
   const togglePlayback = () => {
     if (playing) {
       setPlaying(false);
@@ -317,6 +342,7 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
         <button type="button" onClick={skip}>SKIP TO END <span>→</span></button>
       </>}
     </div>
+    {!reducedMotion && <ReplayScrubber timeline={timeline} elapsed={elapsed} onSeek={seek}/>}
     {promptLane?.prompt && <section className="replay-prompt" aria-labelledby="replay-prompt-title">
       <header><p className="eyebrow">THE PROMPT</p><span>WHAT EVERY MODEL WAS ASKED</span></header>
       <h2 id="replay-prompt-title">{promptLane.scenario.scenarioName}</h2>
@@ -324,9 +350,9 @@ export default function Replay({ run, entries, renderInline }: { run: RunManifes
     </section>}
     <section className="replay-candidates">
       <div className="stage-heading"><div><p className="eyebrow">STAGE 01 + 02 / EXECUTE → JUDGE PANEL</p><h2>Candidate field</h2></div><span>WORD STREAM / REAL OUTPUT</span></div>
-      <div className="replay-lanes">{timeline.lanes.map((lane) => <CandidateLane lane={lane} run={run} elapsed={elapsed} renderInline={renderInline} key={lane.entry.modelId}/>)}</div>
+      <div className={`replay-lanes ${elapsed >= timeline.arbiterStart && elapsed < timeline.arbiterEnd ? 'converging' : ''}`}>{timeline.lanes.map((lane) => <CandidateLane lane={lane} run={run} elapsed={elapsed} renderInline={renderInline} key={lane.entry.modelId}/>)}</div>
     </section>
-    {elapsed >= timeline.arbiterStart && <ArbiterPanel timeline={timeline} elapsed={elapsed} renderInline={renderInline}/>}
+    {elapsed >= timeline.arbiterStart && <ArbiterPanel timeline={timeline} run={run} elapsed={elapsed} renderInline={renderInline}/>}
     {elapsed >= timeline.leaderboardStart && <ReplayLeaderboard timeline={timeline} entries={entries} elapsed={elapsed} runId={run.runId}/>}
     {elapsed >= timeline.ctaAt && <div className="stage-arrival replay-cta"><RunItYourself/></div>}
   </div>;

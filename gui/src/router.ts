@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-export type Route = { view: 'home' | 'model' | 'judges' | 'transcript' | 'replay' | 'about' | 'settings' | 'new' | 'build' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
+export type Route = { view: 'home' | 'model' | 'judges' | 'transcript' | 'replay' | 'why' | 'about' | 'settings' | 'new' | 'build' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
 export function href(route: Route) {
+  if (route.view === 'why') return '#/why';
   if (route.view === 'about') return '#/about';
   if (route.view === 'settings') return '#/settings';
   if (route.view === 'new') return '#/new';
@@ -17,6 +18,7 @@ export function href(route: Route) {
 }
 function parse(): Route {
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts[0] === 'why') return { view: 'why' };
   if (parts[0] === 'about') return { view: 'about' };
   if (parts[0] === 'settings') return { view: 'settings' };
   if (parts[0] === 'new') return { view: 'new' };

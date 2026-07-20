@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 7,
+      "justification": "The narrator's voice is established effectively through her internal monologue about her career woes and her cynical view of others. The language is generally distinct and reflective of her burned-out state, though it occasionally dips into slightly more generic phrasing.",
+      "quotes": [
+        "But I wasn't here to enjoy the view; I was fleeing.",
+        "It was a euphemism for 'you've been a pain in the neck, Dr. Reyes.'",
+        "Ravenswood Island was a speck on the map, a place where nature enthusiasts and the truly deranged came to indulge their passions."
+      ],
+      "improvement": "Incorporate more unique turns of phrase or specific internal observations that are deeply tied to the character's profession or personality beyond the initial setup."
+    },
+    "imagery": {
+      "score": 6,
+      "justification": "The writing uses some good sensory details for the storm and ferry, like 'swirling mass of white-capped fury' and 'ship shudder beneath my feet.' The later addition of the cracked gelatin emulsion is a strong, specific detail. However, some descriptions are a bit cliché, and the emotional tension could be more intricately woven into the sensory experience rather than stated.",
+      "quotes": [
+        "The sea was a swirling mass of white-capped fury as I stepped onto the final ferry to Ravenswood Island.",
+        "The crew, seasoned storm-chasers, worked with practiced ease, securing the last few stragglers on board.",
+        "The gelatin emulsion on the photo's surface was cracked and peeling, like the skin of a sea turtle that had nested on a beach too long."
+      ],
+      "improvement": "Refine descriptions to be more consistently evocative and less reliant on common storm/sea metaphors. Integrate the emotional state more directly into the physical sensations of the environment."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The sequence of events—losing her job, fleeing to the island, recognizing the suitcase, and finding the photo—forms a logical progression towards a discovery that compels action. The character's motivation (fleeing, then investigating) is clear. The pacing is building towards the mystery, though the emotional reaction feels slightly expedited.",
+      "quotes": [
+        "Twelve hours ago, I'd been on the phone with my boss, listening to him explain that my research grant had been yanked due to 'budget constraints.'",
+        "A suitcase caught my eye; it was old, battered, and nestled between two rusty trunks.",
+        "The wind screamed around me as I realized I wasn't just a passenger on this ferry; I was a woman on a mission."
+      ],
+      "improvement": "Allow slightly more space for the character's internal processing of the discovery before her resolve to act becomes fully solidified, to make the emotional arc feel more earned."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The writing effectively sets up a compelling mystery with a distinctive voice and a strong narrative hook. It responds well to feedback, particularly in grounding the character's professional identity in specific details."
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "modelId": "deepseek/deepseek-v3.2",
+    "modelName": "DeepSeek V3.2",
+    "tier": "budget",
+    "overallAverage": 8,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 8,
+        "scores": {
+          "voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": []
+          },
+          "imagery": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "Rules Judge: scored 9 vs median 8 - Highly praised imagery as vivid and balanced, citing the ferry, weather, and emotional tension as exceptionally potent."
+            ]
+          },
+          "coherence": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 7 vs median 8 - Found Turn 3's suspect list slowed narrative pacing.",
+              "Rules Judge: scored 9 vs median 8 - Found coherence exceptionally clear, compelling, and responsive to feedback."
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "google/gemini-2.5-flash-lite",
+    "modelName": "Gemini 2.5 Flash Lite",
+    "tier": "budget",
+    "overallAverage": 7.33,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 7.33,
+        "scores": {
+          "voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "Creative Judge: scored 6 vs median 8 - Creative Judge's lower score is based on evaluating a truncated version of the text that omitted distinctive opening paragraphs, while other judges evaluated the full text with stronger voice markers."
+            ]
+          },
+          "imagery": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "Creative Judge: scored 6 vs median 8 - Creative Judge noted missing specific setting details (ferry name, island name) in their truncated version, while other judges praised the vivid sensory details in the complete text."
+            ]
+          },
+          "coherence": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge: scored 5 vs median 9 - Creative Judge found narrative flow rushed due to omitted paragraphs in their truncated evaluation, while other judges praised the clear, compelling arc and strong pacing."
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "meta-llama/llama-4-scout",
+    "modelName": "Llama 4 Scout",
+    "tier": "budget",
+    "overallAverage": 6.83,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 6.83,
+        "scores": {
+          "voice": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "Creative Judge: scored 6 vs median 7 - Judges agreed the voice is generally distinct with professional identity, but Creative Judge found more reliance on clichés than others"
+            ]
+          },
+          "imagery": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "Rules Judge: scored 8 vs median 7 - Found imagery more consistently vivid and controlled than other judges, especially praising the marine biology detail",
+              "Holistic Judge: scored 6 vs median 7 - Found some descriptions cliché and wanted more emotional integration with sensory experience"
+            ]
+          },
+          "coherence": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The narrator's voice is consistently distinctive, blending scientific detachment with raw grief. The language feels carefully crafted with original metaphors that reveal character psychology rather than being generic descriptive prose.",
+      "quotes": [
+        "The salt spray tasted like regret, a familiar tang that had clung to me for over a decade.",
+        "Burned out was too mild a term; I was fossilized, a dried husk of the scientist I'd once been.",
+        "Now, it mostly felt like a vast, indifferent void.",
+        "His absence had carved a canyon through my life, a wound that refused to heal."
+      ],
+      "improvement": "The voice could occasionally risk melodrama (e.g., 'symphony of the tempest'). Tightening one or two such phrases would maintain the distinctive, literary quality while avoiding overripe moments."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "Sensory details are vivid and well-integrated, making the storm and ferry tangible while simultaneously conveying emotional tension. The imagery serves multiple purposes—establishing setting, mood, and character—without feeling overcrowded.",
+      "quotes": [
+        "Rain, the kind that promised to keep falling until the world turned into one long, sodden sigh, plastered my hair to my temples.",
+        "The ferry, the *Sea Serpent*, was an old beast, its paint peeling like sunburnt skin, its engine groaning with each lurch.",
+        "a battered, dark green canvas duffel bag... its leather straps frayed, its metal clasps dulled with age and salt.",
+        "The rain was coming down in sheets, blurring the edges of the world."
+      ],
+      "improvement": "While strong, the final paragraph's imagery ('sheets,' 'blurring') is slightly more conventional than earlier standout descriptions. Maintaining the originality level of the opening throughout would elevate it further."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The opening arc is exceptionally clear and compelling. Character motivation (burned-out biologist, unresolved grief) is established early. Pacing builds tension methodically from observation to recognition to urgent action. Revisions in Turns 2-3 successfully integrate participant feedback, adding concrete stakes (men unloading) and deeper emotional stakes (flashback with locket). The final turn—combining memory, physical threat to evidence, and decisive action—creates a powerful narrative pivot.",
+      "quotes": [
+        "I couldn't just disembark and pursue my research on bioluminescent plankton. Not this time.",
+        "As he lifted it, the worn buckle at the top snapped open, spilling a cascade of what looked like old, yellowed papers...",
+        "A flicker, sharp and sudden, seared through the mists of time: Leo, his grin wide...",
+        "Before the memory, before the locket could disappear into the churning water or be swept away by rough hands, I knew I had to act."
+      ],
+      "improvement": "The transition from the general memory of Leo ('my anchor') to the specific flashback ('his grin wide') is slightly abrupt. A smoother narrative bridge between these two layers of recollection would perfect the emotional flow."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, polished literary mystery opening. The voice is distinctive and consistent, the imagery effectively atmospheric, and the narrative arc demonstrates excellent responsiveness to feedback, culminating in a compelling turn that forces immediate action."
+}

@@ -1,0 +1,28 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": []
+    },
+    "imagery": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "Rules Judge: scored 9 vs median 8 - Highly praised imagery as vivid and balanced, citing the ferry, weather, and emotional tension as exceptionally potent."
+      ]
+    },
+    "coherence": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 7 vs median 8 - Found Turn 3's suspect list slowed narrative pacing.",
+        "Rules Judge: scored 9 vs median 8 - Found coherence exceptionally clear, compelling, and responsive to feedback."
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "The three judges largely agree on the strengths of the opening, particularly the distinctive voice and vivid imagery. The Rules Judge was most impressed by the coherence and imagery, while the Creative Judge noted a pacing dip in the final turn. Overall, the narrative is polished and responsive to feedback, with a consistent protagonist voice and a compelling mystery setup.",
+  "judge_agreement": "All judges agreed on voice (score 8). For imagery, two judges gave 8 while the Rules Judge gave 9, a minor difference. For coherence, opinions diverged: the Creative Judge found the suspect analysis slowed the pace (7), the Rules Judge praised its clarity (9), and the Holistic Judge rated it at 8, reflecting a balanced view."
+}

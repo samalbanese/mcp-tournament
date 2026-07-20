@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "voice": {
+      "score": 7,
+      "justification": "The first-person voice has a distinct, weary, professional tone with moments of sharp observation, but remains somewhat generic in its emotional expression. The marine biologist's perspective is shown through specific similes ('like the skin of a sea turtle') and procedural language ('beach surveys', 'poring over marine specimens'), but the internal monologue about career woes ('pain in the neck, Dr. Reyes') is less distinctive.",
+      "quotes": [
+        "'The gelatin emulsion on the photo's surface was cracked and peeling, like the skin of a sea turtle that had nested on a beach too long. It was a tiny detail, but one that only a marine biologist like me would notice.'",
+        "'The storm raging outside was the kind that made you question the sanity of anyone who'd venture out on a night like this. But I wasn't here to enjoy the view; I was fleeing.'"
+      ],
+      "improvement": "Deepen the voice by weaving more of her scientific observational habits into her reaction to the storm, the ferry's mechanics, or the other passengers, rather than reserving it only for the climactic Polaroid moment. Let her professional lens color her perception throughout."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The storm, ferry, and island are vividly rendered with strong, controlled sensory details. The prose effectively evokes the physicality of the scene ('swirling mass of white-capped fury', 'ship shudder beneath my feet', 'acrid scent of saltwater and diesel fuel') without becoming cluttered. The final, profession-specific detail about the Polaroid ('cracked and peeling, like the skin of a sea turtle') is an excellent, sharpening revision that grounds the emotional trigger in her expertise.",
+      "quotes": [
+        "'The sea was a swirling mass of white-capped fury as I stepped onto the final ferry...'",
+        "'The ferry pitched and rolled, sending loose equipment crashing across the deck. I gripped the railing tighter, my knuckles white.'",
+        "'The gelatin emulsion on the photo's surface was cracked and peeling, like the skin of a sea turtle that had nested on a beach too long.'"
+      ],
+      "improvement": "Consider adding one or two more subtle, non-visual details about the ferry's environment—the specific pitch of the wind through the cables, the taste of the spray, the feeling of damp cold seeping through her clothes—to deepen the immersive, multi-sensory atmosphere."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The opening arc is clear: flight from personal crisis, boarding during a storm, recognition of the suitcase, discovery of the Polaroid, and the decisive turn to action. The pacing from shock to investigation is logical. However, the character's motivation for being on the ferry ('fleeing' a lost grant) feels somewhat external and disconnected from the core mystery of her brother. The transition from burned-out professional to determined sister-investigator, while present, could be more seamlessly integrated.",
+      "quotes": [
+        "'But I wasn't here to enjoy the view; I was fleeing.' (Establishes initial motive)",
+        "'Why was it here, on this ferry, in the middle of a storm? A cold dread began to creep up my spine. I had to know more.' (Shows motivation shift)",
+        "'The wind screamed around me as I realized I wasn't just a passenger on this ferry; I was a woman on a mission.' (Presents the final, compelling turn to action)"
+      ],
+      "improvement": "To strengthen coherence, hint more strongly at a subconscious or denied connection between her professional flight and the island/her past *before* she sees the suitcase. This would make her arrival feel less coincidental and the ensuing emotional cascade more inevitable."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A competent, evocative opening that responds well to refinement prompts. The voice is distinctive in flashes, the imagery is strong and professionally sharpened, and the narrative arc fulfills the brief. The main room for growth lies in more thoroughly integrating the protagonist's dual identities—the marine biologist and the grieving sister—from the very first paragraph to enhance motivation and coherence."
+}

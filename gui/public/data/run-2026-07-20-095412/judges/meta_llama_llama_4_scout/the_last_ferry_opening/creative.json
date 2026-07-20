@@ -1,0 +1,34 @@
+{
+  "scores": {
+    "voice": {
+      "score": 6,
+      "justification": "The narrator establishes a clear professional identity but falls back on overused idioms that dilute the literary tone.",
+      "quotes": [
+        "It was a euphemism for 'you've been a pain in the neck, Dr. Reyes.'",
+        "The revelation hit me like a slap in the face."
+      ],
+      "improvement": "Replace colloquial clichés with sensory details specific to the character's exhaustion and grief."
+    },
+    "imagery": {
+      "score": 7,
+      "justification": "The marine biology revision adds a unique sensory anchor, though the surrounding storm descriptions remain generic.",
+      "quotes": [
+        "The gelatin emulsion on the photo's surface was cracked and peeling, like the skin of a sea turtle that had nested on a beach too long.",
+        "The sea was a swirling mass of white-capped fury"
+      ],
+      "improvement": "Apply the specificity of the turtle comparison to the environment (e.g., wave pressure, salt spray) to unify the imagery."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The opening follows a logical arc from arrival to discovery, meeting the prompt's structural requirements and word count.",
+      "quotes": [
+        "I steeled myself, took a deep breath, and began to walk toward the interior of the ferry, determined to find answers."
+      ],
+      "improvement": "Bridge the gap between finding the photo and deciding to act with more internal psychological resistance to emphasize the stakes."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The draft meets the structural and word count goals with a competent narrative flow. The final revision successfully integrates the requested marine detail, but the prose still relies too heavily on familiar genre tropes to feel truly distinctive."
+}

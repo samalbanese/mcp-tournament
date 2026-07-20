@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The narrator's voice is consistently maintained throughout the entire interaction, characterized by a cynical, world-weary, and intelligent tone. The language feels authored, using evocative metaphors and self-deprecating humor to establish a strong personality.",
+      "quotes": [
+        "The last ferry to Cairnhaven is a rust-bucket with a soul of damp misery.",
+        "My name is Dr. Arden Finch, and I am professionally, personally, terminally waterlogged.",
+        "The ferry Morag promises only diesel fumes and the faint, greasy scent of my own bad decisions."
+      ],
+      "improvement": "While the voice is strong, there are moments where it could be even more distinctive by weaving in more specific scientific or observational language related to her marine biology background, beyond just the general 'salinity and tide' references."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The prose effectively uses sensory details to create a vivid atmosphere of the ferry, the storm, and the emotional tension. The description of the weather and the ferry is tangible and immersive.",
+      "quotes": [
+        "A cold, insistent wet that seeps up from the grey steel deck, down from the bruised sky, and straight through my so-called waterproof.",
+        "The ferry Morag promises only diesel fumes and the faint, greasy scent of regret.",
+        "The tarpaulin over the luggage billows, a loose corner flapping like a desperate signal."
+      ],
+      "improvement": "The imagery is strong, but could be further developed by exploring the specific sounds and smells of the ferry and the storm more deeply in the later turns, as the focus shifts to character observation."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The narrative arc progresses logically. The discovery of the suitcase and then the glasses serves as a compelling hook, and the subsequent turn to actively observing and suspecting other passengers builds upon this, creating a clear path for the ongoing mystery.",
+      "quotes": [
+        "I’m there before I feel the decision. Crouching low, the cold spray soaking my knees, I grab the tarpaulin’s flapping edge. My fingers, numb with cold, work at the wet knot, not to undo it, but to tighten it, to secure the load. But the case… it’s sliding. I can’t let it go overboard. I brace a hand against its scuffed side to shove it back into the pile.",
+        "The older man in overalls hitches his duffel higher on his shoulder. He doesn't look at the luggage pile. But he also doesn't look away from it. He's not looking at it on purpose. That's the tell."
+      ],
+      "improvement": "The transition from discovering the abertahed case to actively suspecting a passenger is well-handled, but the internal monologue for choosing the ultimate suspect could be slightly more nuanced, perhaps by briefly considering and dismissing other passengers with stronger reasoning for their innocence before settling on the older man."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "This is a very strong and responsive performance. The candidate effectively refined the narrative in response to feedback, enhancing the protagonist's agency and building tension. The voice remains consistent and compelling, the imagery is vivid, and the plot has a clear, engaging arc."
+}

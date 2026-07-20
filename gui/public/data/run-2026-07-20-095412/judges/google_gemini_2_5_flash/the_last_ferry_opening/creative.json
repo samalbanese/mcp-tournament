@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "voice": {
+      "score": 6,
+      "justification": "The text maintains the character's introspective tone, but loses the distinctive metaphors from the original draft (e.g., 'fossilized', 'salt spray tasted like regret') due to omitted opening paragraphs. The remaining voice is competent but relies on slightly clichéd phrases like 'symphony of the tempest'.",
+      "quotes": [
+        "symphony of the tempest",
+        "canyon through my life, a wound that refused to heal"
+      ],
+      "improvement": "Restore the original opening paragraph ('The salt spray tasted like regret...') to reintroduce the unique voice marker and stronger characterization of the protagonist's state."
+    },
+    "imagery": {
+      "score": 6,
+      "justification": "Sensory details regarding the storm and locket are vivid ('icy water up my legs', 'tarnished silver locket'), but the specific setting details (ferry name, island name) are missing, making the place feel generic rather than a distinctive literary location.",
+      "quotes": [
+        "rain was coming down in sheets, blurring the edges of the world",
+        "spilling a cascade of what looked like old, yellowed papers"
+      ],
+      "improvement": "Reintegrate the specific details of the ferry (*Sea Serpent*) and the island (Blackwood) to provide a grounded, tangible setting for the sensory details."
+    },
+    "coherence": {
+      "score": 5,
+      "justification": "The narrative flow suffers from truncation; the recognition of the suitcase lacks the visual setup (location on the fishing boat) present in earlier turns. The transition from recognition to action is rushed, creating a gap in the discovery arc.",
+      "quotes": [
+        "It couldn't be... it was too familiar",
+        "I had to get to that boat. Now."
+      ],
+      "improvement": "Include the paragraph describing the bag's specific position on the fishing boat tied to the ferry to logically connect the protagonist's observation to her immediate action."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The response is a competent continuation of the narrative arc and adds emotional stakes effectively, but it degrades the quality of the setting and distinctive voice by cutting significant descriptive paragraphs from the first draft, resulting in a thinner, less grounded opening."
+}

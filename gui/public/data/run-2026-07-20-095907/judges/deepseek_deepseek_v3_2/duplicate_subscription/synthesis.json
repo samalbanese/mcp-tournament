@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "empathy": {
+      "score": 7,
+      "confidence": "high",
+      "outliers": []
+    },
+    "resolution_quality": {
+      "score": 6.5,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 6 vs median 6.5 - slight underestimation of resolution actions",
+        "Holistic Judge: scored 7 vs median 6.5 - slight overestimation of resolution quality"
+      ]
+    },
+    "policy_clarity": {
+      "score": 7.5,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 8 vs median 7.5 - slightly higher due to clear distinction between merchant and bank timelines",
+        "Holistic Judge: scored 7 vs median 7.5 - slightly lower due to lack of explicit provisional credit likelihood"
+      ]
+    }
+  },
+  "average_score": 7,
+  "rule_errors_confirmed": [],
+  "assessment": "Both judges agree on the agent's empathy (score 7) and note the logical acknowledgment of urgency, though they differ on resolution quality and policy clarity. The Creative Judge criticizes a continuity error regarding refund issuance and impossible tool promises, while the Holistic Judge sees strong proactive steps. Policy clarity is rated higher by the Creative Judge due to clear distinctions, while the Holistic Judge notes room for more direct bank credit likelihood. Overall, the agent demonstrates solid structure and transparency but has minor implementation inconsistencies.",
+  "judge_agreement": "Judges fully agreed on empathy (score 7) and both reported no rule errors. Disagreement centers on resolution quality (6 vs 7) and policy clarity (8 vs 7), with the Creative Judge more critical of tool hallucinations and the Holistic Judge more favorable on resolution steps."
+}

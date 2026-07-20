@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "Creative Judge: scored 6 vs median 8 - Creative Judge's lower score is based on evaluating a truncated version of the text that omitted distinctive opening paragraphs, while other judges evaluated the full text with stronger voice markers."
+      ]
+    },
+    "imagery": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "Creative Judge: scored 6 vs median 8 - Creative Judge noted missing specific setting details (ferry name, island name) in their truncated version, while other judges praised the vivid sensory details in the complete text."
+      ]
+    },
+    "coherence": {
+      "score": 9,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge: scored 5 vs median 9 - Creative Judge found narrative flow rushed due to omitted paragraphs in their truncated evaluation, while other judges praised the clear, compelling arc and strong pacing."
+      ]
+    }
+  },
+  "average_score": 7.33,
+  "rule_errors_confirmed": [],
+  "assessment": "The Last Ferry Opening demonstrates strong literary quality with a distinctive voice, vivid imagery, and excellent narrative coherence. Judges consistently praised its atmospheric setting, emotional depth, and compelling mystery setup. While one judge evaluated a truncated version leading to lower scores, the consensus among judges who evaluated the complete text shows polished execution across all criteria.",
+  "judge_agreement": "Judges strongly agreed on the quality of voice and imagery when evaluating the complete text, with Rules and Holistic judges both scoring these criteria at 8. All judges recognized the emotional depth and narrative tension. Disagreement emerged around coherence, where Creative Judge's evaluation of a truncated version resulted in a significantly lower score, highlighting how omitted paragraphs affected narrative flow perception."
+}

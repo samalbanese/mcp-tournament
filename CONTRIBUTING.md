@@ -5,16 +5,15 @@ Thanks for your interest! This project is small and moves fast — issues and PR
 ## Getting set up
 
 ```bash
-# Windows: enable long paths once (committed demo-run data has deep folders)
-git config --global core.longpaths true
-
 git clone https://github.com/samalbanese/mcp-tournament.git
 cd mcp-tournament
-npm install && npm run build
-npm test                    # 24 unit tests, no API key needed
-npm --prefix gui install && npm --prefix gui run build
+npm run setup               # installs + builds server and GUI
+npm test                    # unit tests, no API key needed
 node dist/cli.js gui        # local app at http://localhost:4600
 ```
+
+Or one click, zero local setup:
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samalbanese/mcp-tournament)
 
 Real runs need an OpenRouter key (`OPENROUTER_API_KEY` or paste it in the GUI
 Settings). Unit tests and the results viewer work without one.

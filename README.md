@@ -58,22 +58,32 @@ rendered in the viewer:
 
 ![Model scorecard with judge disagreements](docs/images/scorecard-1440.png)
 
+## When to use this (and when not to)
+
+| You want | Reach for |
+|----------|-----------|
+| CI-style assertions and regression gates over prompts at scale | [promptfoo](https://github.com/promptfoo/promptfoo) |
+| Standardized academic benchmarks (MMLU, HellaSwag, …) | [lm-eval-harness](https://github.com/EleutherAI/lm-evaluation-harness) |
+| Rubric-scored comparisons on **your own scenarios** — multi-round conversations, personas, tool use — with judge disagreement preserved instead of averaged away | **mcp-tournament** |
+
+Those tools are better at what they do; this one is for judgment-heavy,
+domain-specific evals where a single aggregate score hides the story.
+
 ## Quick start
 
 ```bash
-# Windows only, once: the committed demo-run data has deep folders
-git config --global core.longpaths true
-
 git clone https://github.com/samalbanese/mcp-tournament.git
 cd mcp-tournament
-npm install && npm run build
-export OPENROUTER_API_KEY=sk-or-...   # one key, every role
+npm run setup                          # installs + builds server and GUI
+export OPENROUTER_API_KEY=sk-or-...    # one key, every role
 ```
+
+Or skip local setup entirely:
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samalbanese/mcp-tournament)
 
 ### As a local app (BYOK GUI)
 
 ```bash
-npm --prefix gui install && npm --prefix gui run build
 node dist/cli.js gui              # http://localhost:4600
 ```
 
@@ -180,6 +190,22 @@ stderr (stdout is reserved for JSON-RPC).
 | `OPENROUTER_API_KEY` | Yes | All roles by default |
 | `TOURNAMENT_MODEL_*` | No | Per-role model overrides (see above) |
 | `TOURNAMENT_RESULTS_DIR` | No | Results output root (default `./results`) |
+
+## How it's tested
+
+`npm test` runs 30 unit tests with no API key required. Two of them are
+regression guards with a story:
+
+- **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC —
+  one stray `console.log` corrupts the protocol stream and silently breaks
+  every connected MCP client. The guard makes that a failing test instead of
+  a mystery bug report.
+- **The default route can never resolve to a paid first-party API.** The demo
+  path stays BYOK-through-OpenRouter at budget-tier prices; a config regression
+  that would quietly bill someone's Anthropic key fails CI.
+
+An e2e suite (`npm run test:e2e`) exercises real model calls when a key is
+present. CI runs build + unit tests + the GUI build on every push and PR.
 
 ## Roadmap
 

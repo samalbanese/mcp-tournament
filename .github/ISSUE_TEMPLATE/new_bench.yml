@@ -1,0 +1,45 @@
+name: Propose a new benchmark
+description: "A bench is just a JSON file in benches/, and the GUI has a form at #/build that generates it for you."
+title: "[Bench]: "
+labels:
+  - bench-proposal
+  - good first issue
+body:
+  - type: input
+    id: domain-name
+    attributes:
+      label: Domain name
+      description: What should this benchmark domain be called?
+      placeholder: e.g. Incident response
+    validations:
+      required: true
+
+  - type: textarea
+    id: evaluation-goal
+    attributes:
+      label: What it evaluates
+      description: Describe the capability, skill, or behavior this benchmark should measure.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example-scenario
+    attributes:
+      label: Example scenario prompt
+      description: Give us one realistic prompt that belongs in this benchmark.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scoring-criteria
+    attributes:
+      label: Scoring criteria ideas
+      description: What should the independent judges reward or penalize?
+
+  - type: checkboxes
+    id: willing-to-pr
+    attributes:
+      label: Willing to PR it yourself?
+      description: No pressure—this just helps us plan the next step.
+      options:
+        - label: Yes, I would like to open a pull request for this bench.

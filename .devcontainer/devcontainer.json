@@ -1,0 +1,6 @@
+{
+  "name": "mcp-tournament",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "postCreateCommand": "npm run setup",
+  "forwardPorts": [4600]
+}

@@ -17,6 +17,7 @@
   },
   "files": ["dist", "gui/dist/**/*", "benches"],
   "scripts": {
+    "setup": "npm install && npm run build && npm --prefix gui install && npm --prefix gui run build",
     "build": "tsc",
     "prepublishOnly": "npm run build && npm run test:unit",
     "demo:bundle": "node scripts/demo-bundle.mjs",

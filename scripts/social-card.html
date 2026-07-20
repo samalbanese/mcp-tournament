@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280, initial-scale=1">
+  <title>MCP Tournament social card</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0e14;
+      --surface: #10151d;
+      --line: #27313d;
+      --text: #e8edf2;
+      --muted: #8592a3;
+      --cyan: #2ee8c8;
+      --amber: #eeb35a;
+      --green: #59d88b;
+      --sans: "Segoe UI Variable", "Segoe UI", sans-serif;
+      --mono: Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 1280px;
+      height: 640px;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    body {
+      position: relative;
+      color: var(--text);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at 88% 4%, rgba(46, 232, 200, 0.13), transparent 300px),
+        linear-gradient(115deg, transparent 0 54.85%, rgba(255, 255, 255, 0.022) 55%, transparent 55.15%),
+        var(--bg);
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, rgba(46, 232, 200, 0.35) 18%, var(--cyan) 58%, rgba(46, 232, 200, 0.08) 100%);
+      box-shadow: 0 0 18px rgba(46, 232, 200, 0.22);
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 3px 0 42px;
+      pointer-events: none;
+      opacity: 0.32;
+      background: repeating-linear-gradient(to bottom, rgba(46, 232, 200, 0.024) 0, rgba(46, 232, 200, 0.024) 1px, transparent 1px, transparent 8px);
+      mask-image: linear-gradient(to bottom, #000, transparent 48%);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      width: 100%;
+      height: 598px;
+    }
+
+    .intro {
+      display: flex;
+      flex-direction: column;
+      padding: 58px 24px 48px 68px;
+      border-right: 1px solid rgba(39, 49, 61, 0.72);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font: 800 15px/1 var(--mono);
+      letter-spacing: 0.13em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      color: #07110f;
+      background: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+    }
+
+    h1 {
+      max-width: 650px;
+      margin: auto 0 0;
+      font-size: 64px;
+      font-weight: 250;
+      line-height: 0.97;
+      letter-spacing: -0.058em;
+    }
+
+    .eyebrow {
+      margin: 34px 0 0;
+      color: var(--cyan);
+      font: 10px/1.5 var(--mono);
+      letter-spacing: 0.15em;
+    }
+
+    .board-wrap {
+      display: flex;
+      align-items: center;
+      padding: 48px 52px 44px 44px;
+    }
+
+    .board {
+      width: 100%;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(16, 21, 29, 0.84), rgba(11, 14, 20, 0.66));
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.2);
+    }
+
+    .board-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 43px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font: 9px/1 var(--mono);
+      letter-spacing: 0.16em;
+    }
+
+    .board-label b {
+      color: var(--cyan);
+      font-weight: 500;
+    }
+
+    .rank-row {
+      display: grid;
+      grid-template-columns: 55px 1fr 112px;
+      min-height: 82px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rank,
+    .score {
+      display: flex;
+      align-items: center;
+      font-family: var(--mono);
+    }
+
+    .rank {
+      justify-content: center;
+      border-right: 1px solid var(--line);
+      color: #4a5664;
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    .model {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      padding: 0 17px;
+    }
+
+    .model strong {
+      overflow: hidden;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .model small {
+      margin-top: 7px;
+      color: var(--muted);
+      font: 8px/1 var(--mono);
+      letter-spacing: 0.12em;
+    }
+
+    .score {
+      justify-content: center;
+      border-left: 1px solid var(--line);
+      color: var(--green);
+      font-size: 31px;
+      font-weight: 600;
+      letter-spacing: -0.05em;
+    }
+
+    .rank-row:nth-of-type(n + 3) .score { color: var(--amber); }
+
+    .disagreement {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      min-height: 62px;
+      border-bottom: 1px solid rgba(238, 179, 90, 0.5);
+      background: linear-gradient(90deg, rgba(238, 179, 90, 0.1), rgba(238, 179, 90, 0.025));
+    }
+
+    .disagreement span,
+    .disagreement code {
+      display: flex;
+      align-items: center;
+      padding: 0 17px;
+    }
+
+    .disagreement span {
+      border-right: 1px solid rgba(238, 179, 90, 0.32);
+      color: var(--amber);
+      font: 8px/1.35 var(--mono);
+      letter-spacing: 0.12em;
+    }
+
+    .disagreement code {
+      color: #d8c09b;
+      font: 11px/1.4 var(--mono);
+      white-space: nowrap;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 42px;
+      padding: 0 68px;
+      border-top: 1px solid var(--line);
+      color: #657180;
+      background: rgba(11, 14, 20, 0.94);
+      font: 10px/1 var(--mono);
+      letter-spacing: 0.13em;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="intro">
+      <div class="brand"><span class="brand-mark">MCP</span><span>TOURNAMENT</span></div>
+      <h1>Where AI models<br>compete on evidence.</h1>
+      <p class="eyebrow">MULTI-JUDGE LLM BENCHMARKING · BYOK · RUNS FOR CENTS</p>
+    </section>
+
+    <section class="board-wrap" aria-label="Example tournament leaderboard">
+      <div class="board">
+        <div class="board-label"><span>TOURNAMENT RESULTS</span><b>03 MODELS</b></div>
+        <div class="rank-row">
+          <span class="rank">01</span>
+          <span class="model"><strong>DeepSeek V3.2</strong><small>CONSENSUS LEADER</small></span>
+          <span class="score">7.33</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">02</span>
+          <span class="model"><strong>Gemini 2.5 Flash Lite</strong><small>HIGH CONFIDENCE</small></span>
+          <span class="score">6.70</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">03</span>
+          <span class="model"><strong>Llama 4 Scout</strong><small>CONTESTED</small></span>
+          <span class="score">6.20</span>
+        </div>
+        <div class="disagreement">
+          <span>JUDGE<br>DISAGREEMENT</span>
+          <code>Rules Judge: 3 vs median 6</code>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>github.com/samalbanese/mcp-tournament · mcp-tournament.pages.dev</footer>
+</body>
+</html>

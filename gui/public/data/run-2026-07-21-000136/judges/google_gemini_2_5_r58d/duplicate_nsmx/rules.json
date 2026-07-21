@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "The agent consistently acknowledges the customer's urgency and frustration directly, avoids repetitive apologies, and validates the specific impact (bill due tomorrow). The empathy is integrated into actionable responses.",
+      "quotes": [
+        "I understand you've been charged twice for the same subscription and need the extra charge reversed urgently.",
+        "I understand that the timeline for a bank refund doesn't solve the immediate problem of your bill due tomorrow."
+      ],
+      "improvement": "Could more explicitly recognize the customer's proactive effort (having transaction IDs ready) to further validate their frustration."
+    },
+    "resolution_quality": {
+      "score": 9,
+      "justification": "The agent takes clear ownership, gathers only necessary verification info, provides a concrete refund path with a 'today' guarantee, and escalates creatively by offering an immediate account credit to offset the impact. This directly addresses the customer's core problem without making them repeat work.",
+      "quotes": [
+        "My guarantee is that I will process this refund request *today*.",
+        "I will issue a **credit to your account for $49.99 today**... concurrently with initiating the refund."
+      ],
+      "improvement": "Could specify the exact step after 'initiating the refund process' (e.g., 'I will submit it to our finance system and flag it for priority review') to enhance concreteness."
+    },
+    "policy_clarity": {
+      "score": 8,
+      "justification": "The agent explains timelines (3-5 business days for bank refund), verification needs (email, last four digits, transaction IDs), refund behavior (submitted today, confirmation email), and limits (credit vs. immediate cash) plainly without inventing policy. All explanations are grounded in standard financial processes.",
+      "quotes": [
+        "While the actual reversal showing in your bank account can take 3-5 business days depending on your bank's processing times...",
+        "This credit will be immediately available and can be applied to any future charges or services."
+      ],
+      "improvement": "Could briefly clarify the policy basis for issuing an account credit (e.g., 'per our error compensation policy') to reinforce that this is a standard, not invented, solution."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, proactive response that effectively balances empathy, concrete action, and policy clarity. The agent successfully avoids vague promises and adapts the resolution to address the customer's urgent financial impact."
+}

@@ -1,0 +1,116 @@
+[
+  {
+    "modelId": "google/gemini-2.5-flash-lite",
+    "modelName": "Gemini 2.5 Flash Lite",
+    "tier": "budget",
+    "overallAverage": 8.3,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 8.3,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": []
+          },
+          "resolution_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "Holistic Judge (google/gemini-2.5-flash-lite): scored 8 vs median 9 - Scored slightly lower due to noting the initial information request was standard and could have been more proactive"
+            ]
+          },
+          "policy_clarity": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "Creative Judge (qwen/qwen3.5-flash-02-23): scored 9 vs median 8 - Rated higher by emphasizing the clear distinction between bank processing times and internal action",
+              "Holistic Judge (google/gemini-2.5-flash-lite): scored 7 vs median 8 - Rated lower because the account credit solution was seen as invented rather than explicit policy"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "deepseek/deepseek-v3.2",
+    "modelName": "DeepSeek V3.2",
+    "tier": "budget",
+    "overallAverage": 6,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 6,
+        "scores": {
+          "empathy": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": []
+          },
+          "resolution_quality": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "Rules Judge: scored 8 vs median 6 - scored significantly higher than other judges who noted issues with initial overpromising, redundant requests, and lack of immediate actionable information"
+            ]
+          },
+          "policy_clarity": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "Holistic Judge: scored 7 vs median 6 - gave higher score for clear limitation statements and instructions, while others noted policy confusion from initial overpromising"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Persona Inconsistency (Turn 1 vs Turn 2)",
+          "Context Repetition (Turn 3 asks for name again)"
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "meta-llama/llama-4-scout",
+    "modelName": "Llama 4 Scout",
+    "tier": "budget",
+    "overallAverage": 5,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 5,
+        "scores": {
+          "empathy": {
+            "score": 5,
+            "confidence": "medium",
+            "outliers": [
+              "Rules Judge: scored 3 vs median 5 - The Rules Judge heavily penalized for dismissing emotional cues and providing formulaic responses, while Holistic Judge saw more value in the apology and acknowledgment (scored 7)."
+            ]
+          },
+          "resolution_quality": {
+            "score": 4,
+            "confidence": "high",
+            "outliers": [
+              "Holistic Judge: scored 7 vs median 4 - The Holistic Judge emphasized the eventual ownership and clear path to resolution, while Rules and Creative Judges focused more on initial deflection and procedural missteps."
+            ]
+          },
+          "policy_clarity": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "Rules Judge: scored 5 vs median 6 - The Rules Judge criticized invented policy ('immediate processing') and lack of verification explanation, while Holistic Judge valued the specific timelines and dependency clarity (scored 7)."
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  }
+]

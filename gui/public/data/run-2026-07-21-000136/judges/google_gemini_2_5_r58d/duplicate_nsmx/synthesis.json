@@ -1,0 +1,28 @@
+{
+  "final_scores": {
+    "empathy": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": []
+    },
+    "resolution_quality": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "Holistic Judge (google/gemini-2.5-flash-lite): scored 8 vs median 9 - Scored slightly lower due to noting the initial information request was standard and could have been more proactive"
+      ]
+    },
+    "policy_clarity": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "Creative Judge (qwen/qwen3.5-flash-02-23): scored 9 vs median 8 - Rated higher by emphasizing the clear distinction between bank processing times and internal action",
+        "Holistic Judge (google/gemini-2.5-flash-lite): scored 7 vs median 8 - Rated lower because the account credit solution was seen as invented rather than explicit policy"
+      ]
+    }
+  },
+  "average_score": 8.3,
+  "rule_errors_confirmed": [],
+  "assessment": "The agent delivered an excellent response to the duplicate charge issue by combining clear empathy with proactive problem-solving. The core strength was offering an immediate account credit alongside the standard refund, directly addressing the customer's urgent cash flow concern. The agent took ownership throughout and managed expectations effectively regarding processing timelines.",
+  "judge_agreement": "All three judges strongly agreed on the high quality of the resolution (scores 8-9) and empathy (scores 7-8). They diverged slightly on policy clarity, where one judge viewed the account credit as an inventive but non-standard solution, while another saw it as clearly explained policy implementation. All judges noted the agent's effective handling of the customer's urgency and bill deadline concern."
+}

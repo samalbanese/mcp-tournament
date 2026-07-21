@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
 export const CriterionScoreSchema = z.object({
-  score: z.number().int().min(1).max(10),
+  // Judges emit half-scores ("score": 6.5) on rubric criteria; round rather
+  // than reject, or the same judge/model pair fails every retry.
+  score: z.number().min(1).max(10).transform(value => Math.round(value)),
   justification: z.string(),
   quotes: z.array(z.string()),
   improvement: z.string(),

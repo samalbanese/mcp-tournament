@@ -49,7 +49,12 @@ export async function evaluateWithJudges(
 
   const settled = await Promise.allSettled(judges.map(async judge => {
     const result = await runJudge(judge, plugin, scenario, turns);
-    if (!result.parsed) throw new Error(`${judge.name} returned invalid score JSON`);
+    if (!result.parsed) {
+      // Keep the unparseable output on disk — without it, a failed judge
+      // leaves nothing to diagnose (only the one-line error in failures.json).
+      fs.writeFileSync(path.join(judgeDir, `${judge.role}.failed.txt`), result.raw);
+      throw new Error(`${judge.name} returned invalid score JSON`);
+    }
     fs.writeFileSync(
       path.join(judgeDir, `${judge.role}.json`),
       JSON.stringify(result.parsed, null, 2),

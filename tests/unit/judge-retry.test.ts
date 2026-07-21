@@ -75,6 +75,50 @@ afterEach(() => {
 });
 
 describe('judge parse retries', () => {
+  it('accepts non-integer criterion scores by rounding them', async () => {
+    // Regression: budget judges emit half-scores ("score": 6.5) on rubric
+    // criteria; the schema's int() rejected them on every retry, so the same
+    // judge/model pair failed deterministically (customer-support runs
+    // 2026-07-20). Non-integer scores must round, not fail the judge.
+    const halfScore = validScore.replace('"score":8', '"score":6.5');
+    expect(halfScore).toContain('6.5');
+    const createMessage = vi.fn().mockResolvedValue(modelResponse(halfScore));
+    registerModelClient('openrouter', { createMessage } as ModelClient);
+
+    const result = await runJudge(
+      judge('Rules Judge', 'rules', 'half-score-model'),
+      plugin,
+      scenario,
+      turns,
+    );
+
+    expect(result.parseSuccess).toBe(true);
+    expect(result.parsed?.scores.overall_task_quality.score).toBe(7);
+    expect(createMessage).toHaveBeenCalledTimes(1);
+  });
+
+  it('persists the raw output of an exhausted judge for diagnosis', async () => {
+    const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-tournament-judge-'));
+    temporaryDirectories.push(outputDir);
+    const createMessage = vi.fn(async (params: CreateMessageParams) =>
+      modelResponse(params.model === 'valid-model' ? validScore : 'still not JSON'));
+    registerModelClient('openrouter', { createMessage });
+
+    await evaluateWithJudges(
+      plugin, scenario, turns, 'candidate/model', outputDir,
+      [
+        judge('Broken Judge', 'rules', 'invalid-model'),
+        judge('Valid Judge', 'creative', 'valid-model'),
+      ], false,
+    );
+
+    const failedRaw = path.join(
+      outputDir, 'judges', 'candidate_model', 'retry_scenario', 'rules.failed.txt',
+    );
+    expect(fs.existsSync(failedRaw)).toBe(true);
+    expect(fs.readFileSync(failedRaw, 'utf8')).toContain('still not JSON');
+  });
+
   it('recovers when a fresh sample returns valid judge JSON', async () => {
     const createMessage = vi.fn()
       .mockResolvedValueOnce(modelResponse('not valid JSON', 3, 4))

@@ -193,7 +193,7 @@ stderr (stdout is reserved for JSON-RPC).
 
 ## How it's tested
 
-`npm test` runs 30 unit tests with no API key required. Two of them are
+`npm test` runs 32 unit tests with no API key required. Two of them are
 regression guards with a story:
 
 - **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC —

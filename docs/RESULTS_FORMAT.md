@@ -2,7 +2,7 @@
 
 This is the shared contract between the pipeline (writer) and the results-viewer GUI
 (reader). Both MUST conform to it exactly. Naming is domain-generic: `candidate` (the
-model under test) and `participant` (the simulated counterpart — player, customer,
+model under test) and `participant` (the simulated counterpart: player, customer,
 test system), never `dm`/`player`.
 
 ## Directory layout
@@ -33,7 +33,7 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
 }
 ```
 
-## leaderboard.json — `LeaderboardEntry[]`
+## leaderboard.json · `LeaderboardEntry[]`
 
 ```json
 [{
@@ -56,7 +56,7 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
 
 `confidence` ∈ `"high" | "medium" | "contested"`. `scenarioId` is a **string**.
 
-## turns.json — `Turn[]` (generic shape from `src/plugins/base.ts`)
+## turns.json · `Turn[]` (generic shape from `src/plugins/base.ts`)
 
 ```json
 [{
@@ -70,7 +70,7 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
 
 `toolCalls` and `metrics` are optional (participant turns typically have neither).
 
-## metrics.json — `RunMetrics`
+## metrics.json · `RunMetrics`
 
 ```json
 {
@@ -80,7 +80,7 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
 }
 ```
 
-## <judgeRole>.json — `JudgeScore` (see `src/schemas/judge-score.ts`)
+## <judgeRole>.json · `JudgeScore` (see `src/schemas/judge-score.ts`)
 
 ```json
 {
@@ -90,7 +90,7 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
 }
 ```
 
-## synthesis.json — `Synthesis` (see `src/schemas/synthesis.ts`)
+## synthesis.json · `Synthesis` (see `src/schemas/synthesis.ts`)
 
 ```json
 {
@@ -104,7 +104,7 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
 
 ## GUI data directory
 
-The GUI is static — it reads `gui/public/data/index.json`:
+The GUI is static; it reads `gui/public/data/index.json`:
 
 ```json
 { "runs": ["run-2026-07-17-120000"] }

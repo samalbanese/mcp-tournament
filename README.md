@@ -8,14 +8,14 @@
 
 Build a custom LLM benchmark in a form, run it from a local GUI, MCP client, or CLI, and turn independent judge opinions into ranked, auditable results.
 
-![Demo — build a bench, run it, inspect judge disagreements](docs/images/demo.gif)
+![Demo: build a bench, run it, inspect judge disagreements](docs/images/demo.gif)
 
-**[▶ Live demo](https://mcp-tournament.pages.dev/#/replay/run-2026-07-18-194500)** — watch a real `business-strategy` run assemble itself, no key needed.
+**[▶ Live demo](https://mcp-tournament.pages.dev/#/replay/run-2026-07-18-194500)**: watch a real `business-strategy` run assemble itself, no key needed.
 
 Why this is interesting:
 
 - **Disagreement is data:** multiple specialist judges score independently; the arbiter preserves outliers and explains where they diverged.
-- **Benches are declarative:** anyone can define scenarios and criteria as JSON or build them in a form — no pipeline code required.
+- **Benches are declarative:** anyone can define scenarios and criteria as JSON or build them in a form, no pipeline code required.
 - **BYOK and local-first:** bring one OpenRouter key, keep the GUI on your machine, and run budget-tier tournaments for cents.
 
 ## How it works
@@ -34,10 +34,10 @@ Three entry points feed the same pipeline:
 - **MCP client:** evaluate models from Claude Desktop, Cursor, or Windsurf.
 - **CLI:** script runs, serve MCP over stdio, or print the leaderboard.
 
-Domain logic is pluggable; the pipeline is not. Benches are declarative plugins —
+Domain logic is pluggable; the pipeline is not. Benches are declarative plugins:
 a JSON file (or the Build Bench form) defines scenarios, rounds, an optional
 simulated participant persona, and judging criteria. Code plugins can go further
-with custom tools — see [docs/PLUGINS.md](docs/PLUGINS.md).
+with custom tools; see [docs/PLUGINS.md](docs/PLUGINS.md).
 
 | Plugin | Domain | Kind |
 |--------|--------|------|
@@ -52,7 +52,7 @@ with custom tools — see [docs/PLUGINS.md](docs/PLUGINS.md).
 
 Single evaluators miss things. A Rules judge catches mechanical errors; a Creative
 judge catches boring output; a Holistic judge catches "would I keep using this?"
-The synthesizer never scores independently — it arbitrates, flags outlier judges,
+The synthesizer never scores independently: it arbitrates, flags outlier judges,
 and records **why** they disagreed. Judge disagreements are first-class data,
 rendered in the viewer:
 
@@ -64,7 +64,7 @@ rendered in the viewer:
 |----------|-----------|
 | CI-style assertions and regression gates over prompts at scale | [promptfoo](https://github.com/promptfoo/promptfoo) |
 | Standardized academic benchmarks (MMLU, HellaSwag, …) | [lm-eval-harness](https://github.com/EleutherAI/lm-evaluation-harness) |
-| Rubric-scored comparisons on **your own scenarios** — multi-round conversations, personas, tool use — with judge disagreement preserved instead of averaged away | **mcp-tournament** |
+| Rubric-scored comparisons on **your own scenarios** (multi-round conversations, personas, tool use) with judge disagreement preserved instead of averaged away | **mcp-tournament** |
 
 Those tools are better at what they do; this one is for judgment-heavy,
 domain-specific evals where a single aggregate score hides the story.
@@ -89,10 +89,10 @@ node dist/cli.js gui              # http://localhost:4600
 
 Paste your OpenRouter key in **Settings** (stored in your browser, sent only to
 this local server, never written to disk), then set your model routing right
-below it — default candidates from the live catalog with prices, plus the
-model behind each judge and the synthesizer — and start a run from **NEW RUN**. **BUILD BENCH** creates a new
-benchmark from a form — question, rounds, persona, judging criteria (with an
-AI-suggest button) — and saves it as a JSON plugin, live immediately.
+below it (default candidates from the live catalog with prices, plus the
+model behind each judge and the synthesizer) and start a run from **NEW RUN**. **BUILD BENCH** creates a new
+benchmark from a form (question, rounds, persona, judging criteria, with an
+AI-suggest button) and saves it as a JSON plugin, live immediately.
 
 ### As a desktop app (Windows, unsigned preview)
 
@@ -104,7 +104,7 @@ npm --prefix electron install
 npm --prefix electron run dist   # unsigned NSIS installer + portable exe → electron/dist-app/
 ```
 
-Builds are unsigned for now, so Windows SmartScreen will warn on first run —
+Builds are unsigned for now, so Windows SmartScreen will warn on first run;
 see [electron/README.md](electron/README.md).
 
 ### As an MCP server (Claude Desktop, Cursor, Windsurf)
@@ -124,7 +124,7 @@ see [electron/README.md](electron/README.md).
 | Tool | Description |
 |------|-------------|
 | `tournament.evaluate` | 1–4 models × scenarios × judge panel → ranked results |
-| `tournament.quick_test` | One scenario, one judge — fast smoke score |
+| `tournament.quick_test` | One scenario, one judge: fast smoke score |
 | `tournament.leaderboard` | Best cached score per model across runs |
 
 ### As a CLI
@@ -145,8 +145,8 @@ node dist/cli.js serve          # MCP stdio server
 
 ## Results viewer
 
-`gui/` is a self-contained Vite + React static site — no backend, deploys to any
-static host (Cloudflare Pages works as-is). It reads committed run JSON and
+`gui/` is a self-contained Vite + React static site with no backend; it deploys
+to any static host (Cloudflare Pages works as-is). It reads committed run JSON and
 renders rankings, per-judge breakdowns, disagreement callouts, and full
 transcripts with tool-call inspection.
 
@@ -162,10 +162,10 @@ npm run build && npm run preview
 
 ## Model routing
 
-Every role — the candidates, each judge, the synthesizer, the participant agent —
+Every role (the candidates, each judge, the synthesizer, the participant agent)
 is independently model-selectable and routes through **OpenRouter by default**.
 One key, any model, no paid first-party API in the demo path. Defaults are all
-budget-tier (DeepSeek, Qwen Flash, Gemini Flash Lite — a full run costs cents);
+budget-tier (DeepSeek, Qwen Flash, Gemini Flash Lite; a full run costs cents);
 override per role:
 
 ```bash
@@ -178,7 +178,7 @@ The routing layer resolves a pluggable `ModelClient` per role
 (`src/clients/types.ts`). That registry is the documented extension point for a
 [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk) route, which
 authenticates against a local `claude /login` session so Claude-judged runs draw
-on a Max/Pro **subscription** instead of the metered API — the original
+on a Max/Pro **subscription** instead of the metered API: the original
 oracle-tournament design. Two regression tests guard the default: the demo path
 never resolves to the paid Anthropic API, and the MCP server's logger stays on
 stderr (stdout is reserved for JSON-RPC).
@@ -196,7 +196,7 @@ stderr (stdout is reserved for JSON-RPC).
 `npm test` runs 32 unit tests with no API key required. Two of them are
 regression guards with a story:
 
-- **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC —
+- **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC:
   one stray `console.log` corrupts the protocol stream and silently breaks
   every connected MCP client. The guard makes that a failing test instead of
   a mystery bug report.
@@ -211,17 +211,16 @@ present. CI runs build + unit tests + the GUI build on every push and PR.
 
 Deferred deliberately: `tournament.compare` / `report` / `plugins` / `scenarios` /
 `judges` tools, plugin auto-discovery, npm publish, and MCP registry submission.
-Tracked in `TODO.md`.
 
 ## Provenance
 
 Generalized from [oracle-tournament](https://github.com/samalbanese/oracle-tournament),
-a D&D-specific model evaluator — its pipeline proved out the multi-judge +
+a D&D-specific model evaluator whose pipeline proved out the multi-judge +
 arbiter design; this repo makes the domain pluggable.
 
 ## Contributing
 
-Issues and PRs welcome — the easiest contribution is a new bench JSON.
+Issues and PRs welcome; the easiest contribution is a new bench JSON.
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License

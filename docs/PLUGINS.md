@@ -1,7 +1,7 @@
 # Writing a Domain Plugin
 
 A plugin defines **what** to evaluate. The pipeline defines **how**. Adding a new
-evaluation domain — legal drafting, SQL generation, customer support — is one
+evaluation domain (legal drafting, SQL generation, customer support) is one
 TypeScript file implementing `TournamentPlugin` (see `src/plugins/base.ts`).
 
 ## The interface, in practice
@@ -66,13 +66,13 @@ Register it in `src/plugins/index.ts` and it is immediately usable from the CLI
 ## Design notes
 
 - **Judges see what you show them.** `buildJudgePrompt` controls the entire
-  judging context. Include the grading criteria by name — judge output is parsed
+  judging context. Include the grading criteria by name; judge output is parsed
   against them into `JudgeScore` (`src/schemas/judge-score.ts`).
 - **The participant drives realism.** An LLM-backed participant (see
   `src/plugins/dnd.ts`) produces far richer transcripts than canned lines. Keep a
   non-LLM fallback so the plugin loads and tests run without an API key.
 - **Tools are optional but powerful.** The executor runs the tool loop
-  (`MAX_TOOL_ROUNDS` guard included) and records every call — valid and invalid —
+  (`MAX_TOOL_ROUNDS` guard included) and records every call, valid and invalid,
   into the results JSON, which the GUI renders for inspection.
 - **Cheap by default.** Scenario `maxTurns` is the main cost lever. The included
   demo run (3 models, 1 scenario, 3 judges) costs a few cents on OpenRouter.
@@ -82,4 +82,4 @@ Register it in `src/plugins/index.ts` and it is immediately usable from the CLI
 Per candidate × scenario: conversation execution with metrics, an N-judge panel
 scored against your criteria, an arbiter synthesis that surfaces judge
 disagreements, aggregation into `leaderboard.json`, and the static results
-viewer under `gui/` — all conforming to `docs/RESULTS_FORMAT.md`.
+viewer under `gui/`, all conforming to `docs/RESULTS_FORMAT.md`.

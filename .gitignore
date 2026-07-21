@@ -30,3 +30,13 @@ Thumbs.db
 
 # Local tooling (mcp-publisher binary)
 .tools/
+
+# Root markdown and docs are local working notes unless listed below
+/*.md
+!/README.md
+!/CONTRIBUTING.md
+docs/*
+!docs/DEPLOY_DEMO.md
+!docs/PLUGINS.md
+!docs/RESULTS_FORMAT.md
+!docs/images/

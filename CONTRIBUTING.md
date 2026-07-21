@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest! This project is small and moves fast — issues and PRs welcome.
+Thanks for your interest! This project is small and moves fast; issues and PRs welcome.
 
 ## Getting set up
 
@@ -20,17 +20,17 @@ Settings). Unit tests and the results viewer work without one.
 
 ## What contributions look like
 
-- **New benches** — the easiest contribution: a JSON file in `benches/`
+- **New benches**: the easiest contribution, a JSON file in `benches/`
   (or build it in the GUI at `#/build` and copy the file out). See
   [docs/PLUGINS.md](docs/PLUGINS.md).
-- **Code plugins** — domains that need custom tools (see `src/plugins/dnd.ts`).
-- **Bug fixes** — please include a failing test that your fix turns green.
+- **Code plugins**: domains that need custom tools (see `src/plugins/dnd.ts`).
+- **Bug fixes**: please include a failing test that your fix turns green.
 
 ## Ground rules
 
-- TypeScript ESM with NodeNext resolution — imports need `.js` extensions.
+- TypeScript ESM with NodeNext resolution; imports need `.js` extensions.
 - `npm run build` and `npm test` must pass; CI runs both plus the GUI build.
-- Keep the core pipeline domain-agnostic — domain logic belongs in plugins.
+- Keep the core pipeline domain-agnostic; domain logic belongs in plugins.
 - The MCP server logs to stderr only (stdout is reserved for JSON-RPC). Two
   regression tests enforce this and the no-paid-API default; don't break them.
 

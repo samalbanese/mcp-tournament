@@ -3,6 +3,7 @@ import { detectAppMode, loadDefaults, loadModels, loadPlugins, loadRunProgress, 
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
 import { humanizePlugin } from './format';
 import JudgeSpread from './JudgeSpread';
+import RunWorkspace, { WorkspaceShell } from './Workspace';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Turn } from './types';
@@ -75,23 +76,6 @@ function routingOverrides(routing: RoutingSettings, defaults: ApiDefaults) {
   };
 }
 
-function Shell({ children, runs, activeRun, route, appMode }: { children: ReactNode; runs: string[]; activeRun?: string; route: Route; appMode: boolean }) {
-  const selectRun = (runId: string) => { location.hash = href({ view: 'home', runId }); };
-  return <>
-    <div className="ambient" aria-hidden="true" />
-    <header className={`masthead ${appMode ? 'app-mode' : ''}`}>
-      <a className="brand" href={href({ view: 'home', runId: activeRun })}><span className="brand-mark">MCP</span><span>TOURNAMENT</span><small>{appMode ? 'LOCAL RUNNER' : 'RESULTS TERMINAL'}</small></a>
-      <div className="run-control"><label htmlFor="run-select">ACTIVE RUN</label><select id="run-select" value={activeRun ?? ''} onChange={(event) => selectRun(event.target.value)}>{runs.map((run) => <option key={run}>{run}</option>)}</select></div>
-      {appMode && <a className={route.view === 'new' ? 'nav-link active' : 'nav-link'} href="#/new">NEW RUN</a>}
-      {appMode && <a className={route.view === 'build' ? 'nav-link active' : 'nav-link'} href="#/build">BUILD BENCH</a>}
-      {appMode && <a className={route.view === 'settings' ? 'nav-link active' : 'nav-link'} href="#/settings">SETTINGS</a>}
-      <a className={route.view === 'why' ? 'nav-link active' : 'nav-link'} href="#/why">WHY</a>
-      <a className={route.view === 'about' ? 'nav-link active' : 'nav-link'} href="#/about">ABOUT</a>
-    </header>
-    <main>{children}</main>
-    <footer><span>MCP TOURNAMENT / {appMode ? 'LOCAL APP' : 'STATIC RESULTS VIEWER'}</span><span>DATA LOCAL · NO TELEMETRY</span></footer>
-  </>;
-}
 
 function Skeleton() { return <div className="skeleton-stack" aria-label="Loading results"><span/><span/><span/></div>; }
 function Empty({ title = 'No tournament data found', detail }: { title?: string; detail?: string }) {
@@ -105,24 +89,6 @@ function Breadcrumbs({ run, model, scenario }: { run: string; model?: Leaderboar
   return <nav className="crumbs" aria-label="Breadcrumb"><a href={href({ view: 'home', runId: run })}>{run}</a>{model && <><i>/</i><a href={href({ view: 'model', runId: run, modelId: model.modelId })}>{model.modelName}</a></>}{scenario && <><i>/</i><span>{scenario.scenarioName}</span></>}</nav>;
 }
 
-function Leaderboard({ run, entries }: { run: RunManifest; entries: LeaderboardEntry[] }) {
-  const criteria = [...new Set(entries.flatMap((entry) => entry.scenarioScores.flatMap((scenario) => Object.keys(scenario.scores))))];
-  const spotlight = entries.length === 1;
-  return <div className="page reveal">
-    <Breadcrumbs run={run.runId}/>
-    <section className="page-heading"><div><p className="eyebrow">AGGREGATED MODEL RANKING</p><h1>{spotlight ? 'Scorecard spotlight' : 'Leaderboard'}</h1><p>{humanizePlugin(run.plugin)} evaluation · {run.scenarios.length} scenario{run.scenarios.length === 1 ? '' : 's'} · {run.judges.length} independent judges</p></div><div className="run-stamp"><span>RUN CREATED</span><b>{new Date(run.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' })}</b><small>{new Date(run.createdAt).toLocaleTimeString()}</small></div></section>
-    {spotlight && <p className="spotlight-note"><span>SOLE CANDIDATE</span> One model was evaluated in this run. Its scorecard is shown at full resolution.</p>}
-    <div className="leaderboard-entry"><a className="watch-replay" href={href({ view: 'replay', runId: run.runId })}>▶ WATCH THIS RUN HAPPEN <span>→</span></a></div>
-    <section className={`leaderboard ${spotlight ? 'spotlight' : ''}`}>
-      <div className="leader-head"><span>RANK / MODEL</span><span>CRITERION SIGNAL</span><span>OVERALL</span></div>
-      {entries.map((entry, index) => <a className="leader-row" key={entry.modelId} href={href({ view: 'model', runId: run.runId, modelId: entry.modelId })}>
-        <div className="model-cell"><span className="rank">{String(index + 1).padStart(2, '0')}</span><div><h2>{entry.modelName}</h2><span className="tier">{entry.tier} tier</span><small>{entry.modelId}</small></div></div>
-        <div className="criterion-strip">{criteria.map((criterion) => { const scores = entry.scenarioScores.map((s) => s.scores[criterion]?.score).filter((v): v is number => v != null); const score = scores.reduce((a,b) => a+b, 0) / scores.length; return <div key={criterion}><label>{label(criterion)}</label><ScoreBar compact score={score}/></div>; })}</div>
-        <div className={`overall ${scoreClass(entry.overallAverage)}`}><b>{entry.overallAverage.toFixed(2)}</b><span>/ 10</span><small>{entry.scenarioScores.filter((s) => Object.values(s.scores).some((v) => v.confidence === 'contested')).length ? 'CONTESTED SIGNALS' : 'STABLE SIGNAL'}</small></div>
-      </a>)}
-    </section>
-  </div>;
-}
 
 function ScenarioSynthesis({ run, modelId, scenario }: { run: RunManifest; modelId: string; scenario: ScenarioScore }) {
   const runId = run.runId;
@@ -131,8 +97,10 @@ function ScenarioSynthesis({ run, modelId, scenario }: { run: RunManifest; model
   if (state.loading) return <Skeleton/>;
   const synthesis = state.data;
   if (!synthesis) return <div className="inline-empty">Synthesizer record unavailable for this scenario.</div>;
+  const missingJudges = run.judges.filter(judge => !judgesState.data?.some(record => record.role === judge.role));
   const outliers = Object.entries(synthesis.final_scores).flatMap(([criterion, score]) => score.outliers.map((note) => ({ criterion, note })));
   return <>
+    {!judgesState.loading && missingJudges.length > 0 && <p className="evidence-error" role="status">Partial judge archive: {missingJudges.map(judge => judge.name).join(', ')} records are unavailable for this candidate. The saved arbiter assessment is shown below.</p>}
     {outliers.length > 0 && <section className="outliers"><div className="section-label"><span>JUDGE DISAGREEMENTS</span><b>{outliers.length} MATERIAL OUTLIER{outliers.length === 1 ? '' : 'S'}</b></div>{outliers.map((item, index) => <article className="outlier" key={`${item.criterion}-${index}`}><span>{label(item.criterion)}</span><p>{item.note}</p></article>)}</section>}
     <div className="detail-grid">
       <section className="score-panel"><div className="section-label"><span>FINAL CRITERIA</span><b>{synthesis.average_score.toFixed(2)} AVG</b></div>{Object.entries(synthesis.final_scores).map(([criterion, score]) => { const notes = score.outliers.join(' ').toLowerCase(); const spreadJudges = (judgesState.data ?? []).flatMap(({ role, score: judgeScore }) => { const value = judgeScore.scores[criterion]?.score; const manifest = run.judges.find((judge) => judge.role === role); return value == null ? [] : [{ role, name: manifest?.name, score: value }]; }); const outlierRoles = spreadJudges.filter(({ role, name }) => [role, role.replaceAll('_', ' '), name].some((candidate) => candidate && notes.includes(candidate.toLowerCase()))).map(({ role }) => role); return <div className="criterion-score" key={criterion}><div><b>{label(criterion)}</b><ConfidenceChip value={score.confidence}/></div><div className="criterion-signal"><ScoreBar score={score.score}/><JudgeSpread judges={spreadJudges} final={score.score} outlierRoles={outlierRoles}/></div></div>; })}</section>
@@ -156,9 +124,11 @@ function ModelDetail({ run, entry, selectedScenario }: { run: RunManifest; entry
 function JudgePanel({ run, entry, scenario }: { run: RunManifest; entry: LeaderboardEntry; scenario: ScenarioScore }) {
   const state = useLoad(() => loadJudges(run.runId, entry.modelId, scenario.scenarioId, scenario.scenarioName, run.judges.map((judge) => judge.role)), [run.runId, entry.modelId, scenario.scenarioId]);
   const judges = state.data ?? [];
+  const missingJudges = run.judges.filter(judge => !judges.some(record => record.role === judge.role));
   const criteria = [...new Set(judges.flatMap((judge) => Object.keys(judge.score.scores)))];
   return <div className="page reveal"><Breadcrumbs run={run.runId} model={entry} scenario={scenario}/><ViewHeader eyebrow="INDEPENDENT EVALUATION" title="Judge panel" detail="Scores before synthesizer arbitration" back={href({ view: 'model', runId: run.runId, modelId: entry.modelId, scenarioId: scenario.scenarioId })}/>
     {state.loading ? <Skeleton/> : state.error ? <Empty title="Judge panel unavailable" detail={state.error}/> : <>
+      {missingJudges.length > 0 && <p className="evidence-error" role="status">Partial judge archive: {judges.length} of {run.judges.length} records available. Missing: {missingJudges.map(judge => judge.name).join(', ')}. No replacement scores have been inferred.</p>}
       <section className="matrix-wrap"><table className="matrix"><thead><tr><th>CRITERION</th>{judges.map(({role}) => <th key={role}><span>{run.judges.find((j) => j.role === role)?.name ?? label(role)}</span><small>{run.judges.find((j) => j.role === role)?.model}</small></th>)}</tr></thead><tbody>{criteria.flatMap((criterion) => { const values = judges.map((judge) => judge.score.scores[criterion]?.score).filter((v): v is number => v != null); const spread = Math.max(...values)-Math.min(...values); const spreadJudges = judges.flatMap(({ role, score }) => { const value = score.scores[criterion]?.score; return value == null ? [] : [{ role, name: run.judges.find((judge) => judge.role === role)?.name, score: value }]; }); return [<tr className={spread >= 3 ? 'disputed' : ''} key={criterion}><th>{label(criterion)}{spread >= 3 && <small>▲ {spread} PT SPREAD</small>}</th>{judges.map(({ role, score }) => <td key={role} className={scoreClass(score.scores[criterion]?.score ?? 0)}><b>{score.scores[criterion]?.score ?? '—'}</b></td>)}</tr>, <tr className="matrix-spread-row" key={`${criterion}-spread`}><td colSpan={judges.length + 1}><JudgeSpread judges={spreadJudges} compact/></td></tr>]; })}</tbody></table></section>
       <section className="judge-notes"><div className="section-label"><span>JUDGE EVIDENCE</span><b>EXPAND TO INSPECT</b></div>{judges.map(({role, score}) => <JudgeNotes key={role} role={role} score={score} name={run.judges.find((judge) => judge.role === role)?.name}/>)}</section>
     </>}
@@ -443,6 +413,10 @@ function About() { return <div className="page about reveal"><p className="eyebr
 
 export default function App() {
   const route = useRoute();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.getElementById('main-content')?.focus({ preventScroll: true });
+  }, [route]);
   const [appMode, setAppMode] = useState<boolean | null>(null);
   const [apiKey, setApiKey] = useState(() => window.tournamentSecure ? '' : localStorage.getItem('or-key') ?? '');
   const [freshRuns, setFreshRuns] = useState<string[]>([]);
@@ -459,7 +433,7 @@ export default function App() {
   useEffect(() => { void detectAppMode().then((health) => setAppMode(Boolean(health))); }, []);
   const index = useLoad(loadIndex, []);
   const runs = useMemo(() => [...new Set([...freshRuns, ...(index.data?.runs ?? [])])].sort().reverse(), [freshRuns, index.data]);
-  const activeRun = route.runId ?? runs[0];
+  const activeRun = route.runId ?? (!appMode && runs.includes('run-2026-07-18-194500') ? 'run-2026-07-18-194500' : runs[0]);
   const isAppRoute = route.view === 'settings' || route.view === 'new' || route.view === 'build' || route.view === 'progress';
   const runState = useLoad(!isAppRoute && activeRun ? () => loadRun(activeRun) : null, [isAppRoute, activeRun]);
   const leaderboardState = useLoad(!isAppRoute && activeRun ? () => loadLeaderboard(activeRun) : null, [isAppRoute, activeRun]);
@@ -483,12 +457,12 @@ export default function App() {
     }
     if (index.loading || runState.loading || leaderboardState.loading) return <div className="page"><Skeleton/></div>;
     if (!activeRun || index.error || runState.error || leaderboardState.error || !runState.data || !leaderboardState.data) return <Empty detail={index.error ?? runState.error ?? leaderboardState.error}/>;
-    if (route.view === 'home') return <Leaderboard run={runState.data} entries={leaderboardState.data}/>;
+    if (route.view === 'home' || route.view === 'compare' || route.view === 'lab') return <RunWorkspace key={activeRun} run={runState.data} entries={leaderboardState.data} view={route.view}/>;
     if (route.view === 'replay') return <Replay run={runState.data} entries={leaderboardState.data} renderInline={formatMessage}/>;
     if (!entry) return <Empty title="Model not found" detail="This share link does not match a candidate in the selected run."/>;
     if (route.view === 'model') return <ModelDetail run={runState.data} entry={entry} selectedScenario={route.scenarioId}/>;
     if (!scenario) return <Empty title="Scenario not found"/>;
     return route.view === 'judges' ? <JudgePanel run={runState.data} entry={entry} scenario={scenario}/> : <Transcript run={runState.data} entry={entry} scenario={scenario}/>;
   }, [route, isAppRoute, appMode, apiKey, index, activeRun, runState, leaderboardState, entry, scenario]);
-  return <Shell runs={runs} activeRun={activeRun} route={route} appMode={appMode === true}>{content}</Shell>;
+  return <WorkspaceShell runs={runs} activeRun={activeRun} route={route} appMode={appMode === true}>{content}</WorkspaceShell>;
 }

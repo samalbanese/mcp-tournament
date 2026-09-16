@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export type Route = { view: 'home' | 'model' | 'judges' | 'transcript' | 'replay' | 'why' | 'about' | 'settings' | 'new' | 'build' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
+export type Route = { view: 'home' | 'compare' | 'lab' | 'model' | 'judges' | 'transcript' | 'replay' | 'why' | 'about' | 'settings' | 'new' | 'build' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
 export function href(route: Route) {
   if (route.view === 'why') return '#/why';
   if (route.view === 'about') return '#/about';
@@ -9,6 +9,7 @@ export function href(route: Route) {
   if (route.view === 'build') return '#/build';
   if (route.view === 'progress') return `#/progress/${encodeURIComponent(route.runId ?? '')}`;
   if (route.view === 'replay') return route.runId ? `#/replay/${encodeURIComponent(route.runId)}` : '#/replay';
+  if (route.view === 'compare' || route.view === 'lab') return `#/${route.view}/${encodeURIComponent(route.runId ?? '')}`;
   const p = ['/'];
   if (route.runId) p.push('run', encodeURIComponent(route.runId));
   if (route.modelId) p.push('model', encodeURIComponent(route.modelId));
@@ -18,6 +19,7 @@ export function href(route: Route) {
 }
 function parse(): Route {
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts[0] === 'compare' || parts[0] === 'lab') return { view: parts[0], runId: parts[1] };
   if (parts[0] === 'why') return { view: 'why' };
   if (parts[0] === 'about') return { view: 'about' };
   if (parts[0] === 'settings') return { view: 'settings' };

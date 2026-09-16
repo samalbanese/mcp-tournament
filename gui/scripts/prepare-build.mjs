@@ -7,3 +7,4 @@ await mkdir(stage, { recursive: true });
 const html = (await readFile(path.join(root, 'index.html'), 'utf8')).replace('/src/main.tsx', '/main.js');
 await writeFile(path.join(stage, 'index.html'), html);
 await cp(path.join(root, 'src', 'styles.css'), path.join(stage, 'styles.css'));
+await cp(path.join(root, 'src', 'workspace.css'), path.join(stage, 'workspace.css'));

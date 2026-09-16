@@ -8,15 +8,33 @@
 
 Build a custom LLM benchmark in a form, run it from a local GUI, MCP client, or CLI, and turn independent judge opinions into ranked, auditable results.
 
-![Demo: build a bench, run it, inspect judge disagreements](docs/images/demo.gif)
+![Evaluation workspace with recorded model rankings and judge disagreement](docs/images/leaderboard-1440.png)
 
-**[▶ Live demo](https://mcp-tournament.pages.dev/#/replay/run-2026-07-18-194500)**: watch a real `business-strategy` run assemble itself, no key needed.
+**[Explore the interactive demo](https://mcp-tournament.pages.dev/#/run/run-2026-07-18-194500)**: compare a recorded business-strategy experiment, inspect the evidence, and try your own criterion weights. No key needed.
 
 Why this is interesting:
 
 - **Disagreement is data:** multiple specialist judges score independently; the arbiter preserves outliers and explains where they diverged.
 - **Benches are declarative:** anyone can define scenarios and criteria as JSON or build them in a form, no pipeline code required.
 - **BYOK and local-first:** bring one OpenRouter key, keep the GUI on your machine, and run budget-tier tournaments for cents.
+
+## A model choice you can explain
+
+The evaluation studio turns the recorded pipeline output into a decision workflow:
+
+- **Results overview:** the original leaderboard, criterion comparisons, and material judge dissent in one place.
+- **Compare evidence:** choose up to three candidates and inspect their original answers and arbiter assessments side by side.
+- **Decision lab:** change the importance of each criterion with sliders or presets, then see the weighted ranking respond immediately.
+- **Export a report:** download original scores, judge identities, dissent, and optional exploratory weights as Markdown.
+- **Follow the evidence:** open any model's scorecard, individual judge matrix, transcript, or animated run replay.
+
+![Decision lab with adjustable priorities and explicitly separated recorded scores](docs/images/decision-lab-1440.png)
+
+The demo contains real, dated recordings across business strategy, customer support,
+creative writing, and the D&D showcase. It makes no live model calls. Results are
+scenario-specific observations, not a statistically validated or universal model
+ranking. The decision lab recomputes scores from final criteria; it never changes
+recorded results or hides missing evidence. Candidate and judge models may overlap.
 
 ## How it works
 
@@ -193,8 +211,11 @@ stderr (stdout is reserved for JSON-RPC).
 
 ## How it's tested
 
-`npm test` runs 32 unit tests with no API key required. Two of them are
-regression guards with a story:
+`npm run test:unit` runs 43 unit tests with no API key required. The suite includes decision-lab tests for changing priorities, zero weights,
+missing evidence, ties, preserved original scores, and report provenance. The
+committed demo fixtures are also checked through the viewer loaders, including
+known partial judge archives. Two
+additional regression guards have a story:
 
 - **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC:
   one stray `console.log` corrupts the protocol stream and silently breaks

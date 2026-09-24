@@ -1,0 +1,17 @@
+[
+  {
+    "turn": 1,
+    "role": "candidate",
+    "content": "I'd start with a 12% price increase on the enterprise tier only, grandfather existing annual contracts for one renewal cycle, and pair it with a usage-based add-on for the accounts already over their seat limit."
+  },
+  {
+    "turn": 2,
+    "role": "participant",
+    "content": "Finance is worried the enterprise tier churns if we move too fast. What's the rollback plan if renewals drop more than 5%?"
+  },
+  {
+    "turn": 3,
+    "role": "candidate",
+    "content": "Cap the pilot to the top 20 accounts by ARR for one quarter, track renewal rate weekly, and roll back the increase for any account that churns before we touch the rest of the tier."
+  }
+]

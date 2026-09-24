@@ -49,7 +49,7 @@ flowchart LR
 Three entry points feed the same pipeline:
 
 - **GUI:** build benches, launch runs, and inspect results locally.
-- **MCP client:** evaluate models from Claude Desktop, Cursor, or Windsurf.
+- **MCP client:** ask Claude Desktop, Cursor, or Windsurf to run, compare, and explain evaluations (5 tools, 5 resources, 3 prompts).
 - **CLI:** script runs, serve MCP over stdio, or print the leaderboard.
 
 Domain logic is pluggable; the pipeline is not. Benches are declarative plugins:
@@ -133,17 +133,58 @@ see [electron/README.md](electron/README.md).
     "tournament": {
       "command": "node",
       "args": ["<path-to-repo>/dist/index.js"],
-      "env": { "OPENROUTER_API_KEY": "sk-or-..." }
+      "env": {
+        "OPENROUTER_API_KEY": "sk-or-...",
+        "TOURNAMENT_RESULTS_DIR": "<path-to-repo>/results"
+      }
     }
   }
 }
 ```
 
-| Tool | Description |
-|------|-------------|
-| `tournament.evaluate` | 1–4 models × scenarios × judge panel → ranked results |
-| `tournament.quick_test` | One scenario, one judge: fast smoke score |
-| `tournament.leaderboard` | Best cached score per model across runs |
+MCP clients start the server from their own working directory, so
+`TOURNAMENT_RESULTS_DIR` is what lets it find (and add to) the repo's saved runs.
+
+The server runs over stdio and uses all three MCP primitives: tools, resources, and prompts.
+
+| Tool | What it does | Cost |
+|------|--------------|------|
+| `tournament_list_benches` | Every bench and its scenario IDs | Free, local read |
+| `tournament_leaderboard` | Best score per model across saved runs, optionally per bench | Free, local read |
+| `tournament_get_run` | One saved run in full: models, judges, per-scenario scores, failures | Free, local read |
+| `tournament_quick_test` | One model, one scenario, one judge: a cheap sanity check | Paid (OpenRouter), usually under a minute |
+| `tournament_evaluate` | 1–4 models × every scenario × a judge panel, ranked | Paid (OpenRouter), several minutes |
+
+Every tool returns a readable markdown answer plus typed `structuredContent` that matches a
+declared `outputSchema`. Tools carry annotations (`readOnlyHint`, `openWorldHint`) so a client
+can tell a free read from a paid run, and the two paid tools stream `notifications/progress`
+(one step as each model/scenario pair starts and finishes) so long runs don't look frozen. The
+server also sends connection-time instructions telling the assistant to confirm with you
+before spending money.
+
+**Resources** (data a client can attach without a tool call):
+
+| URI | Contents |
+|-----|----------|
+| `tournament://benches` | Benches and scenarios (JSON) |
+| `tournament://leaderboard` | All-time best score per model (JSON) |
+| `tournament://runs` | Index of saved runs with each winner (JSON) |
+| `tournament://runs/{runId}` | One run in full (JSON) |
+| `tournament://runs/{runId}/report` | One run as a markdown scorecard |
+
+The two templates list every saved run and autocomplete run IDs.
+
+**Prompts** (slash commands in clients that support them):
+
+- `compare_models` (models, plugin): runs a head-to-head evaluation, then explains who won and why.
+- `choose_model_for_task` (task): matches the task to a bench and checks existing results first, asking before any paid run.
+- `explain_run` (runId): attaches a run's scorecard and asks for a plain-English explanation.
+
+Once it's connected, you can just ask:
+
+- "Which benches does mcp-tournament have, and who leads the customer-support leaderboard?"
+- "Quick-test deepseek/deepseek-v3.2 on the coding bench."
+- "Compare deepseek/deepseek-v3.2 and openai/gpt-5.4-mini on business-strategy."
 
 ### As a CLI
 
@@ -211,11 +252,14 @@ stderr (stdout is reserved for JSON-RPC).
 
 ## How it's tested
 
-`npm run test:unit` runs 43 unit tests with no API key required. The suite includes decision-lab tests for changing priorities, zero weights,
-missing evidence, ties, preserved original scores, and report provenance. The
-committed demo fixtures are also checked through the viewer loaders, including
-known partial judge archives. Two
-additional regression guards have a story:
+`npm run test:unit` runs 61 unit tests with no API key required. The MCP layer
+is tested at the protocol level: a real SDK client connects over an in-memory
+transport and checks every tool, resource, template, prompt, completion,
+structured output, and error path, plus progress notifications from the real
+pipeline (strictly increasing, ending at 100%). The suite also covers the decision
+lab (changing priorities, zero weights, missing evidence, ties, preserved original
+scores, report provenance) and runs the committed demo fixtures through the viewer
+loaders, including known partial judge archives. Two regression guards have a story:
 
 - **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC:
   one stray `console.log` corrupts the protocol stream and silently breaks
@@ -230,8 +274,8 @@ present. CI runs build + unit tests + the GUI build on every push and PR.
 
 ## Roadmap
 
-Deferred deliberately: `tournament.compare` / `report` / `plugins` / `scenarios` /
-`judges` tools, plugin auto-discovery, npm publish, and MCP registry submission.
+Deferred deliberately: a Streamable HTTP transport for remote hosting, a `judges`
+tool for per-run panel overrides, npm publish, and MCP registry submission.
 
 ## Provenance
 

@@ -116,4 +116,29 @@ describe('per-run pipeline model routing', () => {
       'synthesizer/override',
     ]));
   });
+
+  it('reports strictly increasing progress that ends at total, including failed pairs', async () => {
+    const outputRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-tournament-progress-'));
+    temporaryDirectories.push(outputRoot);
+    registerModelClient('openrouter', {
+      createMessage: vi.fn(async (params: CreateMessageParams) => {
+        if (params.model === 'candidate/broken') throw new Error('upstream unavailable');
+        return response(params.model === 'candidate/test-model' ? 'Candidate response' : judgeScore, params.model);
+      }),
+    } as unknown as ModelClient);
+
+    const updates: Array<{ completed: number; total: number }> = [];
+    await evaluateTournament({
+      models: ['candidate/test-model', 'candidate/broken'],
+      plugin: plugin.name,
+      quick: true,
+      outputRoot,
+      onProgress: ({ completed, total }) => updates.push({ completed, total }),
+    });
+
+    // MCP requires each progress value to be larger than the last; clients show
+    // completed/total, so the final update must land exactly on total.
+    expect(updates.map(update => update.completed)).toEqual([1, 2, 3, 4]);
+    expect(updates.every(update => update.total === 4)).toBe(true);
+  });
 });

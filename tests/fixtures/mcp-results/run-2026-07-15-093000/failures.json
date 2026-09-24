@@ -1,0 +1,7 @@
+[
+  {
+    "model": "openai/gpt-5.4-mini",
+    "scenario": "pricing-pivot",
+    "error": "judge Rules Judge: invalid score JSON"
+  }
+]

@@ -9,6 +9,12 @@ import { getPlugin } from './plugins/index.js';
 import type { TestCase } from './plugins/base.js';
 import { logError } from './utils/logger.js';
 
+export interface EvaluateProgress {
+  completed: number;
+  total: number;
+  message: string;
+}
+
 export interface EvaluateOptions {
   models: string[];
   plugin?: string;
@@ -19,6 +25,12 @@ export interface EvaluateOptions {
   outputRoot?: string;
   quick?: boolean;
   runId?: string;
+  /**
+   * Called once when a candidate/scenario pair starts and once when it finishes
+   * (success or failure). `completed` strictly increases (MCP progress requires
+   * it) and equals `total` on the final call.
+   */
+  onProgress?: (progress: EvaluateProgress) => void;
 }
 
 export interface TournamentRun {
@@ -27,6 +39,15 @@ export interface TournamentRun {
   leaderboard: LeaderboardEntry[];
   failures?: Array<{ model: string; scenario: string; error: string }>;
   judgeFailures?: Array<{ model: string; scenario: string; error: string }>;
+}
+
+/**
+ * Where runs are written and read: TOURNAMENT_RESULTS_DIR if set, else ./results.
+ * MCP clients launch the server from their own working directory, so the env var
+ * is how a Claude Desktop config points it at the repo's results.
+ */
+export function defaultResultsRoot(): string {
+  return path.resolve(process.env.TOURNAMENT_RESULTS_DIR || path.join(process.cwd(), 'results'));
 }
 
 function createRunId(date = new Date()): string {
@@ -63,7 +84,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   }
 
   const candidates = options.models.map(resolveCandidateModel);
-  const outputRoot = path.resolve(options.outputRoot ?? path.join(process.cwd(), 'results'));
+  const outputRoot = path.resolve(options.outputRoot ?? defaultResultsRoot());
   if (options.runId && (!/^run-[a-zA-Z0-9-]+$/.test(options.runId) || path.basename(options.runId) !== options.runId)) {
     throw new Error('Invalid run ID');
   }
@@ -96,8 +117,16 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   // whole tournament — one flaky model must not waste every other model's run.
   const failures: Array<{ model: string; scenario: string; error: string }> = [];
   const judgeFailures: Array<{ model: string; scenario: string; error: string }> = [];
+  const totalProgressSteps = candidates.length * scenarios.length * 2;
+  let completedProgressSteps = 0;
   for (const candidate of candidates) {
     for (const scenario of scenarios) {
+      completedProgressSteps += 1;
+      options.onProgress?.({
+        completed: completedProgressSteps,
+        total: totalProgressSteps,
+        message: `Running ${candidate.name} on ${scenario.name}`,
+      });
       try {
         const execution = await runScenario(candidate, scenario, plugin, runDir);
         if (!execution.success) {
@@ -123,6 +152,12 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
         failures.push({ model: candidate.id, scenario: scenario.id, error: message });
         logError(`  [${candidate.name}/${scenario.name}] Skipped: ${message}`);
       }
+      completedProgressSteps += 1;
+      options.onProgress?.({
+        completed: completedProgressSteps,
+        total: totalProgressSteps,
+        message: `Finished ${candidate.name} on ${scenario.name}`,
+      });
     }
   }
   if (failures.length || judgeFailures.length) {
@@ -150,6 +185,7 @@ export async function quickTest(options: {
   plugin?: string;
   scenario?: string;
   outputRoot?: string;
+  onProgress?: (progress: EvaluateProgress) => void;
 }): Promise<TournamentRun> {
   const plugin = getPlugin(options.plugin ?? 'dnd');
   const scenario = options.scenario ?? plugin.scenarios[0]?.id;
@@ -161,6 +197,7 @@ export async function quickTest(options: {
     judges: 1,
     outputRoot: options.outputRoot,
     quick: true,
+    onProgress: options.onProgress,
   });
 }
 
@@ -169,7 +206,7 @@ export function readLeaderboard(options: {
   limit?: number;
   outputRoot?: string;
 } = {}): LeaderboardEntry[] {
-  const root = path.resolve(options.outputRoot ?? path.join(process.cwd(), 'results'));
+  const root = path.resolve(options.outputRoot ?? defaultResultsRoot());
   if (!fs.existsSync(root)) return [];
   const best = new Map<string, LeaderboardEntry>();
   for (const directory of fs.readdirSync(root, { withFileTypes: true })) {

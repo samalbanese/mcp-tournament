@@ -1,0 +1,17 @@
+[
+  {
+    "turn": 1,
+    "role": "candidate",
+    "content": "Raise prices 20% across the board next billing cycle and send a single email explaining the change."
+  },
+  {
+    "turn": 2,
+    "role": "participant",
+    "content": "That's a big jump with no segmentation. Won't that spike support tickets and cancellations?"
+  },
+  {
+    "turn": 3,
+    "role": "candidate",
+    "content": "It might, but a clean flat increase is simpler to communicate than a tiered rollout."
+  }
+]

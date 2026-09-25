@@ -25,11 +25,16 @@ const FAKE_RUN: TournamentRun = {
   judgeFailures: [],
 };
 
+// Recorded so tests can assert on exactly what options the MCP tool layer passed through to the
+// pipeline (e.g. the judgeModels/synthesizerModel conversion), without re-implementing the pipeline.
+const recordedCalls: EvaluateOptions[] = [];
+
 vi.mock('../../src/pipeline.js', async importOriginal => {
   const actual = await importOriginal<typeof import('../../src/pipeline.js')>();
   return {
     ...actual,
     evaluateTournament: vi.fn(async (options: EvaluateOptions) => {
+      recordedCalls.push(options);
       const total = 4;
       options.onProgress?.({ completed: 1, total, message: 'deepseek/deepseek-v3.2 on pricing-pivot: started' });
       options.onProgress?.({ completed: 2, total, message: 'deepseek/deepseek-v3.2 on pricing-pivot: finished' });
@@ -49,6 +54,7 @@ describe('tournament_evaluate progress notifications', () => {
     await closeServer?.();
     client = undefined;
     closeServer = undefined;
+    recordedCalls.length = 0;
   });
 
   it('forwards monotonically increasing progress notifications when the request carries a progress token', async () => {
@@ -79,5 +85,30 @@ describe('tournament_evaluate progress notifications', () => {
       expect(progressUpdates[i].progress).toBeGreaterThan(progressUpdates[i - 1].progress);
     }
     expect(progressUpdates[progressUpdates.length - 1].progress).toBe(progressUpdates[progressUpdates.length - 1].total);
+  });
+
+  it('converts judgeModels + synthesizerModel into the pipeline\'s judges count and judgeModels map', async () => {
+    const server = createServer({ resultsRoot: FIXTURE_ROOT });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    client = new Client({ name: 'test-client', version: '0.0.0' });
+    closeServer = () => server.close();
+    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+
+    const result = await client.callTool({
+      name: 'tournament_evaluate',
+      arguments: {
+        models: ['deepseek/deepseek-v3.2'],
+        plugin: 'business-strategy',
+        judgeModels: ['a/one', 'b/two'],
+        synthesizerModel: 'c/syn',
+      },
+    });
+
+    expect(result.isError).toBeFalsy();
+    expect(recordedCalls).toHaveLength(1);
+    const [call] = recordedCalls;
+    expect(call.judges).toBe(2);
+    expect(call.judgeModels).toEqual({ rules: 'a/one', creative: 'b/two' });
+    expect(call.synthesizerModel).toBe('c/syn');
   });
 });

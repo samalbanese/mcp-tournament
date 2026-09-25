@@ -6,6 +6,7 @@
  * These helpers keep that markdown consistent: GitHub-flavored tables, one-line
  * headlines, no filler.
  */
+import type { BenchDefinition } from '../plugins/custom.js';
 import type { BenchInfo, RunFailure, RunSummary } from './data.js';
 
 export interface LeaderboardRow {
@@ -51,6 +52,21 @@ export function formatBenchesMarkdown(benches: BenchInfo[]): string {
     return `## ${bench.name}\n\n${bench.description}\n\n${scenarioLines}`;
   });
   return sections.join('\n\n');
+}
+
+/** `tournament_create_bench` output: what was saved, its scenarios, and a next step. */
+export function formatCreateBenchMarkdown(
+  bench: BenchInfo,
+  file: string,
+  scenarios: BenchDefinition['scenarios'],
+): string {
+  const scenarioLines = scenarios.map(scenario => {
+    const roundLabel = scenario.rounds === 1 ? '1 round' : `${scenario.rounds} rounds`;
+    const criteriaNames = scenario.criteria.map(criterion => criterion.name).join(', ');
+    return `- \`${scenario.id}\`: ${scenario.name} (${roundLabel}; criteria: ${criteriaNames})`;
+  }).join('\n');
+  return `Saved bench "${bench.name}" to \`${file}\`.\n\n${scenarioLines}\n\n` +
+    `Run it with tournament_quick_test or tournament_evaluate using plugin: "${bench.name}".`;
 }
 
 export function scoreTable(rows: LeaderboardRow[]): string {
@@ -109,13 +125,17 @@ export function formatRunResultMarkdown(result: {
   failures: RunFailure[];
   judgeFailures: RunFailure[];
   resultsDir: string;
+  judges: Array<{ role: string; name: string; model: string }>;
 }): string {
   const headline = result.entries.length
     ? `Winner: ${result.entries[0].modelName} (${formatScore(result.entries[0].score)}/10) on "${result.plugin}"`
     : `No scored results for "${result.plugin}" (every candidate/scenario pair failed or produced no score)`;
   const table = result.entries.length ? `\n\n${scoreTable(result.entries)}` : '';
+  const judgesLine = result.judges.length
+    ? `\n\nJudges: ${result.judges.map(judge => `${judge.name} (${judge.model})`).join(', ')}`
+    : '';
   const footer = `\n\nRun ID: \`${result.runId}\`. Call tournament_get_run with this ID for full detail, or read resource tournament://runs/${result.runId}/report.`;
-  return `${headline}${table}${issuesSections(result.failures, result.judgeFailures)}${footer}`;
+  return `${headline}${table}${judgesLine}${issuesSections(result.failures, result.judgeFailures)}${footer}`;
 }
 
 /** `tournament_get_run` output: run facts, ranked table, model-by-scenario grid, issues. */

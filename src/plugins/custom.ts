@@ -8,14 +8,14 @@ import { PARTICIPANT_AGENT_ROUTE, resolveRoleModel } from '../config/judges.js';
 import { buildCriteriaJsonInstruction } from '../prompts/judge-prompts.js';
 import { logWarn } from '../utils/logger.js';
 import type { TestCase, TournamentPlugin, Turn } from './base.js';
-import { registerPlugin } from './index.js';
+import { listPlugins, registerPlugin } from './index.js';
 
-const CriterionSchema = z.object({
+export const CriterionSchema = z.object({
   name: z.string().min(1).max(60).regex(/^[a-z0-9_]+$/, 'must use lowercase letters, numbers, and underscores'),
   description: z.string().min(1).max(500),
 }).strict();
 
-const ScenarioSchema = z.object({
+export const ScenarioSchema = z.object({
   id: z.string().min(1).regex(/^[a-z0-9-]+$/, 'must be a lowercase slug'),
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional().default(''),
@@ -32,6 +32,56 @@ export const BenchDefinitionSchema = z.object({
 }).strict();
 
 export type BenchDefinition = z.infer<typeof BenchDefinitionSchema>;
+
+/** Bench name to a safe JSON filename, or null when the name has no letters/digits to slug. */
+export function benchFilename(name: string): string | null {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return slug ? `${slug}.json` : null;
+}
+
+export class BenchSaveError extends Error {
+  constructor(message: string, readonly code: 'invalid' | 'conflict') {
+    super(message);
+    this.name = 'BenchSaveError';
+  }
+}
+
+/**
+ * Saves a validated bench definition to `benchesDir` and registers it as a plugin, so it is
+ * immediately usable by name. Shared by the GUI's POST /api/benches handler and the
+ * tournament_create_bench MCP tool so both surfaces save benches identically.
+ */
+export function saveBench(benchesDir: string, input: BenchDefinition): { name: string; file: string } {
+  // Re-validate here so every caller gets the same rules, whatever schema it parsed with.
+  const parsed = BenchDefinitionSchema.safeParse(input);
+  if (!parsed.success) {
+    throw new BenchSaveError(`invalid bench definition: ${parsed.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; ')}`, 'invalid');
+  }
+  const definition = parsed.data;
+  // Scenario IDs name the result folders, so a duplicate would overwrite another scenario's results.
+  const seenIds = new Set<string>();
+  for (const scenario of definition.scenarios) {
+    if (seenIds.has(scenario.id)) {
+      throw new BenchSaveError(`scenario ID "${scenario.id}" is used more than once; each scenario needs a unique ID`, 'invalid');
+    }
+    seenIds.add(scenario.id);
+  }
+  if (listPlugins().some(plugin => plugin.name === definition.name)) {
+    throw new BenchSaveError(`plugin "${definition.name}" already exists`, 'conflict');
+  }
+  const filename = benchFilename(definition.name);
+  if (!filename) {
+    throw new BenchSaveError('bench name must contain at least one letter or number', 'invalid');
+  }
+  fs.mkdirSync(benchesDir, { recursive: true });
+  const benchPath = path.resolve(benchesDir, filename);
+  if (fs.existsSync(benchPath)) {
+    throw new BenchSaveError(`a saved bench already uses the filename "${filename}"`, 'conflict');
+  }
+  fs.writeFileSync(benchPath, `${JSON.stringify(definition, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
+  registerPlugin(createCustomPlugin(definition));
+  return { name: definition.name, file: benchPath };
+}
 
 const FALLBACK_FOLLOW_UPS = [
   'Can you be more specific about the first step?',

@@ -9,12 +9,15 @@ import path from 'node:path';
 import type { LeaderboardEntry } from '../phases/aggregator.js';
 import { modelSlug, scenarioSlug, type Turn } from '../plugins/base.js';
 import { listPlugins } from '../plugins/index.js';
+import { getPackageBenchesDir } from '../plugins/custom.js';
 import { defaultResultsRoot } from '../pipeline.js';
 import { slugify } from '../utils/slug.js';
 
 export interface McpContext {
   /** Absolute path of the directory that holds `run-*` result folders. */
   resultsRoot: string;
+  /** Absolute path of the directory new benches are saved into. */
+  benchesDir: string;
 }
 
 export interface RunFailure {
@@ -43,8 +46,11 @@ export interface BenchInfo {
 
 export const RUN_ID_PATTERN = /^run-[a-zA-Z0-9-]+$/;
 
-export function createContext(resultsRoot?: string): McpContext {
-  return { resultsRoot: resultsRoot ? path.resolve(resultsRoot) : defaultResultsRoot() };
+export function createContext(resultsRoot?: string, benchesDir?: string): McpContext {
+  return {
+    resultsRoot: resultsRoot ? path.resolve(resultsRoot) : defaultResultsRoot(),
+    benchesDir: benchesDir ? path.resolve(benchesDir) : getPackageBenchesDir(),
+  };
 }
 
 function readJson<T>(file: string): T | null {

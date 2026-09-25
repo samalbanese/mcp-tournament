@@ -15,6 +15,7 @@ const TOOL_NAMES = [
   'tournament_get_run',
   'tournament_quick_test',
   'tournament_evaluate',
+  'tournament_create_bench',
 ] as const;
 
 const READ_ONLY_TOOLS = new Set(['tournament_list_benches', 'tournament_leaderboard', 'tournament_get_run']);
@@ -56,7 +57,7 @@ describe('MCP server protocol contract', () => {
   });
 
   describe('tools', () => {
-    it('lists exactly the 5 contract tools with correct annotations and an outputSchema', async () => {
+    it('lists exactly the 6 contract tools with correct annotations and an outputSchema', async () => {
       const { tools } = await client.listTools();
       const names = tools.map(tool => tool.name).sort();
       expect(names).toEqual([...TOOL_NAMES].sort());

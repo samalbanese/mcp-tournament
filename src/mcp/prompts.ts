@@ -27,10 +27,12 @@ export function registerPrompts(server: McpServer, ctx: McpContext): void {
           z.string().optional().describe('Bench (plugin) name to run, e.g. "dnd" or "customer-support". Defaults to "dnd".'),
           value => describeBenches().map(bench => bench.name).filter(name => name.startsWith(value ?? '')),
         ),
+        judges: z.string().optional().describe('Comma-separated OpenRouter model IDs, one per judge seat, e.g. "deepseek/deepseek-v3.2,qwen/qwen3.5-flash-02-23". Omit to use the default judge panel.'),
       },
     },
-    async ({ models, plugin }) => {
+    async ({ models, plugin, judges }) => {
       const modelList = models.split(',').map(id => id.trim()).filter(Boolean);
+      const judgeModelList = judges?.split(',').map(id => id.trim()).filter(Boolean);
       const benchNote = plugin ? `the "${plugin}" bench` : 'the default bench ("dnd")';
       return {
         messages: [{
@@ -40,7 +42,9 @@ export function registerPrompts(server: McpServer, ctx: McpContext): void {
             text:
               `Compare these models head to head on ${benchNote}: ${modelList.join(', ')}.\n\n` +
               `1. Call tournament_evaluate with models: ${JSON.stringify(modelList)}` +
-              `${plugin ? `, plugin: "${plugin}"` : ''}. This makes real API calls to each ` +
+              `${plugin ? `, plugin: "${plugin}"` : ''}` +
+              `${judgeModelList?.length ? `, judgeModels: ${JSON.stringify(judgeModelList)}` : ''}. ` +
+              'This makes real API calls to each ' +
               'candidate and to the judge panel, so tell the user up front that this costs ' +
               'money and takes a few minutes before you call it.\n' +
               '2. Once it returns, call tournament_get_run with the runId it gives back for ' +

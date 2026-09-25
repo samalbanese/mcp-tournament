@@ -7,11 +7,12 @@ import { JUDGES, SYNTHESIZER } from './config/judges.js';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
 import {
   BenchDefinitionSchema,
-  createCustomPlugin,
+  BenchSaveError,
   loadBenches,
   readBenchDefinitions,
+  saveBench,
 } from './plugins/custom.js';
-import { listPlugins, registerPlugin } from './plugins/index.js';
+import { listPlugins } from './plugins/index.js';
 import { logDebug, logError, logInfo, onLog } from './utils/logger.js';
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -244,11 +245,6 @@ async function suggestCriteria(fetcher: typeof fetch, apiKey: string, question: 
   throw new Error('OpenRouter did not return three valid scoring criteria after one retry');
 }
 
-function benchFilename(name: string): string | null {
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  return slug ? `${slug}.json` : null;
-}
-
 function runInBackground(input: z.infer<typeof runRequestSchema>, runId: string, resultsDir: string, evaluate: typeof evaluateTournament): void {
   const state: ActiveRun = { runId, status: 'running', logTail: [] };
   runs.set(runId, state);
@@ -346,23 +342,15 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
           sendJson(response, 400, { error: 'invalid bench definition', details: parsed.error.flatten() });
           return;
         }
-        if (listPlugins().some(plugin => plugin.name === parsed.data.name)) {
-          sendJson(response, 409, { error: `plugin "${parsed.data.name}" already exists` });
-          return;
+        try {
+          saveBench(benchesDir, parsed.data);
+        } catch (error) {
+          if (error instanceof BenchSaveError) {
+            sendJson(response, error.code === 'conflict' ? 409 : 400, { error: error.message });
+            return;
+          }
+          throw error;
         }
-        const filename = benchFilename(parsed.data.name);
-        if (!filename) {
-          sendJson(response, 400, { error: 'bench name must contain at least one letter or number' });
-          return;
-        }
-        fs.mkdirSync(benchesDir, { recursive: true });
-        const benchPath = path.join(benchesDir, filename);
-        if (fs.existsSync(benchPath)) {
-          sendJson(response, 409, { error: `a saved bench already uses the filename "${filename}"` });
-          return;
-        }
-        fs.writeFileSync(benchPath, `${JSON.stringify(parsed.data, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
-        registerPlugin(createCustomPlugin(parsed.data));
         sendJson(response, 201, { name: parsed.data.name });
         return;
       }

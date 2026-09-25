@@ -1,15 +1,25 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { ProgressNotification, RequestMeta } from '@modelcontextprotocol/sdk/types.js';
-import { describeBenches, readRun, type McpContext, type RunFailure } from './data.js';
+import { describeBenches, readRun, type BenchInfo, type McpContext, type RunFailure } from './data.js';
 import {
   formatBenchesMarkdown,
+  formatCreateBenchMarkdown,
   formatLeaderboardMarkdown,
   formatRunResultMarkdown,
   formatRunSummaryMarkdown,
   toLeaderboardRows,
 } from './format.js';
 import { evaluateTournament, quickTest, readLeaderboard, type EvaluateProgress } from '../pipeline.js';
+import { JUDGES } from '../config/judges.js';
+import {
+  BenchDefinitionSchema,
+  BenchSaveError,
+  CriterionSchema,
+  ScenarioSchema,
+  saveBench,
+  type BenchDefinition,
+} from '../plugins/custom.js';
 
 const FinalCriterionSchema = z.object({
   score: z.number(),
@@ -65,6 +75,8 @@ const LeaderboardRowSchema = z.object({
   score: z.number(),
 });
 
+const JudgeInfoSchema = z.object({ role: z.string(), name: z.string(), model: z.string() });
+
 const RunResultSchema = {
   runId: z.string(),
   plugin: z.string(),
@@ -72,7 +84,76 @@ const RunResultSchema = {
   failures: z.array(RunFailureSchema),
   judgeFailures: z.array(RunFailureSchema),
   resultsDir: z.string(),
+  judges: z.array(JudgeInfoSchema),
 };
+
+/**
+ * The judge panel actually used for a run, read back from the saved manifest. Tolerant of a
+ * missing or malformed run.json (returns []) so a run result is never blocked on this detail.
+ */
+function readRunJudges(ctx: McpContext, runId: string): Array<{ role: string; name: string; model: string }> {
+  try {
+    return readRun(ctx, runId).judges;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Zod pieces reused from the bench definition schema (src/plugins/custom.ts), with
+ * agent-facing `.describe()` text layered on top of the same validators (length limits, ID
+ * formats) that saveBench enforces, so the limits stated here can never drift from reality.
+ */
+const criterionInputShape = {
+  name: CriterionSchema.shape.name.describe(
+    'Short snake_case criterion ID, e.g. "resolution_quality". 1-60 characters, lowercase ' +
+      'letters, numbers, and underscores only (must match ^[a-z0-9_]+$). Shown to the judge ' +
+      'panel and in reports.',
+  ),
+  description: CriterionSchema.shape.description.describe(
+    'What strong performance on this criterion looks like, written for the judge models to ' +
+      'score against, e.g. "Fully resolves the customer\'s billing issue without deflecting or ' +
+      'asking them to call back." 1-500 characters.',
+  ),
+};
+
+const scenarioInputShape = {
+  id: ScenarioSchema.shape.id.describe(
+    'Lowercase slug ID for this scenario, e.g. "double-charge-refund". Lowercase letters, ' +
+      'numbers, and hyphens only (must match ^[a-z0-9-]+$). Used as the scenario ID in ' +
+      'tournament_evaluate/tournament_quick_test.',
+  ),
+  name: ScenarioSchema.shape.name.describe(
+    'Short human-readable scenario name, e.g. "Double Charge Refund Request". 1-100 characters.',
+  ),
+  description: ScenarioSchema.shape.description.describe(
+    'Optional one-line summary of what this scenario tests, up to 500 characters. Shown in ' +
+      'tournament_list_benches; also used as the judges\' goal statement if you do not write one.',
+  ),
+  prompt: ScenarioSchema.shape.prompt.describe(
+    'The exact task given to the candidate model as the opening message, e.g. "A customer says ' +
+      'they were charged twice for the same order and wants a refund today. Handle it." ' +
+      '1-20,000 characters.',
+  ),
+  rounds: ScenarioSchema.shape.rounds.describe(
+    'Number of back-and-forth turns with the simulated participant, 1-5. 1 means the candidate ' +
+      'gives a single answer and the scenario ends there; higher values add follow-up messages ' +
+      'from a simulated participant reacting to the candidate\'s answer. Defaults to 1.',
+  ),
+  participantPersona: ScenarioSchema.shape.participantPersona.describe(
+    'Who the candidate is talking to, used to drive realistic follow-up questions when rounds ' +
+      'is greater than 1, e.g. "an impatient customer who was double-charged". Optional; only ' +
+      'matters when rounds > 1. 1-1,000 characters.',
+  ),
+  criteria: z.array(z.object(criterionInputShape)).min(1).max(6).describe(
+    '1-6 scoring criteria the judge panel evaluates this scenario against.',
+  ),
+};
+
+const benchScenariosInputShape = z.array(z.object(scenarioInputShape)).min(1).max(10).describe(
+  '1-10 scenarios that make up this bench. Each scenario is one task the candidate model is ' +
+    'given and scored on.',
+);
 
 /**
  * getPlugin's "Unknown plugin" error already lists the valid names; point the
@@ -108,7 +189,7 @@ function makeProgressForwarder(extra: {
   };
 }
 
-function runResultPayload(run: {
+function runResultPayload(ctx: McpContext, run: {
   runId: string;
   runDir: string;
   leaderboard: Array<{ modelId: string; modelName: string; tier: string; overallAverage: number }>;
@@ -122,6 +203,7 @@ function runResultPayload(run: {
     failures: run.failures ?? [],
     judgeFailures: run.judgeFailures ?? [],
     resultsDir: run.runDir,
+    judges: readRunJudges(ctx, run.runId),
   };
 }
 
@@ -244,7 +326,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         outputRoot: ctx.resultsRoot,
         onProgress: makeProgressForwarder(extra),
       });
-      const payload = runResultPayload(run, plugin);
+      const payload = runResultPayload(ctx, run, plugin);
       return {
         structuredContent: payload,
         content: [{ type: 'text', text: formatRunResultMarkdown(payload) }],
@@ -261,12 +343,21 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         'results to disk. Runs 1-4 candidate models across one bench\'s scenarios, scored by a ' +
         'multi-judge panel, and saves a leaderboard. Takes minutes, not seconds. Suggest ' +
         'tournament_quick_test first for a cheap sanity check, and tournament_list_benches to ' +
-        'discover valid `plugin` and `scenario` IDs.',
+        'discover valid `plugin` and `scenario` IDs. Judges are picked by number (`judges`) by ' +
+        'default; pass `judgeModels` to choose the exact model for each judge seat instead, and ' +
+        '`synthesizerModel` to choose the model that reconciles judge scores into a final number.',
       inputSchema: {
         models: z.array(z.string()).min(1).max(4).describe('1-4 OpenRouter model IDs to compare, e.g. ["deepseek/deepseek-v3.2", "openai/gpt-5.4-mini"].'),
         plugin: z.string().default('dnd').describe('Bench to run, e.g. "dnd" or "coding". Defaults to "dnd".'),
         scenarios: z.array(z.string()).optional().describe('Scenario IDs to run. Omit to run every scenario in the bench.'),
-        judges: z.number().int().min(1).max(5).default(3).describe('Number of judges on the scoring panel, 1-5. Defaults to 3.'),
+        judges: z.number().int().min(1).max(5).default(3).describe('Number of judges on the scoring panel, 1-5. Defaults to 3. Ignored when `judgeModels` is provided.'),
+        judgeModels: z.array(z.string()).min(1).max(5).optional().describe(
+          `1-5 OpenRouter model IDs, one per judge seat, filled in this fixed order: ${
+            JUDGES.map((judge, index) => `${index + 1}. ${judge.name} (${judge.focus.join(', ')})`).join('; ')
+          }. When provided, the panel size equals the length of this list and overrides \`judges\`. ` +
+            'Omit to use the default model for each seat.',
+        ),
+        synthesizerModel: z.string().optional().describe('OpenRouter model ID that reconciles the judges\' scores into one final score. Omit to use the default synthesizer model.'),
       },
       outputSchema: RunResultSchema,
       annotations: {
@@ -277,20 +368,85 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         openWorldHint: true,
       },
     },
-    async ({ models, plugin, scenarios, judges }, extra) => withBenchHint(async () => {
+    async ({ models, plugin, scenarios, judges, judgeModels, synthesizerModel }, extra) => withBenchHint(async () => {
+      const judgeModelsByRole = judgeModels
+        ? Object.fromEntries(judgeModels.map((model, index) => [JUDGES[index].role, model]))
+        : undefined;
       const run = await evaluateTournament({
         models,
         plugin,
         scenarios,
-        judges,
+        judges: judgeModels?.length ?? judges,
+        judgeModels: judgeModelsByRole,
+        synthesizerModel,
         outputRoot: ctx.resultsRoot,
         onProgress: makeProgressForwarder(extra),
       });
-      const payload = runResultPayload(run, plugin);
+      const payload = runResultPayload(ctx, run, plugin);
       return {
         structuredContent: payload,
         content: [{ type: 'text', text: formatRunResultMarkdown(payload) }],
       };
     }),
+  );
+
+  server.registerTool(
+    'tournament_create_bench',
+    {
+      title: 'Create a reusable evaluation bench',
+      description:
+        'Free, local, no model calls. Saves a new reusable bench (a named set of scenarios and ' +
+        'scoring criteria) to disk. Once saved, it is immediately usable by tournament_evaluate ' +
+        'and tournament_quick_test as `plugin: "<name>"`, and it appears in ' +
+        'tournament_list_benches. Bench names must be unique among registered benches. Draft the ' +
+        'scenarios and criteria first and confirm them with the user before calling this tool, ' +
+        'since saving registers the bench immediately.',
+      inputSchema: {
+        name: BenchDefinitionSchema.shape.name.describe(
+          'Unique bench name, e.g. "customer-support-escalations". 1-60 characters, must contain ' +
+            'at least one letter or number. Fails if a bench with this name already exists.',
+        ),
+        description: BenchDefinitionSchema.shape.description.describe(
+          'One-sentence description of what this bench tests, e.g. "Tests how well a model ' +
+            'handles frustrated customers who feel wronged." 1-200 characters.',
+        ),
+        scenarios: benchScenariosInputShape,
+      },
+      outputSchema: { bench: BenchInfoSchema, file: z.string() },
+      annotations: {
+        title: 'Create a reusable evaluation bench',
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: false,
+        openWorldHint: false,
+      },
+    },
+    async ({ name, description, scenarios }) => {
+      const definition: BenchDefinition = { name, description, scenarios };
+      try {
+        const { file } = saveBench(ctx.benchesDir, definition);
+        const bench: BenchInfo = {
+          name: definition.name,
+          description: definition.description,
+          scenarios: definition.scenarios.map(scenario => ({
+            id: scenario.id,
+            name: scenario.name,
+            description: scenario.description,
+          })),
+        };
+        return {
+          structuredContent: { bench, file },
+          content: [{ type: 'text', text: formatCreateBenchMarkdown(bench, file, definition.scenarios) }],
+        };
+      } catch (error) {
+        if (error instanceof BenchSaveError && error.code === 'conflict') {
+          throw new Error(
+            `A bench named "${definition.name}" already exists. Pick a different name, or run ` +
+              `the existing one with plugin: "${definition.name}".`,
+          );
+        }
+        throw error;
+      }
+    },
   );
 }

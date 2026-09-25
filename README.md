@@ -49,7 +49,7 @@ flowchart LR
 Three entry points feed the same pipeline:
 
 - **GUI:** build benches, launch runs, and inspect results locally.
-- **MCP client:** ask Claude Desktop, Cursor, or Windsurf to run, compare, and explain evaluations (5 tools, 5 resources, 3 prompts).
+- **MCP client:** ask Claude Desktop, Cursor, or Windsurf to run, compare, and explain evaluations (6 tools, 5 resources, 3 prompts), including saving your own benches from chat.
 - **CLI:** script runs, serve MCP over stdio, or print the leaderboard.
 
 Domain logic is pluggable; the pipeline is not. Benches are declarative plugins:
@@ -153,7 +153,8 @@ The server runs over stdio and uses all three MCP primitives: tools, resources, 
 | `tournament_leaderboard` | Best score per model across saved runs, optionally per bench | Free, local read |
 | `tournament_get_run` | One saved run in full: models, judges, per-scenario scores, failures | Free, local read |
 | `tournament_quick_test` | One model, one scenario, one judge: a cheap sanity check | Paid (OpenRouter), usually under a minute |
-| `tournament_evaluate` | 1–4 models × every scenario × a judge panel, ranked | Paid (OpenRouter), several minutes |
+| `tournament_evaluate` | 1–4 models × every scenario × a judge panel, ranked; optionally pick each judge's model | Paid (OpenRouter), several minutes |
+| `tournament_create_bench` | Saves a new bench (your scenarios and scoring criteria), usable immediately | Free, local write |
 
 Every tool returns a readable markdown answer plus typed `structuredContent` that matches a
 declared `outputSchema`. Tools carry annotations (`readOnlyHint`, `openWorldHint`) so a client
@@ -161,6 +162,13 @@ can tell a free read from a paid run, and the two paid tools stream `notificatio
 (one step as each model/scenario pair starts and finishes) so long runs don't look frozen. The
 server also sends connection-time instructions telling the assistant to confirm with you
 before spending money.
+
+**Your own scenarios and judges.** Describe what you want tested and the assistant drafts a
+bench (scenarios, a prompt for each, and the criteria judges score against), shows it to you,
+then saves it with `tournament_create_bench`. The bench is written to `benches/` and works
+right away as `plugin: "<name>"`. `tournament_evaluate` accepts `judgeModels` (one model ID per
+judge seat, in the order Rules, Creative, Holistic, Authentic Voice, Context; the list length
+sets the panel size) and `synthesizerModel` for the model that reconciles their scores.
 
 **Resources** (data a client can attach without a tool call):
 
@@ -176,7 +184,7 @@ The two templates list every saved run and autocomplete run IDs.
 
 **Prompts** (slash commands in clients that support them):
 
-- `compare_models` (models, plugin): runs a head-to-head evaluation, then explains who won and why.
+- `compare_models` (models, plugin, judges): runs a head-to-head evaluation, then explains who won and why.
 - `choose_model_for_task` (task): matches the task to a bench and checks existing results first, asking before any paid run.
 - `explain_run` (runId): attaches a run's scorecard and asks for a plain-English explanation.
 
@@ -185,6 +193,9 @@ Once it's connected, you can just ask:
 - "Which benches does mcp-tournament have, and who leads the customer-support leaderboard?"
 - "Quick-test deepseek/deepseek-v3.2 on the coding bench."
 - "Compare deepseek/deepseek-v3.2 and openai/gpt-5.4-mini on business-strategy."
+- "Make a bench that tests how models handle a customer disputing a late fee, then run
+  deepseek/deepseek-v3.2 against openai/gpt-5.4-mini with qwen/qwen3.5-flash-02-23 and
+  deepseek/deepseek-v3.2 as the judges."
 
 ### As a CLI
 
@@ -252,9 +263,9 @@ stderr (stdout is reserved for JSON-RPC).
 
 ## How it's tested
 
-`npm run test:unit` runs 61 unit tests with no API key required. The MCP layer
+`npm run test:unit` runs 66 unit tests with no API key required. The MCP layer
 is tested at the protocol level: a real SDK client connects over an in-memory
-transport and checks every tool, resource, template, prompt, completion,
+transport and checks every tool (including saving a bench and passing chosen judges through to the pipeline), resource, template, prompt, completion,
 structured output, and error path, plus progress notifications from the real
 pipeline (strictly increasing, ending at 100%). The suite also covers the decision
 lab (changing priorities, zero weights, missing evidence, ties, preserved original

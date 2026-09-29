@@ -290,7 +290,7 @@ tool for per-run panel overrides, npm publish, and MCP registry submission.
 
 ## Provenance
 
-Generalized from [oracle-tournament](https://github.com/samalbanese/oracle-tournament),
+Generalized from oracle-tournament (a private project),
 a D&D-specific model evaluator whose pipeline proved out the multi-judge +
 arbiter design; this repo makes the domain pluggable.
 

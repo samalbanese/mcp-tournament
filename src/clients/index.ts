@@ -19,12 +19,17 @@ export function registerModelClient(route: string, client: ModelClient): void {
   clients.set(route, client);
 }
 
-/** Env-only credential check. Plugins use it to decide between a live participant and canned lines. */
+/**
+ * Whether a route can make calls. A registered client that reports its own
+ * readiness wins; otherwise fall back to the provider's env key.
+ */
 export function routeHasCredentials(route: ClientRoute): boolean {
+  if (route === 'chatgpt') return false;
+  const client = clients.get(route);
+  if (client?.isConfigured) return client.isConfigured();
   switch (route) {
     case 'openrouter': return Boolean(process.env.OPENROUTER_API_KEY ?? process.env.OPENROUTER_DICE_ORACLE_API_KEY);
     case 'anthropic': return Boolean(process.env.ANTHROPIC_API_KEY);
-    case 'chatgpt': return false;
   }
 }
 

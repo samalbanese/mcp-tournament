@@ -45,6 +45,29 @@ describe('parseModelRef', () => {
 });
 
 describe('route readiness', () => {
+  it('trusts a registered client that reports itself configured, without env keys', () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    const original = getModelClient('anthropic');
+    registerModelClient('anthropic', { isConfigured: () => true, createMessage: async () => { throw new Error('unused'); } });
+    try {
+      expect(routeHasCredentials('anthropic')).toBe(true);
+    } finally {
+      registerModelClient('anthropic', original);
+    }
+  });
+  it('falls back to env keys for a registered client without isConfigured', () => {
+    delete process.env.OPENROUTER_API_KEY;
+    delete process.env.OPENROUTER_DICE_ORACLE_API_KEY;
+    const original = getModelClient('openrouter');
+    registerModelClient('openrouter', { createMessage: async () => { throw new Error('unused'); } });
+    try {
+      expect(routeHasCredentials('openrouter')).toBe(false);
+      process.env.OPENROUTER_DICE_ORACLE_API_KEY = 'x';
+      expect(routeHasCredentials('openrouter')).toBe(true);
+    } finally {
+      registerModelClient('openrouter', original);
+    }
+  });
   it('reports anthropic credentials from ANTHROPIC_API_KEY only', () => {
     delete process.env.ANTHROPIC_API_KEY;
     expect(routeHasCredentials('anthropic')).toBe(false);

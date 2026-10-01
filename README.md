@@ -341,6 +341,9 @@ TOURNAMENT_MODEL_SYNTHESIZER=moonshotai/kimi-k2.5
 TOURNAMENT_MODEL_PARTICIPANT=deepseek/deepseek-v3.2
 ```
 
+Values are model refs, so `TOURNAMENT_MODEL_SYNTHESIZER=anthropic:claude-sonnet-5-5`
+sends that role to the optional Anthropic route instead of OpenRouter.
+
 The routing layer resolves a pluggable `ModelClient` per role
 (`src/clients/types.ts`). OpenRouter and the optional Anthropic API route share
 the same pipeline. Regression tests keep all default roles on OpenRouter and the

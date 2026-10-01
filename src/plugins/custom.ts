@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { getModelClient, routeHasCredentials } from '../clients/index.js';
 import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
-import { PARTICIPANT_AGENT_ROUTE, resolveRoleModel } from '../config/judges.js';
+import { resolveRoleRef } from '../config/judges.js';
 import { buildCriteriaJsonInstruction } from '../prompts/judge-prompts.js';
 import { logWarn } from '../utils/logger.js';
 import type { ParticipantRuntime, TestCase, TournamentPlugin, Turn } from './base.js';
@@ -148,7 +148,7 @@ ${buildCriteriaJsonInstruction(criteria)}`;
       if (scenario.maxTurns <= 1) return scenarioDefinition.prompt;
 
       const fallback = FALLBACK_FOLLOW_UPS[(candidateTurns.length - 1) % FALLBACK_FOLLOW_UPS.length];
-      const participant = runtime?.participant ?? { route: PARTICIPANT_AGENT_ROUTE, model: resolveRoleModel('participant') };
+      const participant = runtime?.participant ?? resolveRoleRef('participant');
       if (!routeHasCredentials(participant.route)) return fallback;
 
       const persona = scenarioDefinition.participantPersona ?? 'an engaged participant who wants a practical, specific answer';

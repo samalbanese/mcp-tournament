@@ -7,7 +7,7 @@
 
 import type { ParticipantRuntime, TournamentPlugin, TestCase, Turn, ToolDefinition } from './base.js';
 import { getModelClient, routeHasCredentials } from '../clients/index.js';
-import { PARTICIPANT_AGENT_MODEL, PARTICIPANT_AGENT_ROUTE } from '../config/judges.js';
+import { resolveRoleRef } from '../config/judges.js';
 import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
 
 // ── Test Character ──────────────────────────────────────
@@ -210,7 +210,7 @@ ${scenario.setupMessage}`;
     if (!lastDM) return 'I cautiously look around, hand on my bow.';
 
     const fallback = FALLBACK_PLAYER_LINES[Math.floor(turns.length / 2) % FALLBACK_PLAYER_LINES.length];
-    const participant = runtime?.participant ?? { route: PARTICIPANT_AGENT_ROUTE, model: PARTICIPANT_AGENT_MODEL };
+    const participant = runtime?.participant ?? resolveRoleRef('participant');
     if (!routeHasCredentials(participant.route)) {
       return fallback;
     }

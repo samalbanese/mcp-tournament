@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import type { ClientRoute } from '../clients/index.js';
 import { runJudge, type JudgeResult } from '../agents/judge-agent.js';
 import { runSynthesis, type SynthesisResult } from '../agents/synthesizer.js';
 import { JUDGES, type JudgeConfig } from '../config/judges.js';
@@ -42,6 +43,7 @@ export async function evaluateWithJudges(
   judges: JudgeConfig[] = JUDGES,
   useSynthesizer = true,
   synthesizerModel?: string,
+  synthesizerRoute: ClientRoute = 'openrouter',
 ): Promise<JudgePhaseResult> {
   const judgeDir = path.join(outputDir, 'judges', modelSlug(modelId), scenarioSlug(scenario));
   fs.mkdirSync(judgeDir, { recursive: true });
@@ -73,7 +75,7 @@ export async function evaluateWithJudges(
 
   let synthesis: SynthesisResult;
   if (useSynthesizer) {
-    synthesis = await runSynthesis(scenario, judgeResults, synthesizerModel);
+    synthesis = await runSynthesis(scenario, judgeResults, synthesizerModel, synthesizerRoute);
     if (!synthesis.synthesis) throw new Error(`Synthesis failed: ${synthesis.raw}`);
   } else {
     const derived = singleJudgeSynthesis(judgeResults[0]);

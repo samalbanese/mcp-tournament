@@ -1,8 +1,13 @@
+import type { ClientRoute } from '../clients/index.js';
+import { parseModelRef } from './model-ref.js';
+
 export interface CandidateModel {
   id: string;
   name: string;
   tier: 'budget' | 'mid' | 'premium' | 'wildcards' | 'unknown';
   notes: string;
+  route?: ClientRoute;
+  apiModel?: string;
 }
 
 export const CANDIDATE_MODELS: CandidateModel[] = [
@@ -51,12 +56,19 @@ export function getModelById(id: string): CandidateModel | undefined {
   return CANDIDATE_MODELS.find(m => m.id === id);
 }
 
-export function resolveCandidateModel(id: string): CandidateModel {
-  return getModelById(id) ?? {
-    id,
-    name: id.split('/').at(-1) ?? id,
-    tier: 'unknown',
-    notes: 'User-supplied OpenRouter model',
+export function resolveCandidateModel(ref: string): CandidateModel {
+  const parsed = parseModelRef(ref);
+  const curated = parsed.route === 'openrouter' ? getModelById(parsed.model) : undefined;
+  return {
+    ...(curated ?? {
+      id: parsed.ref,
+      name: parsed.route === 'anthropic' ? `${parsed.model} (Anthropic API)` : parsed.model.split('/').at(-1) ?? parsed.model,
+      tier: 'unknown' as const,
+      notes: parsed.route === 'anthropic' ? 'Anthropic API key route' : 'User-supplied OpenRouter model',
+    }),
+    id: parsed.ref,
+    route: parsed.route,
+    apiModel: parsed.model,
   };
 }
 

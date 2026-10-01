@@ -7,6 +7,7 @@ import type { CandidateModel } from '../config/models.js';
 import {
   modelSlug,
   scenarioSlug,
+  type ParticipantRuntime,
   type TestCase,
   type ToolCall,
   type TournamentPlugin,
@@ -54,6 +55,7 @@ export async function runScenario(
   scenario: TestCase,
   plugin: TournamentPlugin,
   outputDir: string,
+  runtime?: ParticipantRuntime,
 ): Promise<ScenarioRunResult> {
   const scenarioDir = path.join(
     outputDir,
@@ -77,7 +79,7 @@ export async function runScenario(
     toolCallCount: 0,
   };
   const messages: ModelMessage[] = [{ role: 'user', content: scenario.setupMessage }];
-  const client = getModelClient('openrouter');
+  const client = getModelClient(model.route ?? 'openrouter');
   const system = plugin.buildCandidatePrompt(scenario);
   const tools = clientTools(plugin);
 
@@ -93,7 +95,7 @@ export async function runScenario(
 
       for (let toolRound = 0; toolRound <= MAX_TOOL_ROUNDS; toolRound++) {
         const response = await client.createMessage({
-          model: model.id,
+          model: model.apiModel ?? model.id,
           system,
           messages,
           max_tokens: MAX_TOKENS_CANDIDATE,
@@ -154,6 +156,7 @@ export async function runScenario(
           scenario,
           turns,
           scenario.context,
+          runtime,
         );
         turns.push({ turn: turnNumber, role: 'participant', content: participantMessage });
         messages.push({ role: 'user', content: participantMessage });

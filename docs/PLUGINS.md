@@ -63,6 +63,37 @@ export const sqlPlugin: TournamentPlugin = {
 Register it in `src/plugins/index.ts` and it is immediately usable from the CLI
 (`--plugin sql`) and every MCP tool.
 
+## Participant settings for each run
+
+`generateParticipantMessage(scenario, turns, context?, runtime?)` accepts an optional
+fourth parameter of type `ParticipantRuntime` from `src/plugins/base.ts`:
+
+```ts
+interface ParticipantRuntime {
+  participant: {
+    route: ClientRoute;
+    model: string;
+  };
+}
+```
+
+`route` selects the provider client (`openrouter`, `anthropic`, or the reserved
+`chatgpt` route). `model` is the provider's API model ID, with any route prefix
+already removed. ChatGPT routing is not available yet.
+
+Use `runtime.participant` when supplied, and use your plugin's default model and
+route otherwise. Pass the selected route to `getModelClient(route)` and the model
+to `createMessage`. Use `routeHasCredentials(route)` from `src/clients/index.ts`
+to decide whether to return a scripted fallback when credentials are absent.
+Keep a fallback for failed participant calls too. Plugins that always return
+scripted lines can ignore the runtime parameter.
+
+The pipeline also applies a run's `turns` override to both `scenario.minTurns` and
+`scenario.maxTurns` before passing the scenario to plugins. Use those effective
+values when deciding whether to generate a follow-up. A custom bench originally
+defined with one round can therefore run several turns without repeating its
+opening prompt.
+
 ## Design notes
 
 - **Judges see what you show them.** `buildJudgePrompt` controls the entire

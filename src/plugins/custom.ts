@@ -2,12 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { getModelClient } from '../clients/index.js';
+import { getModelClient, routeHasCredentials } from '../clients/index.js';
 import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
 import { PARTICIPANT_AGENT_ROUTE, resolveRoleModel } from '../config/judges.js';
 import { buildCriteriaJsonInstruction } from '../prompts/judge-prompts.js';
 import { logWarn } from '../utils/logger.js';
-import type { TestCase, TournamentPlugin, Turn } from './base.js';
+import type { ParticipantRuntime, TestCase, TournamentPlugin, Turn } from './base.js';
 import { listPlugins, registerPlugin } from './index.js';
 
 export const CriterionSchema = z.object({
@@ -135,20 +135,26 @@ ${transcript}
 ${buildCriteriaJsonInstruction(criteria)}`;
     },
 
-    async generateParticipantMessage(scenario: TestCase, turns: Turn[]): Promise<string> {
+    async generateParticipantMessage(
+      scenario: TestCase,
+      turns: Turn[],
+      _context?: Record<string, unknown>,
+      runtime?: ParticipantRuntime,
+    ): Promise<string> {
       const scenarioDefinition = definition.scenarios.find(item => item.id === scenario.id);
       if (!scenarioDefinition) return scenario.setupMessage;
       const candidateTurns = turns.filter(turn => turn.role === 'candidate');
       if (candidateTurns.length === 0) return scenarioDefinition.prompt;
-      if (scenarioDefinition.rounds === 1) return scenarioDefinition.prompt;
+      if (scenario.maxTurns <= 1) return scenarioDefinition.prompt;
 
       const fallback = FALLBACK_FOLLOW_UPS[(candidateTurns.length - 1) % FALLBACK_FOLLOW_UPS.length];
-      if (!process.env.OPENROUTER_API_KEY && !process.env.OPENROUTER_DICE_ORACLE_API_KEY) return fallback;
+      const participant = runtime?.participant ?? { route: PARTICIPANT_AGENT_ROUTE, model: resolveRoleModel('participant') };
+      if (!routeHasCredentials(participant.route)) return fallback;
 
       const persona = scenarioDefinition.participantPersona ?? 'an engaged participant who wants a practical, specific answer';
       try {
-        const response = await getModelClient(PARTICIPANT_AGENT_ROUTE).createMessage({
-          model: resolveRoleModel('participant'),
+        const response = await getModelClient(participant.route).createMessage({
+          model: participant.model,
           system: `You are ${persona}. Stay in character. React to the candidate's last answer and push deeper with exactly one follow-up question. Never answer the original task yourself. Keep your response to 80 words or fewer.`,
           messages: [{
             role: 'user',

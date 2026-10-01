@@ -5,8 +5,8 @@
  * using structured scenarios, a test character, and simulated DM tools.
  */
 
-import type { TournamentPlugin, TestCase, Turn, ToolDefinition } from './base.js';
-import { getModelClient } from '../clients/index.js';
+import type { ParticipantRuntime, TournamentPlugin, TestCase, Turn, ToolDefinition } from './base.js';
+import { getModelClient, routeHasCredentials } from '../clients/index.js';
 import { PARTICIPANT_AGENT_MODEL, PARTICIPANT_AGENT_ROUTE } from '../config/judges.js';
 import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
 
@@ -200,12 +200,18 @@ ${scenario.setupMessage}`;
     return rolePrompts[role] || rolePrompts.holistic;
   },
 
-  async generateParticipantMessage(scenario: TestCase, turns: Turn[]): Promise<string> {
+  async generateParticipantMessage(
+    scenario: TestCase,
+    turns: Turn[],
+    _context?: Record<string, unknown>,
+    runtime?: ParticipantRuntime,
+  ): Promise<string> {
     const lastDM = turns.filter(t => t.role === 'candidate').pop();
     if (!lastDM) return 'I cautiously look around, hand on my bow.';
 
     const fallback = FALLBACK_PLAYER_LINES[Math.floor(turns.length / 2) % FALLBACK_PLAYER_LINES.length];
-    if (!process.env.OPENROUTER_API_KEY && !process.env.OPENROUTER_DICE_ORACLE_API_KEY) {
+    const participant = runtime?.participant ?? { route: PARTICIPANT_AGENT_ROUTE, model: PARTICIPANT_AGENT_MODEL };
+    if (!routeHasCredentials(participant.route)) {
       return fallback;
     }
 
@@ -213,8 +219,8 @@ ${scenario.setupMessage}`;
       const transcript = turns
         .map(t => `${t.role === 'candidate' ? 'DM' : 'PLAYER'}: ${t.content}`)
         .join('\n\n');
-      const response = await getModelClient(PARTICIPANT_AGENT_ROUTE).createMessage({
-        model: PARTICIPANT_AGENT_MODEL,
+      const response = await getModelClient(participant.route).createMessage({
+        model: participant.model,
         system: `You are roleplaying ${TEST_CHARACTER.name}, a level ${TEST_CHARACTER.level} ${TEST_CHARACTER.race} ${TEST_CHARACTER.class}, as a player at a D&D table. Reply with what the PLAYER says: 1-3 sentences of action and/or dialogue, first person, in character. Declare intent — never narrate outcomes, roll dice, or speak for NPCs (that is the DM's job).`,
         messages: [{
           role: 'user',
@@ -229,7 +235,7 @@ ${scenario.setupMessage}`;
   },
 };
 
-/** Used when no OpenRouter key is configured (offline tests) or the participant call fails. */
+/** Used when the participant route has no credentials or its call fails. */
 const FALLBACK_PLAYER_LINES = [
   'I draw my bow and take aim. "Show yourselves!"',
   'I take a cautious step forward, scanning for traps.',

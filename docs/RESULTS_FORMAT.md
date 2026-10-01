@@ -26,10 +26,43 @@ results/<runId>/                      # runId = run-YYYY-MM-DD-HHMMSS
   "runId": "run-2026-07-17-120000",
   "plugin": "dnd",
   "createdAt": "2026-07-17T12:00:00.000Z",
-  "candidates": [{ "id": "moonshotai/kimi-k2.5", "name": "Kimi K2.5", "tier": "mid" }],
-  "judges": [{ "role": "rules", "name": "Rules Judge", "model": "openai/gpt-5.4-mini" }],
-  "synthesizer": { "model": "moonshotai/kimi-k2.5" },
+  "turns": null,
+  "participant": { "model": "deepseek/deepseek-v3.2", "route": "openrouter" },
+  "candidates": [{ "id": "moonshotai/kimi-k2.5", "name": "Kimi K2.5", "tier": "mid", "route": "openrouter" }],
+  "judges": [{ "role": "rules", "name": "Rules Judge", "model": "openai/gpt-5.4-mini", "persona": "rules", "route": "openrouter" }],
+  "synthesizer": { "model": "moonshotai/kimi-k2.5", "route": "openrouter" },
   "scenarios": [{ "id": "scenario-01", "name": "The Moonlit Ambush" }]
+}
+```
+
+The following fields are additive. Older manifests may omit them; readers should
+continue accepting those runs.
+
+- `turns`: the run's turn override (an integer from 1 to 10), or `null` when each
+  scenario uses its own default. One turn means one candidate response.
+- `participant`: the simulated user's canonical model ref and provider route.
+  Anthropic refs retain the `anthropic:` prefix here.
+- Candidate `route`: the provider used for execution. Candidate `id` remains the
+  canonical model ref, including `anthropic:` when applicable.
+- Judge `persona`: a preset ID or `custom`. `role` remains the unique result-file
+  identifier; repeated personas use suffixes such as `skeptic_2`.
+- Judge `route`: the provider used for that seat. Judge `model` is the API model ID.
+- Judge `customLens`: the trimmed lens text, present only for custom personas.
+  Preset judges omit this field.
+- Synthesizer `route`: the provider used for synthesis. Its `model` is the API
+  model ID. `synthesizer` is `null` for quick tests and one-judge panels, which use
+  the judge's scores directly without a synthesis model call.
+
+For example, a custom judge seat can be recorded as:
+
+```json
+{
+  "role": "custom_2",
+  "name": "Practical Reviewer",
+  "model": "claude-haiku-4-5",
+  "persona": "custom",
+  "route": "anthropic",
+  "customLens": "Check whether a beginner could follow these steps."
 }
 ```
 

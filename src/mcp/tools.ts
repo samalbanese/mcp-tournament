@@ -6,12 +6,25 @@ import {
   formatBenchesMarkdown,
   formatCreateBenchMarkdown,
   formatLeaderboardMarkdown,
+  formatOptionsMarkdown,
+  formatPlanPreviewMarkdown,
   formatRunResultMarkdown,
   formatRunSummaryMarkdown,
   toLeaderboardRows,
 } from './format.js';
-import { evaluateTournament, quickTest, readLeaderboard, type EvaluateProgress } from '../pipeline.js';
-import { JUDGES } from '../config/judges.js';
+import { assertRoutesReady, evaluateTournament, quickTest, readLeaderboard, type EvaluateProgress } from '../pipeline.js';
+import { logWarn } from '../utils/logger.js';
+import { JUDGES, PARTICIPANT_AGENT_MODEL, resolveRoleModel, SYNTHESIZER } from '../config/judges.js';
+import { buildShortlist, closestModelIds, getCatalog } from '../catalog.js';
+import { routeHasCredentials, routeSetupHint } from '../clients/index.js';
+import { parseModelRef } from '../config/model-ref.js';
+import { DEFAULT_SEAT_ORDER, PERSONAS } from '../config/personas.js';
+import { estimateRunCost, type CostEstimate } from '../estimate.js';
+import { getPlugin } from '../plugins/index.js';
+import {
+  describePlan, JudgeSeatSchema, normalizeRunPlan, PLAN_LIMITS, RunPlanSchema,
+  type LegacyJudgeOptions, type ResolvedRunPlan, type RunPlanInput,
+} from '../run-plan.js';
 import {
   BenchDefinitionSchema,
   BenchSaveError,
@@ -78,6 +91,8 @@ const LeaderboardRowSchema = z.object({
 const JudgeInfoSchema = z.object({ role: z.string(), name: z.string(), model: z.string() });
 
 const RunResultSchema = {
+  status: z.enum(['completed', 'cancelled']),
+  message: z.string().optional(),
   runId: z.string(),
   plugin: z.string(),
   entries: z.array(LeaderboardRowSchema),
@@ -86,6 +101,119 @@ const RunResultSchema = {
   resultsDir: z.string(),
   judges: z.array(JudgeInfoSchema),
 };
+
+const ShortlistEntrySchema = z.object({
+  ref: z.string(), name: z.string(), notes: z.string(),
+  inputPrice: z.number().nullable(), outputPrice: z.number().nullable(),
+});
+
+const OptionsSchema = z.object({
+  benches: z.array(BenchInfoSchema.extend({
+    scenarios: z.array(z.object({
+      id: z.string(), name: z.string(), description: z.string(), defaultTurns: z.number(),
+    })),
+  })),
+  models: z.object({
+    source: z.enum(['live', 'curated-fallback']), liveCount: z.number(),
+    shortlist: z.object({
+      budget: z.array(ShortlistEntrySchema), mid: z.array(ShortlistEntrySchema),
+      premium: z.array(ShortlistEntrySchema), wildcards: z.array(ShortlistEntrySchema),
+    }),
+    note: z.string(),
+  }),
+  providers: z.array(z.object({
+    id: z.enum(['openrouter', 'anthropic', 'chatgpt']), label: z.string(),
+    status: z.enum(['ready', 'not_set_up']), appliesTo: z.string(), setupHint: z.string(),
+  })),
+  personas: z.array(z.object({ id: z.string(), name: z.string(), description: z.string(), defaultModel: z.string() })),
+  defaults: z.object({
+    judgePanel: z.array(z.object({ persona: z.string(), model: z.string() })),
+    synthesizer: z.string(), participant: z.string(), turns: z.string(),
+  }),
+  limits: z.object({ candidates: z.string(), judges: z.string(), turns: z.string(), customLens: z.string() }),
+});
+
+export type TournamentOptions = z.infer<typeof OptionsSchema>;
+
+const RefSummarySchema = z.object({ ref: z.string(), route: z.enum(['openrouter', 'anthropic', 'chatgpt']) });
+const PlanPreviewSchema = z.object({
+  plan: z.object({
+    bench: z.string(),
+    scenarios: z.array(z.object({ id: z.string(), name: z.string(), turns: z.number() })),
+    candidates: z.array(RefSummarySchema),
+    judges: z.array(JudgeInfoSchema.extend({ persona: z.string(), route: RefSummarySchema.shape.route })),
+    synthesizer: RefSummarySchema, participant: RefSummarySchema, turns: z.number().nullable(),
+  }),
+  summary: z.string(),
+  estimate: z.object({ usd: z.number().nullable(), display: z.string(), excluded: z.array(z.string()), assumptions: z.string() }),
+  warnings: z.array(z.string()),
+  readyToRun: z.boolean(),
+});
+
+const planInputShape = {
+  bench: RunPlanSchema.shape.bench.describe('Bench name. Defaults to "dnd". Call tournament_options for choices.'),
+  scenarios: RunPlanSchema.shape.scenarios.describe('Scenario IDs. Omit for every scenario in the bench.'),
+  candidates: RunPlanSchema.shape.candidates.describe('1-4 model refs. Bare IDs use OpenRouter. Use anthropic:claude-... for your Anthropic API key.'),
+  judgePanel: RunPlanSchema.shape.judgePanel.describe('1-5 judge seats. Each may set model and either persona or customPersona with a lens (1-1000 characters) and optional name (1-60 characters).'),
+  synthesizer: RunPlanSchema.shape.synthesizer.describe('Model ref used to reconcile judge scores. Omit for the default. Not used for one judge.'),
+  participant: RunPlanSchema.shape.participant.describe('Model ref for the simulated user who sends follow-up messages. Omit for the default.'),
+  turns: RunPlanSchema.shape.turns.describe('1-10 turns for every scenario. Omit to use each scenario\'s own default.'),
+};
+
+export interface PlanPreview {
+  plan: ResolvedRunPlan;
+  summary: string;
+  estimate: CostEstimate;
+  warnings: string[];
+}
+
+function planModelRefs(plan: ResolvedRunPlan) {
+  return [
+    ...plan.candidates.map(candidate => parseModelRef(candidate.id)),
+    ...plan.judges.map(judge => parseModelRef(judge.route === 'openrouter' ? judge.model : `${judge.route}:${judge.model}`)),
+    plan.synthesizer, plan.participant,
+  ];
+}
+
+export async function buildPlanPreview(ctx: McpContext, input: RunPlanInput, legacy?: LegacyJudgeOptions): Promise<PlanPreview> {
+  const plan = normalizeRunPlan(input, legacy);
+  const catalog = await getCatalog(ctx.fetch);
+  const catalogIds = catalog.models.map(model => model.id);
+  const knownIds = new Set(catalogIds);
+  const warnings = new Set(plan.warnings);
+  for (const ref of planModelRefs(plan)) {
+    if (catalog.source === 'live' && ref.route === 'openrouter' && !knownIds.has(ref.model)) {
+      throw new Error(`Unknown OpenRouter model "${ref.model}". Closest matches: ${closestModelIds(ref.model, catalogIds).join(', ')}.`);
+    }
+    if (ref.route === 'anthropic' && !routeHasCredentials('anthropic')) {
+      warnings.add(`"${ref.ref}" needs ANTHROPIC_API_KEY before the run starts.`);
+    }
+    if (ref.route === 'openrouter' && !routeHasCredentials('openrouter')) {
+      warnings.add(routeSetupHint('openrouter'));
+    }
+  }
+  if (catalog.source === 'curated-fallback') {
+    warnings.add('Model catalog offline. Model IDs could not be checked and the cost estimate is unavailable.');
+  }
+  return { plan, summary: describePlan(plan), estimate: estimateRunCost(plan, catalog), warnings: [...warnings] };
+}
+
+function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSchema> {
+  const { plan, summary, estimate, warnings } = preview;
+  return {
+    plan: {
+      bench: plan.bench,
+      scenarios: plan.scenarios.map(scenario => ({ id: scenario.id, name: scenario.name, turns: plan.turns ?? scenario.maxTurns })),
+      candidates: plan.candidates.map(candidate => ({ ref: candidate.id, route: candidate.route ?? 'openrouter' })),
+      judges: plan.judges.map(judge => ({ role: judge.role, name: judge.name, persona: judge.persona ?? judge.role, model: judge.model, route: judge.route })),
+      synthesizer: { ref: plan.synthesizer.ref, route: plan.synthesizer.route },
+      participant: { ref: plan.participant.ref, route: plan.participant.route },
+      turns: plan.turns,
+    },
+    summary, estimate, warnings,
+    readyToRun: planModelRefs(plan).every(ref => routeHasCredentials(ref.route)),
+  };
+}
 
 /**
  * The judge panel actually used for a run, read back from the saved manifest. Tolerant of a
@@ -197,6 +325,7 @@ function runResultPayload(ctx: McpContext, run: {
   judgeFailures?: RunFailure[];
 }, plugin: string) {
   return {
+    status: 'completed' as const,
     runId: run.runId,
     plugin,
     entries: toLeaderboardRows(run.leaderboard),
@@ -208,6 +337,79 @@ function runResultPayload(ctx: McpContext, run: {
 }
 
 export function registerTools(server: McpServer, ctx: McpContext): void {
+  server.registerTool(
+    'tournament_options',
+    {
+      title: 'Explore tournament options',
+      description: 'Free discovery. Lists benches, scenarios, model tiers with prices per million tokens, ' +
+        'judge personas, provider setup, defaults, and limits. Fetches the model catalog but makes no paid model calls.',
+      inputSchema: { bench: z.string().optional().describe('Show scenarios for just this bench. Omit for all benches.') },
+      outputSchema: OptionsSchema.shape,
+      annotations: { title: 'Explore tournament options', readOnlyHint: true, openWorldHint: true, idempotentHint: true },
+    },
+    async ({ bench }) => withBenchHint(async () => {
+      if (bench !== undefined) getPlugin(bench);
+      const benches = describeBenches().filter(item => bench === undefined || item.name === bench).map(item => ({
+        ...item,
+        scenarios: getPlugin(item.name).scenarios.map(scenario => ({
+          id: scenario.id, name: scenario.name, description: scenario.description, defaultTurns: scenario.maxTurns,
+        })),
+      }));
+      const catalog = await getCatalog(ctx.fetch);
+      const shortlist = buildShortlist(catalog);
+      const payload: TournamentOptions = {
+        benches,
+        models: {
+          source: catalog.source, liveCount: catalog.source === 'live' ? catalog.models.length : 0,
+          shortlist,
+          note: 'Any OpenRouter model ID works, not just this list. Prefix with "anthropic:" ' +
+            '(e.g. "anthropic:claude-sonnet-5-5") to bill an Anthropic model to your own Anthropic API key instead.',
+        },
+        providers: [
+          { id: 'openrouter', label: 'OpenRouter', status: routeHasCredentials('openrouter') ? 'ready' : 'not_set_up',
+            appliesTo: 'every model', setupHint: routeSetupHint('openrouter') },
+          { id: 'anthropic', label: 'Anthropic', status: routeHasCredentials('anthropic') ? 'ready' : 'not_set_up',
+            appliesTo: 'Anthropic (Claude) models only, billed per use to your Anthropic API key', setupHint: routeSetupHint('anthropic') },
+          { id: 'chatgpt', label: 'ChatGPT plan', status: 'not_set_up', appliesTo: 'OpenAI models',
+            setupHint: 'Coming soon: run OpenAI models on your ChatGPT plan.' },
+        ],
+        personas: Object.values(PERSONAS).map(persona => ({
+          id: persona.id, name: persona.label, description: persona.description, defaultModel: resolveRoleModel(persona.defaultModelRole),
+        })),
+        defaults: {
+          judgePanel: DEFAULT_SEAT_ORDER.slice(0, 3).map(persona => ({ persona, model: resolveRoleModel(PERSONAS[persona].defaultModelRole) })),
+          synthesizer: SYNTHESIZER.model, participant: PARTICIPANT_AGENT_MODEL,
+          turns: "each scenario's own default (shown per scenario)",
+        },
+        limits: {
+          candidates: PLAN_LIMITS.candidates.join('-'), judges: PLAN_LIMITS.judges.join('-'),
+          turns: PLAN_LIMITS.turns.join('-'), customLens: `${PLAN_LIMITS.lens.join('-')} characters`,
+        },
+      };
+      return { structuredContent: payload, content: [{ type: 'text', text: formatOptionsMarkdown(payload) }] };
+    }),
+  );
+
+  server.registerTool(
+    'tournament_plan_run',
+    {
+      title: 'Preview a tournament run',
+      description: 'Free preview. Checks your choices against the model catalog, fills in defaults, and shows ' +
+        'the plan, rough cost, and any provider setup still needed. Makes no model calls and creates no run folder. ' +
+        'Show the preview and get the user\'s yes before tournament_evaluate.',
+      inputSchema: planInputShape,
+      outputSchema: PlanPreviewSchema.shape,
+      annotations: { title: 'Preview a tournament run', readOnlyHint: true, openWorldHint: true, idempotentHint: true },
+    },
+    async input => withBenchHint(async () => {
+      const preview = await buildPlanPreview(ctx, input);
+      return {
+        structuredContent: planPreviewPayload(preview),
+        content: [{ type: 'text', text: formatPlanPreviewMarkdown(preview) }],
+      };
+    }),
+  );
+
   server.registerTool(
     'tournament_list_benches',
     {
@@ -299,15 +501,16 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
     {
       title: 'Quick sanity-check a model',
       description:
-        'Makes a real, paid model call through OpenRouter (requires OPENROUTER_API_KEY) and writes ' +
-        'a result to disk. Runs ONE candidate model against ONE scenario with a single judge: a ' +
-        'cheap, fast sanity check (usually well under a minute) before committing to a full ' +
-        'tournament_evaluate run. Call tournament_list_benches first if you are not sure which ' +
-        '`plugin`/`scenario` IDs are valid.',
+        'The cheap check: one model, one scenario, one judge. Makes real, paid model calls and writes ' +
+        'a result to disk. OpenRouter is the default. An anthropic: ref bills your Anthropic API key. ' +
+        'Optional judge picks the judge model and persona; turns sets 1-10 turns. No confirm form. ' +
+        'Call tournament_options if you need bench or scenario IDs.',
       inputSchema: {
-        model: z.string().describe('OpenRouter model ID, e.g. "deepseek/deepseek-v3.2".'),
+        model: z.string().describe('Model ref, e.g. "deepseek/deepseek-v3.2" or "anthropic:claude-haiku-4-5".'),
         plugin: z.string().default('dnd').describe('Bench to test against, e.g. "dnd" or "coding". Defaults to "dnd".'),
         scenario: z.string().optional().describe('Scenario ID within the plugin. Defaults to the plugin\'s first scenario.'),
+        judge: JudgeSeatSchema.optional().describe('One judge seat with an optional model and either persona or customPersona (lens and optional name).'),
+        turns: planInputShape.turns,
       },
       outputSchema: RunResultSchema,
       annotations: {
@@ -318,11 +521,13 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         openWorldHint: true,
       },
     },
-    async ({ model, plugin, scenario }, extra) => withBenchHint(async () => {
+    async ({ model, plugin, scenario, judge, turns }, extra) => withBenchHint(async () => {
       const run = await quickTest({
         model,
         plugin,
         scenario,
+        judge,
+        turns,
         outputRoot: ctx.resultsRoot,
         onProgress: makeProgressForwarder(extra),
       });
@@ -339,15 +544,15 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
     {
       title: 'Run a full tournament',
       description:
-        'Makes real, paid model calls through OpenRouter (requires OPENROUTER_API_KEY) and writes ' +
-        'results to disk. Runs 1-4 candidate models across one bench\'s scenarios, scored by a ' +
-        'multi-judge panel, and saves a leaderboard. Takes minutes, not seconds. Suggest ' +
-        'tournament_quick_test first for a cheap sanity check, and tournament_list_benches to ' +
-        'discover valid `plugin` and `scenario` IDs. Judges are picked by number (`judges`) by ' +
-        'default; pass `judgeModels` to choose the exact model for each judge seat instead, and ' +
-        '`synthesizerModel` to choose the model that reconciles judge scores into a final number.',
+        'Costs money. Makes paid model calls and writes results to disk. Call tournament_plan_run first ' +
+        'and get the user\'s yes in chat. Clients that support forms will also get a confirm form. ' +
+        'Runs 1-4 models across a bench\'s scenarios and saves a leaderboard. Can take several minutes. ' +
+        'judgePanel picks judge models and personas per seat and overrides judges and judgeModels. ' +
+        'turns sets one turn count for every scenario. participantModel picks the simulated user model. ' +
+        'synthesizerModel reconciles judge scores. OpenRouter is the default; anthropic: refs bill ' +
+        'the user\'s Anthropic API key. Use tournament_quick_test for a cheap check.',
       inputSchema: {
-        models: z.array(z.string()).min(1).max(4).describe('1-4 OpenRouter model IDs to compare, e.g. ["deepseek/deepseek-v3.2", "openai/gpt-5.4-mini"].'),
+        models: z.array(z.string()).min(1).max(4).describe('1-4 model refs to compare. Bare IDs use OpenRouter. anthropic: refs use your Anthropic API key.'),
         plugin: z.string().default('dnd').describe('Bench to run, e.g. "dnd" or "coding". Defaults to "dnd".'),
         scenarios: z.array(z.string()).optional().describe('Scenario IDs to run. Omit to run every scenario in the bench.'),
         judges: z.number().int().min(1).max(5).default(3).describe('Number of judges on the scoring panel, 1-5. Defaults to 3. Ignored when `judgeModels` is provided.'),
@@ -358,6 +563,9 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
             'Omit to use the default model for each seat.',
         ),
         synthesizerModel: z.string().optional().describe('OpenRouter model ID that reconciles the judges\' scores into one final score. Omit to use the default synthesizer model.'),
+        judgePanel: planInputShape.judgePanel,
+        turns: planInputShape.turns,
+        participantModel: planInputShape.participant,
       },
       outputSchema: RunResultSchema,
       annotations: {
@@ -368,10 +576,45 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         openWorldHint: true,
       },
     },
-    async ({ models, plugin, scenarios, judges, judgeModels, synthesizerModel }, extra) => withBenchHint(async () => {
+    async ({ models, plugin, scenarios, judges, judgeModels, synthesizerModel, judgePanel, turns, participantModel }, extra) => withBenchHint(async () => {
       const judgeModelsByRole = judgeModels
         ? Object.fromEntries(judgeModels.map((model, index) => [JUDGES[index].role, model]))
         : undefined;
+      const caps = server.server.getClientCapabilities();
+      if (caps?.elicitation) {
+        const preview = await buildPlanPreview(ctx, {
+          bench: plugin, scenarios, candidates: models, judgePanel,
+          synthesizer: synthesizerModel, participant: participantModel, turns,
+        }, { judges: judgeModels?.length ?? judges, judgeModels: judgeModelsByRole });
+        // Fail on a missing provider key before asking, so the user never confirms a run that cannot start.
+        assertRoutesReady(preview.plan);
+        let confirmed = false;
+        try {
+          const result = await server.server.elicitInput({
+            mode: 'form',
+            message: `${preview.summary}\n\nEstimated cost: ${preview.estimate.display}\n\nStart this paid run?`,
+            requestedSchema: {
+              type: 'object',
+              properties: {
+                confirm: { type: 'boolean', title: 'Start the run', description: 'Makes real, paid model calls.', default: false },
+              },
+              required: ['confirm'],
+            },
+          }, { timeout: 10 * 60 * 1000 });
+          confirmed = result.action === 'accept' && result.content?.confirm === true;
+        } catch (error) {
+          // A timeout, unsupported form, or client failure never authorizes a paid run.
+          logWarn(`Confirm form failed, treating as cancel: ${error instanceof Error ? error.message : String(error)}`);
+        }
+        if (!confirmed) {
+          const message = 'Cancelled. Nothing was run and nothing was charged.';
+          return {
+            structuredContent: { status: 'cancelled' as const, message, runId: '', plugin,
+              entries: [], failures: [], judgeFailures: [], resultsDir: '', judges: [] },
+            content: [{ type: 'text', text: message }],
+          };
+        }
+      }
       const run = await evaluateTournament({
         models,
         plugin,
@@ -379,6 +622,9 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         judges: judgeModels?.length ?? judges,
         judgeModels: judgeModelsByRole,
         synthesizerModel,
+        judgePanel,
+        turns,
+        participantModel,
         outputRoot: ctx.resultsRoot,
         onProgress: makeProgressForwarder(extra),
       });

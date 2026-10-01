@@ -18,6 +18,8 @@ export interface McpContext {
   resultsRoot: string;
   /** Absolute path of the directory new benches are saved into. */
   benchesDir: string;
+  /** Catalog transport. Injectable so preview and discovery tests stay offline. */
+  fetch: typeof fetch;
 }
 
 export interface RunFailure {
@@ -46,10 +48,11 @@ export interface BenchInfo {
 
 export const RUN_ID_PATTERN = /^run-[a-zA-Z0-9-]+$/;
 
-export function createContext(resultsRoot?: string, benchesDir?: string): McpContext {
+export function createContext(resultsRoot?: string, benchesDir?: string, fetcher: typeof fetch = globalThis.fetch): McpContext {
   return {
     resultsRoot: resultsRoot ? path.resolve(resultsRoot) : defaultResultsRoot(),
     benchesDir: benchesDir ? path.resolve(benchesDir) : getPackageBenchesDir(),
+    fetch: fetcher,
   };
 }
 

@@ -12,6 +12,38 @@ import { buildReport } from './report.js';
 
 export function registerPrompts(server: McpServer, ctx: McpContext): void {
   server.registerPrompt(
+    'setup_tournament',
+    {
+      title: 'Set up a tournament',
+      description: 'Guides the user through options, missing choices, a free preview, and confirmation before a paid run.',
+      argsSchema: { goal: z.string().optional().describe('What the user wants to test, e.g. "support chats".') },
+    },
+    async ({ goal }) => ({
+      messages: [{
+        role: 'user',
+        content: {
+          type: 'text',
+          text:
+            `Help the user set up a model tournament${goal ? ` for this goal: "${goal}"` : ''}.\n\n` +
+            '1. Call tournament_options. Briefly show the user: the benches (with scenario counts), ' +
+            'the model shortlist by tier with prices, the judge personas, and which provider accounts ' +
+            'are ready. Tell them plainly that any OpenRouter model works, that Anthropic models can ' +
+            'run on their own Anthropic API key with the "anthropic:" prefix, and that running OpenAI ' +
+            'models on a ChatGPT plan is coming soon.\n' +
+            '2. Ask only for what is missing, one short question at a time: which bench (or offer to ' +
+            'create one with tournament_create_bench), then which 1-4 models. Then say the defaults ' +
+            'are fine unless they want to change: judges and personas (including writing their own ' +
+            'judge persona), turns, synthesizer, or the simulated user.\n' +
+            '3. Call tournament_plan_run with their choices. Show the summary and the cost estimate, ' +
+            'and ask for a clear yes before running anything.\n' +
+            '4. Call tournament_evaluate with exactly the confirmed settings. Then explain the result ' +
+            'in plain language: who won, by how much, which criteria decided it, and where the judges disagreed.',
+        },
+      }],
+    }),
+  );
+
+  server.registerPrompt(
     'compare_models',
     {
       title: 'Compare models head to head',
@@ -22,7 +54,7 @@ export function registerPrompts(server: McpServer, ctx: McpContext): void {
         'choose_model_for_task instead if an existing leaderboard would already answer the ' +
         'question.',
       argsSchema: {
-        models: z.string().describe('Comma-separated model IDs to compare, e.g. "deepseek/deepseek-v3.2,openai/gpt-5.4-mini"'),
+        models: z.string().optional().describe('Comma-separated model IDs to compare, e.g. "deepseek/deepseek-v3.2,openai/gpt-5.4-mini". Omit for guided setup.'),
         plugin: completable(
           z.string().optional().describe('Bench (plugin) name to run, e.g. "dnd" or "customer-support". Defaults to "dnd".'),
           value => describeBenches().map(bench => bench.name).filter(name => name.startsWith(value ?? '')),
@@ -31,7 +63,12 @@ export function registerPrompts(server: McpServer, ctx: McpContext): void {
       },
     },
     async ({ models, plugin, judges }) => {
-      const modelList = models.split(',').map(id => id.trim()).filter(Boolean);
+      const modelList = (models ?? '').split(',').map(id => id.trim()).filter(Boolean);
+      if (!modelList.length) {
+        return { messages: [{ role: 'user', content: { type: 'text', text:
+          'No models were selected. Follow the setup_tournament flow to discover options, ask only for missing choices, ' +
+          'preview the plan and cost, and get a clear yes before running.' } }] };
+      }
       const judgeModelList = judges?.split(',').map(id => id.trim()).filter(Boolean);
       const benchNote = plugin ? `the "${plugin}" bench` : 'the default bench ("dnd")';
       return {

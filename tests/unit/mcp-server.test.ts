@@ -10,6 +10,8 @@ const FIXTURE_ROOT = path.join(__dirname, '..', 'fixtures', 'mcp-results');
 const FIXTURE_RUN_ID = 'run-2026-07-15-093000';
 
 const TOOL_NAMES = [
+  'tournament_options',
+  'tournament_plan_run',
   'tournament_list_benches',
   'tournament_leaderboard',
   'tournament_get_run',
@@ -18,7 +20,7 @@ const TOOL_NAMES = [
   'tournament_create_bench',
 ] as const;
 
-const READ_ONLY_TOOLS = new Set(['tournament_list_benches', 'tournament_leaderboard', 'tournament_get_run']);
+const READ_ONLY_TOOLS = new Set(['tournament_list_benches', 'tournament_leaderboard', 'tournament_get_run', 'tournament_options', 'tournament_plan_run']);
 
 async function connectedClient(): Promise<{ client: Client; close: () => Promise<void> }> {
   const server = createServer({ resultsRoot: FIXTURE_ROOT });
@@ -57,7 +59,7 @@ describe('MCP server protocol contract', () => {
   });
 
   describe('tools', () => {
-    it('lists exactly the 6 contract tools with correct annotations and an outputSchema', async () => {
+    it('lists exactly the 8 contract tools with correct annotations and an outputSchema', async () => {
       const { tools } = await client.listTools();
       const names = tools.map(tool => tool.name).sort();
       expect(names).toEqual([...TOOL_NAMES].sort());
@@ -176,10 +178,10 @@ describe('MCP server protocol contract', () => {
   });
 
   describe('prompts', () => {
-    it('lists the 3 contract prompts', async () => {
+    it('lists the 4 contract prompts', async () => {
       const { prompts } = await client.listPrompts();
       const names = prompts.map(prompt => prompt.name).sort();
-      expect(names).toEqual(['choose_model_for_task', 'compare_models', 'explain_run'].sort());
+      expect(names).toEqual(['choose_model_for_task', 'compare_models', 'explain_run', 'setup_tournament'].sort());
     });
 
     it('getPrompt(explain_run, {runId}) embeds a resource', async () => {

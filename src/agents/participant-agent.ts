@@ -4,7 +4,7 @@
  * Generates messages through the active plugin's participant implementation.
  */
 
-import type { TournamentPlugin, TestCase, Turn } from '../plugins/base.js';
+import type { ParticipantRuntime, TournamentPlugin, TestCase, Turn } from '../plugins/base.js';
 
 let _activePlugin: TournamentPlugin | null = null;
 
@@ -15,10 +15,11 @@ export function setActivePlugin(plugin: TournamentPlugin): void {
 export async function generateParticipantMessage(
   scenario: TestCase,
   turns: Turn[],
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
+  runtime?: ParticipantRuntime,
 ): Promise<string> {
   if (!_activePlugin) {
     throw new Error('No active plugin set. Call setActivePlugin() first.');
   }
-  return _activePlugin.generateParticipantMessage(scenario, turns, context);
+  return _activePlugin.generateParticipantMessage(scenario, turns, context, runtime);
 }

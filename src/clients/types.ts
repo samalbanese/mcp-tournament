@@ -34,7 +34,9 @@ export interface CreateMessageParams {
   tools?: ModelToolDefinition[] | null;
 }
 
-/** Extension point for future model routes such as claude-agent-sdk. */
+/** Shared interface for model routes. */
 export interface ModelClient {
+  /** False when credentials are missing. Omitted means ready for test doubles. */
+  isConfigured?(): boolean;
   createMessage(params: CreateMessageParams): Promise<ModelResponse>;
 }

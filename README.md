@@ -49,7 +49,7 @@ flowchart LR
 Three entry points feed the same pipeline:
 
 - **GUI:** build benches, launch runs, and inspect results locally.
-- **MCP client:** ask Claude Desktop, Cursor, or Windsurf to run, compare, and explain evaluations (6 tools, 5 resources, 3 prompts), including saving your own benches from chat.
+- **MCP client:** ask Claude Desktop, Cursor, or Windsurf to run, compare, and explain evaluations (8 tools, 5 resources, 4 prompts), including saving your own benches from chat.
 - **CLI:** script runs, serve MCP over stdio, or print the leaderboard.
 
 Domain logic is pluggable; the pipeline is not. Benches are declarative plugins:
@@ -149,11 +149,13 @@ The server runs over stdio and uses all three MCP primitives: tools, resources, 
 
 | Tool | What it does | Cost |
 |------|--------------|------|
+| `tournament_options` | Benches, model shortlist with prices, personas, provider status, defaults, and limits | Free catalog lookup, no model calls |
+| `tournament_plan_run` | Resolved settings, summary, rough cost, and setup warnings | Free catalog lookup, no model calls |
 | `tournament_list_benches` | Every bench and its scenario IDs | Free, local read |
 | `tournament_leaderboard` | Best score per model across saved runs, optionally per bench | Free, local read |
 | `tournament_get_run` | One saved run in full: models, judges, per-scenario scores, failures | Free, local read |
-| `tournament_quick_test` | One model, one scenario, one judge: a cheap sanity check | Paid (OpenRouter), usually under a minute |
-| `tournament_evaluate` | 1–4 models × every scenario × a judge panel, ranked; optionally pick each judge's model | Paid (OpenRouter), several minutes |
+| `tournament_quick_test` | One model, one scenario, one judge; optional judge persona and turns | Paid through the selected provider |
+| `tournament_evaluate` | 1–4 models across selected scenarios; choose judge models, personas, turns, and simulated user | Paid through the selected providers, several minutes |
 | `tournament_create_bench` | Saves a new bench (your scenarios and scoring criteria), usable immediately | Free, local write |
 
 Every tool returns a readable markdown answer plus typed `structuredContent` that matches a
@@ -184,7 +186,8 @@ The two templates list every saved run and autocomplete run IDs.
 
 **Prompts** (slash commands in clients that support them):
 
-- `compare_models` (models, plugin, judges): runs a head-to-head evaluation, then explains who won and why.
+- `setup_tournament` (optional goal): shows options, asks only for missing choices, previews cost, and gets your yes before a run.
+- `compare_models` (optional models, plugin, judges): compares selected models and explains who won; starts guided setup when models are missing.
 - `choose_model_for_task` (task): matches the task to a bench and checks existing results first, asking before any paid run.
 - `explain_run` (runId): attaches a run's scorecard and asks for a plain-English explanation.
 
@@ -212,6 +215,100 @@ node dist/cli.js run --plugin dnd --models "deepseek/deepseek-v3.2" \
 node dist/cli.js leaderboard
 node dist/cli.js serve          # MCP stdio server
 ```
+
+## Swapping models, judges, scenarios, and turns
+
+In your MCP client, start with the `setup_tournament` prompt or ask to set up a
+tournament for your goal. The assistant calls `tournament_options` to show benches
+and scenario counts, a model shortlist grouped by price tier, judge personas, and
+which provider accounts are ready. Any OpenRouter model ID works, including models
+outside the shortlist. Prices are USD per million input or output tokens.
+
+The assistant asks only for missing choices, one short question at a time: the bench
+and 1-4 candidate models. It can help create a bench with `tournament_create_bench`.
+The remaining defaults are fine unless you want different judges, personas, turns,
+a synthesizer, or a simulated user. Settings apply to this run.
+
+For example, call `tournament_plan_run` with:
+
+```json
+{
+  "bench": "customer-support",
+  "scenarios": ["billing-dispute"],
+  "candidates": ["deepseek/deepseek-v3.2", "openai/gpt-5.4-mini"],
+  "judgePanel": [
+    { "persona": "skeptic", "model": "qwen/qwen3.5-flash-02-23" },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "customPersona": {
+        "name": "Support customer",
+        "lens": "Check whether the customer gets a clear next step without repeating information."
+      }
+    }
+  ],
+  "turns": 2,
+  "synthesizer": "deepseek/deepseek-v3.2",
+  "participant": "deepseek/deepseek-v3.2"
+}
+```
+
+The preview fills in defaults, checks model IDs against the live catalog, and shows
+a rough estimate such as `≈ $0.09 (rough, could be ±50%)`. Models without prices are
+listed as excluded. If the catalog is offline, discovery uses a curated fallback
+and the cost estimate is unavailable. Previewing makes no model calls and creates
+no run folder. Missing provider keys appear as setup warnings.
+
+After you say yes, the assistant calls `tournament_evaluate` with those same choices.
+The preview's `bench`, `candidates`, `synthesizer`, and `participant` fields become
+`plugin`, `models`, `synthesizerModel`, and `participantModel` in the evaluate tool.
+`scenarios`, `judgePanel`, and `turns` keep their names. Clients that support forms
+also show a confirmation form. Only accepting with the confirmation box checked
+starts the run. Declining, cancelling, leaving it unchecked, or a form error returns:
+"Cancelled. Nothing was run and nothing was charged."
+
+Clients without form support run immediately when `tournament_evaluate` is called,
+so the assistant must get your yes in chat first. `tournament_quick_test` is the
+cheap check: one model, one scenario, one judge, with optional `judge` and `turns`.
+It makes paid calls without a form.
+
+Choose 1-5 judge seats. Each can set its own model and one of these personas:
+
+| Persona ID | Name | What it checks |
+|------------|------|----------------|
+| `rules` | Accuracy | Facts, reasoning, rules, and tool use |
+| `creative` | Craft & Clarity | Clear, original, useful communication |
+| `holistic` | Holistic | Task completion and the overall experience |
+| `authentic_voice` | Authentic Voice | Natural, specific language without repetition |
+| `npc_world` | Context & Consistency | Coherent details throughout the conversation |
+| `strict` | Strict Grader | Flaws, with high scores reserved for excellent work |
+| `skeptic` | Skeptic | Unsupported claims and steps that would not work |
+| `audience` | Target Audience | Whether the reader can understand, trust, and use the answer |
+
+Use either `persona` or `customPersona` on a seat. A custom lens must be 1-1000
+characters, with an optional name of 1-60 characters. The default panel is Accuracy,
+Craft & Clarity, and Holistic. A single judge needs no synthesizer. Existing `judges`
+and `judgeModels` inputs still work; `judgePanel` takes priority if both are supplied.
+
+Set `turns` to 1-10 to use the same turn count for every selected scenario. Omit it
+to use each scenario's default, shown by `tournament_options`. Omit `scenarios` to
+run all scenarios in the bench. The participant model plays the simulated user in
+follow-up turns.
+
+## Provider accounts
+
+OpenRouter is the default for every role. Set `OPENROUTER_API_KEY` in the shell or
+your MCP client's server configuration. A bare model ID such as
+`deepseek/deepseek-v3.2`, or an explicit `openrouter:` prefix, uses that account.
+
+Optionally set `ANTHROPIC_API_KEY` and use a ref such as
+`anthropic:claude-haiku-4-5` for a candidate, judge, synthesizer, or simulated user.
+These Claude calls are billed per use to your Anthropic API account. This is separate
+from a Claude subscription. The default route stays OpenRouter, and an OpenRouter
+ID such as `anthropic/claude-haiku-4.5` still bills OpenRouter. Only Claude model IDs
+work with `anthropic:`. Discovery reports account readiness without showing key values.
+
+Support for running OpenAI models on a ChatGPT plan is coming soon. For now, use
+their OpenRouter IDs, such as `openai/gpt-5.4-mini`.
 
 ## Results viewer
 
@@ -245,48 +342,48 @@ TOURNAMENT_MODEL_PARTICIPANT=deepseek/deepseek-v3.2
 ```
 
 The routing layer resolves a pluggable `ModelClient` per role
-(`src/clients/types.ts`). That registry is the documented extension point for a
-[Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk) route, which
-authenticates against a local `claude /login` session so Claude-judged runs draw
-on a Max/Pro **subscription** instead of the metered API: the original
-oracle-tournament design. Two regression tests guard the default: the demo path
-never resolves to the paid Anthropic API, and the MCP server's logger stays on
-stderr (stdout is reserved for JSON-RPC).
+(`src/clients/types.ts`). OpenRouter and the optional Anthropic API route share
+the same pipeline. Regression tests keep all default roles on OpenRouter and the
+MCP server's logger on stderr (stdout is reserved for JSON-RPC).
 
 ## Environment variables
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `OPENROUTER_API_KEY` | Yes | All roles by default |
+| `OPENROUTER_API_KEY` | For OpenRouter calls | All roles by default |
+| `ANTHROPIC_API_KEY` | No | Optional Claude calls using `anthropic:` refs, billed per use |
 | `TOURNAMENT_MODEL_*` | No | Per-role model overrides (see above) |
 | `TOURNAMENT_RESULTS_DIR` | No | Results output root (default `./results`) |
 
 ## How it's tested
 
-`npm run test:unit` runs 66 unit tests with no API key required. The MCP layer
+`npm run test:unit` runs unit tests with no API key required. The MCP layer
 is tested at the protocol level: a real SDK client connects over an in-memory
 transport and checks every tool (including saving a bench and passing chosen judges through to the pipeline), resource, template, prompt, completion,
 structured output, and error path, plus progress notifications from the real
 pipeline (strictly increasing, ending at 100%). The suite also covers the decision
 lab (changing priorities, zero weights, missing evidence, ties, preserved original
 scores, report provenance) and runs the committed demo fixtures through the viewer
-loaders, including known partial judge archives. Two regression guards have a story:
+loaders, including known partial judge archives. Swappable-run tests cover cost
+estimates, catalog fallback, provider warnings, confirmation and cancellation,
+legacy clients, and the guided setup prompt. Two regression guards have a story:
 
 - **The MCP logger writes to stderr only.** stdout is reserved for JSON-RPC:
   one stray `console.log` corrupts the protocol stream and silently breaks
   every connected MCP client. The guard makes that a failing test instead of
   a mystery bug report.
 - **The default route can never resolve to a paid first-party API.** The demo
-  path stays BYOK-through-OpenRouter at budget-tier prices; a config regression
-  that would quietly bill someone's Anthropic key fails CI.
+  path stays BYOK-through-OpenRouter at budget-tier prices. An Anthropic key is
+  billed only when you opt in with an `anthropic:` ref; a config regression that
+  would quietly bill it fails CI.
 
 An e2e suite (`npm run test:e2e`) exercises real model calls when a key is
 present. CI runs build + unit tests + the GUI build on every push and PR.
 
 ## Roadmap
 
-Deferred deliberately: a Streamable HTTP transport for remote hosting, a `judges`
-tool for per-run panel overrides, npm publish, and MCP registry submission.
+Deferred deliberately: a Streamable HTTP transport for remote hosting, ChatGPT
+plan support, npm publish, and MCP registry submission.
 
 ## Provenance
 

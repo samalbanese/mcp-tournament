@@ -8,6 +8,46 @@
  */
 import type { BenchDefinition } from '../plugins/custom.js';
 import type { BenchInfo, RunFailure, RunSummary } from './data.js';
+import type { PlanPreview, TournamentOptions } from './tools.js';
+
+/** Discovery includes account status and pricing units so choices can be made in chat. */
+export function formatOptionsMarkdown(options: TournamentOptions): string {
+  const lines = ['## Benches', ''];
+  for (const bench of options.benches) {
+    lines.push(`### ${bench.name} (${bench.scenarios.length} scenarios)`, '', bench.description, '');
+    lines.push(...bench.scenarios.map(scenario =>
+      `- \`${scenario.id}\`: ${scenario.name}. ${scenario.description} Default turns: ${scenario.defaultTurns}.`), '');
+  }
+  lines.push('## Models', '', options.models.note, '',
+    options.models.source === 'live'
+      ? `${options.models.liveCount} models in the live catalog. Prices below are USD per million input or output tokens.`
+      : 'Model catalog offline. Showing the curated fallback list. Prices are unavailable.', '');
+  const price = (value: number | null) => value === null ? 'unavailable' : `$${value}`;
+  for (const [tier, models] of Object.entries(options.models.shortlist)) {
+    lines.push(`### ${tier}`, '');
+    if (!models.length) lines.push('No matching shortlist models in this catalog.', '');
+    else lines.push('| Model ref | Name | Input / 1M | Output / 1M | Notes |', '|---|---|---|---|---|',
+      ...models.map(model => `| \`${model.ref}\` | ${model.name} | ${price(model.inputPrice)} | ${price(model.outputPrice)} | ${model.notes} |`), '');
+  }
+  lines.push('## Provider accounts', '');
+  for (const provider of options.providers) {
+    lines.push(`- **${provider.label}: ${provider.status === 'ready' ? 'ready' : 'not set up'}**. ` +
+      `${provider.appliesTo}. ${provider.setupHint}`);
+  }
+  lines.push('', '## Judge personas', '', '| ID | Name | Lens | Default model |', '|---|---|---|---|',
+    ...options.personas.map(persona => `| \`${persona.id}\` | ${persona.name} | ${persona.description} | \`${persona.defaultModel}\` |`), '',
+    'You can also write a custom judge persona with a lens and an optional name.', '', '## Defaults and limits', '',
+    `- Judges: ${options.defaults.judgePanel.map(seat => `${seat.persona} (${seat.model})`).join(', ')}.`,
+    `- Synthesizer: ${options.defaults.synthesizer}.`, `- Simulated user: ${options.defaults.participant}.`,
+    `- Turns: ${options.defaults.turns}.`,
+    `- Limits: ${options.limits.candidates} candidates; ${options.limits.judges} judges; ${options.limits.turns} turns; custom lens ${options.limits.customLens}.`);
+  return lines.join('\n').replaceAll('\u2014', ';');
+}
+
+export function formatPlanPreviewMarkdown(preview: Pick<PlanPreview, 'summary' | 'estimate' | 'warnings'>): string {
+  const warnings = preview.warnings.length ? `\n\nWarnings:\n\n${preview.warnings.map(warning => `- ${warning}`).join('\n')}` : '';
+  return `${preview.summary}\n\nEstimated cost: ${preview.estimate.display}\n\n${preview.estimate.assumptions}${warnings}`;
+}
 
 export interface LeaderboardRow {
   rank: number;

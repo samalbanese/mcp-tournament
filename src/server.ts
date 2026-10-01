@@ -3,6 +3,7 @@ import http, { type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { fetchCatalogModels as getModels } from './catalog.js';
 import { JUDGES, SYNTHESIZER } from './config/judges.js';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
 import {
@@ -17,7 +18,6 @@ import { logDebug, logError, logInfo, onLog } from './utils/logger.js';
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MAX_BODY_BYTES = 64 * 1024;
-const MODEL_CACHE_MS = 10 * 60 * 1000;
 const DEFAULT_CANDIDATE_MODELS = [
   'deepseek/deepseek-v3.2',
   'google/gemini-2.5-flash-lite',
@@ -41,13 +41,6 @@ interface ActiveRun {
   leaderboard?: TournamentRun['leaderboard'];
   error?: string;
 }
-interface ModelSummary {
-  id: string;
-  name: string;
-  contextLength: number;
-  promptPrice: number;
-  completionPrice: number;
-}
 export interface HandlerOptions {
   rootDir?: string;
   port: number;
@@ -58,7 +51,6 @@ export interface HandlerOptions {
 
 const runs = new Map<string, ActiveRun>();
 let activeApiKey: string | null = null;
-let modelCache: { expiresAt: number; models: ModelSummary[] } | null = null;
 
 const runRequestSchema = z.object({
   apiKey: z.string().min(1),
@@ -186,28 +178,6 @@ export function findUnknownModelId(
 ): string | undefined {
   const available = new Set(availableModelIds);
   return requestedModelIds.find(modelId => !available.has(modelId));
-}
-
-async function getModels(fetcher: typeof fetch): Promise<ModelSummary[]> {
-  if (modelCache && modelCache.expiresAt > Date.now()) return modelCache.models;
-  const response = await fetcher('https://openrouter.ai/api/v1/models');
-  if (!response.ok) throw new Error(`OpenRouter models request failed (${response.status})`);
-  const body = await response.json() as { data?: Array<{ id?: unknown; name?: unknown; context_length?: unknown; pricing?: { prompt?: unknown; completion?: unknown } }> };
-  if (!Array.isArray(body.data)) throw new Error('OpenRouter returned an invalid models response');
-  const models = body.data
-    .filter((model): model is typeof model & { id: string } => typeof model.id === 'string')
-    .map(model => ({
-      id: model.id,
-      name: typeof model.name === 'string' ? model.name : model.id,
-      contextLength: Number(model.context_length) || 0,
-      promptPrice: Number(model.pricing?.prompt) * 1e6 || 0,
-      completionPrice: Number(model.pricing?.completion) * 1e6 || 0,
-    }))
-    // OpenRouter marks meta-entries like the Auto Router with -1 pricing;
-    // they aren't real candidates and render as absurd negative prices.
-    .filter(model => model.promptPrice >= 0 && model.completionPrice >= 0);
-  modelCache = { expiresAt: Date.now() + MODEL_CACHE_MS, models };
-  return models;
 }
 
 function stripJsonFence(value: string): string {

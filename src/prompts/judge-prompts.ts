@@ -35,18 +35,28 @@ export function buildCriteriaJsonInstruction(criteria: Array<{ name: string }>):
   }, null, 2)}`;
 }
 
-export const JUDGE_SYSTEM_PROMPTS: Record<string, string> = {
+export const JUDGE_LENSES = {
   rules: `You are a precise correctness and tool-use evaluator. Check factual,
-logical, procedural, and domain-rule accuracy. ${JSON_INSTRUCTION}`,
+logical, procedural, and domain-rule accuracy.`,
   creative: `You evaluate clarity, originality, communication quality, and whether
-the response avoids generic filler. ${JSON_INSTRUCTION}`,
+the response avoids generic filler.`,
   holistic: `You evaluate overall task completion, usefulness, and the quality of
-the participant experience. ${JSON_INSTRUCTION}`,
+the participant experience.`,
   authentic_voice: `You evaluate whether the response has a natural, specific voice
-instead of repetitive model-like phrasing. ${JSON_INSTRUCTION}`,
+instead of repetitive model-like phrasing.`,
   npc_world: `You evaluate context use, internal consistency, and whether details
-remain coherent across the interaction. ${JSON_INSTRUCTION}`,
-};
+remain coherent across the interaction.`,
+} as const;
+
+export const JUDGE_SYSTEM_PROMPTS: Record<string, string> = Object.fromEntries(
+  Object.entries(JUDGE_LENSES).map(([role, lens]) => [role, `${lens} ${JSON_INSTRUCTION}`]),
+);
+
+/** Append the fixed score format after the persona lens. */
+export function buildJudgeSystemPrompt(judge: { role: string; lens?: string }): string {
+  if (judge.lens) return `${judge.lens} ${JSON_INSTRUCTION}`;
+  return JUDGE_SYSTEM_PROMPTS[judge.role] ?? JUDGE_SYSTEM_PROMPTS.holistic;
+}
 
 export function buildJudgeUserPrompt(
   plugin: TournamentPlugin,

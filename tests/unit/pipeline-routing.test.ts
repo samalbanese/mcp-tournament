@@ -106,8 +106,8 @@ describe('per-run pipeline model routing', () => {
       synthesizer: { model: string };
     };
     expect(manifest.judges).toEqual([
-      { role: 'rules', name: JUDGES[0].name, model: 'judge/rules-override' },
-      { role: 'creative', name: JUDGES[1].name, model: JUDGES[1].model },
+      { role: 'rules', name: JUDGES[0].name, model: 'judge/rules-override', persona: 'rules', route: 'openrouter' },
+      { role: 'creative', name: JUDGES[1].name, model: JUDGES[1].model, persona: 'creative', route: 'openrouter' },
     ]);
     expect(manifest.synthesizer.model).toBe('synthesizer/override');
     expect(createMessage.mock.calls.map(([params]) => params.model)).toEqual(expect.arrayContaining([

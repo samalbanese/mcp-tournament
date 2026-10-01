@@ -9,6 +9,8 @@ export interface CreateServerOptions {
   resultsRoot?: string;
   /** Directory new benches are saved into. Defaults to the package's benches/ folder. */
   benchesDir?: string;
+  /** Catalog transport. Defaults to global fetch. */
+  fetch?: typeof fetch;
 }
 
 export const SERVER_INFO = { name: 'mcp-tournament', version: '0.1.0' } as const;
@@ -19,6 +21,9 @@ export function createServer(options: CreateServerOptions = {}): McpServer {
       'MCP Tournament benchmarks language models head to head: candidate models play through',
       'scenarios from a bench, a panel of judge models scores each transcript, and a synthesizer',
       'reconciles the judges into one score out of 10.',
+      '',
+      'To set up a run, follow the setup_tournament prompt: call tournament_options, ask the user only what is missing, ' +
+        'preview with tournament_plan_run, and get a yes before tournament_evaluate.',
       '',
       'Start free: tournament_list_benches shows the benches and scenario IDs, and',
       'tournament_leaderboard / tournament_get_run read results already on disk.',
@@ -34,7 +39,7 @@ export function createServer(options: CreateServerOptions = {}): McpServer {
       'plugin: "<bench name>". Judges for a run can be chosen with judgeModels.',
     ].join('\n'),
   });
-  const ctx = createContext(options.resultsRoot, options.benchesDir);
+  const ctx = createContext(options.resultsRoot, options.benchesDir, options.fetch);
   registerTools(server, ctx);
   registerResources(server, ctx);
   registerPrompts(server, ctx);

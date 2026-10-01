@@ -7,6 +7,11 @@
  */
 
 import { shortSlug } from '../utils/slug.js';
+import type { ClientRoute } from '../clients/index.js';
+
+export interface ParticipantRuntime {
+  participant: { route: ClientRoute; model: string };
+}
 
 /** A single test case the candidate model must handle. */
 export interface TestCase {
@@ -112,7 +117,8 @@ export interface TournamentPlugin {
   generateParticipantMessage(
     scenario: TestCase,
     turns: Turn[],
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
+    runtime?: ParticipantRuntime,
   ): Promise<string>;
   
   /** Optional: tools the candidate can use during evaluation */

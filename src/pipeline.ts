@@ -1,13 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { JUDGES, SYNTHESIZER, type JudgeConfig } from './config/judges.js';
-import { resolveCandidateModel } from './config/models.js';
+import { isRouteReady, routeSetupHint, type ClientRoute } from './clients/index.js';
 import { buildLeaderboard, type LeaderboardEntry } from './phases/aggregator.js';
 import { runScenario } from './phases/executor.js';
 import { evaluateWithJudges } from './phases/judge-runner.js';
 import { getPlugin } from './plugins/index.js';
-import type { TestCase } from './plugins/base.js';
 import { logError } from './utils/logger.js';
+import { effectiveScenario, normalizeRunPlan, type JudgeSeat, type ResolvedRunPlan } from './run-plan.js';
+
+export { selectJudges } from './run-plan.js';
 
 export interface EvaluateProgress {
   completed: number;
@@ -22,6 +23,9 @@ export interface EvaluateOptions {
   judges?: number;
   judgeModels?: Record<string, string>;
   synthesizerModel?: string;
+  judgePanel?: JudgeSeat[];
+  turns?: number;
+  participantModel?: string;
   outputRoot?: string;
   quick?: boolean;
   runId?: string;
@@ -54,36 +58,44 @@ function createRunId(date = new Date()): string {
   return `run-${date.toISOString().slice(0, 19).replace('T', '-').replaceAll(':', '')}`;
 }
 
-function selectScenarios(all: TestCase[], requested?: string[]): TestCase[] {
-  if (!requested?.length) return all;
-  const selected = requested.map(id => all.find(scenario => scenario.id === id));
-  const missing = requested.filter((_id, index) => !selected[index]);
-  if (missing.length) throw new Error(`Unknown scenario ID(s): ${missing.join(', ')}`);
-  return selected as TestCase[];
-}
-
-export function selectJudges(
-  judgeCount: number,
-  judgeModels?: Record<string, string>,
-): JudgeConfig[] {
-  return JUDGES.slice(0, judgeCount).map(judge => judgeModels?.[judge.role]
-    ? { ...judge, model: judgeModels[judge.role] }
-    : judge);
+export function assertRoutesReady(plan: ResolvedRunPlan): void {
+  const uses: Array<{ label: string; route: ClientRoute }> = [
+    ...plan.candidates.map(candidate => ({ label: `Candidate "${candidate.id}"`, route: candidate.route ?? 'openrouter' as const })),
+    ...plan.judges.map(judge => ({ label: `Judge "${judge.name}" (${judge.model})`, route: judge.route })),
+  ];
+  if (!plan.quick && plan.judges.length >= 2) {
+    uses.push({ label: `Synthesizer "${plan.synthesizer.ref}"`, route: plan.synthesizer.route });
+  }
+  if (plan.participantExplicit) {
+    uses.push({ label: `Simulated user "${plan.participant.ref}"`, route: plan.participant.route });
+  }
+  const checked = new Set<ClientRoute>();
+  for (const { label, route } of uses) {
+    if (checked.has(route)) continue;
+    if (!isRouteReady(route)) {
+      throw new Error(`${label} needs a provider that is not set up. ${routeSetupHint(route)}`);
+    }
+    checked.add(route);
+  }
 }
 
 export async function evaluateTournament(options: EvaluateOptions): Promise<TournamentRun> {
   if (options.models.length < 1 || options.models.length > 4) {
     throw new Error('Evaluate requires between 1 and 4 candidate models');
   }
-  const plugin = getPlugin(options.plugin ?? 'dnd');
-  const scenarios = selectScenarios(plugin.scenarios, options.scenarios);
-  if (!scenarios.length) throw new Error(`Plugin "${plugin.name}" has no scenarios`);
-  const judgeCount = options.quick ? 1 : options.judges ?? 3;
-  if (judgeCount < 1 || judgeCount > JUDGES.length) {
-    throw new Error(`Judge count must be between 1 and ${JUDGES.length}`);
-  }
-
-  const candidates = options.models.map(resolveCandidateModel);
+  const plan = normalizeRunPlan({
+    bench: options.plugin ?? 'dnd',
+    scenarios: options.scenarios,
+    candidates: options.models,
+    judgePanel: options.judgePanel,
+    synthesizer: options.synthesizerModel,
+    participant: options.participantModel,
+    turns: options.turns,
+  }, { judges: options.judges, judgeModels: options.judgeModels, quick: options.quick });
+  assertRoutesReady(plan);
+  const { plugin, scenarios, candidates, judges: selectedJudges } = plan;
+  const useSynthesizer = !plan.quick && selectedJudges.length >= 2;
+  const runtime = { participant: { route: plan.participant.route, model: plan.participant.model } };
   const outputRoot = path.resolve(options.outputRoot ?? defaultResultsRoot());
   if (options.runId && (!/^run-[a-zA-Z0-9-]+$/.test(options.runId) || path.basename(options.runId) !== options.runId)) {
     throw new Error('Invalid run ID');
@@ -99,17 +111,19 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   if (options.runId && fs.existsSync(runDir)) throw new Error(`Run already exists: ${options.runId}`);
   const actualRunId = path.basename(runDir);
   fs.mkdirSync(runDir, { recursive: true });
-  const selectedJudges = selectJudges(judgeCount, options.judgeModels);
-  const synthesizerModel = options.synthesizerModel ?? SYNTHESIZER.model;
-
   const manifest = {
     runId: actualRunId,
     plugin: plugin.name,
     createdAt: new Date().toISOString(),
-    candidates: candidates.map(({ id, name, tier }) => ({ id, name, tier })),
-    judges: selectedJudges.map(({ role, name, model }) => ({ role, name, model })),
-    synthesizer: options.quick ? null : { model: synthesizerModel },
+    candidates: candidates.map(({ id, name, tier, route }) => ({ id, name, tier, route })),
+    judges: selectedJudges.map(({ role, name, model, persona, route, lens }) => ({
+      role, name, model, persona: persona ?? role, route,
+      ...(persona === 'custom' ? { customLens: lens } : {}),
+    })),
+    synthesizer: useSynthesizer ? { model: plan.synthesizer.model, route: plan.synthesizer.route } : null,
     scenarios: scenarios.map(({ id, name }) => ({ id, name })),
+    turns: plan.turns,
+    participant: { model: plan.participant.ref, route: plan.participant.route },
   };
   fs.writeFileSync(path.join(runDir, 'run.json'), JSON.stringify(manifest, null, 2));
 
@@ -121,6 +135,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   let completedProgressSteps = 0;
   for (const candidate of candidates) {
     for (const scenario of scenarios) {
+      const runScenarioCase = effectiveScenario(scenario, plan.turns);
       completedProgressSteps += 1;
       options.onProgress?.({
         completed: completedProgressSteps,
@@ -128,19 +143,20 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
         message: `Running ${candidate.name} on ${scenario.name}`,
       });
       try {
-        const execution = await runScenario(candidate, scenario, plugin, runDir);
+        const execution = await runScenario(candidate, runScenarioCase, plugin, runDir, runtime);
         if (!execution.success) {
           throw new Error(execution.error ?? 'Scenario execution failed');
         }
         const judgePhase = await evaluateWithJudges(
           plugin,
-          scenario,
+          runScenarioCase,
           execution.turns,
           candidate.id,
           runDir,
           selectedJudges,
-          !options.quick,
-          synthesizerModel,
+          useSynthesizer,
+          plan.synthesizer.model,
+          plan.synthesizer.route,
         );
         for (const failure of judgePhase.failedJudges) {
           const message = `judge ${failure.judge}: ${failure.error}`;
@@ -184,6 +200,8 @@ export async function quickTest(options: {
   model: string;
   plugin?: string;
   scenario?: string;
+  judge?: JudgeSeat;
+  turns?: number;
   outputRoot?: string;
   onProgress?: (progress: EvaluateProgress) => void;
 }): Promise<TournamentRun> {
@@ -195,6 +213,8 @@ export async function quickTest(options: {
     plugin: plugin.name,
     scenarios: [scenario],
     judges: 1,
+    judgePanel: options.judge ? [options.judge] : undefined,
+    turns: options.turns,
     outputRoot: options.outputRoot,
     quick: true,
     onProgress: options.onProgress,

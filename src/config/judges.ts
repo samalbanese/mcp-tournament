@@ -9,6 +9,12 @@ export interface JudgeConfig {
   family: string;
   route: JudgeRoute;
   focus: string[];
+  /** Persona lens text; absent for legacy judge selections. */
+  lens?: string;
+  /** Role passed to plugin.buildJudgePrompt; defaults to role. */
+  pluginRole?: string;
+  /** Preset persona id, or 'custom'. */
+  persona?: string;
 }
 
 // All defaults are budget-tier (<$1/M output) so a full tournament run costs

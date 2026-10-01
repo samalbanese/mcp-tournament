@@ -1,4 +1,4 @@
-import { getModelClient } from '../clients/index.js';
+import { getModelClient, type ClientRoute } from '../clients/index.js';
 import { MAX_TOKENS_SYNTHESIS, RETRY_ATTEMPTS } from '../config/constants.js';
 import { SYNTHESIZER } from '../config/judges.js';
 import type { TestCase } from '../plugins/base.js';
@@ -50,6 +50,7 @@ export async function runSynthesis(
   scenario: TestCase,
   judgeResults: JudgeResult[],
   model = SYNTHESIZER.model,
+  route: ClientRoute = SYNTHESIZER.route,
 ): Promise<SynthesisResult> {
   const parsedJudges = judgeResults.filter(result => result.parsed);
   if (parsedJudges.length < 2) {
@@ -74,7 +75,7 @@ export async function runSynthesis(
   let inputTokens = 0;
   let outputTokens = 0;
   for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
-    const response = await getModelClient(SYNTHESIZER.route).createMessage({
+    const response = await getModelClient(route).createMessage({
       model,
       max_tokens: MAX_TOKENS_SYNTHESIS,
       system: 'Synthesize independent evaluations into final scores. Return only valid JSON.',

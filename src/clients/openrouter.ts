@@ -237,7 +237,10 @@ function isRetryable(error: unknown): boolean {
     /abort|timeout|ECONNRESET|fetch failed/i.test(error.message);
 }
 
-export const openRouterClient: ModelClient = { createMessage };
+export const openRouterClient: ModelClient = {
+  createMessage,
+  isConfigured: () => Boolean(process.env.OPENROUTER_API_KEY ?? process.env.OPENROUTER_DICE_ORACLE_API_KEY),
+};
 
 interface OpenRouterModel {
   id: string;

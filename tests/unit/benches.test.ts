@@ -43,6 +43,28 @@ describe('custom benches', () => {
     }
   });
 
+  it.each([
+    ['business-strategy', ['pricing-pivot', 'hire-or-outsource', 'wholesale-offer', 'inventory-cash-crunch'], 1],
+    ['customer-support', ['billing-dispute', 'refund-abuse', 'shipping-delay-gift', 'cancellation-save'], 3],
+    ['creative-writing', ['opening-chapter', 'launch-email', 'apology-post', 'product-page-rewrite'], 3],
+  ] as const)('keeps the %s study scenarios complete and consistent', (name, expectedIds, rounds) => {
+    const source = fs.readFileSync(path.join(getPackageBenchesDir(), `${name}.json`), 'utf8');
+    const bench = BenchDefinitionSchema.parse(JSON.parse(source));
+    const ids = bench.scenarios.map(scenario => scenario.id);
+
+    expect(bench.name).toBe(name);
+    expect(bench.scenarios).toHaveLength(4);
+    expect(ids).toEqual(expect.arrayContaining([...expectedIds]));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(source).not.toContain('\u2014');
+    expect(JSON.stringify(bench)).not.toContain('\u2014');
+    for (const scenario of bench.scenarios) {
+      expect(scenario.rounds).toBe(rounds);
+      expect(scenario.criteria).toHaveLength(3);
+      if (rounds > 1) expect(scenario.participantPersona?.trim()).toBeTruthy();
+    }
+  });
+
   it('loads shipped benches and a cwd overlay when launched elsewhere', () => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'mcp-tournament-cwd-'));
     tempDirs.push(directory);

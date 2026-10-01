@@ -22,6 +22,69 @@
           "description": "The answer identifies margin, customer behavior, and experiment-design risks and explains how to control them."
         }
       ]
+    },
+    {
+      "id": "hire-or-outsource",
+      "name": "A Marketer on Payroll or an Agency",
+      "description": "Compare two marketing hires against current contribution, cash reserves, and management capacity.",
+      "prompt": "Our six-person home-storage brand sells through a hosted ecommerce storefront. Monthly revenue is $120,000 from 1,500 orders at an $80 average order value. Of those orders, 600 are first orders acquired through $18,000 in paid advertising, so our paid customer acquisition cost is $30; the other 900 are repeat orders. Gross margin after product cost is 60%. Shipping, fulfillment, and payment fees cost another $8 per order. Existing fixed operating costs, including all six salaries, are $36,000 per month. We have $32,000 in cash and no debt. I handle marketing as the founder, but it takes 15 hours a week and I can spare only four. We can hire an in-house marketer at $58,000 a year plus 20% for employer taxes and benefits, with a one-time $2,000 recruiting cost, or retain an agency for $4,500 a month plus $1,500 onboarding. Advertising spend stays at $18,000 under either option. The employee could start in six weeks and own email, ads, and creative; the agency can start next week on a three-month minimum contract but only handles ads, leaving email and creative with me. Neither promises sales growth. Which option, if either, should we choose? Show current monthly operating surplus, each option's recurring and upfront costs, and the extra monthly orders needed to cover the recurring cost at current unit economics with advertising spend held flat. Propose a 90-day decision plan that accounts for cash, ramp time, and the work still on my plate. State assumptions rather than treating repeat purchases or growth as guaranteed.",
+      "rounds": 1,
+      "criteria": [
+        {
+          "name": "financial_reasoning",
+          "description": "Correctly separates product margin, per-order costs, advertising, and overhead; calculates current surplus, loaded hiring cost, agency cost, and incremental order requirements without double-counting CAC."
+        },
+        {
+          "name": "practicality",
+          "description": "Makes a defensible choice, including deferral if justified, with a usable 90-day plan tied to the four-hour management limit, scope gaps, startup timing, and cash reserve."
+        },
+        {
+          "name": "risk_awareness",
+          "description": "Identifies cash exposure, hiring ramp, agency commitment, and uncertain acquisition or retention gains; gives measurable review points without assuming either option creates growth."
+        }
+      ]
+    },
+    {
+      "id": "wholesale-offer",
+      "name": "The First Large Wholesale Order",
+      "description": "Assess a wholesale offer using channel margins, inventory availability, and payment timing.",
+      "prompt": "I sell a tabletop lamp for $60 direct to consumers. Each lamp costs $18 landed, and each direct sale incurs another $9 in shipping, fulfillment, and payment fees. We currently sell 400 lamps a month at full price with no separate advertising expense. A boutique retailer wants 2,000 lamps at 45% off retail, all shipped in two weeks. It offers 50% of the order value on signing and 50% payable 45 days after delivery, with no returns except verified defects. We would pay $2,000 total freight and handling for this wholesale shipment; the $9 direct-sale cost does not apply to wholesale. We have 3,000 paid-for lamps in stock and $22,000 in cash, of which $16,000 must remain reserved for other operating commitments. Our supplier can replenish 2,000 lamps at the same $18 landed cost in eight weeks from order, taking a 50% deposit now and the balance on arrival. Assume direct demand stays at 400 a month, use four weeks per month for stock planning, and ignore taxes. Should we accept, negotiate, or decline? Calculate wholesale revenue and contribution after freight, compare it with direct-sale contribution, and map inventory and the known cash commitments through replenishment. Identify what the retailer's deposit can fund and what still depends on future collections. Recommend any payment or order-size changes and explain the risks of credit, channel conflict, and tying up stock without assuming all 2,000 units would otherwise sell immediately at retail.",
+      "rounds": 1,
+      "criteria": [
+        {
+          "name": "unit_economics",
+          "description": "Uses the 45% discount, $18 unit cost, channel-specific fulfillment costs, and $2,000 freight correctly; distinguishes wholesale contribution from cash receipts and a theoretical full-retail comparison."
+        },
+        {
+          "name": "cash_and_stock_plan",
+          "description": "Tracks the 2,000-unit shipment, ongoing direct demand, eight-week replenishment, supplier deposits, retailer payment delay, and protected $16,000 reserve in a feasible recommendation."
+        },
+        {
+          "name": "risk_awareness",
+          "description": "Addresses delayed or missing payment, replenishment slippage, defects, and channel conflict with concrete terms or safeguards; does not assume immediate retail sell-through."
+        }
+      ]
+    },
+    {
+      "id": "inventory-cash-crunch",
+      "name": "Stock on the Shelf, Payroll on Friday",
+      "description": "Choose a timely cash bridge without confusing inventory value, sales revenue, and spendable cash.",
+      "prompt": "My seasonal kitchenware shop has $40,000 of slow-moving stock at landed cost: 2,000 units costing $20 each, normally priced at $50. That inventory is already paid for. We have $6,000 cash today, $5,000 of unavoidable bills due in one week, and $18,000 payroll due in three weeks. Other products will generate $4,000 net cash before payroll after all their own costs; assume no other cash flows during these three weeks. Option one is a seven-day flash sale at $32 per unit, with $4 per unit in fulfillment and payment costs plus $1,000 upfront promotion spend. The sales team estimates 350 to 600 units, with all proceeds settled before payroll, but there are no advance orders. Option two is a liquidator buying all 2,000 units for 30 cents per dollar of their $40,000 cost value, paying in five days; we pay $1,000 freight at pickup. Option three is a $15,000 loan funded in three days at 14% APR, simple interest on a 365-day basis for 90 days, with a $300 fee deducted from the cash advanced and all principal plus interest due on day 90. The lender allows a flash sale alongside the loan. We have no forecast beyond the next three weeks yet. Recommend a primary plan and a fallback with action dates. Calculate the payroll cash gap, net cash from each option, the flash-sale volume needed to close the gap, and the loan's total repayment and financing cost. Distinguish losses against inventory cost from new cash available, and explain what must be checked before accepting a debt repayment obligation.",
+      "rounds": 1,
+      "criteria": [
+        {
+          "name": "cash_math",
+          "description": "Correctly derives the payroll gap, sale cash after per-unit and upfront costs, minimum sale volume, liquidator proceeds after freight, and loan proceeds, interest, repayment, and total financing cost."
+        },
+        {
+          "name": "execution_plan",
+          "description": "Sets feasible actions and fallback triggers before bills and payroll fall due, using the stated settlement times and sales range rather than treating forecast sales as cash already received."
+        },
+        {
+          "name": "risk_awareness",
+          "description": "Separates sunk stock cost from liquidity and addresses sale uncertainty, clearance damage, loss of remaining inventory, and the unknown ability to repay on day 90."
+        }
+      ]
     }
   ]
 }

@@ -3,7 +3,7 @@ import { MAX_TOKENS_JUDGE, RETRY_ATTEMPTS } from '../config/constants.js';
 import type { JudgeConfig } from '../config/judges.js';
 import type { TestCase, TournamentPlugin, Turn } from '../plugins/base.js';
 import { JudgeScoreSchema, type JudgeScore } from '../schemas/judge-score.js';
-import { buildJudgeUserPrompt, JUDGE_SYSTEM_PROMPTS } from '../prompts/judge-prompts.js';
+import { buildJudgeSystemPrompt, buildJudgeUserPrompt } from '../prompts/judge-prompts.js';
 
 export interface JudgeResult {
   judgeName: string;
@@ -33,8 +33,8 @@ export async function runJudge(
   scenario: TestCase,
   turns: Turn[],
 ): Promise<JudgeResult> {
-  const system = JUDGE_SYSTEM_PROMPTS[judge.role] ?? JUDGE_SYSTEM_PROMPTS.holistic;
-  const prompt = buildJudgeUserPrompt(plugin, judge.role, scenario, turns);
+  const system = buildJudgeSystemPrompt(judge);
+  const prompt = buildJudgeUserPrompt(plugin, judge.pluginRole ?? judge.role, scenario, turns);
   const startedAt = Date.now();
   let raw = '';
   let inputTokens = 0;

@@ -60,6 +60,19 @@ afterEach(async () => {
 });
 
 describe('tournament_options', () => {
+  it('reports a registered anthropic client as ready without ANTHROPIC_API_KEY', async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    const original = getModelClient('anthropic');
+    registerModelClient('anthropic', { ...spyClient, isConfigured: () => true });
+    try {
+      const { client, close } = await connect(okFetch);
+      const result = await client.callTool({ name: 'tournament_options', arguments: {} }).finally(close);
+      const providers = (result.structuredContent as { providers: Array<{ id: string; status: string }> }).providers;
+      expect(providers.find(provider => provider.id === 'anthropic')?.status).toBe('ready');
+    } finally {
+      registerModelClient('anthropic', original);
+    }
+  });
   it('T9: falls back to curated models when the catalog is down', async () => {
     const { client, close } = await connect(downFetch);
     const result = await client.callTool({ name: 'tournament_options', arguments: {} });

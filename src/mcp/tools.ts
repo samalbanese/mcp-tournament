@@ -14,7 +14,7 @@ import {
 } from './format.js';
 import { assertRoutesReady, evaluateTournament, quickTest, readLeaderboard, type EvaluateProgress } from '../pipeline.js';
 import { logWarn } from '../utils/logger.js';
-import { JUDGES, PARTICIPANT_AGENT_MODEL, resolveRoleModel, SYNTHESIZER } from '../config/judges.js';
+import { JUDGES, PARTICIPANT_AGENT_MODEL, resolveRoleModel } from '../config/judges.js';
 import { buildShortlist, closestModelIds, getCatalog } from '../catalog.js';
 import { routeHasCredentials, routeSetupHint } from '../clients/index.js';
 import { parseModelRef } from '../config/model-ref.js';
@@ -378,7 +378,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         })),
         defaults: {
           judgePanel: DEFAULT_SEAT_ORDER.slice(0, 3).map(persona => ({ persona, model: resolveRoleModel(PERSONAS[persona].defaultModelRole) })),
-          synthesizer: SYNTHESIZER.model, participant: PARTICIPANT_AGENT_MODEL,
+          synthesizer: resolveRoleModel('synthesizer'), participant: PARTICIPANT_AGENT_MODEL,
           turns: "each scenario's own default (shown per scenario)",
         },
         limits: {

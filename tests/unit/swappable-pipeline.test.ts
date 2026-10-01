@@ -141,6 +141,23 @@ describe('swappable runs through the pipeline', () => {
     expect(openLog.some(call => call.model === 'claude-haiku-4-5')).toBe(false);
   });
 
+  it('a registered anthropic client runs without ANTHROPIC_API_KEY and drives a live participant', async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    const openLog: CreateMessageParams[] = [];
+    const anthropicLog: CreateMessageParams[] = [];
+    registerModelClient('openrouter', fakeClient(['quality'], openLog));
+    registerModelClient('anthropic', { ...fakeClient(['quality'], anthropicLog), isConfigured: () => true });
+    const run = await evaluateTournament({
+      models: ['anthropic:claude-haiku-4-5'], plugin: 'swap-test-bench', turns: 2, judges: 2,
+      participantModel: 'anthropic:claude-haiku-4-5', outputRoot,
+    });
+    expect(run.failures).toEqual([]);
+    expect(run.judgeFailures).toEqual([]);
+    expect(anthropicLog.some(call => (call.system ?? '').includes('Stay in character'))).toBe(true);
+    expect(anthropicLog.every(call => call.model === 'claude-haiku-4-5')).toBe(true);
+    expect(openLog.some(call => call.model === 'claude-haiku-4-5')).toBe(false);
+  });
+
   it('a one-judge panel scores without the synthesizer instead of failing', async () => {
     const log: CreateMessageParams[] = [];
     registerModelClient('openrouter', fakeClient(['quality'], log));

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { fetchCatalogModels as getModels } from './catalog.js';
-import { JUDGES, SYNTHESIZER } from './config/judges.js';
+import { JUDGES, resolveRoleModel } from './config/judges.js';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
 import {
   BenchDefinitionSchema,
@@ -289,8 +289,8 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
       if (request.method === 'GET' && pathname === '/api/defaults') {
         sendJson(response, 200, {
           candidates: DEFAULT_CANDIDATE_MODELS,
-          judges: JUDGES.map(({ role, name, model }) => ({ role, name, model })),
-          synthesizer: SYNTHESIZER.model,
+          judges: JUDGES.map(({ role, name, model, route }) => ({ role, name, model: route === 'anthropic' ? `anthropic:${model}` : model })),
+          synthesizer: resolveRoleModel('synthesizer'),
         });
         return;
       }

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { JUDGES, PARTICIPANT_AGENT_MODEL, resolveRoleModel, SYNTHESIZER, type JudgeConfig } from './config/judges.js';
+import { JUDGES, resolveRoleModel, type JudgeConfig } from './config/judges.js';
 import { ModelRefError, parseModelRef, type ParsedModelRef } from './config/model-ref.js';
 import { resolveCandidateModel, type CandidateModel } from './config/models.js';
 import { DEFAULT_SEAT_ORDER, PERSONAS, PERSONA_IDS } from './config/personas.js';
@@ -84,16 +84,23 @@ export function selectJudges(
   judgeCount: number,
   judgeModels?: Record<string, string>,
 ): JudgeConfig[] {
-  return JUDGES.slice(0, judgeCount).map(judge => judgeModels?.[judge.role]
-    ? { ...judge, model: judgeModels[judge.role] }
-    : judge);
+  return JUDGES.slice(0, judgeCount).map(judge => {
+    const override = judgeModels?.[judge.role];
+    if (!override) return judge;
+    const parsed = parseRef(override, `judgeModels.${judge.role}`);
+    return {
+      ...judge, model: parsed.model, route: parsed.route,
+      family: parsed.route === 'anthropic' ? 'anthropic' : judge.family,
+    };
+  });
 }
 
 function resolveSeat(seat: JudgeSeat, index: number): JudgeConfig {
   const preset = PERSONAS[seat.persona ?? DEFAULT_SEAT_ORDER[index] ?? 'holistic'];
-  const parsed = seat.model
-    ? parseRef(seat.model, `judgePanel seat ${index + 1}: model`)
-    : { route: 'openrouter' as const, model: resolveRoleModel(preset.defaultModelRole) };
+  const parsed = parseRef(
+    seat.model ?? resolveRoleModel(preset.defaultModelRole),
+    seat.model ? `judgePanel seat ${index + 1}: model` : `judgePanel seat ${index + 1}: default model`,
+  );
   const custom = seat.customPersona;
   return {
     role: custom ? `custom_${index + 1}` : preset.id,
@@ -161,8 +168,8 @@ export function normalizeRunPlan(input: RunPlanInput, legacy: LegacyJudgeOptions
 
   return {
     bench: data.bench, plugin, scenarios, candidates, judges,
-    synthesizer: parseRef(data.synthesizer ?? SYNTHESIZER.model, 'synthesizer'),
-    participant: parseRef(data.participant ?? PARTICIPANT_AGENT_MODEL, 'participant'),
+    synthesizer: parseRef(data.synthesizer ?? resolveRoleModel('synthesizer'), 'synthesizer'),
+    participant: parseRef(data.participant ?? resolveRoleModel('participant'), 'participant'),
     participantExplicit: data.participant !== undefined,
     turns: data.turns ?? null,
     quick: legacy.quick ?? false,

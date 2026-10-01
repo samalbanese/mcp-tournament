@@ -62,7 +62,7 @@ export function resolveCandidateModel(ref: string): CandidateModel {
   return {
     ...(curated ?? {
       id: parsed.ref,
-      name: parsed.route === 'anthropic' ? `${parsed.model} (Anthropic API)` : parsed.model.split('/').at(-1) ?? parsed.model,
+      name: parsed.route === 'anthropic' ? `${parsed.model} (Anthropic)` : parsed.model.split('/').at(-1) ?? parsed.model,
       tier: 'unknown' as const,
       notes: parsed.route === 'anthropic' ? 'Anthropic API key route' : 'User-supplied OpenRouter model',
     }),

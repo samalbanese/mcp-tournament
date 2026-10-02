@@ -321,6 +321,25 @@ to use each scenario's default, shown by `tournament_options`. Omit `scenarios` 
 run all scenarios in the bench. The participant model plays the simulated user in
 follow-up turns.
 
+### Reasoning levels
+
+Add `@level` to any model ref to set how hard that seat thinks: `none`, `minimal`,
+`low`, `medium`, `high`, `xhigh` or `max`. It works on candidates, judges, the
+synthesizer and the simulated user. List the same model twice to test whether extra
+thinking pays for itself:
+
+```json
+{ "candidates": ["google/gemini-3.1-flash-lite@low", "google/gemini-3.1-flash-lite@high"] }
+```
+
+The two levels get separate leaderboard rows, labelled `· low` and `· high`. Each
+level is checked against that model's entry in the OpenRouter catalog before
+anything is spent, so a level the model doesn't offer stops the run with the levels
+it does accept. A ref without a level uses the provider's default and sends no
+reasoning setting. Seats that think get a larger output allowance, and the cost
+estimate adds hidden reasoning tokens for each level. In the GUI, a Thinking menu
+appears only on models that offer levels.
+
 ## Provider accounts
 
 OpenRouter is the default for every role. Set `OPENROUTER_API_KEY` in the shell or

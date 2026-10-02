@@ -86,7 +86,7 @@ function Empty({ title = 'No tournament data found', detail }: { title?: string;
 }
 function Pipeline() { return <div className="pipeline" aria-label="Evaluation pipeline"><span><b>01</b> EXECUTE</span><i>→</i><span><b>02</b> JUDGE PANEL</span><i>→</i><span><b>03</b> SYNTHESIZE</span><i>→</i><span><b>04</b> AGGREGATE</span></div>; }
 function ConfidenceChip({ value }: { value: Confidence }) { return <span className={`confidence ${value}`}>{value}</span>; }
-function ScoreBar({ score, compact = false }: { score: number; compact?: boolean }) { return <div className={`score-bar ${compact ? 'compact' : ''}`}><span className={scoreClass(score)} style={{ width: `${score * 10}%` }} /><b>{score.toFixed(1)}</b></div>; }
+function ScoreBar({ score }: { score: number }) { return <div className="score-bar"><span className={scoreClass(score)} style={{ width: `${score * 10}%` }} /><b>{score.toFixed(1)}</b></div>; }
 
 function Breadcrumbs({ run, model, scenario }: { run: string; model?: LeaderboardEntry; scenario?: ScenarioScore }) {
   return <nav className="crumbs" aria-label="Breadcrumb"><a href={href({ view: 'home', runId: run })}>{run}</a>{model && <><i>/</i><a href={href({ view: 'model', runId: run, modelId: model.modelId })}>{model.modelName}</a></>}{scenario && <><i>/</i><span>{scenario.scenarioName}</span></>}</nav>;

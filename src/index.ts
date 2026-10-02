@@ -5,9 +5,10 @@ import { logError, logInfo } from './utils/logger.js';
 import { loadDiscoveredBenches } from './plugins/custom.js';
 
 export { createServer } from './mcp/server.js';
-export { runStudy, analyzeStudy, parseStudy, planBatches, reanalyzeStudy } from './study/index.js';
+export { runStudy, repairStudy, analyzeStudy, parseStudy, planBatches, reanalyzeStudy } from './study/index.js';
 export { loadDiscoveredBenches };
 export type { Study, RunStudyOptions, StudyOutcome, StudyProgress, StudyAnalysis, ScoreRow } from './study/index.js';
+export type { RepairStudyOptions, RepairGap, RepairOutcome } from './study/index.js';
 
 export async function serve(): Promise<void> {
   loadDiscoveredBenches();

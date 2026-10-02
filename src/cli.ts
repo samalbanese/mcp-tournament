@@ -4,7 +4,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
-import { parseStudy, runStudy, reanalyzeStudy } from './study/index.js';
+import { parseStudy, runStudy, repairStudy, reanalyzeStudy } from './study/index.js';
 import { defaultResultsRoot } from './pipeline.js';
 
 /**
@@ -87,6 +87,19 @@ program.command('leaderboard')
     })));
   });
 
+async function confirmStudy(summary: string, yes: boolean, question: string): Promise<boolean> {
+  process.stderr.write(`${summary}\n`);
+  if (yes) return true;
+  const prompt = createInterface({ input: process.stdin, output: process.stderr });
+  try {
+    return /^y(?:es)?$/i.test((await prompt.question(`${question} [y/N] `)).trim());
+  } catch {
+    return false;
+  } finally {
+    prompt.close();
+  }
+}
+
 program.command('study <file>')
   .description('Run or resume a model study')
   .option('--yes', 'Accept the cost estimate without prompting')
@@ -97,22 +110,32 @@ program.command('study <file>')
     const study = parseStudy(JSON.parse(fs.readFileSync(studyFile, 'utf8')));
     const result = await runStudy(study, {
       resultsRoot: options.out, studyFile,
-      confirm: async summary => {
-        process.stderr.write(`${summary}\n`);
-        if (options.yes) return true;
-        const prompt = createInterface({ input: process.stdin, output: process.stderr });
-        try {
-          return /^y(?:es)?$/i.test((await prompt.question('Run this study? [y/N] ')).trim());
-        } catch {
-          return false;
-        } finally {
-          prompt.close();
-        }
-      },
+      confirm: summary => confirmStudy(summary, options.yes, 'Run this study?'),
       onProgress: progress => process.stderr.write(`[${progress.batch}/${progress.batches}] ${progress.message}\n`),
     });
     if (result.cancelled) process.stderr.write('Study cancelled.\n');
     else print(result.studyDir);
+  });
+
+program.command('study-repair <file>')
+  .description('Fill gaps in completed study batches in place')
+  .option('--yes', 'Accept the repair summary without prompting')
+  .option('--out <directory>', 'Root directory for result runs')
+  .action(async (file: string, options) => {
+    loadDiscoveredBenches();
+    const study = parseStudy(JSON.parse(fs.readFileSync(path.resolve(file), 'utf8')));
+    const result = await repairStudy(study, {
+      resultsRoot: options.out,
+      confirm: summary => confirmStudy(summary, options.yes, 'Repair this study?'),
+      onProgress: message => process.stderr.write(`${message}\n`),
+    });
+    if (result.cancelled) process.stderr.write('Study repair cancelled.\n');
+    process.stderr.write(`${result.answersRerun} answer(s) rerun, ${result.judgeSeatsFilled} judge seat(s) filled.\n`);
+    for (const gap of result.remaining) {
+      process.stderr.write(`${gap.runId} ${gap.model} ${gap.scenario}: ${gap.error}\n`);
+    }
+    print(result.studyDir);
+    if (result.remaining.length) process.exitCode = 1;
   });
 
 program.command('study-analyze <id>')

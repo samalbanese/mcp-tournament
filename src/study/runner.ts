@@ -29,7 +29,7 @@ export interface StudyOutcome {
   cancelled: boolean;
 }
 
-const ProgressSchema = z.object({
+export const ProgressSchema = z.object({
   done: z.array(z.string().regex(/^\d+-\d+$/)),
   studyFile: z.string().optional(),
   study: StudySchema.optional(),
@@ -49,7 +49,7 @@ function readJson(file: string): unknown {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
-async function defaultFetchUsage(): Promise<number | null> {
+export async function defaultFetchUsage(): Promise<number | null> {
   const key = process.env.OPENROUTER_API_KEY ?? process.env.OPENROUTER_DICE_ORACLE_API_KEY;
   if (!key) return null;
   try {
@@ -65,7 +65,7 @@ async function defaultFetchUsage(): Promise<number | null> {
   }
 }
 
-async function readUsage(fetchUsage: () => Promise<number | null>): Promise<number | null> {
+export async function readUsage(fetchUsage: () => Promise<number | null>): Promise<number | null> {
   try {
     const usage = await fetchUsage();
     return typeof usage === 'number' && Number.isFinite(usage) ? usage : null;

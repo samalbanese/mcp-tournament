@@ -141,6 +141,27 @@ catalog requests, or usage requests. It preserves existing metadata, including
 edited headlines. If `study.json` does not yet exist, it uses progress and the
 saved study snapshot or original study file, collecting only completed batches.
 
+## Repairing gaps
+
+```sh
+mcp-tournament study-repair studies/business-study.json --out ./results
+```
+
+Repair fills gaps listed in `failures.json` for completed batches in place. It
+reruns failed answers with judging, or fills only the missing judge seats on
+saved answers. Successful work is never redone. Unfinished batches still belong
+to the normal `study` resume command.
+
+The command shows the answers and judge seats to repair before asking for y/N
+confirmation. Use `--yes` to accept that summary without prompting. Declining
+makes no model calls or file changes. Repair refreshes affected summaries,
+leaderboards, `study.json`, and `scores.csv`, preserving edited metadata.
+
+OpenRouter usage is read before and after repair and added to the saved spend.
+An unavailable reading makes the total unknown (`null`). Progress and remaining
+gaps go to stderr; the study folder goes to stdout. The exit code is 1 if any
+gaps remain, so scripts can detect incomplete repairs.
+
 ## Reading the statistics
 
 - An answer is one candidate on one scenario in one run. Each judge's answer
@@ -172,10 +193,10 @@ generations of the same answer.
 
 ## Library use
 
-The package exports `runStudy`, `reanalyzeStudy`, `parseStudy`, `planBatches`, and
-`analyzeStudy`, plus their main input and result types. Register benches first
-with `loadDiscoveredBenches()` (the CLI does this), then call
-`runStudy(parseStudy(input), { confirm: async summary => ... })`; optional settings
-are `resultsRoot`, `onProgress`, `catalog`, `fetchUsage`, and `studyFile`.
+The package exports `runStudy`, `repairStudy`, `reanalyzeStudy`, `parseStudy`,
+`planBatches`, and `analyzeStudy`, plus their main input and result types.
+Register benches first with `loadDiscoveredBenches()` (the CLI does this), then
+call `runStudy(parseStudy(input), { confirm: async summary => ... })`; optional
+settings are `resultsRoot`, `onProgress`, `catalog`, `fetchUsage`, and `studyFile`.
 `fetchUsage` returns a cumulative dollar reading or `null`. A declined confirmation
 returns an outcome with `cancelled: true` and creates no output folders.

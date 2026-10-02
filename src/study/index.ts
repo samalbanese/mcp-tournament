@@ -4,3 +4,4 @@ export { analyzeStudy, type ScoreRow, type StudyAnalysis, type Interval } from '
 export { collectScores } from './collect.js';
 export { writeStudyOutputs, type StudyMeta } from './export.js';
 export { runStudy, reanalyzeStudy, type RunStudyOptions, type StudyProgress, type StudyOutcome } from './runner.js';
+export { repairStudy, type RepairStudyOptions, type RepairGap, type RepairOutcome } from './repair.js';

@@ -192,6 +192,58 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(fs.existsSync(failuresFile())).toBe(false);
   });
 
+  it('re-judges a saved answer whose judging failed instead of generating a new one', async () => {
+    await finishedWithGap();
+    write(failuresFile(), [{ model: 'openai/test', scenario: 'one', error: 'Synthesis failed: timeout' }]);
+    const turns = fs.readFileSync(artifact('candidates', 'turns.json'), 'utf8');
+    const result = await repairStudy(study(), options());
+    expect(result).toMatchObject({ answersRerun: 0, judgeSeatsFilled: 1, remaining: [] });
+    expect(calls.map(({ model, phase }) => `${phase}:${model}`)).toEqual(['judge:claude-test', 'synthesis:z-ai/synthesis']);
+    expect(fs.readFileSync(artifact('candidates', 'turns.json'), 'utf8')).toBe(turns);
+  });
+
+  it('keeps a seat filled by an interrupted repair and only refreshes the synthesis', async () => {
+    await finishedWithGap();
+    write(artifact('judges', 'custom_1.json'), read(artifact('judges', 'custom_2.json')));
+    const result = await repairStudy(study(), options());
+    expect(result).toMatchObject({ answersRerun: 0, judgeSeatsFilled: 0, remaining: [] });
+    expect(calls.map(call => call.phase)).toEqual(['synthesis']);
+    expect(fs.existsSync(failuresFile())).toBe(false);
+  });
+
+  it('clears an earlier attempt\'s scores before regenerating an answer', async () => {
+    await finishedWithGap();
+    const model = 'openai/test';
+    write(artifact('candidates', 'error.json', model), { error: 'Cut off' });
+    write(failuresFile(), [{ model, scenario: 'one', error: 'Cut off' }]);
+    expect(fs.existsSync(artifact('judges', 'custom_3.json', model))).toBe(true);
+    failure = call => call.phase === 'judge' && call.route === 'openrouter' && call.model === 'google/test' ? 'Judge down' : undefined;
+    const result = await repairStudy(study(), options());
+    expect(result.answersRerun).toBe(1);
+    expect(result.remaining).toEqual([expect.objectContaining({ model, scenario: 'one', error: 'judge google judge: Judge down' })]);
+    expect(fs.existsSync(artifact('judges', 'custom_3.json', model))).toBe(false);
+    expect(fs.existsSync(artifact('candidates', 'error.json', model))).toBe(false);
+  });
+
+  it('finishes an interrupted repair and recovers its spend', async () => {
+    await finishedWithGap();
+    const progressFile = path.join(studyDir(), 'progress.json');
+    const leaderboard = path.join(runDirs()[0], 'leaderboard.json');
+    write(progressFile, { ...read(progressFile), spentUsd: 2, lastUsage: 10, repairing: true });
+    fs.rmSync(failuresFile());
+    fs.rmSync(leaderboard);
+    const opts = options(); opts.fetchUsage.mockResolvedValue(13);
+    const result = await repairStudy(study(), opts);
+    expect(opts.confirm.mock.calls[0][0]).toContain('A previous repair stopped early');
+    expect(calls).toHaveLength(0);
+    expect(result.analysis).not.toBeNull();
+    expect(fs.existsSync(leaderboard)).toBe(true);
+    const progress = read(progressFile);
+    expect(progress).toMatchObject({ spentUsd: 5, lastUsage: 13 });
+    expect(progress.repairing).toBeUndefined();
+    expect(read(path.join(studyDir(), 'study.json')).meta.actualUsd).toBe(5);
+  });
+
   it('reruns a skipped pair with all judges and removes the old execution error', async () => {
     failure = call => call.phase === 'answer' && call.route === 'anthropic' && call.text.includes('Prompt one')
       ? 'Subscription exhausted' : undefined;

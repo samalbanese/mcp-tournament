@@ -37,6 +37,8 @@ export const ProgressSchema = z.object({
   // OpenRouter spend summed across invocations, recovering gaps on resume; null once any usage reading failed.
   spentUsd: z.number().nullable().optional(),
   lastUsage: z.number().nullable().optional(),
+  /** Set while a repair is running, so an interrupted repair is finished and its spend recovered. */
+  repairing: z.boolean().optional(),
 });
 const MetaSchema = z.object({
   runIds: z.array(z.string().regex(/^run-[a-zA-Z0-9-]+$/)),

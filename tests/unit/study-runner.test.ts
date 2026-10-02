@@ -103,7 +103,8 @@ afterEach(() => {
   fs.rmSync(root, { recursive: true, force: true });
 });
 
-describe('study runner', () => {
+// Each test runs a whole fake study on disk; on a busy machine that can pass 5 s.
+describe('study runner', { timeout: 30_000 }, () => {
   it('runs the real pipeline, collects judge seats, and records the usage delta', async () => {
     const opts = options();
     opts.fetchUsage.mockResolvedValueOnce(1.25).mockResolvedValueOnce(4.75);

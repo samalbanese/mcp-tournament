@@ -149,16 +149,23 @@ mcp-tournament study-repair studies/business-study.json --out ./results
 
 Repair fills gaps listed in `failures.json` for completed batches in place. It
 reruns failed answers with judging, or fills only the missing judge seats on
-saved answers. Successful work is never redone. Unfinished batches still belong
-to the normal `study` resume command.
+saved answers. Successful work is never redone: an answer that was saved but
+failed during judging is judged again rather than regenerated, and a seat that
+already has a valid score is kept. When an answer is regenerated, scores from
+the earlier attempt are cleared first so one panel never mixes two answers.
+Unfinished batches still belong to the normal `study` resume command.
+
+If a repair is interrupted, run it again. It finishes the remaining gaps,
+counts the interrupted run's spend, and refreshes the report even when no gaps
+are left.
 
 The command shows the answers and judge seats to repair before asking for y/N
 confirmation. Use `--yes` to accept that summary without prompting. Declining
 makes no model calls or file changes. Repair refreshes affected summaries,
 leaderboards, `study.json`, and `scores.csv`, preserving edited metadata.
 
-OpenRouter usage is read before and after repair and added to the saved spend.
-An unavailable reading makes the total unknown (`null`). Progress and remaining
+OpenRouter usage is read before repair and after each batch, and the difference
+is added to the saved spend as it goes. An unavailable reading makes the total unknown (`null`). Progress and remaining
 gaps go to stderr; the study folder goes to stdout. The exit code is 1 if any
 gaps remain, so scripts can detect incomplete repairs.
 

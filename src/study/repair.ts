@@ -48,23 +48,35 @@ function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
+function answerDirs(runDir: string, plan: ResolvedRunPlan, candidate: CandidateModel, scenario: TestCase) {
+  const scenarioCase = effectiveScenario(scenario, plan.turns);
+  return {
+    scenarioCase,
+    candidateDir: path.join(runDir, 'candidates', modelSlug(candidate.id), scenarioSlug(scenarioCase)),
+    judgeDir: path.join(runDir, 'judges', modelSlug(candidate.id), scenarioSlug(scenarioCase)),
+  };
+}
+
+/** A saved, valid score for this judge seat, or null when the seat is empty. */
+function savedScore(judgeDir: string, judge: JudgeConfig): JudgeResult | null {
+  const file = path.join(judgeDir, `${judge.role}.json`);
+  if (!fs.existsSync(file)) return null;
+  try {
+    const raw = fs.readFileSync(file, 'utf8');
+    const parsed = JudgeScoreSchema.safeParse(JSON.parse(raw));
+    if (!parsed.success) return null;
+    return {
+      judgeName: judge.name, judgeRole: judge.role, judgeModel: judge.model, judgeFamily: judge.family,
+      raw, parsed: parsed.data, parseSuccess: true,
+      metrics: { inputTokens: 0, outputTokens: 0, timeMs: 0 },
+    };
+  } catch {
+    return null;
+  }
+}
+
 function savedJudges(judgeDir: string, plan: ResolvedRunPlan): JudgeResult[] {
-  return plan.judges.flatMap(judge => {
-    const file = path.join(judgeDir, `${judge.role}.json`);
-    if (!fs.existsSync(file)) return [];
-    try {
-      const raw = fs.readFileSync(file, 'utf8');
-      const parsed = JudgeScoreSchema.safeParse(JSON.parse(raw));
-      if (!parsed.success) return [];
-      return [{
-        judgeName: judge.name, judgeRole: judge.role, judgeModel: judge.model, judgeFamily: judge.family,
-        raw, parsed: parsed.data, parseSuccess: true,
-        metrics: { inputTokens: 0, outputTokens: 0, timeMs: 0 },
-      }];
-    } catch {
-      return [];
-    }
-  });
+  return plan.judges.flatMap(judge => savedScore(judgeDir, judge) ?? []);
 }
 
 export async function repairStudy(input: Study, options: RepairStudyOptions): Promise<RepairOutcome> {
@@ -117,6 +129,21 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
       if (!judge) group.pair = true;
       else if (!group.judges.includes(judge)) group.judges.push(judge);
     }
+    // Trust the files over the failure list: an answer that was saved but failed in judging
+    // (or a seat filled by a repair that was then interrupted) must not be paid for twice.
+    for (const group of groups.values()) {
+      const { candidateDir, judgeDir } = answerDirs(runDir, plan, group.candidate, group.scenario);
+      if (group.pair && fs.existsSync(path.join(candidateDir, 'turns.json'))
+        && !fs.existsSync(path.join(candidateDir, 'error.json'))) {
+        group.pair = false;
+        group.judges = [...plan.judges];
+        group.synthesis = true;
+      }
+      if (group.pair) continue;
+      const open = group.judges.filter(judge => !savedScore(judgeDir, judge));
+      if (open.length < group.judges.length) group.synthesis = true;
+      group.judges = open;
+    }
     const answers = [...groups.values()];
     return [{ batch, plan, runDir, file, failures, unmatched, answers,
       pairs: answers.filter(answer => answer.pair).length,
@@ -128,8 +155,10 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     remaining: work.flatMap(item => item.unmatched), cancelled: false, analysis: null,
   };
   const pending = work.filter(item => item.answers.length);
-  if (!pending.length) return outcome;
+  const interrupted = progress.repairing === true;
+  if (!pending.length && !interrupted) return outcome;
   const summary = [
+    ...(interrupted ? ['A previous repair stopped early; this one finishes it and refreshes the report.'] : []),
     `Repair "${study.title}": ${pending.reduce((sum, item) => sum + item.pairs, 0)} answer(s) to rerun and ${pending.reduce((sum, item) => sum + item.seats, 0)} judge seat(s) to fill across ${pending.length} batch(es). Only these pieces are re-run; nothing that succeeded is touched.`,
     ...pending.map(item => `${item.batch.batchId}: ${item.pairs} answer(s), ${item.seats} judge seat(s)`),
   ].join('\n');
@@ -144,7 +173,22 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
   try {
     if (study.reasoningEffort) process.env.TOURNAMENT_REASONING_EFFORT = study.reasoningEffort;
     const fetchUsage = options.fetchUsage ?? defaultFetchUsage;
-    const before = await readUsage(fetchUsage);
+    const saveProgress = () => {
+      fs.writeFileSync(`${progressFile}.tmp`, `${JSON.stringify(progress, null, 2)}\n`);
+      fs.renameSync(`${progressFile}.tmp`, progressFile);
+    };
+    // Same rule as runStudy: spend since the last saved reading belongs to this study, so an
+    // interrupted repair's calls are still counted. An unknown reading makes the total unknown.
+    const addSpend = (usage: number | null, since: number | null | undefined) => {
+      progress.spentUsd = usage === null || since === null || progress.spentUsd === null
+        ? null : (progress.spentUsd ?? 0) + (since === undefined ? 0 : usage - since);
+      progress.lastUsage = usage;
+    };
+    let lastUsage = await readUsage(fetchUsage);
+    if (interrupted) addSpend(lastUsage, progress.lastUsage);
+    else progress.lastUsage = lastUsage;
+    progress.repairing = true;
+    saveProgress();
     for (const item of pending) {
       const { batch, plan, runDir } = item;
       const useSynthesizer = !plan.quick && plan.judges.length >= 2;
@@ -152,15 +196,15 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
       const repaired: RepairGap[][] = new Array(item.answers.length);
       const repairAnswer = async (answer: AnswerGaps): Promise<RepairGap[]> => {
         const { candidate, scenario } = answer;
-        const scenarioCase = effectiveScenario(scenario, plan.turns);
-        const candidateDir = path.join(runDir, 'candidates', modelSlug(candidate.id), scenarioSlug(scenarioCase));
-        const judgeDir = path.join(runDir, 'judges', modelSlug(candidate.id), scenarioSlug(scenarioCase));
+        const { scenarioCase, candidateDir, judgeDir } = answerDirs(runDir, plan, candidate, scenario);
         const gaps: RepairGap[] = [];
         const gap = (error: string) => gaps.push({ runId: batch.runId, model: candidate.id, scenario: scenario.id, error });
         const label = `${batch.batchId} ${candidate.id} ${scenario.id}`;
         if (answer.pair) {
           report(`Starting answer ${label}`);
           try {
+            // Scores left from an earlier attempt belong to a different answer; never mix them in.
+            fs.rmSync(judgeDir, { recursive: true, force: true });
             const execution = await runScenario(candidate, scenarioCase, plan.plugin, runDir, {
               participant: { route: plan.participant.route, model: plan.participant.model },
             });
@@ -226,14 +270,14 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
       } else fs.rmSync(item.file, { force: true });
       buildLeaderboard(runDir, plan.candidates, plan.scenarios);
       outcome.remaining.push(...repaired.flat());
+      const usage = await readUsage(fetchUsage);
+      addSpend(usage, lastUsage);
+      lastUsage = usage;
+      saveProgress();
       report(`Finished batch ${batch.batchId}: ${remaining.length} gap(s) remain`);
     }
-    const after = await readUsage(fetchUsage);
-    progress.spentUsd = before === null || after === null || progress.spentUsd === null
-      ? null : (progress.spentUsd ?? 0) + after - before;
-    progress.lastUsage = after;
-    fs.writeFileSync(`${progressFile}.tmp`, `${JSON.stringify(progress, null, 2)}\n`);
-    fs.renameSync(`${progressFile}.tmp`, progressFile);
+    // An interrupted repair may have stopped between clearing a batch's gaps and rebuilding its leaderboard.
+    if (interrupted) for (const item of work) buildLeaderboard(item.runDir, item.plan.candidates, item.plan.scenarios);
     const outputFile = path.join(studyDir, 'study.json');
     if (fs.existsSync(outputFile)) {
       const output = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
@@ -241,6 +285,8 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
       fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
     }
     outcome.analysis = await reanalyzeStudy(study.id, root);
+    delete progress.repairing;
+    saveProgress();
     return outcome;
   } finally {
     if (previousEffort === undefined) delete process.env.TOURNAMENT_REASONING_EFFORT;

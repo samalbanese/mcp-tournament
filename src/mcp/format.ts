@@ -71,7 +71,7 @@ export function toLeaderboardRows(entries: ScoredEntry[]): LeaderboardRow[] {
 }
 
 /** A judge's model with its reasoning level, when one was picked. */
-function judgeModelLabel(judge: { model: string; reasoning?: string }): string {
+export function judgeModelLabel(judge: { model: string; reasoning?: string }): string {
   return judge.reasoning ? `${judge.model} · ${judge.reasoning}` : judge.model;
 }
 

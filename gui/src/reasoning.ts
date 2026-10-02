@@ -18,6 +18,25 @@ export function swapModel(oldRef: string, newId: string, models: ApiModel[]): st
   return keepLevelIfSupported(joinLevel(newId, splitLevel(oldRef).level), models.find(model => model.id === newId));
 }
 
+// Mirrors anthropicSupportsLevels in src/config/reasoning.ts.
+const ANTHROPIC_LEVELS = ['low', 'medium', 'high', 'xhigh', 'max'];
+const ANTHROPIC_FAMILIES = /^claude-(opus|sonnet|fable|mythos)-5(\b|-|\.)|^claude-(opus|sonnet)-4-([6-9])\b/;
+
+/**
+ * The catalog entry that drives a seat's level picker. Anthropic-routed refs are not in the
+ * OpenRouter catalog, so they get the Anthropic levels; any other unknown ref with a level
+ * keeps that level visible so it can be cleared.
+ */
+export function pickerModel(base: string, level: string | undefined, models: ApiModel[]): ApiModel | undefined {
+  const found = models.find(model => model.id === base);
+  if (found) return found;
+  const unknown = { id: base, name: base, contextLength: 0, promptPrice: 0, completionPrice: 0 };
+  if (base.startsWith('anthropic:') && ANTHROPIC_FAMILIES.test(base.slice('anthropic:'.length))) {
+    return { ...unknown, reasoningLevels: ANTHROPIC_LEVELS };
+  }
+  return level ? { ...unknown, reasoningLevels: [level] } : undefined;
+}
+
 export function levelOptions(model?: ApiModel): Array<{ value: string; label: string }> {
   if (!model?.reasoningLevels?.length) return [];
   return [

@@ -9,7 +9,7 @@ import Study from './Study';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Turn } from './types';
-import { joinLevel, levelOptions, splitLevel, swapModel } from './reasoning.js';
+import { joinLevel, levelOptions, pickerModel, splitLevel, swapModel } from './reasoning.js';
 
 type LoadState<T> = { data?: T; error?: string; loading: boolean };
 function useLoad<T>(loader: (() => Promise<T>) | null, deps: unknown[]): LoadState<T> {
@@ -178,11 +178,11 @@ function ThinkingSelect({ id, model, value, onChange, disabledLevels = [] }: { i
 
 function ModelRouteSelect({ id, models, value, onChange }: { id: string; models: ApiModel[]; value: string; onChange: (model: string) => void }) {
   const { base, level } = splitLevel(value);
-  const model = models.find(model => model.id === base);
+  const inCatalog = models.some(model => model.id === base);
   return <div className="model-route-select"><select id={id} value={base} onChange={event => onChange(swapModel(value, event.target.value, models))}>
-    {!model && <option value={base}>{base}</option>}
+    {!inCatalog && <option value={base}>{base}</option>}
     {models.map(model => <option value={model.id} key={model.id}>{model.name} · {model.id}</option>)}
-  </select><ThinkingSelect id={`${id}-thinking`} model={model} value={level} onChange={next => onChange(joinLevel(base, next))}/></div>;
+  </select><ThinkingSelect id={`${id}-thinking`} model={pickerModel(base, level, models)} value={level} onChange={next => onChange(joinLevel(base, next))}/></div>;
 }
 
 function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: string) => void }) {
@@ -335,7 +335,7 @@ function ModelPicker({ models, selected, search, onSearch, onToggle, onChange, m
   return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = bases.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={checked ? bases.filter(base => base !== model.id).length < minimum : selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div>
     <div className="selected-models">{selected.map((ref, index) => {
       const { base, level } = splitLevel(ref);
-      const model = models.find(model => model.id === base);
+      const model = pickerModel(base, level, models);
       const usedLevels = selected.filter((_, other) => other !== index).filter(ref => splitLevel(ref).base === base).map(ref => splitLevel(ref).level ?? '');
       const unused = model?.reasoningLevels?.find(level => !selected.includes(joinLevel(base, level)));
       return <div className="selected-model" key={ref}>

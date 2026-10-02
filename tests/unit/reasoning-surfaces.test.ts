@@ -120,4 +120,33 @@ describe('MCP reports', () => {
     });
     expect(text).toContain('Accuracy (openai/gpt-6.1-sol · low), Skeptic (openai/gpt-6.1-sol · high), Holistic (qwen/qwen3.5-flash-02-23)');
   });
+
+  it('show judge levels in the full run report resource', async () => {
+    const { buildReport } = await import('../../src/mcp/report.js');
+    const text = buildReport({
+      runId: 'run-test', plugin: 'dnd', createdAt: '2026-10-02T06:00:00.000Z', candidates: [], scenarios: [],
+      leaderboard: null, failures: [],
+      judges: [
+        { role: 'rules', name: 'Accuracy', model: 'openai/gpt-6.1-sol', reasoning: 'low' },
+        { role: 'holistic', name: 'Holistic', model: 'qwen/qwen3.5-flash-02-23' },
+      ],
+    });
+    expect(text).toContain('| rules | Accuracy | openai/gpt-6.1-sol · low |');
+    expect(text).toContain('| holistic | Holistic | qwen/qwen3.5-flash-02-23 |');
+  });
+
+  it('show judge and synthesizer levels in the GUI download', async () => {
+    const { buildReport } = await import('../../gui/src/analysis.js');
+    const text = buildReport({
+      runId: 'run-test', plugin: 'dnd', createdAt: '2026-10-02T06:00:00.000Z', candidates: [], scenarios: [],
+      judges: [
+        { role: 'rules', name: 'Accuracy', model: 'openai/gpt-6.1-sol', reasoning: 'high' },
+        { role: 'holistic', name: 'Holistic', model: 'qwen/qwen3.5-flash-02-23' },
+      ],
+      synthesizer: { model: 'z-ai/glm-5.3', reasoning: 'low' },
+    }, []);
+    expect(text).toContain('- Accuracy: openai/gpt-6.1-sol · high');
+    expect(text).toContain('- Holistic: qwen/qwen3.5-flash-02-23\n');
+    expect(text).toContain('- Synthesizer: z-ai/glm-5.3 · low');
+  });
 });

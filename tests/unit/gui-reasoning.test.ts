@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ApiModel } from '../../gui/src/api.js';
-import { joinLevel, keepLevelIfSupported, levelOptions, splitLevel, swapModel } from '../../gui/src/reasoning.js';
+import { joinLevel, keepLevelIfSupported, levelOptions, pickerModel, splitLevel, swapModel } from '../../gui/src/reasoning.js';
 
 const model = (id: string, extra: Partial<ApiModel> = {}): ApiModel => ({
   id, name: id, contextLength: 0, promptPrice: 0, completionPrice: 0, ...extra,
@@ -43,5 +43,17 @@ describe('GUI reasoning controls', () => {
     expect(swapModel('a/b@high', 'c/d', [thinking, other])).toBe('c/d@high');
     expect(swapModel('a/b@high', 'unknown/model', [thinking])).toBe('unknown/model');
     expect(swapModel('a/b', 'c/d', [other])).toBe('c/d');
+  });
+
+  it('gives refs outside the OpenRouter catalog a picker that shows their level', () => {
+    expect(pickerModel('a/b', 'low', [thinking])).toBe(thinking);
+    expect(levelOptions(pickerModel('anthropic:claude-sonnet-5-5', 'high', [thinking])).map(option => option.value))
+      .toEqual(['', 'low', 'medium', 'high', 'xhigh', 'max']);
+    expect(levelOptions(pickerModel('anthropic:claude-opus-5-5', undefined, []))).toHaveLength(6);
+    // Haiku 4.5 takes no level: nothing to pick unless one was set, and then it can be cleared.
+    expect(pickerModel('anthropic:claude-haiku-4-5', undefined, [])).toBeUndefined();
+    expect(levelOptions(pickerModel('anthropic:claude-haiku-4-5', 'low', [])).map(option => option.value)).toEqual(['', 'low']);
+    expect(pickerModel('retired/model', undefined, [thinking])).toBeUndefined();
+    expect(levelOptions(pickerModel('retired/model', 'high', [thinking])).map(option => option.value)).toEqual(['', 'high']);
   });
 });

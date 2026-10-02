@@ -62,7 +62,6 @@ beforeEach(() => {
   outputRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'reasoning-delivery-'));
   vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('Unexpected network request'); }));
   vi.stubEnv('OPENROUTER_API_KEY', 'test');
-  vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'max');
   createCompletion.mockReset().mockResolvedValue({ model: 'a/b',
     choices: [{ message: { content: 'ok' }, finish_reason: 'stop' }], usage: {} });
 });
@@ -88,7 +87,7 @@ describe('provider reasoning delivery', () => {
     expect(create.mock.calls[1][0]).not.toHaveProperty('output_config');
   });
 
-  it('sends OpenRouter effort per call with a bare model and ignores the old env setting', async () => {
+  it('sends OpenRouter effort per call with a bare model', async () => {
     const params = { model: 'a/b', max_tokens: 100, messages: [{ role: 'user' as const, content: 'hi' }] };
     await createMessage({ ...params, reasoning: 'high' });
     await createMessage(params);

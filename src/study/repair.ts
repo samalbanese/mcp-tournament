@@ -1,6 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
+import { getCatalog, type Catalog } from '../catalog.js';
+import { parseModelRef } from '../config/model-ref.js';
+import { applyReasoningCatalog } from '../config/reasoning.js';
 import { runJudge, type JudgeResult } from '../agents/judge-agent.js';
 import { runSynthesis } from '../agents/synthesizer.js';
 import type { JudgeConfig } from '../config/judges.js';
@@ -17,10 +20,11 @@ import { planBatches, validateStudyAgainstBenches } from './batches.js';
 import { acquireStudyLock, assertUnchanged } from './lock.js';
 import { writeFileAtomic } from './export.js';
 import { defaultFetchUsage, ProgressSchema, readUsage, reanalyzeWithLockHeld } from './runner.js';
-import { parseStudy, StudyError, type Study } from './schema.js';
+import { parseStudy, studySeatRef, StudyError, type Study } from './schema.js';
 
 export interface RepairStudyOptions {
   resultsRoot?: string;
+  catalog?: Catalog;
   /** Shown the repair summary; return false to stop before any model call or file change. */
   confirm: (summary: string) => Promise<boolean>;
   onProgress?: (message: string) => void;
@@ -85,7 +89,13 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
   const study = parseStudy(input);
   validateStudyAgainstBenches(study);
   const batches = planBatches(study);
-  const plans = batches.map(batch => normalizeRunPlan(batch.plan));
+  const plans = batches.map(batch => normalizeRunPlan({
+    ...batch.plan,
+    candidates: batch.candidates.map(ref => studySeatRef(ref, study)),
+    judgePanel: batch.plan.judgePanel?.map((seat, index) => ({ ...seat, model: studySeatRef(study.judges[index].ref, study) })),
+    participant: studySeatRef(study.participant, study),
+    synthesizer: studySeatRef(study.synthesizer, study),
+  }));
   for (const plan of plans) assertRoutesReady(plan);
 
   const root = path.resolve(options.resultsRoot ?? defaultResultsRoot());
@@ -101,11 +111,24 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
   if (progress.done.some(id => !batches.some(batch => batch.batchId === id))) {
     throw new StudyError('Progress contains a batch that is not in this study.');
   }
+  const catalog = options.catalog ?? await getCatalog();
+  const checks = plans.map(plan => applyReasoningCatalog(plan, catalog));
+  const errors = checks.flatMap(check => check.errors);
+  if (errors.length) throw new StudyError(errors.join('\n'));
+  const warnings = [...new Set(checks.flatMap(check => check.warnings))];
 
   const work = batches.flatMap((batch, index) => {
     if (!progress.done.includes(batch.batchId)) return [];
     const plan = plans[index];
     const runDir = path.join(root, batch.runId);
+    const manifest = z.object({ candidates: z.array(z.object({ id: z.string() })) })
+      .parse(JSON.parse(fs.readFileSync(path.join(runDir, 'run.json'), 'utf8')));
+    // Legacy runs keep their original folders; only new calls take the effective level.
+    plan.candidates.forEach((candidate, seat) => {
+      const originalRef = parseModelRef(batch.candidates[seat]).ref;
+      if (!manifest.candidates.some(saved => saved.id === candidate.id)
+        && manifest.candidates.some(saved => saved.id === originalRef)) candidate.id = originalRef;
+    });
     const file = path.join(runDir, 'failures.json');
     const failuresText = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
     const failures = failuresText === null ? [] : FailuresSchema.parse(JSON.parse(failuresText));
@@ -168,6 +191,7 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     ...(interrupted ? ['A previous repair stopped early; this one finishes it and refreshes the report.'] : []),
     `Repair "${study.title}": ${pending.reduce((sum, item) => sum + item.pairs, 0)} answer(s) to rerun and ${pending.reduce((sum, item) => sum + item.seats, 0)} judge seat(s) to fill across ${pending.length} batch(es). Only these pieces are re-run; nothing that succeeded is touched.`,
     ...pending.map(item => `${item.batch.batchId}: ${item.pairs} answer(s), ${item.seats} judge seat(s)`),
+    ...warnings,
   ].join('\n');
   if (!await options.confirm(summary)) {
     return { ...outcome, cancelled: true,
@@ -175,13 +199,11 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     };
   }
 
-  const previousEffort = process.env.TOURNAMENT_REASONING_EFFORT;
   const report = (text: string) => options.onProgress?.(text);
   const release = acquireStudyLock(studyDir);
   try {
     // The gap list above came from files another run or repair may have changed during the prompt.
     assertUnchanged(inputs, inputsBefore);
-    if (study.reasoningEffort) process.env.TOURNAMENT_REASONING_EFFORT = study.reasoningEffort;
     const fetchUsage = options.fetchUsage ?? defaultFetchUsage;
     const saveProgress = () => {
       fs.writeFileSync(`${progressFile}.tmp`, `${JSON.stringify(progress, null, 2)}\n`);
@@ -219,7 +241,8 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
             // Scores left from an earlier attempt belong to a different answer; never mix them in.
             fs.rmSync(judgeDir, { recursive: true, force: true });
             const execution = await runScenario(candidate, scenarioCase, plan.plugin, runDir, {
-              participant: { route: plan.participant.route, model: plan.participant.model },
+              participant: { route: plan.participant.route, model: plan.participant.model,
+                reasoning: plan.participant.reasoning, thinks: plan.participant.thinks },
             });
             if (!execution.success) throw new Error(execution.error ?? 'Scenario execution failed');
             fs.rmSync(path.join(candidateDir, 'error.json'), { force: true });
@@ -302,9 +325,6 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     saveProgress();
     return outcome;
   } finally {
-    // Restored before releasing: releasing can throw, and the setting must not leak into a later run.
-    if (previousEffort === undefined) delete process.env.TOURNAMENT_REASONING_EFFORT;
-    else process.env.TOURNAMENT_REASONING_EFFORT = previousEffort;
     release();
   }
 }

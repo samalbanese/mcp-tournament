@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { parseModelRef } from '../config/model-ref.js';
 import { modelSlug, scenarioSlug } from '../plugins/base.js';
 import type { ScoreRow } from './analyze.js';
-import { StudyError, type Study } from './schema.js';
+import { studySeatRef, StudyError, type Study } from './schema.js';
 
 const ManifestSchema = z.object({
   runId: z.string().regex(/^run-[a-zA-Z0-9-]+$/),
@@ -13,6 +13,7 @@ const ManifestSchema = z.object({
   scenarios: z.array(z.object({ id: z.string(), name: z.string() })),
   judges: z.array(z.object({
     role: z.string(), model: z.string(), route: z.enum(['anthropic', 'openrouter']).optional(),
+    reasoning: z.string().optional(),
   })).optional(),
 });
 const ScoresSchema = z.object({
@@ -30,15 +31,18 @@ export function collectScores(study: Study, runDirs: string[]): ScoreRow[] {
       }
       study.judges.forEach((judge, index) => {
         const seat = manifest.judges![index];
-        const expected = parseModelRef(judge.ref);
+        const expected = parseModelRef(studySeatRef(judge.ref, study));
         if (seat.role !== `custom_${index + 1}` || seat.model !== expected.model
+          || (seat.reasoning !== undefined && seat.reasoning !== expected.reasoning)
           || (seat.route !== undefined && seat.route !== expected.route)) {
           throw new StudyError(`Judge seat ${index + 1} mismatch in ${manifest.runId}`);
         }
       });
     }
     for (const candidate of manifest.candidates) {
-      const source = study.candidates.find(item => parseModelRef(item.ref).ref === candidate.id);
+      // Runs made before per-seat levels recorded the bare ID.
+      const source = study.candidates.find(item => parseModelRef(item.ref).ref === candidate.id
+        || studySeatRef(item.ref, study) === candidate.id);
       if (!source) throw new StudyError(`Unknown candidate "${candidate.id}" in ${manifest.runId}`);
       for (const scenario of manifest.scenarios) {
         const bench = study.benches.find(item => item.bench === manifest.plugin && item.scenarios.includes(scenario.id));

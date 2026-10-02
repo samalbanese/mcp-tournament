@@ -33,7 +33,6 @@ describe('runScenario candidate replies', () => {
   beforeEach(() => {
     dir = fs.mkdtempSync(path.join(os.tmpdir(), 'executor-'));
     calls = [];
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', undefined);
   });
 
   afterEach(() => {
@@ -95,7 +94,6 @@ describe('runScenario candidate replies', () => {
 
   it('keeps the standard allowance without reasoning', async () => {
     useReplies(reply('Offer free shipping over $60.', 'end_turn'));
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'high');
     await runScenario(model, scenario, plugin, dir);
     expect(calls[0].max_tokens).toBe(MAX_TOKENS_CANDIDATE);
   });

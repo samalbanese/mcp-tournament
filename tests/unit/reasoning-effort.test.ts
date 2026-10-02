@@ -20,7 +20,6 @@ const params: CreateMessageParams = {
 
 beforeEach(() => {
   vi.stubEnv('OPENROUTER_API_KEY', 'test-key');
-  vi.stubEnv('TOURNAMENT_REASONING_EFFORT', undefined);
   createCompletion.mockReset();
   createCompletion.mockResolvedValue({
     model: 'test/model',
@@ -72,11 +71,5 @@ describe('OpenRouter reasoning effort', () => {
     expect(createCompletion.mock.calls[0][0].reasoning).toEqual({ effort: 'low' });
     expect(createCompletion.mock.calls[1][0].reasoning).toEqual({ effort: 'high' });
     expect(createCompletion.mock.calls[2][0]).not.toHaveProperty('reasoning');
-  });
-
-  it('ignores the removed environment setting', async () => {
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'turbo');
-    await createMessage(params);
-    expect(createCompletion.mock.calls[0][0]).not.toHaveProperty('reasoning');
   });
 });

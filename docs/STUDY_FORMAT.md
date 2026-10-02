@@ -48,12 +48,16 @@ Save a JSON file with these fields:
 - `participant`: the model simulating follow-up messages in multi-round scenarios.
   `synthesizer`: the model combining judge reports for ordinary run evidence.
   Study statistics use the individual judges' scores, not synthesized scores.
-- `reasoningEffort`: optional `minimal`, `low`, `medium`, or `high`. It temporarily
-  sets `TOURNAMENT_REASONING_EFFORT`; the previous value, including an unset
-  value, is restored on success or failure. If omitted, the environment is used.
-  With reasoning on, candidates get a 32,768-token output limit because hidden
-  reasoning counts against it. A reply that comes back empty or hits the limit
-  is recorded as a failed answer, never scored.
+- `reasoningEffort`: optional default for every seat without its own `@level`.
+  Levels are `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, and `max`.
+  Add a suffix such as `openai/gpt-6.1-sol@high` to override that default for
+  a candidate, judge, participant, or synthesizer. Without either setting,
+  the provider's default applies and no reasoning parameter is sent.
+  Each model accepts only some levels, checked before confirmation. An offline
+  catalog produces a warning and the selected level is still sent. The Anthropic
+  route accepts `low`, `medium`, `high`, `xhigh`, and `max` on supported models.
+  Seats that reason get larger output limits because hidden reasoning counts
+  against them. Empty or cut-off replies are recorded as failures, never scored.
 
 Model refs use OpenRouter IDs or `anthropic:claude-...` for the registered Claude
 client. Refs are stored in canonical form, so `openrouter:openai/gpt-6.1-sol` and
@@ -80,9 +84,9 @@ on routes the caller marks as subscription (`subscriptionRoutes`, such as a loca
 Claude subscription client) are left out. Paid Anthropic API calls are priced,
 and the summary warns that recorded spend will not include them, because spend is
 read from OpenRouter. Other refs with missing prices are listed separately. An offline catalog makes the estimate
-unavailable. These are token-based estimates, not spending caps. When
-`reasoningEffort` is set, reasoning tokens come on top of the estimate, and the
-summary says so.
+unavailable. These are token-based estimates, not spending caps. They include
+an allowance for hidden reasoning tokens based on each seat's effective level.
+The summary lists the level for every candidate, judge, participant, and synthesizer.
 
 Actual cost is a best-effort sum of OpenRouter key usage differences. The runner
 reads usage before the first pending batch and after every batch, including a
@@ -142,6 +146,10 @@ newlines are enclosed in quotes, and embedded quotes are doubled. Scenario paths
 come from the saved scenario **name**, not its ID. The collector checks saved
 judge seats against the study before assigning judge refs and families. Missing
 judge files are skipped; malformed files or mismatched seats raise errors.
+New run manifests keep the effective `@level` in candidate IDs and record each
+seat's reasoning level. Older runs without suffixes or reasoning fields still
+re-analyze to the same scores. Repair keeps their existing folder names while
+using the study default and any seat overrides for new calls.
 
 `study-analyze` reads saved scores and rewrites both outputs without model calls,
 catalog requests, or usage requests. It preserves existing metadata, including

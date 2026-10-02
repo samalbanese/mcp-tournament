@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ModelRefError, parseModelRef } from '../config/model-ref.js';
+import { REASONING_LEVELS, withReasoning } from '../config/reasoning.js';
 import { ModelRefSchema } from '../run-plan.js';
 
 export const StudyFamilySchema = z.string().regex(/^[a-z0-9-]{2,30}$/);
@@ -7,7 +8,7 @@ export const StudyFamilySchema = z.string().regex(/^[a-z0-9-]{2,30}$/);
 export const StudySchema = z.object({
   id: z.string().regex(/^[a-z0-9-]{3,40}$/),
   title: z.string().trim().min(1).max(120),
-  reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
+  reasoningEffort: z.enum(REASONING_LEVELS).optional(),
   benches: z.array(z.object({
     bench: z.string().trim().min(1),
     label: z.string().trim().min(1).max(40),
@@ -28,6 +29,10 @@ export const StudySchema = z.object({
 }).strict();
 
 export type Study = z.infer<typeof StudySchema>;
+
+export function studySeatRef(ref: string, study: Study): string {
+  return withReasoning(parseModelRef(ref).ref, study.reasoningEffort);
+}
 
 export class StudyError extends Error {
   constructor(message: string) {

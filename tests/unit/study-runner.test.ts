@@ -8,7 +8,7 @@ import type { Catalog } from '../../src/catalog.js';
 import { createCustomPlugin } from '../../src/plugins/custom.js';
 import { registerPlugin } from '../../src/plugins/index.js';
 import { modelSlug, scenarioSlug } from '../../src/plugins/base.js';
-import { parseStudy, type Study } from '../../src/study/schema.js';
+import { parseStudy, studySeatRef, type Study } from '../../src/study/schema.js';
 import { planBatches } from '../../src/study/batches.js';
 import { collectScores } from '../../src/study/collect.js';
 import { runStudy, reanalyzeStudy } from '../../src/study/runner.js';
@@ -27,11 +27,10 @@ registerPlugin(bench);
 const catalog: Catalog = {
   source: 'live',
   models: ['openai/test', 'google/test', 'meta/participant', 'z-ai/synthesis', 'deepseek/test', 'qwen/test', 'anthropic/claude-test']
-    .map(id => ({ id, name: id, contextLength: 10000, promptPrice: 2, completionPrice: 10 })),
+    .map(id => ({ id, name: id, contextLength: 10000, promptPrice: 2, completionPrice: 10, reasoningLevels: ['low', 'high'] })),
 };
 let root: string;
 let calls: CreateMessageParams[];
-let efforts: Array<string | undefined>;
 let failModels: Set<string>;
 
 function study(): Study {
@@ -62,7 +61,6 @@ function fake(): ModelClient {
     isConfigured: () => true,
     createMessage: vi.fn(async (params: CreateMessageParams) => {
       calls.push(params);
-      efforts.push(process.env.TOURNAMENT_REASONING_EFFORT);
       if (failModels.has(params.model)) throw new Error('Interrupted fixture');
       if (params.system?.startsWith('Synthesize')) return reply({
         final_scores: { quality: { score: 7, confidence: 'high', outliers: [] } },
@@ -87,13 +85,12 @@ function read(file: string) { return JSON.parse(fs.readFileSync(file, 'utf8')); 
 function studyDir() { return path.join(root, 'studies', study().id); }
 function runDirs(input = study()) { return planBatches(input).map(batch => path.join(root, batch.runId)); }
 function judgeFile(role = 'custom_1') {
-  return path.join(runDirs()[0], 'judges', modelSlug(study().candidates[0].ref), scenarioSlug(bench.scenarios[0]), `${role}.json`);
+  return path.join(runDirs()[0], 'judges', modelSlug(studySeatRef(study().candidates[0].ref, study())), scenarioSlug(bench.scenarios[0]), `${role}.json`);
 }
 
 beforeEach(() => {
   root = fs.mkdtempSync(path.join(os.tmpdir(), 'study-runner-'));
-  calls = []; efforts = []; failModels = new Set();
-  delete process.env.TOURNAMENT_REASONING_EFFORT;
+  calls = []; failModels = new Set();
   registerModelClient('openrouter', fake());
   registerModelClient('anthropic', fake());
   vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('Unexpected network request'); }));
@@ -127,8 +124,7 @@ describe('study runner', { timeout: 30_000 }, () => {
     expect(rows.filter(row => row.judgeRole === 'custom_1').every(row =>
       row.judgeRef === 'anthropic:claude-test' && row.judgeFamily === 'anthropic')).toBe(true);
     expect(result.analysis.contested[0].byJudge).toEqual({ anthropic: 7, openai: 7, google: 7 });
-    expect(efforts.every(value => value === 'low')).toBe(true);
-    expect(process.env).not.toHaveProperty('TOURNAMENT_REASONING_EFFORT');
+    expect(calls.every(call => call.reasoning === 'low')).toBe(true);
   });
 
   it('excludes subscription pricing even when Claude appears in the catalog', async () => {
@@ -189,14 +185,12 @@ describe('study runner', { timeout: 30_000 }, () => {
     expect(fs.readdirSync(root)).toEqual([]);
   });
 
-  it('resumes finished batches, preserves partial data, and restores the env on failure', async () => {
+  it('resumes finished batches and preserves partial data after failure', async () => {
     const input = study();
     input.candidates.push({ ref: 'deepseek/test', family: 'deepseek', label: 'DeepSeek' },
       { ref: 'qwen/test', family: 'qwen', label: 'Qwen' });
     failModels = new Set(['deepseek/test', 'qwen/test']);
-    process.env.TOURNAMENT_REASONING_EFFORT = 'high';
     await expect(runStudy(input, options())).rejects.toThrow(/Every candidate\/scenario pair failed/);
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('high');
     expect(read(path.join(studyDir(), 'progress.json')).done).toEqual(['1-1']);
     const firstManifest = fs.readFileSync(path.join(runDirs(input)[0], 'run.json'), 'utf8');
     const partial = fs.readFileSync(path.join(runDirs(input)[1], 'failures.json'), 'utf8');
@@ -208,7 +202,6 @@ describe('study runner', { timeout: 30_000 }, () => {
     expect(abandoned).toBeDefined();
     expect(fs.readFileSync(path.join(root, abandoned!, 'failures.json'), 'utf8')).toBe(partial);
     expect(fs.readFileSync(path.join(runDirs(input)[0], 'run.json'), 'utf8')).toBe(firstManifest);
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('high');
     expect(read(path.join(studyDir(), 'progress.json')).done).toEqual(['1-1', '1-2']);
   });
 
@@ -281,18 +274,16 @@ describe('study runner', { timeout: 30_000 }, () => {
     expect(() => collectScores(study(), runDirs())).toThrow(/judge/i);
   });
 
-  it('keeps an inherited effort when the study does not set one', async () => {
+  it('uses provider defaults when the study does not set a level', async () => {
     const input = study(); delete input.reasoningEffort;
-    process.env.TOURNAMENT_REASONING_EFFORT = 'medium';
     await runStudy(input, options());
-    expect(efforts.every(value => value === 'medium')).toBe(true);
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('medium');
+    expect(calls.every(call => call.reasoning === undefined)).toBe(true);
   });
 
-  it('deletes a previously unset effort after a failed batch', async () => {
+  it('releases the lock after a failed batch', async () => {
     failModels = new Set(['claude-test', 'openai/test', 'google/test']);
     await expect(runStudy(study(), options())).rejects.toThrow(/Every candidate/);
-    expect(process.env).not.toHaveProperty('TOURNAMENT_REASONING_EFFORT');
+    expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
   });
 
   it('does not rerun or reread usage for an already completed study', async () => {

@@ -15,9 +15,20 @@ function isAlive(pid: number): boolean {
   }
 }
 
+/**
+ * The lock's holder, or null when the file is missing or its contents are not a lock (a crash
+ * mid-write). Any other read error is thrown: a lock that cannot be read may still be live.
+ */
 function readLock(file: string): { pid: number; token: string } | null {
+  let text: string;
   try {
-    const value = JSON.parse(fs.readFileSync(file, 'utf8'));
+    text = fs.readFileSync(file, 'utf8');
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw error;
+  }
+  try {
+    const value = JSON.parse(text);
     return typeof value?.pid === 'number' && typeof value?.token === 'string' ? value : null;
   } catch {
     return null;
@@ -26,13 +37,23 @@ function readLock(file: string): { pid: number; token: string } | null {
 
 /** Creates the file only if it does not exist yet; false when it already does. */
 function createExclusive(file: string, contents: string): boolean {
+  let handle: number;
   try {
-    fs.writeFileSync(file, contents, { flag: 'wx' });
-    return true;
+    handle = fs.openSync(file, 'wx');
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
     throw error;
   }
+  try {
+    fs.writeFileSync(handle, contents);
+  } catch (error) {
+    // A file created but not written (a full disk, say) must not be left behind to block others.
+    fs.closeSync(handle);
+    fs.rmSync(file, { force: true });
+    throw error;
+  }
+  fs.closeSync(handle);
+  return true;
 }
 
 function sleepSync(ms: number): void {
@@ -58,8 +79,10 @@ export function acquireStudyLock(studyDir: string): () => void {
     if (readLock(file)?.token === token) fs.rmSync(file, { force: true });
   };
   // The guard is held for a few file operations, so a short wait covers two commands started together.
+  // Measured on the clock, not by counting sleeps: file operations on a busy machine can take far longer than the sleep.
+  const deadline = Date.now() + 2_000;
   let guarded = createExclusive(guard, String(process.pid));
-  for (let waited = 0; !guarded && waited < 2_000; waited += 25) {
+  while (!guarded && Date.now() < deadline) {
     sleepSync(25);
     guarded = createExclusive(guard, String(process.pid));
   }

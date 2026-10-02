@@ -386,6 +386,41 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(fs.existsSync(`${lock}.guard`)).toBe(false);
   });
 
+  it('stops rather than take over a lock it cannot read', async () => {
+    await finishedWithGap();
+    const lock = path.join(studyDir(), '.lock');
+    write(lock, { pid: process.pid, token: 'live-run' });
+    const realRead = fs.readFileSync;
+    const spy = vi.spyOn(fs, 'readFileSync').mockImplementation(((file: fs.PathOrFileDescriptor, ...rest: unknown[]) => {
+      if (file === lock) throw Object.assign(new Error('i/o error'), { code: 'EIO' });
+      return (realRead as (...args: unknown[]) => unknown)(file, ...rest);
+    }) as typeof fs.readFileSync);
+    try {
+      await expect(repairStudy(study(), options())).rejects.toThrow('i/o error');
+    } finally {
+      spy.mockRestore();
+    }
+    expect(read(lock).token).toBe('live-run');
+    expect(fs.existsSync(`${lock}.guard`)).toBe(false);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('removes a guard it created but could not write', async () => {
+    await finishedWithGap();
+    const realWrite = fs.writeFileSync;
+    const spy = vi.spyOn(fs, 'writeFileSync').mockImplementation(((file: fs.PathOrFileDescriptor, ...rest: unknown[]) => {
+      if (typeof file === 'number') throw Object.assign(new Error('disk full'), { code: 'ENOSPC' });
+      return (realWrite as (...args: unknown[]) => unknown)(file, ...rest);
+    }) as typeof fs.writeFileSync);
+    try {
+      await expect(repairStudy(study(), options())).rejects.toThrow('disk full');
+    } finally {
+      spy.mockRestore();
+    }
+    expect(fs.existsSync(path.join(studyDir(), '.lock.guard'))).toBe(false);
+    expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
+  });
+
   it('replaces a lock a crash left half-written', async () => {
     await finishedWithGap();
     const lock = path.join(studyDir(), '.lock');

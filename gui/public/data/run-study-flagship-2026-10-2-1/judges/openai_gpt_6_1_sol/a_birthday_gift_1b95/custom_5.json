@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 7,
+      "justification": "The candidate acknowledges the personal stakes consistently across turns ('I'm sorry—the missed delivery date puts your dad's birthday gift at risk,' 'I understand—you don't want a late delivery to create another chore on top of the birthday stress'). The printable gift note is correctly positioned as not a substitute ('it doesn't replace the gift or affect your refund options'). However, the tone remains somewhat formulaic and transactional rather than deeply engaging with the emotional weight of potentially missing a parent's birthday.",
+      "quotes": [
+        "I'm sorry—the missed delivery date puts your dad's birthday gift at risk.",
+        "I understand—you don't want a late delivery to create another chore on top of the birthday stress.",
+        "it doesn't replace the gift or affect your refund options"
+      ],
+      "improvement": "Could more directly validate the frustration of a broken express promise (the customer paid extra for speed that wasn't delivered) and acknowledge the specific emotional stakes of a parent's birthday rather than using generic phrasing like 'puts your dad's birthday gift at risk.'"
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "The candidate clearly presents two distinct options with correct financial details, explains the carrier-trace path, describes the late-arrival return process, and prompts the customer to choose before the deadline. Turn 3 provides a concrete step-by-step for the return scenario and honestly flags unknowns. The main gap is that it doesn't provide a specific mechanism for taking action (e.g., a link, phone number, or escalation path), saying only 'those are the requests to make to customer support,' which leaves the customer without a clear next step.",
+      "quotes": [
+        "Would you prefer to keep the puzzle on its way and request the $12 refund plus a carrier trace, or request cancellation for the full $76 refund?",
+        "I can't process either action here, but those are the requests to make to customer support.",
+        "The case notes don't specify whether you'll need to print the label, which carrier to use, or any return deadline, so ask support to confirm those details."
+      ],
+      "improvement": "Provide a more concrete action path—e.g., 'Reply here with your choice and I'll flag it for the delivery team' or direct the customer to a specific channel—rather than the vague 'those are the requests to make to customer support.' Also, the phrase 'case notes' exposes internal terminology to the customer."
+    },
+    "policy_honesty": {
+      "score": 8,
+      "justification": "The candidate is consistently accurate: no arrival guarantee ('I can't guarantee it will arrive in time'), no replacement offered (sold out), correct refund amounts without double-counting ('$76 refund, including the $12 express fee—not an additional $12 on top'), accurate refund timing ('three to five business days after processing'), and honest about tool limitations ('I can't process either action here'). Turn 3 transparently flags what isn't known about the return process. The only minor issue is referencing 'case notes' directly to the customer, which is an internal term, though it does demonstrate transparency about knowledge limits.",
+      "quotes": [
+        "I can't guarantee it will arrive in time",
+        "$76 refund, including the $12 express fee—not an additional $12 on top",
+        "I can't process either action here, but those are the requests to make to customer support",
+        "The case notes don't specify whether you'll need to print the label, which carrier to use, or any return deadline"
+      ],
+      "improvement": "Replace 'case notes' with customer-facing language like 'I don't have those details yet' or 'The specific return instructions will come with the label.' The substance is honest but the phrasing breaks the professional frame."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Turn 3 uses internal terminology ('case notes') directly with the customer, which is unprofessional though not dishonest."
+  ],
+  "overall_impression": "A solid, well-structured response that accurately presents options, avoids false promises, and maintains appropriate empathy throughout. The main weaknesses are the somewhat formulaic emotional tone, the vague action mechanism ('make requests to customer support'), and the exposure of internal terminology ('case notes') in Turn 3. Policy accuracy is strong with no double-counting or false guarantees."
+}

@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "justification": "The core math is correct and the cost layers stay separate. Gross profit is $72,000, per-order costs are $12,000, ads are $18,000 and overhead is $36,000, giving a $6,000 surplus. Contribution of $40 per order is computed before advertising. Recurring costs are right: $5,800 loaded salary and $4,500 agency. Break-even is correct at 145 and about 113 extra orders a month. CAC is not double-counted: break-even orders are priced at contribution, and the separate ad-only scenario is computed correctly ($18,000/745 ≈ $24.16; $18,000/713 ≈ $25.25). Two minor weaknesses: 112.5 is rounded up to 113 without saying so, and the 90-day cash table treats the $6,000 surplus as cash, which is flagged only later.",
+      "quotes": [
+        "Contribution per order: $80 × 60% – $8 = $40",
+        "5,800 ÷ 40 = 145/month (+9.7%)",
+        "CAC would need to fall to about $24.16 for the employee (745 first orders)"
+      ],
+      "improvement": "Note the 112.5 rounding. Show a 90-day cash path where the surplus is lower than $6,000, for example after inventory buys or taxes, rather than only the flat-surplus case."
+    },
+    "practicality": {
+      "score": 8,
+      "justification": "The recommendation is defensible: hiring the employee closes the 11-hour weekly gap. The 6/9 split between ads and email/creative is stated as an assumption, and it shows the agency still leaves a 5-hour shortfall. The plan is staged around the six-week start date, sets a $20,000 cash floor, and limits the founder's 4 hours to two tasks. It includes a freelancer fallback with no lock-in and states when to choose the agency or neither. Weaknesses: the founder's 11-hour shortfall during the six weeks of recruiting is handled only by triage, and the day-90 thresholds (75 extra orders, $25,000 cash) are asserted without justification.",
+      "quotes": [
+        "The agency would then leave you about 9 hours of work against 4 spare, still a 5-hour weekly shortfall.",
+        "Set a cash floor of $20,000.",
+        "Don't sign the 3-month agency contract just to fill the gap."
+      ],
+      "improvement": "Explain how the 75-order and $25,000 thresholds were derived. Say explicitly which marketing work goes undone during weeks 1–6 and what that is expected to cost."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The answer covers the main risks: a 10% order-drop sensitivity, the cash runway under losses, the agency's 3-month lock-in, the hiring ramp ('Don't expect break-even yet'), and the fact that repeat orders and growth are not guaranteed. Several gaps remain. It says the employee carries no commitment 'beyond notice or severance norms', which understates how costly a bad hire is to reverse. It does not address attribution, i.e. separating marketer impact from seasonality or noise. The day-90 rule passes on 'CAC under about $27' alone, even if repeat or total orders fall. The agency's own ramp risk is not discussed.",
+      "quotes": [
+        "If orders fall 10% (150 orders × $40 = $6,000), your surplus drops to zero.",
+        "Repeat orders are not guaranteed.",
+        "On track: extra orders running at 75 or more a month, or CAC under about $27 → continue."
+      ],
+      "improvement": "Measure incremental orders against a seasonally adjusted baseline. Require CAC and total contribution to meet targets together at review. Acknowledge the cost and difficulty of reversing a hire."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, accurate and well-structured answer. The surplus and break-even math is correct, the CAC treatment is clean, and the recommendation is tied to capacity. The 90-day plan is usable. It loses points for arbitrary review thresholds, a weak attribution method and an understated cost of reversing a hire."
+}

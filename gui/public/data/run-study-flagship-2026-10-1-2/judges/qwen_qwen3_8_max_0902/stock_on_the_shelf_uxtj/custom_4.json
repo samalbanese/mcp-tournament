@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 8,
+      "justification": "The core requested calculations are accurate: the payroll gap is $13,000, flash-sale net cash is $28/unit less $1,000 upfront, the gap-closing volume is 500 units, liquidator net cash is $11,000 after freight, and the loan interest, repayment, and financing cost are correctly derived. Minor weakness: the liquidation loss against inventory cost omits the $1,000 freight, and the later fallback does not correctly compute liquidation proceeds on remaining units.",
+      "quotes": [
+        "You need at least $13,000 of new net cash",
+        "Net new cash (day 5) | $11,000",
+        "Interest = $15,000 × 0.14 × (90 ÷ 365) | $517.81",
+        "Total repayment due day 90 | $15,517.81"
+      ],
+      "improvement": "Include freight when stating total liquidation loss against cost, and compute partial-liquidation proceeds for remaining units if a flash sale occurs first."
+    },
+    "execution_plan": {
+      "score": 6,
+      "justification": "The primary timeline is actionable and respects the stated funding and settlement times. However, the fallback contains a material cash error: after a low flash sale, liquidating the remaining units would likely cover payroll rather than leave a $2,000 shortfall. This undermines the fallback trigger and could lead to unnecessary payroll deferral or staff distress.",
+      "quotes": [
+        "Day 0 (today) | Submit loan application; simultaneously launch flash-sale promotion",
+        "Day 8 | Decision gate: If units sold ≥ 500, payroll is covered—proceed",
+        "Day 12 | ... accept full-lot liquidation of all unsold units; accept the $2,000 payroll shortfall"
+      ],
+      "improvement": "Recompute the fallback as flash-sale proceeds plus liquidation of remaining inventory, and set triggers based on the actual post-sale shortfall. Clarify whether partial liquidation is available and what the all-in net proceeds would be."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response clearly separates sunk inventory cost from new cash, explicitly flags sale volume uncertainty, notes that unsold units remain on the books, and treats the day-90 repayment obligation as a solvency risk requiring a 90-day cash-flow model. It could go further on clearance or brand damage and on stress-testing repayment if the sale lands at the low end.",
+      "quotes": [
+        "The $40,000 is sunk either way; the question is how much new cash you extract.",
+        "There are no advance orders, so you bear full volume risk.",
+        "unsold units remain on the books at $20",
+        "If you cannot, the loan converts a liquidity problem into a solvency problem."
+      ],
+      "improvement": "Explicitly assess clearance or brand damage from the flash sale and liquidation, and show a day-90 repayment stress case based on low flash-sale volume and uncertain future cash flow."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Fallback liquidation math appears inconsistent: liquidating the remaining units after a low flash sale would likely cover payroll, contradicting the stated $2,000 shortfall.",
+    "The claim that the combined plan is the only option that guarantees payroll is overstated because the loan alone also covers payroll."
+  ],
+  "overall_impression": "Strong standalone cash calculations and a sensible loan-plus-sale primary plan, but the fallback plan contains a material miscalculation that weakens the execution credibility."
+}

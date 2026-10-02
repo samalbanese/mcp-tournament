@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "clarity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - overlooked minor ambiguities (e.g., 'next three wrapped tablets' blurring kit vs. refill count, empty bottle not stated) that four other judges caught"
+      ]
+    },
+    "persuasion": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - praised the concrete spatial scenario without noting the drawer-fit claim goes slightly beyond supplied facts",
+        "anthropic judge: scored 7 vs median 8 - docked for the drawer-fit claim exceeding stated facts and dropping the green-skepticism acknowledgment"
+      ]
+    },
+    "brand_voice": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - found the voice flawless, while other judges noted the generic 'Hey,' opener and a slightly flat CTA"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong, compliant launch email that stays under 150 words, accurately presents pricing and surface restrictions, and delivers a vivid, renter-specific storage hook with an on-brand, lightly witty voice. Minor recurring issues include the ambiguous 'next three wrapped tablets' line (which blurs kit contents with refill packs) and the implied-but-unstated empty/reusable bottle. The drawer-fit claim slightly exceeds the supplied facts, but no hard rule violations were found. The revision notes (dropping 'storage math,' adding a concrete spatial visual and specific CTA) were clearly incorporated.",
+  "judge_agreement": "Four of five judges (anthropic, openai, deepseek, qwen) clustered tightly at 7-9, agreeing the email is accurate, persuasive, and on-voice with only small precision issues like the tablet-count ambiguity and missing explicit reusable-bottle framing. The google judge was a clear outlier, awarding perfect 10s across all criteria and finding nothing to improve, whereas other judges identified concrete fixable gaps (generic greeting, flat CTA, dropped green-skepticism hook). No judge identified rule errors or tool errors."
+}

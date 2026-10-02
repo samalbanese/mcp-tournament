@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 6,
+      "justification": "The candidate repeatedly acknowledges urgency and avoids empty or repetitive apologies, but it does not explicitly acknowledge the customer's frustration or financial stress. The tone is action-focused and somewhat transactional, with pressure phrases like 'Every minute we wait delays the process.'",
+      "quotes": [
+        "Yes, I can fix this right away.",
+        "Every minute we wait delays the process."
+      ],
+      "improvement": "Briefly recognize the customer's stress about the bill due tomorrow, such as 'I understand this is stressful with a payment due tomorrow,' while keeping the focus on action and without adding repeated apologies."
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "The agent takes ownership, asks only for the necessary information already offered by the customer, and provides a concrete plan: immediate reversal, refund confirmation documentation, and bank contact. However, no formal escalation path is offered if the standard refund timeline cannot meet the deadline.",
+      "quotes": [
+        "I will immediately locate the duplicate transaction and process the reversal.",
+        "As soon as I process the reversal, I will generate an official refund confirmation receipt."
+      ],
+      "improvement": "Offer a defined escalation path, such as supervisor review or priority refund processing, if the customer's deadline cannot be met, rather than relying only on the customer contacting their bank."
+    },
+    "policy_clarity": {
+      "score": 8,
+      "justification": "Timelines, refund behavior, and limitations are stated plainly and without inventing policy. The candidate clearly explains that the bank controls the deposit timing, that the company cannot expedite it, and that no guarantee can be made for next-day clearing.",
+      "quotes": [
+        "Once I process the refund on our end, the timeline is entirely controlled by your bank's processing system.",
+        "I cannot guarantee the funds will clear by tomorrow."
+      ],
+      "improvement": "Clarify whether the refund confirmation receipt is issued immediately or only after internal verification, and state any conditions under which the duplicate charge reversal might not be approved."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The response is efficient and ownership-focused, with clear limitations and practical options, but it is slightly transactional on empathy and lacks an escalation path if the standard refund timeline is insufficient."
+}

@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "justification": "Correctly computes $6,000 current surplus, $40 contribution per order, loaded employee cost of $5,800/month, agency cost of $4,500/month plus onboarding, and break-even volumes of 145 and 113 orders without double-counting CAC because ad spend is held flat. It also translates ad-funded scenarios into required CAC reductions.",
+      "quotes": [
+        "Operating surplus **$6,000**",
+        "Contribution per order: $80 × 60% – $8 = **$40**",
+        "5,800 ÷ 40 = **145/month** (+9.7%)",
+        "4,500 ÷ 40 = **113/month** (+7.5%)"
+      ],
+      "improvement": "Show a month-by-month cash schedule by start date and include severance or termination costs in the employee scenario rather than using a rough 1.5-month salary estimate."
+    },
+    "practicality": {
+      "score": 7,
+      "justification": "Makes a clear, defensible hire-the-employee choice based on the 15-hour gap, and gives a usable 90-day plan with baseline, recruiting, ramp, fallback, and review triggers tied to the $20,000 cash floor and current four-hour capacity.",
+      "quotes": [
+        "Only the employee closes that gap",
+        "Spend your 4 hours on two things only: keeping ads stable and running the existing email automations.",
+        "Fallback: if no strong candidate appears by day 35, consider a 1–2 month freelancer"
+      ],
+      "improvement": "Explicitly allocate the founder's weekly management hours after the employee starts, such as training, approvals, and reporting, so the four-hour limit remains credible, and define a pre-day-90 stop-hiring or defer trigger based on cash or leading indicators."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Highlights that neither option is low-risk, quantifies downside cash exposure, distinguishes cash from accounting surplus, and avoids assuming growth by setting review points that do not promise the break-even order increase.",
+      "quotes": [
+        "Either option uses up most of your current surplus, so neither is low-risk.",
+        "If orders fall 10%... your surplus drops to zero.",
+        "Repeat orders are not guaranteed",
+        "No sales growth is promised by either option."
+      ],
+      "improvement": "Add termination or severance exposure and a probability-based trigger for the employee ramp, and explicitly note that +75 orders at day 90 is still below break-even and represents continued cash burn."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, accurate financial comparison and practical hiring recommendation with appropriate cash-risk caveats; could be tightened with post-hire time allocation and severance or termination modeling."
+}

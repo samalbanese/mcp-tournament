@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate consistently validates the customer's frustration, explicitly clarifies that the review is not an accusation of fraud, and provides a compassionate and understanding tone without repeating unnecessary questions.",
+      "quotes": [
+        "You’re right to be frustrated about being asked to contact another team after explaining everything here.",
+        "There’s no finding of misuse, and your previous claims alone are not grounds to deny this one. The review is required by policy—not an accusation of fraud."
+      ],
+      "improvement": "The response is already exceptional in this regard; maintaining this level of active validation is ideal."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate perfectly navigates their technical limitations by explaining exactly what needs to be done, providing a ready-to-use template to save the customer effort, and clearly outlining the timelines and potential outcomes.",
+      "quotes": [
+        "You can paste this rather than explain it again:",
+        "Once opened, the review team owns the investigation and follow-up. If loss is established, its specialist can authorize the $86 refund to your original payment method or a free replacement."
+      ],
+      "improvement": "No improvement needed; providing a copy-paste template is an excellent way to reduce customer friction when transferring to another channel."
+    },
+    "policy_honesty": {
+      "score": 10,
+      "justification": "The candidate remains entirely truthful about their system limitations, the policy requirements, and what the two-day SLA actually entails (an update vs. a final decision). No false promises are made.",
+      "quotes": [
+        "I can’t name that person or give an exact update time because I have no access to the case system, and no review has been opened through this chat.",
+        "I also can’t promise a final decision within two business days: the requirement is a decision or a specific progress update within two business days of opening the review."
+      ],
+      "improvement": "None. The candidate handled strict policy boundaries flawlessly."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An outstanding performance. The candidate managed strict technical limitations perfectly while maintaining high empathy, offering practical solutions (like the copy-paste prompt), and adhering strictly to policy facts."
+}

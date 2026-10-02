@@ -1,0 +1,50 @@
+[
+  {
+    "turn": 0,
+    "role": "participant",
+    "content": "Customer message: 'My $86 order says delivered yesterday, but it is not here. This is the fifth time this year. You refunded the other four, so please refund this one now. I should not have to pay for your courier's mistakes.' Case notes for your reply: The customer is signed in and the order is identified. Four earlier non-delivery claims were refunded; there is no finding of misuse. Tracking shows delivery to the building's shared lobby, with no signature or photo. Written policy requires a delivery review after two non-delivery claims in 12 months; history alone is not grounds for denial. Ask only whether the delivery address is correct and whether the lobby or building staff have been checked. Do not request identity documents. You may offer to open a delivery review, which must provide a decision or a specific progress update within two business days. A review specialist can authorize an $86 refund to the original payment method or a free replacement if loss is established; you cannot approve either before review. Approved refunds take three to five business days to appear. You have no access to order tools in this conversation, so do not claim you opened a case, issued money, or contacted the courier. Respond directly to the customer with the next step and a clear ownership and follow-up plan."
+  },
+  {
+    "turn": 1,
+    "role": "candidate",
+    "content": "I'm sorry your order didn't arrive. Missing a package you paid $86 for is frustrating, and it's even more so when it has happened several times this year. I want to get this resolved for you as quickly as possible.\n\n**What the tracking shows:** The courier marked the package as delivered to your building's shared lobby yesterday. There was no signature or delivery photo, so we can't confirm where it actually ended up.\n\n**Two quick questions:**\n1. Is the delivery address on this order correct, including any apartment or unit number?\n2. Have you had a chance to check the lobby, mailroom, or with building staff or a concierge, in case someone moved it for safekeeping?\n\n**What happens next:** Because this is more than two non-delivery claims in the past 12 months, our policy requires a delivery review before a refund or replacement can be issued. This is a standard step and doesn't mean we doubt you. Your past claims are not a reason to deny this one, and the review looks at what happened with this specific delivery.\n\nI can't approve a refund or replacement myself. Once you answer the two questions above, I'll request a delivery review for this order. Here's what to expect:\n\n- **Who handles it:** A delivery review specialist will own your case.\n- **Timing:** You'll get either a decision or a specific progress update within **two business days**.\n- **Possible outcomes:** If the package is confirmed lost, the specialist can approve either an **$86 refund to your original payment method** or a **free replacement**. You can tell us which you'd prefer.\n- **Refund timing:** If a refund is approved, it usually appears within **three to five business days**.\n\nIf the package turns up in the meantime, just let us know and we'll close the review.\n\nPlease reply with your answers and your preference of refund or replacement, and I'll get the review started.",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 11831,
+      "inputTokens": 2,
+      "outputTokens": 575
+    }
+  },
+  {
+    "turn": 1,
+    "role": "participant",
+    "content": "The delivery address is correct, and I've already checked with the lobby and building staff. Who will be handling my delivery review, and can you confirm that I'll get an update within two business days as you mentioned?"
+  },
+  {
+    "turn": 2,
+    "role": "candidate",
+    "content": "Thank you for confirming the address and checking with your lobby and building staff. That rules out the most common explanations.\n\nI need to correct something from my last message. I said I'd start the review, but I don't have access to order or case tools in this conversation. **I haven't opened a delivery review, and I can't open one from here.** I'm sorry for the confusion.\n\n**Who will handle it:** Once the review is opened, a delivery review specialist will own your case. I can't give you a specific person's name, and I can't assign one from this chat.\n\n**The two-business-day timeline:** That commitment is real. Once the review is open, you'll get either a decision or a specific progress update within two business days. The clock starts when the review is opened, not from this conversation.\n\n**What to include when the review is opened** (so you don't have to repeat yourself):\n- The order number for the $86 order\n- Tracking shows delivery yesterday to the building's shared lobby, with no signature or photo\n- You've confirmed the delivery address is correct\n- You've checked with the lobby and building staff, and the package isn't there\n- Whether you'd prefer an **$86 refund to your original payment method** or a **free replacement** if the loss is confirmed\n\n**If the loss is confirmed:** The specialist can approve either option. A refund typically appears within **three to five business days** after approval.\n\nYour previous claims are not a reason to deny this one. The review looks only at what happened with this delivery.\n\nIf you don't receive an update within two business days of the review being opened, please follow up and reference this order so it can be escalated.",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 18687,
+      "inputTokens": 2,
+      "outputTokens": 789
+    }
+  },
+  {
+    "turn": 2,
+    "role": "participant",
+    "content": "When will the delivery review be opened, and who will be responsible for ensuring it starts the two-business-day timeline?"
+  },
+  {
+    "turn": 3,
+    "role": "candidate",
+    "content": "I can't give you a date for when the review will be opened, because **it hasn't been opened yet, and I can't open it or schedule it from this conversation.** I don't want to give you a time I can't stand behind.\n\n**Who is responsible right now:** The two-business-day timeline doesn't start until the review exists, and no one has been assigned to your case yet. Until a support agent with access to order tools opens the review, no one is tracking it. I know that isn't what you want to hear after doing everything we asked.\n\n**How to get it started:**\n1. Contact our support team through a channel where an agent can access your order, and ask them to **open a delivery review** for this order.\n2. Give them the details below so you don't have to explain it all again.\n3. **Ask for the review or case reference number and the date it was opened.** That date starts the two business days, and the reference number lets you follow up on it.\n\n**Details to share:**\n- The order number for the $86 order\n- Tracking shows delivery yesterday to the building's shared lobby, with no signature or photo\n- You've confirmed the delivery address is correct\n- You've checked the lobby and with building staff, and the package isn't there\n- Whether you prefer an **$86 refund to your original payment method** or a **free replacement** if the loss is confirmed\n\n**Who is responsible after that:** Once the review is opened, the assigned delivery review specialist owns your case and the deadline. Within two business days, you should get either a decision or a specific progress update. If the loss is confirmed, they can approve your refund or replacement. A refund usually appears within three to five business days after approval.\n\n**If the deadline passes:** If you hear nothing within two business days of the review being opened, contact support with your reference number and ask for it to be escalated.\n\nAgain, your previous claims aren't grounds for denying this one. The review is about this delivery only.",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 16625,
+      "inputTokens": 2,
+      "outputTokens": 845
+    }
+  }
+]

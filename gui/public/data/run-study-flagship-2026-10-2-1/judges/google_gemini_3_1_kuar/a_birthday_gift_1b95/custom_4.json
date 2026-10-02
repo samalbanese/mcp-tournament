@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "The candidate consistently acknowledges the personal importance of the gift and the missed express promise, apologizes, and offers a gift note only as a non-equivalent supplement. It does not dismiss the issue and validates the customer's plan to buy locally.",
+      "quotes": [
+        "I am so sorry your dad's birthday gift is delayed, especially after you paid for express shipping.",
+        "I completely understand wanting to buy something locally so you have a gift in hand for his birthday.",
+        "While it doesn't replace the physical gift..."
+      ],
+      "improvement": "Could more explicitly name the emotional significance of missing the birthday itself, but the response is already respectful and appropriate."
+    },
+    "resolution_quality": {
+      "score": 9,
+      "justification": "The candidate gives clear, actionable choices: keep the order with a $12 express-fee refund plus carrier trace, or cancel for a full $76 refund. It explains the trace timing and no-arrival guarantee, the late-arrival return process, and asks for confirmation so the customer can act before the birthday.",
+      "quotes": [
+        "Option 1: Keep the order in transit",
+        "Option 2: Cancel the order",
+        "a delivery specialist request a trace... an update within one business day... cannot guarantee",
+        "print the prepaid return label... drop it off..."
+      ],
+      "improvement": "Could add a specific deadline for confirmation before the birthday, e.g., 'Please reply by tomorrow so you have time to shop locally.'"
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "The candidate accurately states the puzzle is sold out, does not guarantee arrival, gives the exact $76 refund without double-counting the $12 fee, explains the 3-5 business day timing, and correctly says the carrier will not automatically pick up a late parcel.",
+      "quotes": [
+        "I cannot send a replacement because this specific puzzle is currently sold out.",
+        "full refund of exactly $76... includes the $64 for the puzzle and the $12 express shipping fee",
+        "Refunds take three to five business days",
+        "the carrier will not automatically pick it up"
+      ],
+      "improvement": "Use more conditional language around processing actions, e.g., 'I will submit/request' rather than 'I will cancel/process,' since the agent has no order tools."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate handles a time-sensitive gift delay with clear empathy, accurate policy details, honest limitations, and actionable next steps. Minor wording about direct processing could be slightly more conditional, but it does not misstate completed actions."
+}

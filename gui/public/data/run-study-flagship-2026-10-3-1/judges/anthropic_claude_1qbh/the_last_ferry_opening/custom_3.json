@@ -1,0 +1,32 @@
+{
+  "scores": {
+    "voice": {
+      "score": 10,
+      "justification": "The candidate establishes an incredibly distinct, authored voice that perfectly melds the narrator's scientific background with her raw psychological trauma. The phrasing feels highly deliberate and character-specific.",
+      "quotes": [
+        "My hands had tagged four hundred and eleven eiders and had never once been asked what they thought about it."
+      ],
+      "improvement": "The voice is exceptional; maintaining this exact level of specificity throughout a full manuscript would be the only note."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details are deeply tied to the narrator's emotional state, using marine biology and diving metaphors to make her dissociation tactile and vivid without cluttering the prose.",
+      "quotes": [
+        "a calm come over me that I recognized from the bottom of a cold dive, when your body stops arguing and just shuts the doors to everything but the heart"
+      ],
+      "improvement": "Could incorporate slightly more environmental sensory details of the ferry cabin during the confrontation to ground the psychological imagery further in the immediate physical space."
+    },
+    "coherence": {
+      "score": 10,
+      "justification": "The candidate expertly deconstructs the psychological motivations before seamlessly weaving them into a highly cohesive, tense, and satisfying revised ending. The payoff of the 'counting' motif is brilliant.",
+      "quotes": [
+        "I turned to face the fourteen of them, and for the first time in six months, I let myself count."
+      ],
+      "improvement": "No structural improvements needed; the pacing, motivation, and final turn are masterful."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional response that not only provides a phenomenal creative writing snippet but deeply understands character psychology, narrative tension, and thematic looping."
+}

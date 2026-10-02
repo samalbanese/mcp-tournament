@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "Nell's scientific habits, dry wit, and distrust of her own perceptions establish an identifiable perspective. The latest revision deepens that voice through her resentment of patient, socially acceptable grieving. However, the accompanying analysis sometimes substitutes categorical psychological claims for the ambiguity that makes the narration effective.",
+      "quotes": [
+        "So of course I was counting.",
+        "Decided to put him in the past tense in conversation so people would stop tilting their heads at me.",
+        "My hands had tagged four hundred and eleven eiders and had never once been asked what they thought about it."
+      ],
+      "improvement": "Keep the character-specific counting and social observations, but frame dissociation, guilt, and depleted impulse control as possible interpretations rather than definitive diagnoses."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The opening makes the vessel and weather tangible through smell, vibration, movement, and marine-biological comparisons. The suitcase's worn materials and crooked initials provide concrete emotional anchors. The revised ending adds physical weight and bodily tension, though its extended cold-dive metaphor and personified hands slightly overwork an already established emotional register.",
+      "quotes": [
+        "The diesel smell pooled there, thick and sweet",
+        "the glass shuddered in its rubber gasket",
+        "The letters were crooked. The K leaned like it was walking into wind.",
+        "I hauled the suitcase against my chest. It was heavier than it should have been."
+      ],
+      "improvement": "Shorten the repeated cold-water imagery in the final revision and add one immediate physical consequence of cutting the net on a rolling ferry."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The progression from attempted retreat to recognition, verification, personal threat, and public seizure creates a clear mystery arc without explaining the disappearance. The revisions use burnout and prolonged waiting to motivate the risky action. Nevertheless, the latest ending says she counts for the first time in six months despite her explicitly counting earlier, and facing 'the fourteen of them' conflicts with a passenger tally that presumably includes herself. The analysis also treats unestablished possibilities—such as this being the first evidence in twelve years or someone expecting her aboard—as facts.",
+      "quotes": [
+        "Fourteen passengers.",
+        "The suitcase is the first piece of evidence in twelve years",
+        "Someone knows who she is and expected her to be here.",
+        "I turned to face the fourteen of them, and for the first time in six months, I let myself count."
+      ],
+      "improvement": "Change the final line to distinguish purposeful observation from compulsive counting, clarify who is included in the passenger total, and label the new backstory and threat interpretations as possibilities. Preserve the earlier ending's explicit test of who will claim the suitcase."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A vivid, character-specific opening with a strong personal mystery and a meaningfully riskier revised action. The emotional expansion is useful, but continuity slips and overconfident interpretation keep the final refinement from fully matching the strength of the initial prose."
+}

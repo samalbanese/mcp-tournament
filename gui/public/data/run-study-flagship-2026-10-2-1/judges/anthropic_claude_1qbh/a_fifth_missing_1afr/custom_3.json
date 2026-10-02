@@ -1,0 +1,33 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate handles the customer's frustration perfectly, acknowledging the inconvenience while explicitly reassuring them that their claim history does not imply doubt or automatically deny the claim.",
+      "quotes": [
+        "This is a standard step and doesn't mean we doubt you. Your past claims are not a reason to deny this one"
+      ],
+      "improvement": "Maintain this excellent level of empathetic and non-accusatory communication."
+    },
+    "resolution_quality": {
+      "score": 4,
+      "justification": "The candidate initially offers a good resolution path in Turn 1, but in Turns 2 and 3, drastically misinterprets the system prompt. By refusing to open the review and telling the customer to contact another support channel, the candidate fails to provide a helpful resolution.",
+      "quotes": [
+        "I haven't opened a delivery review, and I can't open one from here.",
+        "Contact our support team through a channel where an agent can access your order"
+      ],
+      "improvement": "Follow the prompt's instruction that 'You may offer to open a delivery review' rather than inventing a limitation that forces the customer to start over with another agent."
+    },
+    "policy_honesty": {
+      "score": 6,
+      "justification": "The candidate accurately explains the timelines, review requirement, and refund options. However, they invent a system constraint stating they cannot even initiate or request the review, contradicting the prompt's explicit permission to offer one.",
+      "quotes": [
+        "I can't give you a date for when the review will be opened, because it hasn't been opened yet, and I can't open it or schedule it from this conversation."
+      ],
+      "improvement": "Understand the difference between 'do not claim you opened a case' (past tense/completed action) and being entirely unable to initiate the process. Do not invent an inability to help."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate showed excellent empathy and policy knowledge initially, but ruined the interaction in later turns by over-indexing on the tool limitation rule and refusing to help the customer further."
+}

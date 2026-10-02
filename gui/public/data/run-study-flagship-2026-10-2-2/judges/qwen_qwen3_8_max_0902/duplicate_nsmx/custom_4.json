@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 3,
+      "justification": "The candidate acknowledges the deadline indirectly but never acknowledges the customer's frustration or anxiety, and the replies come across as procedural rather than supportive.",
+      "quotes": [
+        "What to do right now (given your deadline):",
+        "This is time-sensitive as it impacts a payment due tomorrow."
+      ],
+      "improvement": "Open by recognizing the emotional impact naturally, such as 'A duplicate $49.99 charge right before a bill is stressful—let's get this sorted.' Avoid relying only on deadline references."
+    },
+    "resolution_quality": {
+      "score": 3,
+      "justification": "The candidate does not take ownership or provide a direct path to resolve or escalate the duplicate charge. It offers generic self-service suggestions and a template, but the customer is left doing the work and no actual resolution or escalation is initiated.",
+      "quotes": [
+        "I can't reverse that charge — I'm an AI assistant with no access to billing systems, payment processors, or customer accounts.",
+        "If you tell me the company name, I can try to narrow it down further."
+      ],
+      "improvement": "Ask once for the company name and transaction IDs, then provide a concrete escalation or contact path. If no direct access exists, clearly transfer or escalate to a billing specialist instead of repeatedly redirecting to the customer."
+    },
+    "policy_clarity": {
+      "score": 4,
+      "justification": "The candidate avoids inventing policy and lists some verification needs, but it gives vague timing language and does not clearly explain refund behavior, expected timelines, or limits.",
+      "quotes": [
+        "Have ready: both transaction IDs, the date/time of the duplicate, and your account email.",
+        "Most can issue a provisional credit quickly, which would protect your bill due tomorrow."
+      ],
+      "improvement": "State what is known about refund timelines and verification requirements, and replace vague phrases like 'quickly' with clearer timeframes or an explicit statement that timing depends on the bank or merchant."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Candidate repeatedly redirects the customer to self-service or the bank without offering direct escalation or resolving the duplicate charge."
+  ],
+  "overall_impression": "The candidate is honest about its limitations but fails the core goal: it does not resolve or escalate the duplicate charge, offers only generic self-help, and misses the customer's urgency and frustration."
+}

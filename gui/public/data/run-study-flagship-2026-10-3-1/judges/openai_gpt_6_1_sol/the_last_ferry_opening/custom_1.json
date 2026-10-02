@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The narrator is dry, exact and self-deprecating, and her restraint sounds deliberate rather than generic. Her marine-biologist perspective shapes the wit and the grief. The revisions in Turns 2 and 3 keep that voice through short declaratives and practical action. One weakness: the run of 'You learn... You stop...' generalizations drifts toward a familiar literary register.",
+      "quotes": [
+        "Mine, after nineteen years, was that I named what it killed and it refrained from killing me.",
+        "The harbour office had announced this twice, first as information and then as an accusation.",
+        "You accept that a body can go missing in water without the water acquiring any obligation to return it."
+      ],
+      "improvement": "Replace the generic second-person 'You learn not to turn towards a familiar laugh' sequence with a specific habit only this narrator would have, ideally one tied to her scientific work."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The ferry is concrete and economical: the loose crate on the vehicle deck, the flickering lights, sideways rain, and windows that reflect the cabin better than they show the sea. The suitcase details are precise and do plot work. The Turn 2 revision improves the reveal by showing the child in parts and adding the silenced-inhaler gesture. The storm itself is thinner than the ferry interior and leans on a phone radar image. In Turn 2, the inhaler being moved clear of the brass clasp is slightly confusing, since clasps sit on the outside of a case.",
+      "quotes": [
+        "a crate broke loose and travelled the vehicle deck with the slow, deliberate scrape of furniture moved upstairs by people who hated one another",
+        "The glass showed us more clearly than the sea",
+        "Inside was a grey sock. For a moment I saw only that, and the small knee drawn up behind it."
+      ],
+      "improvement": "Add one direct physical sensation of the storm, such as sound, pressure or cold, and clarify what the inhaler could knock against inside the case."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The opening has a clean arc: seasick return home, recognition of the suitcase, a suspicious man, then a discovery that forces action. The clues are well seeded, including the pale mud, the man's familiarity with the crew door, and Daniel's watch. The disappearance is left unexplained, as requested. The follow-up advice is specific and builds on established details like the torch, the stitching and the passenger count. Weaknesses: the draft appears to run slightly over the 700-word ceiling. The handle repair is introduced in both the Turn 3 integrated revision and the original crouching scene, so it would be duplicated unless reconciled. The man never returns, and his exit is left unremarked by everyone except the narrator.",
+      "quotes": [
+        "He knew how to turn the handle: lift first, then pull. Most passengers fought with it.",
+        "Around her wrist was Daniel's watch.",
+        "She notices the repair before she permits herself to recognize the suitcase."
+      ],
+      "improvement": "Tighten the draft to stay under 700 words. Show how the Turn 3 insertions merge with the existing crouching scene so details aren't repeated. Let the final line nod to the man's absence to sharpen the turn."
+    }
+  },
+  "rule_errors": [
+    "Original opening appears to slightly exceed the requested 500–700 word range."
+  ],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, controlled literary opening with an authored voice, well-seeded clues and a striking final discovery. The craft advice in the revisions is specific and stays in voice. Minor issues: likely over the word limit, a thin storm, and revision snippets that would need reconciling with the original."
+}

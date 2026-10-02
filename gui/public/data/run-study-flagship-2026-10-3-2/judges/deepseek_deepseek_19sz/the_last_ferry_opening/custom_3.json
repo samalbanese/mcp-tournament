@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's voice is highly distinctive and consistent, firmly establishing her background as a jaded marine biologist. The internal monologue feels authentic and deeply authored.",
+      "quotes": [
+        "Not the ocean itself—the ocean I understand. It's the people who claim to love it that wore me down.",
+        "because the grant money ran out and the only lab still willing to take me is a two-room shack with a broken autoclave"
+      ],
+      "improvement": "The voice is exceptionally strong, but further nuances could be added by having her observe the other passengers through a strictly analytical/biological lens."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "The sensory details effectively ground the reader in the environment. The descriptions of the ferry, the storm, and the suitcase are vivid and specific without feeling overwritten.",
+      "quotes": [
+        "Through the rain-streaked window, the sea is a churning gray muscle, flexing and collapsing.",
+        "The cabin smells like wet wool, fried onions, and the sour breath of exhausted passengers.",
+        "Then, with a sound like a fish spine snapping, it opens—not all at once, but tooth by tooth, a reluctant smile."
+      ],
+      "improvement": "Some descriptions of the antagonist (the drunken man) rely slightly on familiar tropes ('flushed face', 'glassy, unfocused' eyes) which could be sharpened."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The narrative arc is tightly constructed. The pacing builds excellent tension, and the candidate successfully implemented the user's feedback to make the reveal of the suitcase's contents more gradual and physical. The final turn provides a compelling mystery.",
+      "quotes": [
+        "Our hands meet on cold rubber, and for a second we're frozen, both of us bent over the suitcase like animals over a carcass. He yanks.",
+        "I unfold the paper with numb fingers. It's not paper—photographic paper, glossy, water-spotted at the edges."
+      ],
+      "improvement": "The logic of running away at the very end ('I have to get off this boat. I have to get to Vannar before he does. I turn and run') is slightly abrupt given they are both trapped on the same ferry heading to the same destination."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent, highly polished piece of creative writing that responds well to iterative feedback. The prose is evocative and the mystery is established effectively."
+}

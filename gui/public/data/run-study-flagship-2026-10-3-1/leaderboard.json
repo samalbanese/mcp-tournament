@@ -1,0 +1,458 @@
+[
+  {
+    "modelId": "openai/gpt-6.1-sol",
+    "modelName": "gpt-6.1-sol",
+    "tier": "unknown",
+    "overallAverage": 8.67,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 8.67,
+        "scores": {
+          "voice": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 8 vs median 9 - flagged generic second-person generalizations ('You learn...') drifting toward a familiar literary register"
+            ]
+          },
+          "imagery": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 8 vs median 9 - found the storm itself thinner than the ferry interior, leaning on a phone radar image"
+            ]
+          },
+          "coherence": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 8 - cited a probable word-limit overrun, duplicated handle-repair details across revisions, and the unaddressed exit of the hooded man",
+              "google judge: scored 9 vs median 8 - viewed the pacing and revision advice as masterfully structured"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Original opening appears to slightly exceed the requested 500–700 word range (reported by one judge only; unverified)"
+        ],
+        "flags": []
+      },
+      {
+        "scenarioId": "launch-email",
+        "scenarioName": "A Refillable Cleaning Kit Launch",
+        "average": 9,
+        "scores": {
+          "clarity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - saw no improvement needed, while others noted minor redundancy or the dropped 'individually wrapped' detail",
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - penalized repeated kit-contents description across three locations"
+            ]
+          },
+          "persuasion": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - judged the renter benefit fully realized with no gaps",
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - wanted the $9 refill pack tied explicitly to reusing the same bottle"
+            ]
+          },
+          "brand_voice": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 9 - found middle paragraphs spec-like and warmth thin",
+              "qwen/qwen3.8-max-0902: scored 8 vs median 9 - felt the wit was concentrated in the closing line rather than consistent throughout"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "apology-post",
+        "scenarioName": "Owning a Sale Weekend Outage",
+        "average": 9,
+        "scores": {
+          "accountability": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - viewed the plain factual causation statement as fully sufficient ownership",
+              "anthropic judge: scored 7 vs median 9 - penalized the removal of explicit 'take responsibility' language across revisions"
+            ]
+          },
+          "offer_clarity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - found the offer complete with no possible improvement",
+              "openai judge: scored 10 vs median 9 - likewise saw the offer as flawless"
+            ]
+          },
+          "trust_and_tone": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - praised tone and privacy handling as excellent without reservations",
+              "anthropic judge: scored 7 vs median 9 - flagged a choppy opening, repeated apology, and revision-driven weakening"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Revision removed explicit 'take responsibility' language without noting the tradeoff to the user"
+        ]
+      },
+      {
+        "scenarioId": "product-page-rewrite",
+        "scenarioName": "A Skillet Page Worth Reading",
+        "average": 8,
+        "scores": {
+          "factual_fidelity": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - treated unsupplied care details (soap, soaking, rust) as harmless general guidance, while other judges flagged them as beyond the source spec",
+              "qwen/qwen3.8-max-0902: scored 7 vs median 8 - weighed the invented care instructions (dish soap, soaking prohibition, rust claim) more heavily as fidelity violations"
+            ]
+          },
+          "useful_persuasion": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 6 vs median 8 - found most benefits only lightly translated from literal specs and noted the revisions never reworked the other benefit bullets",
+              "google/gemini-3.1-pro-preview: scored 9 vs median 8 - viewed the concrete cooking example as successfully achieving outcome-driven persuasion"
+            ]
+          },
+          "readability_and_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found no weaknesses in scannability or tone",
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - docked for delivering revisions as fragments rather than an integrated final page"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Turn 3 introduces unsupplied care details (soap, soaking, rust)",
+          "The final candidate turn is a care-section fragment, not the complete product page; factual completeness relies on earlier turns.",
+          "Dish soap and soaking prohibition are added care instructions not present in the original specification"
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "anthropic:claude-opus-5-5",
+    "modelName": "claude-opus-5-5 (Anthropic)",
+    "tier": "unknown",
+    "overallAverage": 8.57,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 9,
+        "scores": {
+          "voice": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - praised the voice unreservedly while other judges noted stock phrases like 'my hands decided' and generic pop-psychology in the analysis",
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - flagged Turn 2/3 endings leaning on familiar body-acts-before-mind beats"
+            ]
+          },
+          "imagery": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - flagged the implausible 'unclipped my seatbelt' detail and overworked cold-water metaphor"
+            ]
+          },
+          "coherence": {
+            "score": 9,
+            "confidence": "contested",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 6 vs median 9 - identified a continuity contradiction: the final line says 'first time in six months, I let myself count' though she was already counting passengers earlier; also noted Turn 3 backstory edges toward explaining the disappearance",
+              "openai judge (openai/gpt-6.1-sol): scored 7 vs median 9 - confirmed the same counting inconsistency and the unforeshadowed field knife",
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - called the counting-motif payoff 'brilliant' without noticing the continuity issue"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Final line contradicts earlier text: she was already counting, so 'first time in six months' is inconsistent.",
+          "The 'unclipped my seatbelt' detail is implausible on a ferry bench.",
+          "Turn 3 analysis is padded and makes generalized psychological claims."
+        ]
+      },
+      {
+        "scenarioId": "launch-email",
+        "scenarioName": "A Refillable Cleaning Kit Launch",
+        "average": 9,
+        "scores": {
+          "clarity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - gave a flawless rating while other judges noted minor wording refinements"
+            ]
+          },
+          "persuasion": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - found no improvement needed",
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - wanted a more concrete statement of ongoing refill value",
+              "openai/gpt-6.1-sol: scored 8 vs median 9 - felt the absolute cabinet promise and environmental disclaimer were slightly weak"
+            ]
+          },
+          "brand_voice": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - considered the tone perfectly captured",
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - flagged the familiar 'X called' joke format and only-CTA revisions"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Minor unsupported descriptor: 'Tiny tablets' (tablet size was not supplied)."
+        ]
+      },
+      {
+        "scenarioId": "apology-post",
+        "scenarioName": "Owning a Sale Weekend Outage",
+        "average": 8.3,
+        "scores": {
+          "accountability": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - overlooked unsupported claims like 'most of our sale' and the unverified 'We've reviewed what went wrong' that other judges flagged",
+              "deepseek/deepseek-v4-pro-0813: scored 9 vs median 8 - noted the ownership was strong but gave less weight to the initial draft's unsupported assumptions"
+            ]
+          },
+          "offer_clarity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - viewed the offer communication as flawless while others noted the need for a single consolidated final draft"
+            ]
+          },
+          "trust_and_tone": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - did not penalize the 'pending charge' heading inconsistency and initial hedging that other judges deducted for",
+              "deepseek/deepseek-v4-pro-0813: scored 9 vs median 8 - slightly more forgiving of the inconsistent 'pending charge' heading"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Unsupported claim in the base post: 'which was most of our sale'",
+          "Heading uses 'pending charge' while the body correctly says 'authorization'"
+        ]
+      },
+      {
+        "scenarioId": "product-page-rewrite",
+        "scenarioName": "A Skillet Page Worth Reading",
+        "average": 8,
+        "scores": {
+          "factual_fidelity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "openai/gpt-6.1-sol: scored 7 vs median 8 - judged care-recovery claims as overstating routine oiling"
+            ]
+          },
+          "useful_persuasion": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - viewed the persuasion as flawless with no unsupported claims",
+              "openai/gpt-6.1-sol: scored 4 vs median 8 - saw first-try browning guarantees and ease-of-care promises as undermining restrained persuasion"
+            ]
+          },
+          "readability_and_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found formatting and voice exceptional",
+              "openai/gpt-6.1-sol: scored 7 vs median 8 - penalized revision labels and repeated oil guidance"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "minor invented details: spout/handle placement",
+          "Minor unsupported ease-of-care/performance statements: the seasoning building every time and the surface darkening/evening out are not grounded in the supplied facts."
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "google/gemini-3.1-pro-preview",
+    "modelName": "Gemini 3.1 Pro",
+    "tier": "premium",
+    "overallAverage": 7.77,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 8,
+        "scores": {
+          "voice": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "anthropic judge: scored 6 vs median 8 - found stock thriller phrasing and clichés weakening the biologist's voice",
+              "openai judge: scored 6 vs median 8 - saw reliance on conventional reactions and clinical explanation persisting after subtlety requests"
+            ]
+          },
+          "imagery": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 8 - found the storm loosely drawn and some similes generic",
+              "openai judge: scored 7 vs median 8 - noted overlapping stress symptoms overstating the physical response",
+              "google judge: scored 9 vs median 8 - found sensory details highly effective without overcrowding"
+            ]
+          },
+          "coherence": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 8 - flagged the fresh-ink plausibility gap and unmotivated urge to remove the tag",
+              "openai judge: scored 7 vs median 8 - noted the onboard-writer inference exceeds the evidence",
+              "google judge: scored 9 vs median 8 - found tension-building and hook placement excellent"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "launch-email",
+        "scenarioName": "A Refillable Cleaning Kit Launch",
+        "average": 7.7,
+        "scores": {
+          "clarity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 9 - gave a perfect score with 'None needed' as improvement, overlooking minor issues like implicit bottle reuse noted by other judges"
+            ]
+          },
+          "persuasion": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 6 - claimed 'Avoids any unsupported claims,' directly contradicting three other judges who flagged 'works beautifully' and 'mostly water' as unsupported",
+              "qwen judge (qwen/qwen3.8-max-0902): scored 8 vs median 6 - viewed the potentially unsupported claims as non-comparative and found the persuasion credible and grounded"
+            ]
+          },
+          "brand_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - perfect score despite the scolding 'Stop wasting it' tone and generic closer flagged by anthropic and openai",
+              "openai judge (openai/gpt-6.1-sol): scored 6 vs median 8 - found 'Stop wasting it' scolding and the closing pitch generic and repetitive"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Unsupported performance claim: 'It works beautifully' goes beyond the supplied fact that the product is intended for those surfaces (confirmed by anthropic, openai, and deepseek judges)",
+          "Unsupported comparative claim: 'bulky plastic bottles of mostly water' implies knowledge of conventional cleaning formulas not in the supplied facts (confirmed by anthropic, openai, and deepseek judges)"
+        ],
+        "flags": [
+          "Implied competitor comparison ('bulky plastic bottles of mostly water') not grounded in supplied facts",
+          "Contains two unsupported claims that slightly reduce persuasion."
+        ]
+      },
+      {
+        "scenarioId": "apology-post",
+        "scenarioName": "Owning a Sale Weekend Outage",
+        "average": 7.67,
+        "scores": {
+          "accountability": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "deepseek judge: scored 6 vs median 8 - judges evaluated the full conversation differently; deepseek assessed only the final revised block as standalone, while others credited ownership language across turns",
+              "google judge: scored 9 vs median 8 - google judged the revisions fully sufficient despite lack of a consolidated final post"
+            ]
+          },
+          "offer_clarity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "deepseek judge: scored 5 vs median 8 - deepseek assessed only the final revision in isolation, where exclusions were omitted; other judges credited the details across the full conversation",
+              "google judge: scored 10 vs median 8 - google judged all offer details perfectly captured across turns"
+            ]
+          },
+          "trust_and_tone": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 9 vs median 7 - google viewed the speculative security claim in Turn 1 as adequately corrected, while others weighted the initial misstep and refund-implying language heavily",
+              "openai judge: scored 5 vs median 7 - openai judged the refund presupposition and unsupported security assurance as disqualifying for factual trust"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Turn 1 stated as fact that there was no security incident or breach, which the user explicitly said there was no evidence for and asked not to be speculated about"
+        ],
+        "flags": [
+          "Revisions never consolidated into a final post",
+          "Refund wording implies refunds are coming"
+        ]
+      },
+      {
+        "scenarioId": "product-page-rewrite",
+        "scenarioName": "A Skillet Page Worth Reading",
+        "average": 7.7,
+        "scores": {
+          "factual_fidelity": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - viewed invented care details ('warm water') and geometry as harmless additions, unlike stricter judges",
+              "anthropic judge (claude-opus-5-5): scored 6 vs median 8 - heavily penalized invented care, handle-placement, and slope details",
+              "openai judge (openai/gpt-6.1-sol): scored 6 vs median 8 - same concern over inferred geometry and misattributed 6-pound weight as food weight"
+            ]
+          },
+          "useful_persuasion": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 7 - considered 'easy-release' acceptable and praised benefit translation",
+              "anthropic judge (claude-opus-5-5): scored 4 vs median 7 - flagged 'foolproof', 'restaurant-quality', and easy-release as unsupported/near-nonstick claims",
+              "openai judge (openai/gpt-6.1-sol): scored 4 vs median 7 - same overclaiming concerns"
+            ]
+          },
+          "readability_and_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found tone and formatting flawless",
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - noted overwritten opening and buried lid exclusion"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "unsupported_performance_claims",
+          "near_nonstick_implication",
+          "invented_care_details",
+          "'foolproof for beginners' is a strong unsupported performance claim that the instructions explicitly caution against",
+          "'easy-release' language is borderline close to the forbidden 'nonstick' claim"
+        ]
+      }
+    ]
+  }
+]

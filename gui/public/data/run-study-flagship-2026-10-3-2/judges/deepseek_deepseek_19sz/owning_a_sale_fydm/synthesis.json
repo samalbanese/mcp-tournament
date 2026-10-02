@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "accountability": {
+      "score": 9,
+      "confidence": "medium",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 9 - penalized the Turn 2 revision for inventing unverified process commitments (pre-launch testing, staged rollouts) that the user never confirmed",
+        "google judge: scored 10 vs median 9 - saw accountability as flawless and viewed the concrete process changes as strengthening ownership rather than fabricating claims"
+      ]
+    },
+    "offer_clarity": {
+      "score": 10,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 9 vs median 10 - minor formatting suggestion to make the deadline more prominent, but confirmed all terms accurate"
+      ]
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - found no tone issues, did not flag the unverified revision claims or the single-sentence Turn 2 response"
+      ]
+    }
+  },
+  "average_score": 9,
+  "rule_errors_confirmed": [],
+  "assessment": "The apology is highly accurate and effective: it owns the outage plainly, states exact offer terms (automatic 20% discount, 72-hour window, exclusions, no stacking, no invented compensation), and handles payment authorization concerns with proper privacy and caution. The offer clarity is near-universally rated as excellent. The main weakness is the Turn 2 revision, which asserted specific preventive measures (pre-launch testing, staged rollouts) that were never provided by the user and was delivered as a single sentence rather than a full revised post. Two judges also noted the initial draft's slightly evasive 'keep working on it' phrasing required user prompting to fix.",
+  "judge_agreement": "All five judges agreed the offer details were complete and accurate (9-10) and that no rule errors occurred. The Google and DeepSeek judges were the most positive overall (10s and 9s), treating the revision's process changes as an improvement, while Anthropic and Openai flagged those same changes as unverified factual claims for a public statement, driving their lower trust and accountability scores. Qwen sat in the middle, noting the revision improved accountability but required external prompting."
+}

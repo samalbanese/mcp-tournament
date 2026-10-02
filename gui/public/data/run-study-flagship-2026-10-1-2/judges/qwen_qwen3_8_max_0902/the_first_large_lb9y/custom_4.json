@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "Correctly applies the 45% discount, $18 unit cost, $2,000 freight, and excludes the $9 direct fulfillment cost. It computes wholesale contribution as $28,000 and compares it to the theoretical $66,000 direct contribution while keeping cash receipts separate in the cash-flow section.",
+      "quotes": [
+        "Revenue per unit | $60.00 | $33.00",
+        "Contribution per unit | $33.00 | $14.00",
+        "Total contribution: $28,000",
+        "If those same 2,000 units sold direct over time, contribution would be $66,000."
+      ],
+      "improvement": "Could explicitly label the $66,000 full-retail comparison as opportunity value rather than incremental cash, and note that the $36,000 wholesale COGS is sunk inventory cost, not a current-period cash outflow."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "The inventory map correctly tracks 400/month direct sales, the 2,000-unit shipment by week 2, and the week-8 replenishment without a stockout. The cash map uses the protected $6,000 available balance, retailer deposit, supplier deposit/balance, freight, and direct cash receipts, and shows no cash shortfall.",
+      "quotes": [
+        "Starting position: $22,000 cash – $16,000 reserved = $6,000 available",
+        "Week 2 ... –2,000 wholesale ship | 800",
+        "Week 8 ... +2,000 replenishment arrives | 2,200",
+        "Cash never drops below $21,000 available—well above zero."
+      ],
+      "improvement": "Could add a trigger or contingency if the week-8 replenishment or retailer balance slips by one to two weeks, but the mapped plan is feasible under the stated assumptions."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "The response addresses credit, channel conflict, inventory concentration, and correctly avoids assuming immediate retail sell-through. However, it omits the defect/verified-defect risk entirely, and the credit and replenishment safeguards are mostly shorter terms or smaller order size rather than concrete credit protections or supplier contingency terms.",
+      "quotes": [
+        "The $33,000 balance is unsecured. If the retailer becomes insolvent between delivery and day 45, you lose the balance.",
+        "Without a Minimum Advertised Price (MAP) clause, this erodes your direct margin and brand positioning.",
+        "if replenishment is delayed beyond eight weeks, your buffer shrinks to zero by week 10.",
+        "At 400/month, that's five months of demand."
+      ],
+      "improvement": "Add a concrete defect-inspection/replacement allowance or warranty claim process, specify credit safeguards such as a letter of credit, credit check, or personal guarantee, and define a replenishment contingency or penalty with the supplier."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong quantitative and cash/stock planning, with good unit economics; risk section is solid on channel conflict and sell-through assumptions but incomplete on defects and only partially concrete on credit/replenishment safeguards."
+}

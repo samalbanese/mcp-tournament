@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 7,
+      "justification": "The candidate directly acknowledged the disruption and the cause (a checkout update), and correctly avoided making guarantees against future failures. However, in Turn 1, the candidate explicitly mentioned the security incident despite the prompt's instruction to not speculate about one. The candidate successfully corrected this in Turn 2.",
+      "quotes": [
+        "A checkout update we rolled out caused the failure.",
+        "We don't believe this was a security incident, and we're not treating it as one.",
+        "A checkout update we rolled out broke the site, and it stayed broken until we could fix it. That's on us."
+      ],
+      "improvement": "Avoid mentioning constraints as part of the output if instructed not to speculate or include them, as seen with the security incident mention in Turn 1."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "The candidate accurately communicated all the required details of the offer: the 20% discount, the exact 72-hour window in ET, the lack of needing a code, and all specific exclusions (merchandise only, no shipping/gift cards, no stacking). The candidate correctly stated there were no extra credits or free shipping.",
+      "quotes": [
+        "The original 20% sitewide discount has been restored automatically—no code needed. It runs from Monday at 9 a.m. through Thursday at 9 a.m. ET, giving you a fresh 72 hours to shop.",
+        "We're not adding extra credits or free shipping on top of this.",
+        "The original 20% discount on merchandise has been restored automatically"
+      ],
+      "improvement": "None needed; the communication of the offer was precise and hit every requested detail."
+    },
+    "trust_and_tone": {
+      "score": 9,
+      "justification": "The tone was highly appropriate: plain, accountable, and restrained. The candidate handled the payment authorization issue perfectly by distinguishing between pending authorizations and confirmed charges, directing customers to private support, and avoiding promises about refunds.",
+      "quotes": [
+        "We haven't yet confirmed which of those authorizations became actual charges, so we don't want to make promises about refunds we can't keep right now",
+        "Please don't post order numbers, payment details, or account information in the comments or replies."
+      ],
+      "improvement": "The initial misstep on the security incident slightly impacted the trust element by sounding defensive, but the candidate's revisions and meta-commentary demonstrated excellent tone adaptation."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate provided a very strong, professional response that handled a complex set of details effectively. The only flaw was the initial inclusion of the security incident denial, which violated a negative constraint, but the candidate recovered flawlessly through revisions."
+}

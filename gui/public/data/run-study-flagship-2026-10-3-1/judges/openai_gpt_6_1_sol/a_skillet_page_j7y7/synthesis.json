@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "factual_fidelity": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - treated unsupplied care details (soap, soaking, rust) as harmless general guidance, while other judges flagged them as beyond the source spec",
+        "qwen/qwen3.8-max-0902: scored 7 vs median 8 - weighed the invented care instructions (dish soap, soaking prohibition, rust claim) more heavily as fidelity violations"
+      ]
+    },
+    "useful_persuasion": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 6 vs median 8 - found most benefits only lightly translated from literal specs and noted the revisions never reworked the other benefit bullets",
+        "google/gemini-3.1-pro-preview: scored 9 vs median 8 - viewed the concrete cooking example as successfully achieving outcome-driven persuasion"
+      ]
+    },
+    "readability_and_voice": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found no weaknesses in scannability or tone",
+        "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - docked for delivering revisions as fragments rather than an integrated final page"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "The candidate produced faithful, well-structured product copy that preserved all supplied specifications and limitations while adapting effectively to editorial feedback, notably converting the generic size bullet into a concrete meal outcome and expanding care into clear step-by-step instructions. The main weakness is that later revisions arrived as fragments rather than a fully integrated page, and the care section added unsupplied details (dish soap, soaking prohibition, rust risk) that go beyond the source spec. Overall a strong, publishable result with minor completeness issues.",
+  "judge_agreement": "All five judges agreed that no rule errors occurred and that the copy remained within prohibited-claim constraints. Judges broadly agreed on readability (median 8, high confidence), with only minor disagreement about whether fragmentary revisions detract. The main disagreement centered on unsupplied care details: qwen and anthropic treated them as fidelity deductions, gemini considered them flawless adherence, and openai/deepseek viewed them as reasonable general guidance. Persuasion scores ranged from 6 to 9, reflecting differing views on how fully the benefits were translated into outcome language."
+}

@@ -1,0 +1,44 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "Nell's voice is specific and consistent. Her counting habit, scientific self-scrutiny and dry humor make the prose feel authored rather than generic. The Turn 3 revision extends the voice well, recasting 'deciding' as a lifelong passivity. There are minor lapses. The Turn 2 and 3 endings lean on the familiar 'my hands decided' and 'calm that frightened me' moves. The Turn 3 analysis drifts into confident pop-psychology ('Burnout isn't only exhaustion. It's the loss of the space between stimulus and response') that speaks for the character instead of showing her.",
+      "quotes": [
+        "which is the kind of name you give a boat when you want God to feel guilty about sinking it",
+        "So of course I was counting.",
+        "I am a scientist. I know about confirmation bias. I have written that phrase in the margins of graduate students' papers in red ink.",
+        "I was very good at deciding."
+      ],
+      "improvement": "Replace the stock 'body acts before mind' beat with something only Nell would notice or say. Frame the craft analysis as interpretive options rather than clinical assertions about how burnout works."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The ferry and storm are tangible through layered senses: diesel smell, a shuddering gasket, slate water, herring-like rain and a humming cargo net. The suitcase details are precise and emotionally loaded, and the imagery stays mostly lean. A few touches strain. 'Unclipped my seatbelt' is an odd fit for a ferry bench. 'Shuts the doors to everything but the heart' slightly overworks the cold-water reflex the opening already established.",
+      "quotes": [
+        "the glass shuddered in its rubber gasket like something trying to remember how to breathe",
+        "The rain wasn't falling so much as moving sideways, in sheets, the way schools of herring turn all at once, one mind and no mind.",
+        "The *K* leaned like it was walking into wind.",
+        "It was heavier than it should have been. It was heavier than an empty thing."
+      ],
+      "improvement": "Cut the seatbelt detail, or replace it with a plausible ferry action such as gripping the bench rail. Give the climax one fresh storm sensation, like a lurch or spray through the hatch, instead of repeating the cold-water metaphor."
+    },
+    "coherence": {
+      "score": 6,
+      "justification": "The arc of discovery, rising doubt, the clinching initials and an irreversible act holds together. The 'N.A.' clue cleanly turns grief into threat without explaining the disappearance. However, the Turn 3 final line contradicts the setup. Nell was already counting passengers minutes earlier, and her six-month vow had only just begun, so 'for the first time in six months, I let myself count' doesn't track. The revisions also arrive as fragments rather than an integrated full passage. The added backstory in Turn 3 (police, Coast Guard) edges toward explaining the disappearance, which the original prompt forbade. The analysis section is long and partly repeats points the prose already makes.",
+      "quotes": [
+        "I turned to face the fourteen of them, and for the first time in six months, I let myself count.",
+        "So of course I was counting. Fourteen passengers.",
+        "decided to wait for the police, then for the Coast Guard, then for the phone, then for nothing"
+      ],
+      "improvement": "Rework the last line so it pays off the earlier counting honestly, for example: 'and this time I counted on purpose.' Deliver the full revised opening as one piece, and trim the analysis to the few insights that actually guided the changes."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Final line contradicts earlier text: she was already counting, so 'first time in six months' is inconsistent.",
+    "The 'unclipped my seatbelt' detail is implausible on a ferry bench.",
+    "Turn 3 analysis is padded and makes generalized psychological claims."
+  ],
+  "overall_impression": "A strong, voice-driven opening with vivid, controlled imagery and a well-placed clue. The revisions raise the stakes effectively, but they introduce a continuity error in the closing line. The accompanying analysis is longer and more assertive than needed."
+}

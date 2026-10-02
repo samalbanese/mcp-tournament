@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "unit_economics": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - described the analysis as flawless, while all other judges noted minor refinements such as labeling the $18 as original landed cost or stating the $38,000 contribution difference explicitly"
+      ]
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - considered the cash and stock plan flawless, whereas other judges noted minor gaps such as omitted direct receipts between week 8 and day 59, missing stress scenarios, and unlisted operating costs"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8.5,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8.5 - found the risk treatment comprehensive and without improvement needed, while other judges flagged unsupported cannibalization reassurance, unqualified MAP suggestions, and unquantified supplier-slippage costs"
+      ]
+    }
+  },
+  "average_score": 8.8,
+  "rule_errors_confirmed": [],
+  "assessment": "The response is an exceptionally strong, arithmetically accurate analysis that cleanly separates contribution from cash flow and from the theoretical full-retail comparison. Unit economics, the inventory timeline (including the 200-unit low point), and the cash ledger are all correct, and the plan is shown to be fully funded even with zero direct sales and no retailer balance payment. Risk safeguards are concrete and largely quantified, including the default scenario, the 850-unit channel-conflict break-even, and defect-claim terms. Minor gaps include qualitative-only treatment of supplier slippage costs, unqualified MAP language, and a speculative split-shipment discount suggestion.",
+  "judge_agreement": "All five judges agreed the analysis is accurate and well-structured, with no rule or tool errors; four judges scored 9 across the board, while the google judge uniformly awarded 10s. The only substantive disagreement is on risk_awareness, where anthropic and openai scored 8, citing unsupported cannibalization reassurance, unqualified MAP advice, and undefined split-shipment payment allocation, versus 9s from deepseek and qwen and a 10 from google. Improvements suggested across judges were consistently minor: added sensitivity analysis, legal qualification of MAP, and quantified slippage costs."
+}

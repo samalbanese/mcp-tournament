@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "Correctly calculates the $13,000 payroll gap, $28 per-unit sale cash contribution, $8,800–$15,800 sale net cash range, 500-unit threshold, $11,000 liquidator proceeds, and all loan amounts. It also correctly distinguishes inventory losses and accounting profit from cash generated. The main omission is recalculating liquidation proceeds after a flash sale reduces available inventory.",
+      "quotes": [
+        "($13,000 + $1,000) ÷ $28 = 500",
+        "$12,000 − $1,000 = **$11,000 net cash**",
+        "Total repayment due day 90:",
+        "$15,000 + $517.81 = \\boxed{$15,517.81}",
+        "$300 \\text{ fee} + $517.81 \\text{ interest} = \\boxed{$817.81}"
+      ],
+      "improvement": "Quantify the combined fallback only after confirming a revised liquidator offer for remaining units; do not assume the original all-2,000-unit offer remains available."
+    },
+    "execution_plan": {
+      "score": 5,
+      "justification": "Provides concrete sale, review, loan application, funding, and payroll dates, with enough time for the stated three-day loan funding. However, it does not distinguish completed sales from settled cash at day 7, when settlement is guaranteed only before payroll. Promotion leaves exactly $5,000 for week-one bills, so any fulfillment costs paid before settlements need explicit funding protection. The liquidator fallback is not established as feasible after units have been sold, and references to other cash or expense cuts conflict with the stipulated cash flows and unavoidable obligations.",
+      "quotes": [
+        "Day 3 | Review sales pace. If sales are tracking below about 215 units by day 3",
+        "Day 7 | Flash sale ends; pay the $5,000 bills. Reconcile actual sale net cash.",
+        "Day 7–8 | If flash net cash is below $13,000 and no loan was taken yet, apply for the loan.",
+        "it must be combined with flash-sale proceeds, other cash, or expense cuts."
+      ],
+      "improvement": "Reserve week-one bill cash, verify when fulfillment costs are paid and sale receipts settle, and secure loan eligibility and a repayment forecast early. Base the payroll decision on confirmed settlements. Obtain a binding revised liquidation offer before presenting liquidation after the sale as a viable fallback."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "Clearly separates sunk inventory cost from liquidity, recognizes that the sale must reach a threshold, warns against liquidation's severe loss and complete inventory disposal, and gives useful debt due-diligence checks. It does not address clearance pricing's potential damage to normal-price sales or customer expectations, and only partially handles inventory depletion: the proposed liquidation fallback overlooks that sold units invalidate the original all-stock offer. The unknown day-90 repayment capacity is appropriately flagged, though it should be resolved before relying on the loan fallback.",
+      "quotes": [
+        "Treat the inventory cost as **already paid/sunk** for cash-flow purposes.",
+        "it locks in a severe loss, disposes of all inventory, and still does not fully close the gap alone.",
+        "Future cash flow beyond three weeks can repay **$15,517.81**.",
+        "Whether taking debt merely postpones a cash shortage rather than solving the underlying slow-moving inventory problem."
+      ],
+      "improvement": "Explicitly discuss clearance-price damage and uncertain demand without advance orders. Explain the loss of future earning inventory and require a credible day-90 cash forecast before treating borrowing as an available fallback."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Excellent core arithmetic and useful debt checks, but the dated plan needs stronger settlement and working-capital controls. Its liquidation-after-sale fallback is not supported by the stated offer."
+}

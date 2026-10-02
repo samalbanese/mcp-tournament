@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 6,
+      "justification": "The core separation is correct: revenue, COGS, per-order shipping/fulfillment/payment, advertising, and fixed overhead produce a $6,000 monthly surplus; loaded employee cost is $5,800/month and agency cost is $4,500/month; the $40 contribution per incremental order gives 145 and 113 order hurdles. However, the cash accumulation math materially errs by treating the six-week pre-start period as six months, overstating cash by roughly $25,000 at Week 6.",
+      "quotes": [
+        "Revenue (1,500 × $80) | $120,000",
+        "Contribution margin per incremental order (ad spend held flat, so no marginal CAC): $80 - $32 (COGS) - $8 (ship/fulfill/payment) = $40",
+        "Cash check at Week 6: ~$30,000 + (6 × $6,000 surplus) – $2,000 recruiting ≈ $64,000"
+      ],
+      "improvement": "Recalculate the pre-start period as 1.5 months rather than 6 months: starting cash $32k + $9k surplus - $2k recruiting ≈ $39k at employee start. Re-run all downstream cash checks from that corrected base."
+    },
+    "practicality": {
+      "score": 6,
+      "justification": "The recommendation to hire the employee is defensible because it addresses the 15-hour/week bottleneck and scope gaps better than the agency, and the 90-day plan contains usable steps such as workflow documentation, shadowing, and measurable Day 30/90 thresholds. But the plan relies on an inflated cash cushion and does not explicitly budget the founder's four-hour management limit during the ramp period, reducing practical feasibility.",
+      "quotes": [
+        "Post the role and begin recruiting now. Budget the $2,000 fee.",
+        "Run a two-week shadowing/handoff period.",
+        "Your hours on marketing | ≤ 4 hrs/week",
+        "Cash check at Week 6: ~$64,000. Comfortable."
+      ],
+      "improvement": "Provide a week-by-week management time budget during weeks 7–10 and rework the plan using the corrected cash figure of about $39k at employee start. Consider whether deferral, reduced ad spend, or a shorter initial commitment is warranted before hiring."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response states explicit assumptions that repeat orders and ad efficiency are stable, identifies the agency's three-month lock-in as a cash risk, notes the potential for a CPA wobble during handoff, and provides measurable review thresholds without assuming either option creates growth. However, the cash-risk assessment is weakened by the arithmetic error that labels the post-hiring cash position as 'comfortable.'",
+      "quotes": [
+        "The 3-month lock-in ($13,500) is nearly half your cash reserve if things go sideways.",
+        "In practice, a new person managing the account may cause a 10–20% CPA wobble in weeks 1–3.",
+        "If CPA has risen above $35 or surplus has turned negative for two consecutive months: Have a corrective conversation.",
+        "I have not modeled any uplift from better email marketing"
+      ],
+      "improvement": "Add a downside cash-runway scenario using the corrected $39k starting cash at employee start, and specify minimum cash reserve triggers that would prompt exiting the hire or reducing ad spend."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "cash_accumulation_arithmetic_error"
+  ],
+  "overall_impression": "Strong core unit economics and a clear recommendation, but the six-week vs six-month cash accumulation error materially overstates the cash cushion and weakens the practical and risk assessments."
+}

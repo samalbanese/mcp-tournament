@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 6,
+      "justification": "Offers a simple promotion and a concurrent 50/50 test over the requested 30 days, with an accessible calculation. However, it omits implementation details, stable visitor assignment, monitoring, and a fallback for insufficient traffic. The profit calculation is usable only under unstated assumptions about shipping recovery and product margins.",
+      "quotes": [
+        "Run a 50/50 A/B test for 30 days where half your traffic gets the standard experience and half gets the $85 free shipping offer."
+      ],
+      "improvement": "Specify persistent visitor-level assignment, consistent offer messaging through checkout, weekly cost monitoring, and an inconclusive outcome if 30 days produces too few orders to support a reliable decision."
+    },
+    "specificity": {
+      "score": 6,
+      "justification": "Provides an exact $85 offer, uses the supplied AOV and margin, and specifies profit per session and a decision rule. However, the threshold is justified primarily by a generic heuristic rather than break-even economics. Increasing a $72 basket to $85 generates only $5.46 of additional gross profit, less than the $9 subsidy. The formula assumes paid shipping fully covers shipping costs and a uniform margin, while the decision rule accepts any observed increase without accounting for uncertainty.",
+      "quotes": [
+        "Set your offer to: **\"Free Shipping on Orders Over $85\"**",
+        "*( (Total Revenue x 0.42) - (Number of Free Shipping Orders x $9) ) / Total Sessions*",
+        "If the Test Cohort yields a higher Gross Profit per Session than the Control Cohort"
+      ],
+      "improvement": "Show $85 order contribution of $26.70 after shipping versus $30.24 on a $72 order with fully recovered shipping, explain the conversion lift needed to compensate, and measure actual merchandise revenue minus COGS plus shipping collected minus shipping and other variable costs per assigned visitor. Define a minimum worthwhile lift and an uncertainty-aware adoption rule."
+    },
+    "risk_awareness": {
+      "score": 3,
+      "justification": "Recognizes shipping subsidy and the danger of judging revenue or AOV alone, and concurrent testing is a useful design choice. It does not address shipping-cost variation, existing large-order subsidy leakage, low-margin add-ons, returns, or experiment uncertainty. It also treats abandonment after shipping disclosure as proof of causation and predicts customer behavior too confidently.",
+      "quotes": [
+        "customers will still see a shipping charge at checkout and abandon",
+        "This forces customers who normally spend $72 to add a $15–$20 item",
+        "Do not measure success by Conversion Rate or Average Order Value alone."
+      ],
+      "improvement": "Treat shipping abandonment as a hypothesis, not proven causation. Track contribution by basket size and product mix, monitor returns and actual shipping costs, define restrictions for costly shipments if necessary, and control repeat-visitor crossover and statistical noise before declaring success."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A clear, actionable starting recommendation with a concrete offer and test duration, but incomplete contribution accounting and an overly permissive decision rule weaken its ability to establish a genuine profit improvement."
+}

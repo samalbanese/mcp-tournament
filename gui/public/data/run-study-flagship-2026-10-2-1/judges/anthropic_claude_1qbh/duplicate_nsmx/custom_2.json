@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 4,
+      "justification": "The answer recognizes tomorrow's deadline, but repeats a generic apology without acknowledging the customer's frustration at being bounced between channels. It again gives the customer several tasks despite their explicit objection to doing the support work themselves.",
+      "quotes": [
+        "I'm sorry about the confusion. Here's the direct answer:",
+        "This is your fastest option with a bill due tomorrow"
+      ],
+      "improvement": "Acknowledge the unwanted handoff and financial pressure directly, then provide one focused next step rather than another multi-channel checklist."
+    },
+    "resolution_quality": {
+      "score": 4,
+      "justification": "The card-back phone number and duplicate-charge script are actionable, and the answer does not pretend to have issued a refund. However, it provides no actual escalation or ownership, leaves all coordination to the customer, and cannot identify the merchant contact it previously offered to find. The claim that the bank is the fastest option is not established.",
+      "quotes": [
+        "Use the phone number on the back of the card that was charged.",
+        "Can you issue a provisional credit today? I have a bill due tomorrow.",
+        "Give them the same two transaction IDs and ask them to refund the duplicate."
+      ],
+      "improvement": "Clearly distinguish the merchant's authority to refund from the issuer's ability to investigate or offer temporary credit. Ask only for the service name to identify its billing contact, and avoid requiring simultaneous outreach or implying immediate recovery is available."
+    },
+    "policy_clarity": {
+      "score": 3,
+      "justification": "The answer usefully asks the issuer to confirm when credit will appear and notes that a pending charge may never post. But it does not explain that provisional credit is temporary, eligibility and timing vary, or that pending authorizations may not be releasable on request. It also makes an unsupported assurance about bill extensions and labels the bank the fastest option without evidence.",
+      "quotes": [
+        "When the credit will appear in your account",
+        "If one of the charges shows as \"pending,\" ask them to release it.",
+        "Most companies will agree to that."
+      ],
+      "improvement": "State that recovery by tomorrow cannot be guaranteed, provisional credit depends on the issuer and may be reversed, and pending-hold release and bill extensions are discretionary. Remove unsupported generalizations."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Offers a usable bank-call script but largely repeats the deflection the customer rejected. It falls short on ownership and gives overly confident guidance about speed and available relief."
+}

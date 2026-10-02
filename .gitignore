@@ -39,4 +39,5 @@ docs/*
 !docs/DEPLOY_DEMO.md
 !docs/PLUGINS.md
 !docs/RESULTS_FORMAT.md
+!docs/STUDY_FORMAT.md
 !docs/images/

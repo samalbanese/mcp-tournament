@@ -27,7 +27,8 @@ describe('MCP failure formatting', () => {
   });
 });
 
-describe('results directory', () => {
+// The first import of the MCP data module is cold and can pass 5 s on a busy machine.
+describe('results directory', { timeout: 30_000 }, () => {
   it('honors TOURNAMENT_RESULTS_DIR so MCP clients can point at the repo results', async () => {
     const { createContext } = await import('../../src/mcp/data.js');
     const previous = process.env.TOURNAMENT_RESULTS_DIR;

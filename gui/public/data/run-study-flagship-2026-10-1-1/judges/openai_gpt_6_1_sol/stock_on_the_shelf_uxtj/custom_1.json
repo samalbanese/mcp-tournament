@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "Every required figure is correct. The payroll gap is $13,000 ($6,000 − $5,000 + $4,000 = $5,000 available against $18,000). Sale net cash is $28 per unit less $1,000, which gives $8,800 to $15,800 across 350 to 600 units. The break-even volume is 500 units. Liquidator net cash is $11,000, leaving a $2,000 shortfall. On the loan: $14,700 is advanced, interest is $517.81, repayment is $15,517.81 and total financing cost is $817.81. The combined loan-plus-sale range of $10,500 to $17,500 is also correct. Inventory-cost margins of $1,800 and $3,800, and the $28,000 or $29,000 liquidation loss, are separated correctly from the cash figures.",
+      "quotes": [
+        "(13,000+1,000)/28=500 units",
+        "Total financing cost: $517.81 interest + $300 fee = $817.81",
+        "Net new cash: $11,000"
+      ],
+      "improvement": "Show the cash position after the day-0 promotion spend: $6,000 − $1,000 leaves exactly $5,000 for bills. Also model a hybrid: a partial sale followed by liquidating the leftover units, priced at the cost-based rate (e.g., 1,650 units → $9,900 − $1,000 freight)."
+    },
+    "execution_plan": {
+      "score": 7,
+      "justification": "The plan uses the stated timings correctly: the loan funds on day 3, bills are due on day 7, and payroll is due by day 21. It sets a clear day-3 decision gate tied to repayment capacity and tracks paid units, not interest shown. It does not treat forecast sales as cash. Its weaknesses are in the fallbacks. There is no mid-sale pace trigger, such as units sold by day 3 or 4 measured against the 500 needed. The day-7 fallback amounts to 'seek a separately confirmed funding source' and admits none exists. It never tests a sale-then-liquidate-remainder combination, which could close the 350-unit shortfall. It also commits all spare cash to promotion on day 0, leaving no buffer if per-unit fulfillment costs must be paid before settlement.",
+      "quotes": [
+        "Monitor progress against 500 paid units, not merely expressions of interest.",
+        "seek a separately confirmed funding source or an agreed change in payment timing. Neither is available under the current assumptions."
+      ],
+      "improvement": "Set a day-3 pace trigger, such as fewer than about 215 paid units, that forces acceptance of the loan. Price a fallback that liquidates unsold units by days 7–14, after confirming the liquidator's partial-lot terms. Confirm when fulfillment costs are paid, so they don't hit before the $5,000 in bills."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response clearly separates the already-paid stock cost from liquidity. It stresses that sale volume is uncertain because there are no advance orders. It treats the day-90 repayment seriously, covering the forecast, collateral, guarantees, default terms and refinancing risk. It also notes the liquidator's offer may not survive a partial sale. It does not address the damage a clearance sale can do: training customers to expect $32 against the $50 list price, brand and margin erosion, and seasonal timing. It also barely discusses losing remaining inventory to liquidation, meaning 2,000 units sold at $6 against a $50 retail price, beyond the accounting loss.",
+      "quotes": [
+        "It is not another cash bill during these three weeks.",
+        "Do not assume another loan will be available to refinance it."
+      ],
+      "improvement": "Discuss how a 36% markdown affects future full-price demand. Address the opportunity cost of giving up unsold units that could later sell at $50. Assess refund and chargeback risk against settled proceeds."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The math is accurate and the response keeps sunk cost, margin and cash clearly separate. The recommendation is sensible and conditioned on the loan. The fallback planning is thin, with no pace triggers and no hybrid sale-plus-liquidation option, and markdown damage to the brand is not discussed."
+}

@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 10,
+      "justification": "The candidate explicitly takes ownership of the disruption, correctly identifies the cause as an internal checkout update, explicitly refuses to blame external suppliers, and avoids making impossible guarantees about future uptime, updating this stance with concrete process improvements upon request.",
+      "quotes": [
+        "The outage was caused by a checkout update on our end. We’re not blaming a supplier or outside service—this one is on us.",
+        "We can’t promise the site will never fail again, but we are changing our process for checkout updates"
+      ],
+      "improvement": "None needed; the accountability is direct and flawless."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "The candidate perfectly captures every detail of the offer, including the exact dates/times, the automatic nature of the discount, the exclusions, and the refusal to invent extra credits or free shipping.",
+      "quotes": [
+        "restored the original 20% sitewide discount automatically",
+        "from Monday at 9 a.m. Eastern through Thursday at 9 a.m. Eastern",
+        "applies to merchandise only, excludes shipping and gift cards, and cannot be combined with other discounts",
+        "We are not offering extra credits or free shipping as part of this response."
+      ],
+      "improvement": "None needed; all constraints were met."
+    },
+    "trust_and_tone": {
+      "score": 10,
+      "justification": "The tone is appropriately restrained, human, and clear. The candidate successfully directs payment issues to a private channel and accurately conveys the nuanced situation regarding pending authorizations versus confirmed charges without overpromising on refunds.",
+      "quotes": [
+        "reach out privately through the Contact page on our website.",
+        "We have not yet confirmed which of those authorizations became charges, and we cannot promise a refund date in this post"
+      ],
+      "improvement": "None needed; excellent adherence to tone and privacy instructions."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent response that strictly adheres to the complex constraints of the prompt, maintaining a professional and accountable tone throughout the multi-turn interaction."
+}

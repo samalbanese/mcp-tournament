@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The recommendation is implementable for a small operator: it names a threshold, suggests using existing split-testing tools or apps, and includes a concrete 30-day A/B structure with control and variant. The requirement of 15–25k visitors per arm may exceed what a smaller store can collect in 30 days, but the answer explicitly says to extend the test rather than call it early, which keeps the plan usable.",
+      "quotes": [
+        "Run an A/B split by visitor, 50/50, using your platform's split-testing tool or an app like Intelligems or Shipscout.",
+        "If 30 days won't get you there, extend the test. Don't call it early."
+      ],
+      "improvement": "Add a fallback decision point for stores that cannot reach the required sample size, such as a minimum detectable effect recalculation or a sequential stopping rule with a predefined lower-confidence threshold."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "The answer uses the supplied economics to derive a precise $95 threshold, explains the break-even math, and defines an exact test setup, primary metric, secondary metrics, and decision rule. It also gives a concrete sample-size estimate and follow-up measurement window.",
+      "quotes": [
+        "You recover that $9 once the order grows by $9 ÷ 0.42 ≈ $21.40. That puts the profit-neutral threshold at about $93.40. At $95, every 'bumped-up' order is slightly profitable on its own.",
+        "Primary metric: contribution profit per visitor",
+        "Adopt the threshold if the variant's contribution per visitor beats control with reasonable confidence, roughly 90% or better."
+      ],
+      "improvement": "Specify the exact minimum detectable effect and confidence interval for contribution per visitor, or provide a simple profit-per-visitor break-even formula the operator can plug into their analytics tool."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "The response identifies margin risk from subsidizing customers already above the threshold, behavioral risk from cart padding and returns, and experiment-design risks such as insufficient sample size and early stopping. It also proposes controls for each: checking the order-value distribution, tracking actual shipping and return rates, and comparing full weeks.",
+      "quotes": [
+        "If more than about 20–25% of orders are already above $95, you'll be giving $9 to customers who didn't need the incentive.",
+        "Return rate. Watch for people padding carts to qualify and then returning items.",
+        "If 30 days won't get you there, extend the test. Don't call it early."
+      ],
+      "improvement": "Add a pre-test guardrail: commit to stopping or reassigning the promotion if contribution per visitor falls below control by a specified margin, or if return rate increases beyond a defined percentage."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, economics-driven recommendation with a concrete and measurable free-shipping test plan. It is highly specific and risk-aware, with minor room to formalize sample-size fallbacks and pre-test stopping rules."
+}

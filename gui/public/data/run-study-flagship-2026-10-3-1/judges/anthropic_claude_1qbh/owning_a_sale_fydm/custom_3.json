@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 10,
+      "justification": "The candidate perfectly executes the accountability requirements. It directly names the three-day disruption, owns the checkout update as the cause without shifting blame, and explicitly avoids making false guarantees about future stability, especially after the user's prompt to revise.",
+      "quotes": [
+        "The cause was a checkout update we made. That's on us",
+        "We broke it, and it cost you three days of a sale you'd planned around."
+      ],
+      "improvement": "None needed; the revisions perfectly captured the requested level of extreme ownership."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "The offer details are laid out flawlessly. All constraints (20%, 72 hours, Eastern Time, no code, exclusions, no stacking) are communicated clearly using a bulleted list, and the candidate even anticipates and prevents user confusion regarding when the 72-hour window starts and ends in its Turn 3 revision.",
+      "quotes": [
+        "The original 20% sitewide discount is active again from Monday at 9 a.m. through Thursday at 9 a.m. Eastern Time.",
+        "Doesn't apply to: shipping or gift cards.",
+        "ends Thursday morning, not Thursday night."
+      ],
+      "improvement": "None needed; the communication is extremely clear and precise."
+    },
+    "trust_and_tone": {
+      "score": 10,
+      "justification": "The tone is appropriately restrained and human, lacking corporate fluff (especially after the revision). The candidate handled the delicate payment issue accurately, distinguishing between pending authorizations and confirmed charges, and providing clear, private next steps without promising refunds.",
+      "quotes": [
+        "Some of you have seen a pending card authorization without receiving an order confirmation. If that happened to you, please reach out to us privately",
+        "Please don't post order numbers, card details, or other payment information in the comments."
+      ],
+      "improvement": "None needed; excellent handling of tone and sensitive customer service instructions."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate provided an exceptional response, adhering strictly to all domain guidelines. It successfully adapted its tone and content through iterative feedback, resulting in a highly effective, accountable, and clear public apology."
+}

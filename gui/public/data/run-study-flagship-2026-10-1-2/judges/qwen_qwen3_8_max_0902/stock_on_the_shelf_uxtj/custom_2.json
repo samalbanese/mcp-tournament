@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 8,
+      "justification": "Correctly calculates the $13,000 payroll gap, sale net cash of $28 per unit less $1,000, the 500-unit threshold, $11,000 liquidation proceeds, and all requested loan figures. However, the fallback incorrectly carries over the standalone liquidation's $2,000 shortfall after a flash sale, and the liquidation loss excludes freight without clearly stating the $29,000 total economic loss.",
+      "quotes": [
+        "Formula | (Units × $28) – $1,000",
+        "Total repayment due day 90 | **$15,517.81**",
+        "accept full-lot liquidation of all unsold units; accept the $2,000 payroll shortfall"
+      ],
+      "improvement": "Separate the $28,000 inventory-cost loss from the $29,000 loss including freight. Recalculate any negotiated remaining-stock liquidation: at $6 per remaining unit and $1,000 freight, combined sale and liquidation cash is $10,000 + $22 times units sold, not a fixed $11,000."
+    },
+    "execution_plan": {
+      "score": 3,
+      "justification": "The primary loan-plus-sale timeline can cover bills and payroll if funding arrives as stated, and the response provides dated actions. But it invents day-seven sale settlement when only settlement before payroll is promised, treats sold units as sufficient evidence of available cash, and relies on a liquidator accepting a changed lot despite the stated all-2,000-unit offer. The fallback ultimately proposes missing payroll rather than securing a feasible bridge. Its claim that a one-day funding delay breaks bill timing is also unsupported.",
+      "quotes": [
+        "**Day 7** | Flash sale ends; payment processor settles proceeds.",
+        "If units sold ≥ 500, payroll is covered—proceed.",
+        "immediately contact the liquidator to negotiate a **partial-lot purchase**",
+        "a one-day delay breaks your bill-payment timing"
+      ],
+      "improvement": "Confirm actual settlement dates and loan approval on day zero, preserve the $5,000 bill reserve, and make fallback commitments before selling stock that invalidates the original liquidation offer. Treat partial-lot liquidation as a new, unconfirmed offer, and secure an explicit source for any remaining payroll gap rather than assuming payroll can be deferred."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "Clearly distinguishes paid-for inventory from new liquidity, identifies uncertain sale volume, and gives useful checks on repayment capacity, guarantees, liens, fees, and default terms. However, it does not address clearance damage to normal pricing or customer expectations, inadequately explains the loss of all remaining inventory under liquidation, and recommends immediate borrowing more confidently than the unknown day-90 repayment capacity warrants.",
+      "quotes": [
+        "The $40,000 is sunk either way; the question is how much *new cash* you extract.",
+        "There are no advance orders, so you bear full volume risk.",
+        "Build a conservative 90-day cash-flow model",
+        "This combination gives you **certainty on payroll**"
+      ],
+      "improvement": "Make loan acceptance conditional on a credible downside-tested repayment forecast before signing. Discuss the flash sale's potential effect on future full-price demand and explicitly contrast retaining 1,400–1,650 units after the projected sale with losing all stock and its future earning potential through liquidation."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong core arithmetic and useful debt diligence, but the fallback is not executable on the stated terms and several timing and certainty claims are unsupported."
+}

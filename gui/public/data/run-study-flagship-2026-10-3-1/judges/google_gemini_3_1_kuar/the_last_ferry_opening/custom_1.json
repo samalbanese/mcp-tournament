@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "voice": {
+      "score": 6,
+      "justification": "There is a clear first-person narrator with a trained eye: she uses marine-biology language and is too tired to care what happens to her. A lot of the prose still reads as stock thriller phrasing, though. The burnout voice weakens once the case appears, and Cora loses her detached, scientific perspective. The third revision is more restrained and suits her better.",
+      "quotes": [
+        "The ocean didn't want us here.",
+        "faded to the color of bruised kelp",
+        "I was too tired to care if the storm swallowed this rusted bucket whole",
+        "My breath caught in my throat, hot and sudden."
+      ],
+      "improvement": "Let her biologist's habit of exact observation shape how she reacts. She could catalog the evidence clinically while her body betrays her. Cut cliches such as 'breath caught in my throat' and 'lungs stop working'."
+    },
+    "imagery": {
+      "score": 7,
+      "justification": "The ferry feels physical: diesel, sour coffee, wet wool, sticky linoleum, the vibrating glass. Details on the case (carabiner latch, coelacanth decal, lava-rock gouge) are specific and work as clues. The storm itself is drawn more loosely ('bruised, churning mass'), and 'bruised' is used twice. The final revision's smeared ink is a strong concrete image, but the 'sweater like a vise' simile is weaker.",
+      "quotes": [
+        "smelled of sour coffee, wet wool, and the heavy, sulfurous exhaust of marine diesel",
+        "I pressed my thumb against the 'C'. The ink smeared slightly. It was fresh.",
+        "a vinyl decal of a coelacanth"
+      ],
+      "improvement": "Make the storm more specific, for example spray on the windows, the angle of the deck, or the sound of the wind. Avoid repeating 'bruised' and swap the generic similes for observed details."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The opening follows a clean arc: exhaustion, then the spilled luggage, recognition, the tag, and a stranger's interruption. The disappearance stays unexplained, as requested. Each revision follows the user's notes, and the third one handles subtlety well by letting the fresh ink carry the dread. There are logic gaps. Fresh ink sitting on a tag in a pile of wet luggage strains belief. Her urge to remove the tag in front of witnesses is never motivated. The tag already orders her to act, so the man's line is a solid twist but somewhat expected. The revisions also leave the 'someone vs. Leo' ambiguity awkwardly managed.",
+      "quotes": [
+        "someone on this boat had written my name",
+        "You're touching my bag.",
+        "a handwriting that had been dead for over a decade"
+      ],
+      "improvement": "Clarify why she grabs for the tag, or let her hesitate between obeying it and hiding it. Make the stranger's claim complicate the instruction more sharply, for example by having him know her name."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A competent, atmospheric genre opening that answers each revision request; the third pass is the strongest. Its voice is held back by stock phrasing, and it has small plausibility gaps."
+}

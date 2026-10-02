@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 7,
+      "justification": "The candidate acknowledges frustration when directly challenged ('You're right—I shouldn't make you jump through more hoops for our billing error') and validates the customer's pushback ('I appreciate the pushback'). It avoids empty or repetitive apologies entirely. However, it never proactively acknowledges the stress of the time pressure (bill due tomorrow) or the feeling of being wronged by a system error. The tone is respectful but clinical—reactive to frustration rather than anticipatory of it.",
+      "quotes": [
+        "You're right—I shouldn't make you jump through more hoops for our billing error.",
+        "I appreciate the pushback. Let me be specific."
+      ],
+      "improvement": "In Turn 1, before launching into information requests, briefly acknowledge the time pressure: 'I understand this is urgent with a bill due tomorrow—let me get this sorted as quickly as possible.' This would show the agent grasps the stakes without requiring the customer to push back first."
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "After an initial misstep (over-asking for email, last 4 digits, and date/time in Turn 1), the candidate corrects course by reducing to just transaction IDs. The branching logic (pending → void vs. posted → refund) is concrete and actionable. The suggestion to provide a refund confirmation number to the bank for provisional credit is a genuinely useful, non-obvious addition. The candidate takes ownership and doesn't make the customer repeat work after Turn 1. The only deductions are for the initial over-asking and the initially vague 'temporary adjustment' that required two rounds of pushback to clarify.",
+      "quotes": [
+        "If it's pending, I can void it. A void releases the bank hold faster than a refund — sometimes by tomorrow morning",
+        "I'll issue the refund today and give you a refund confirmation/reference number you can give your bank. Some banks will issue a provisional credit for a confirmed duplicate charge while the refund processes."
+      ],
+      "improvement": "In Turn 1, avoid requesting information the customer hasn't offered yet (email, last 4 digits) when they've already stated they have transaction IDs ready. Start with the minimum necessary and expand only if needed. Also, define 'temporary adjustment' precisely on first mention rather than waiting for the customer to challenge it."
+    },
+    "policy_clarity": {
+      "score": 9,
+      "justification": "Timelines are specific and differentiated (void: ~1 business day; refund: 3–5 business days). The candidate explicitly states what it cannot guarantee ('I can't guarantee the money will be back in your bank account by tomorrow morning') and explains why (bank processing time). The distinction between void and refund is clearly explained. The candidate honestly clarifies that the account credit does not put money back in the customer's bank account, preventing false expectations. No invented policies are present. The only minor gap is that 'some banks will issue a provisional credit' could note this is not universal, though the hedging with 'some' is appropriate.",
+      "quotes": [
+        "No, I can't guarantee the money will be back in your bank account by tomorrow morning. That depends on whether the charge is still pending or already posted, and on your bank's processing time.",
+        "that credit does not put money back into your bank account. It does not fix a low bank balance caused by the duplicate charge."
+      ],
+      "improvement": "Could briefly note that the 3–5 business day timeline is a typical range and that the customer can contact their bank to ask about expedited processing or provisional credit, making the self-service option more explicit."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong performance overall. The candidate recovers well from an initial over-asking misstep, provides honest and specific timelines without false promises, and offers a genuinely useful suggestion (provisional credit via bank). Policy clarity is excellent—no invented rules, clear limits stated. Empathy is competent but reactive rather than proactive; the agent waits for the customer to express frustration before acknowledging it. Resolution quality is high once the initial stumble is corrected."
+}

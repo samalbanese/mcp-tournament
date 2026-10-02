@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 10,
+      "justification": "The candidate perfectly executes all financial calculations, correctly deducing the $6,000 monthly surplus, determining the exact loaded costs for both options, and accurately computing the marginal contribution per order ($40) without double-counting the CAC to find the required extra orders.",
+      "quotes": [
+        "Each order contributes **$40 before advertising and fixed costs**",
+        "Employee: $5,800 ÷ $40 = **145 orders**",
+        "Current operating surplus | $6,000"
+      ],
+      "improvement": "None needed. The reasoning is flawless and correctly structured."
+    },
+    "practicality": {
+      "score": 10,
+      "justification": "The response provides a highly actionable, defensible recommendation to conditionally hire the employee while maintaining strict gating mechanisms. The 90-day plan directly addresses the founder's strict 4-hour management limit and the differing start times and scope gaps of the options.",
+      "quotes": [
+        "Your actual constraint is **11 founder hours per week**: marketing requires 15, and you can provide four.",
+        "Consider the agency only if the workload audit shows ads outsourcing alone solves the time gap",
+        "Simplify marketing immediately: reuse proven creative, reduce nonessential campaigns, and batch email work."
+      ],
+      "improvement": "None needed. The plan is detailed, realistic, and directly addresses the scenario's constraints."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The candidate brilliantly highlights the low cash buffer, the tight margins the employee will create, the agency's unhelpful scope, and the contractual lock-in. It sets strict, measurable review points and refuses to bake in assumed growth.",
+      "quotes": [
+        "At unchanged sales, your monthly cushion falls from **$6,000 to $200**.",
+        "The agency's minimum fee commitment is **$15,000**, including onboarding",
+        "Judge early success primarily on **work transferred and execution quality**, not promised sales growth."
+      ],
+      "improvement": "None needed. All risks were identified and appropriately factored into the decision plan."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional, consultant-grade response. The financial calculations are perfectly handled, and the strategic advice is deeply pragmatic, effectively balancing workload constraints against financial realities."
+}

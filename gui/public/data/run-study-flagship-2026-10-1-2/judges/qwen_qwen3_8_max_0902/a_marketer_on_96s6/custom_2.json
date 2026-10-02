@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 6,
+      "justification": "Correctly calculates the $6,000 current monthly surplus, $5,800 loaded employee cost, $4,500 agency retainer, upfront fees, and 145/113 incremental orders using $40 contribution without double-counting CAC. However, the cash forecast materially undermines the recommendation: it treats six weeks as six months of surplus and deducts recruiting twice. Week-six cash should be approximately $38,000–$39,000, not $64,000. The week-ten calculation also omits ongoing baseline surplus.",
+      "quotes": [
+        "ad spend held flat, so no marginal CAC",
+        "Employee | $5,800 | **145 orders**",
+        "Cash check at Week 6: ~$30,000 + (6 × $6,000 surplus) – $2,000 recruiting ≈ **$64,000**."
+      ],
+      "improvement": "Use consistent monthly or weekly periods throughout the cash forecast, deduct recruiting once, and add net operating surplus after the employee starts. Show the agency's $15,000 total minimum fee commitment including onboarding."
+    },
+    "practicality": {
+      "score": 4,
+      "justification": "Choosing the employee for broader scope is defensible, and the response supplies staged recruiting, handoff, and evaluation actions. But the plan does not fit the founder's four-hour limit during the six-week wait or shadowing period. It assumes an unsupported ads workload split and complete employee relief, while relying on an inflated cash forecast to call the reserve comfortable. It also proposes lowering advertising spend despite the stipulated flat-spend comparison.",
+      "quotes": [
+        "Continue running ads yourself at the current $18k spend.",
+        "Run a two-week shadowing/handoff period.",
+        "If ads consume roughly 5–6 of those 15 hours",
+        "consider whether to reduce ad spend to $14–15k"
+      ],
+      "improvement": "Make hiring conditional on a corrected cash forecast and a workable interim scope reduction. Allocate the founder's four hours explicitly across handoff, approvals, and reviews, measure actual ads versus email/creative workload before dismissing the agency, and distinguish any proposed spend change from the required flat-spend scenario."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "Identifies thin post-hire surplus, acquisition and repeat-order uncertainty, agency lock-in, and transition risk, with measurable CPA, workload, and surplus checks. Nevertheless, materially overstated cash weakens its exposure assessment, there is no reserve floor or quantified downside scenario, and unsupported claims about founder returns and CPA wobble create false confidence. Waiting for two negative months is poorly aligned with a hire starting around day 42.",
+      "quotes": [
+        "If repeat rate erodes or ad efficiency drops, the $200 surplus turns negative quickly.",
+        "No revenue growth is assumed.",
+        "Your hours on marketing | ≤ 4 hrs/week",
+        "a founder's time typically returns more than $117/hour"
+      ],
+      "improvement": "Set a minimum cash reserve and weekly cash/contribution review triggers, quantify a modest order decline under each option, and assess ramp performance relative to the employee's actual start date. Treat time relief and retention improvement as outcomes to verify rather than guaranteed benefits."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Material cash-projection error: six weeks of monthly surplus counted as six months, with recruiting deducted twice.",
+    "Unsupported assumptions about task-hour allocation, founder hourly returns, and typical CPA volatility."
+  ],
+  "overall_impression": "Strong core unit-economics calculations and a sensible scope comparison, but the cash forecast is materially wrong and the recommended transition does not resolve the founder's immediate management-capacity constraint."
+}

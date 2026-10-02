@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 9,
+      "justification": "The final post apologizes for the sale disruption, gives the exact three-day outage interval, and directly attributes the failure to the shop's own checkout update. It offers no excuses, supplier blame, security speculation, or promises against future failure.",
+      "quotes": [
+        "Our website was unavailable during our sale, and we're sorry for the disruption.",
+        "The outage ran from Friday at 9 a.m. to Monday at 9 a.m. Eastern Time. Our checkout update caused the outage."
+      ],
+      "improvement": "Explicitly call the interruption 'three days' alongside the exact times so its duration is immediately apparent."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "The recovery offer is complete and accurate: the original automatic 20% discount, a fresh 72-hour period with exact Eastern Time endpoints, no code, merchandise eligibility, shipping and gift-card exclusions, and no stacking. No additional compensation is invented.",
+      "quotes": [
+        "We’ve automatically restored the original **20% sitewide discount** for a fresh 72 hours—from Monday at 9 a.m. through Thursday at 9 a.m. Eastern Time.",
+        "**No code is needed.** The discount applies to merchandise, excludes shipping and gift cards, and cannot be combined with other discounts."
+      ],
+      "improvement": "No substantive improvement is needed; preserve the exact window and exclusions in any shorter version."
+    },
+    "trust_and_tone": {
+      "score": 9,
+      "justification": "The revised opening follows the requested plainer acknowledgment while preserving the useful recovery details. The voice is restrained and empathetic. Payment concerns receive a clear private support route, pending authorizations are distinguished from confirmed charges, and neither refunds nor refund dates are promised.",
+      "quotes": [
+        "If that happened to you, please reach out privately through our website’s **Contact page** so support can check your situation.",
+        "We haven’t yet confirmed which authorizations became charges. Please don’t post order or payment details in the comments.",
+        "We know this interrupted your shopping, and we’re sorry for the frustration it caused."
+      ],
+      "improvement": "Consider trimming the repeated apology in the closing to keep the public post slightly tighter without losing empathy."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A precise, accountable public apology that faithfully explains the recovery offer and handles payment uncertainty responsibly. The revisions improve directness without sacrificing important details."
+}

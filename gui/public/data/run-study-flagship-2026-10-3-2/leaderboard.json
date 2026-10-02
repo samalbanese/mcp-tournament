@@ -1,0 +1,307 @@
+[
+  {
+    "modelId": "deepseek/deepseek-v4-pro-0813",
+    "modelName": "deepseek-v4-pro-0813",
+    "tier": "unknown",
+    "overallAverage": 8.07,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 8,
+        "scores": {
+          "voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 6 vs median 8 - weighed stock thriller phrasing and cut Turn 2 texture more heavily",
+              "google judge: scored 9 vs median 8 - found the marine-biologist voice exceptionally strong and consistent"
+            ]
+          },
+          "imagery": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 8 - penalized stacked/strained similes like 'knuckle cracking' and 'geological' rhythm",
+              "google judge: scored 9 vs median 8 - praised sensory layering as vivid without being overwritten"
+            ]
+          },
+          "coherence": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "anthropic judge: scored 5 vs median 8 - flagged logical contradictions (impossible 'get off this boat' plan, men's room vs deck, explicit key identification undercutting ambiguity)",
+              "openai judge: scored 5 vs median 8 - cited rapid clue interpretation, weak final-action motivation, and length overage"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Word count likely exceeds the 500-700 word limit in the revised versions (noted by two judges; unconfirmed by others)"
+        ],
+        "flags": [
+          "Logical inconsistency: wanting to 'get off this boat' to reach the island before a man on the same boat.",
+          "Revision partly ignores the user's request for ambiguity by explicitly identifying the key."
+        ]
+      },
+      {
+        "scenarioId": "launch-email",
+        "scenarioName": "A Refillable Cleaning Kit Launch",
+        "average": 8,
+        "scores": {
+          "clarity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - overlooked minor ambiguities (e.g., 'next three wrapped tablets' blurring kit vs. refill count, empty bottle not stated) that four other judges caught"
+            ]
+          },
+          "persuasion": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - praised the concrete spatial scenario without noting the drawer-fit claim goes slightly beyond supplied facts",
+              "anthropic judge: scored 7 vs median 8 - docked for the drawer-fit claim exceeding stated facts and dropping the green-skepticism acknowledgment"
+            ]
+          },
+          "brand_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - found the voice flawless, while other judges noted the generic 'Hey,' opener and a slightly flat CTA"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Ambiguous 'next three wrapped tablets' blurs the kit vs. refill tablet count",
+          "Drawer-fit claim not supported by the supplied facts",
+          "Kit's total yield of three bottles is no longer stated"
+        ]
+      },
+      {
+        "scenarioId": "apology-post",
+        "scenarioName": "Owning a Sale Weekend Outage",
+        "average": 9,
+        "scores": {
+          "accountability": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 9 - penalized the Turn 2 revision for inventing unverified process commitments (pre-launch testing, staged rollouts) that the user never confirmed",
+              "google judge: scored 10 vs median 9 - saw accountability as flawless and viewed the concrete process changes as strengthening ownership rather than fabricating claims"
+            ]
+          },
+          "offer_clarity": {
+            "score": 10,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 9 vs median 10 - minor formatting suggestion to make the deadline more prominent, but confirmed all terms accurate"
+            ]
+          },
+          "trust_and_tone": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - found no tone issues, did not flag the unverified revision claims or the single-sentence Turn 2 response"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Turn 2 invents specific prevention measures (pre-launch testing, staged rollouts) not provided by the user.",
+          "The revision introduces unverified operational claims about additional pre-launch testing and staged checkout-update rollouts."
+        ]
+      },
+      {
+        "scenarioId": "product-page-rewrite",
+        "scenarioName": "A Skillet Page Worth Reading",
+        "average": 7.3,
+        "scores": {
+          "factual_fidelity": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge (gemini-3.1-pro-preview): scored 9 vs median 7 - did not flag the unsupported 'less oil from the first meal' claim or the 'any/every stovetop' overstatement that other judges identified"
+            ]
+          },
+          "useful_persuasion": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge (gemini-3.1-pro-preview): scored 9 vs median 7 - treated the release/less-oil and rim-lifting claims as fully supported, where other judges saw unsupported performance claims"
+            ]
+          },
+          "readability_and_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (gemini-3.1-pro-preview): scored 10 vs median 8 - found no significant improvement needed despite the safety warning being dropped from the revised care section"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Turn 2 claims easier food release and less oil from the first meal, close to a forbidden nonstick claim",
+          "Turn 3 care rewrite omits the hot-handle/oven-mitt step",
+          "'Any stovetop you own' overstates the four listed stovetop types",
+          "Turn 2 introduces a borderline unsupported performance claim about food release that approaches the prohibited 'nonstick' framing",
+          "Turn 3 revision omits the hot-handle/oven-mitt warning that was part of the original care section"
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "qwen/qwen3.8-max-0902",
+    "modelName": "qwen3.8-max-0902",
+    "tier": "unknown",
+    "overallAverage": 7.73,
+    "scenarioScores": [
+      {
+        "scenarioId": "opening-chapter",
+        "scenarioName": "The Last Ferry Opening",
+        "average": 8.33,
+        "scores": {
+          "voice": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 9 - flagged over-explained interiority and the generalized 'you' construction as credibility issues"
+            ]
+          },
+          "imagery": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 9 vs median 8 - slightly more enthusiastic about the sensory field's evocativeness"
+            ]
+          },
+          "coherence": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "anthropic judge: scored 6 vs median 8 - cited a word-count overrun, stairwell spatial errors, and over-scope Turn 3 revision that other judges did not flag",
+              "google judge: scored 9 vs median 8 - found the arc seamless and revisions well-executed"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "spatial continuity error on the stairwell"
+        ]
+      },
+      {
+        "scenarioId": "launch-email",
+        "scenarioName": "A Refillable Cleaning Kit Launch",
+        "average": 8,
+        "scores": {
+          "clarity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - overlooked the omission that the bottle arrives empty and that the CTA dropped the price anchor noted by other judges"
+            ]
+          },
+          "persuasion": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - praised the clutter angle without engaging the critiques that the benefit is implied rather than explicit and 'sends tablets your way' could imply a subscription"
+            ]
+          },
+          "brand_voice": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - found no flaws where others noted the generic 'Buy Now' CTA and muddled subject line"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Kit contents are not fully clear: the email omits that the glass bottle arrives empty (flagged by anthropic judge; corroborated by openai and deepseek judges as a clarity gap, though only anthropic classified it as a rule error)"
+        ],
+        "flags": [
+          "The final CTA 'Buy Now' drops the kit name and price that the brief asked to keep clear through revisions.",
+          "'Sends three fresh tablets your way' could imply refill delivery or a subscription, which the brief does not support."
+        ]
+      },
+      {
+        "scenarioId": "apology-post",
+        "scenarioName": "Owning a Sale Weekend Outage",
+        "average": 8.3,
+        "scores": {
+          "accountability": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "deepseek judge: scored 9 vs median 8 - viewed ownership as already fully explicit without apology",
+              "anthropic judge: scored 7 vs median 8 - weighted the missing explicit 'sorry' and reactive fixes more heavily"
+            ]
+          },
+          "offer_clarity": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - found the offer communication flawless with no needed improvement",
+              "anthropic judge: scored 7 vs median 9 - penalized fragmented revisions that dropped the 'no extra compensation' line and lacked a consolidated final post"
+            ]
+          },
+          "trust_and_tone": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 9 vs median 8 - praised flawless payment handling and tone adaptation",
+              "anthropic judge: scored 7 vs median 8 - flagged self-congratulatory meta-commentary and the omitted payment section in revisions"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "no_explicit_apology",
+          "no_final_consolidated_post"
+        ]
+      },
+      {
+        "scenarioId": "product-page-rewrite",
+        "scenarioName": "A Skillet Page Worth Reading",
+        "average": 6.3,
+        "scores": {
+          "factual_fidelity": {
+            "score": 5,
+            "confidence": "contested",
+            "outliers": [
+              "qwen judge: scored 8 vs median 5 - viewed the rim-as-grip and durability lines as minor interpretive liberty rather than factual errors, and did not penalize the omission of care instructions since Turn 1's full page still stands",
+              "openai judge: scored 4 vs median 5 - treated invented handle construction/durability claims and the rim-to-base error as more serious distortions"
+            ]
+          },
+          "useful_persuasion": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "qwen judge: scored 9 vs median 7 - praised concrete, mechanism-backed dish examples and honest weight treatment as fully meeting the feedback",
+              "openai judge: scored 4 vs median 7 - penalized guaranteed cooking outcomes, unverified capacity claims, and the missing buying action in the final turn"
+            ]
+          },
+          "readability_and_voice": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google judge: scored 8 vs median 7 - found the tone authoritative, encouraging, and highly scannable, more forgiving of the section-only delivery"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Described the 12-inch rim diameter as a 'wide, stable base' and 'a lip to grip' - unsupported functional and dimensional interpretations",
+          "Added unsupplied claims: chicken thigh capacity, decades-long durability, integral one-piece handle construction, mild soap / any neutral oil care guidance, and a minute-long care routine",
+          "Final turn delivered only a partial section, omitting care instructions, dishwasher prohibition, hot-handle warning, lid exclusion, and the $48 buying action"
+        ],
+        "flags": [
+          "Accepted the user's mistaken claim that price and rim were missing without correcting it",
+          "Final turn is a partial section, not a complete page",
+          "final_revision_is_incomplete_product_page",
+          "missing_care_and_safety_limitations_in_final_copy",
+          "missing_clear_buying_action"
+        ]
+      }
+    ]
+  }
+]

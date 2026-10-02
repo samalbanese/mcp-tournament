@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "justification": "All calculations are correct: contribution margin ($48 - $8 = $40), current surplus ($6,000), loaded employee cost ($58,000 × 1.20 ÷ 12 = $5,800), agency cost ($4,500), and incremental order requirements (145 and 113). Critically, the response correctly handles the CAC nuance by using $40 marginal contribution with ad spend held flat, explicitly noting this does not mean orders can be acquired without additional spending. Day-90 cash projections are arithmetically sound and properly account for the six-week delay.",
+      "quotes": [
+        "with advertising spend held flat, the marginal contribution used to cover a new recurring cost is $40 per additional order, not $10. That does not mean additional orders can actually be acquired without additional spending.",
+        "$5,800 ÷ $40 = 145 orders",
+        "$4,500 ÷ $40 = 112.5, rounded up to 113 orders"
+      ],
+      "improvement": "Could briefly note that the $40 marginal contribution assumes the additional orders are repeat/organic (since ad spend is flat), making the 'extra orders to break even' framing slightly optimistic without specifying the acquisition channel for those incremental orders."
+    },
+    "practicality": {
+      "score": 8,
+      "justification": "The response makes a clear, conditional recommendation (employee over agency) with well-reasoned scope-fit logic. The 90-day plan is structured in three phases with specific actions: workload tracking, cash forecasting, gate-setting, hiring decision criteria, and ramp milestones. The four-hour limit is explicitly tied to the plan ('capped at four hours weekly'), the six-week gap is addressed with bridging suggestions, and deferral is offered as a legitimate outcome. The day-90 cash table provides a concrete decision anchor.",
+      "quotes": [
+        "If those conditions fail, defer both options and revisit the scope or budget.",
+        "Judge early success primarily on work transferred and execution quality, not promised sales growth.",
+        "Track marketing hours by ads, email, creative, and coordination. Confirm what must be transferred to get your involvement below four hours weekly."
+      ],
+      "improvement": "The 'simplify marketing immediately' and 'temporary internal coverage' suggestions in Days 1-14 are somewhat vague. Specifying which campaigns to pause or what a realistic hour-reduction target looks like would make the bridging plan more actionable."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "The response identifies all major risk vectors: the $200 monthly cushion (with the vivid 'five fewer orders' sensitivity), the $32,000 cash being below the proposed $36,000 floor, the three-month agency lock-in ($15,000 total), hiring ramp uncertainty, and the explicit statement that neither option promises growth. Measurable review points include weekly cash tracking, monthly KPI monitoring, and day-90 evaluation criteria. Assumptions are stated rather than embedded.",
+      "quotes": [
+        "Just five fewer orders per month, with everything else unchanged, would erase that cushion.",
+        "Repeat purchases, paid-acquisition performance, incremental orders, and unchanged sales during the handoff all remain uncertain.",
+        "You are currently below that illustrative floor."
+      ],
+      "improvement": "Could add a specific trigger for abandoning the hire mid-ramp (e.g., 'if cash drops below $X by day 60, initiate exit') and note the risk of employment-law obligations making a quick reversal costly."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptionally well-structured response with precise financial calculations, a defensible conditional recommendation, and thorough risk identification. The CAC handling is particularly strong, correctly avoiding double-counting while acknowledging the limitation. The 90-day plan is actionable with clear gates and review points. Minor improvements would come from more specificity in bridging tactics and explicit exit triggers."
+}

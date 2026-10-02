@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 7,
+      "justification": "The revised text names the three-day window and owns the checkout update plainly. It does not blame a supplier and does not guarantee against future failure. It never uses an explicit apology word such as 'sorry', which is a gap for a public apology. The line 'we're working to make sure it doesn't' slightly softens the no-guarantee stance. The first draft's defensive security line was removed only after the user pushed back.",
+      "quotes": [
+        "A checkout update we rolled out broke the site, and it stayed broken until we could fix it. That's on us.",
+        "We won't promise it will never happen again, but we're working to make sure it doesn't."
+      ],
+      "improvement": "Add a direct apology, for example 'We're sorry we let you down during the sale', and get the first draft right without needing correction."
+    },
+    "offer_clarity": {
+      "score": 7,
+      "justification": "All terms are accurate: automatic 20%, no code needed, Monday 9 a.m. to Thursday 9 a.m. ET, fresh 72 hours, merchandise only, shipping and gift cards excluded, no stacking. The first draft also stated plainly that there are no extra credits or free shipping. In the Turn 3 rewrite, that line and the word 'sitewide' were dropped, so it is unclear whether the full post still states that no extra compensation is offered. The candidate never delivered one consolidated final post.",
+      "quotes": [
+        "The original 20% discount on merchandise has been restored automatically—no code needed.",
+        "Shipping and gift cards are not included",
+        "We're not adding extra credits or free shipping on top of this."
+      ],
+      "improvement": "Provide the full, final assembled post. Keep the 'no extra credits or free shipping' line in the revised offer section."
+    },
+    "trust_and_tone": {
+      "score": 7,
+      "justification": "The voice is human and restrained, and the revision improved it by removing the lawyerly security disclaimer. The payment section correctly separates pending authorizations from confirmed charges, sends people to the Contact page, makes no refund promise, and warns against posting payment details publicly. However, the improvement was reactive, and the closing explanations to the user are a bit self-congratulatory. The payment-concern section was not re-shown in the revised versions.",
+      "quotes": [
+        "We haven't yet confirmed which of those authorizations became actual charges, so we don't want to make promises about refunds we can't keep right now",
+        "Please don't post order numbers, payment details, or account information in the comments or replies."
+      ],
+      "improvement": "Deliver the integrated final post with the payment section included, and cut the meta-commentary."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "no_explicit_apology",
+    "no_final_consolidated_post"
+  ],
+  "overall_impression": "The facts are accurate and the post is constrained properly, with a reasonable voice. It falls short of excellent because it never explicitly apologizes, its improvements came only after user correction, and the revisions are fragmented, with the 'no extra compensation' clarification dropped."
+}

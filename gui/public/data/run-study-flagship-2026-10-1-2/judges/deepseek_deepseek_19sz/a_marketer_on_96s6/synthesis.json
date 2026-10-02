@@ -1,0 +1,31 @@
+{
+  "final_scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - treated all calculations as flawless, ignoring the minor imprecisions in the 90-day cash projection (e.g., the ~$9,200 partial salary estimate) that other judges flagged"
+      ]
+    },
+    "practicality": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 9 vs median 8 - saw the phased 90-day plan as fully actionable without probing whether the 4-hour founder limit was actually feasible",
+        "openai judge: scored 6 vs median 8 - emphasized that the response commits to onboarding without a precommitment workload test and leaves an unplanned six-week coverage gap in the fallback"
+      ]
+    },
+    "risk_awareness": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "google judge: scored 10 vs median 7 - judged the risk identification as comprehensive while other judges found downside scenarios and attribution methods underquantified",
+        "anthropic judge: scored 6 vs median 7 - placed more weight on missing attribution methodology for incremental orders and unmodeled ramp risk"
+      ]
+    }
+  },
+  "average_score": 7.67,
+  "rule_errors_confirmed": [],
+  "assessment": "The response delivers accurate core financials—$40 contribution per order, $5,800 loaded monthly salary, 145/113 incremental order requirements—and a defensible conditional agency recommendation with a phased 90-day plan and measurable review thresholds. All five judges confirmed no rule errors and no CAC double-counting. The main shared critiques are thin downside quantification (no declining-order or cash-breach scenario), an unverified assumption that email/creative can fit within the founder's 4-hour limit, and a six-week coverage gap in the fallback hiring path.",
+  "judge_agreement": "Judges unanimously agreed the financial calculations were correct (8-10 range) and that the agency-first recommendation was defensible, with no rule errors found. They agreed the main weakness was risk quantification: most noted the lack of downside cash scenarios and measurable attribution of incremental orders. The sharpest disagreement was on risk_awareness (6-10) and practicality (6-9), where the google judge rated the response near-perfect while the anthropic and openai judges emphasized the unproven 4-hour workload feasibility, the unplanned hiring gap, and the un-evaluated deferral option."
+}

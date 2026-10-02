@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "Every figure I checked is correct. The payroll gap is $6,000 − $5,000 + $4,000 = $5,000 available against $18,000, so $13,000 short. The sale nets $28 per unit less $1,000 promotion, giving $8,800 at 350 units and $15,800 at 600. The break-even of 500 units correctly adds back the promotion spend. The liquidator nets $11,000, leaving $2,000 short. The loan gives $14,700 cash, $517.81 interest, $15,517.81 repayment and $817.81 total cost, about 22.6% effective. The combined loan-plus-sale case of $28,500 and the Jan 2, 2027 due date are also right. One minor issue: the '–$29,000 write-down' mixes the $28,000 inventory write-down with the $1,000 freight cost without explaining that.",
+      "quotes": [
+        "($13,000 + $1,000) ÷ $28 = **500 units**",
+        "**Financing cost:** $517.81 + $300 = **$817.81**",
+        "the effective annualised cost is about **22.6%**"
+      ],
+      "improvement": "Split the liquidator loss into a $28,000 write-down against inventory cost plus a $1,000 freight cash cost. State the timing of the $1,000 promotion spend directly in the gap table rather than only in a later note."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "The plan has concrete dates and a feasible sequence. It runs the sale while applying for the loan at the same time, and it sets an Oct 5 pace trigger at about 285 units with an Oct 8 hard deadline. That leaves room for the three-day loan funding before the Oct 22 payroll. It flags the zero cash buffer after the promotion spend and does not count forecast sales as cash. However, it assumes the lender will pre-approve and hold the loan undrawn without confirming that. It also has no trigger for checking settlement before Oct 21, and the liquidator fallback still leaves a $2,000 gap with no specific way to close it.",
+      "quotes": [
+        "If units sold are **below ~285** (on pace for under 500), trigger the fallback.",
+        "Submit the loan application today so it can fund within 3 days of a decision, but **don't draw it yet**."
+      ],
+      "improvement": "Confirm by Oct 2 that the lender will approve the loan and hold it undrawn. Add a mid-sale check on settlement timing. Name specific actions to close the $2,000 gap if the liquidator is used, such as payment terms with suppliers or an owner injection."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response treats the stock cost as sunk and says the loan is not income. It identifies that roughly half the sales range fails to close the gap. Its debt checklist is strong: a 13-week forecast, the risk of a structural shortfall, personal guarantees, liens and seasonality. It also notes the liquidator would take all of the inventory. It does not address the clearance damage a $32 price can cause to $50 pricing and brand perception. It is also optimistic in assuming unsold slow-moving stock can later sell at full price.",
+      "quotes": [
+        "The $40,000 is already spent. It is a sunk cost.",
+        "If other products generate only about $4,000 per three weeks against $18,000 payroll, the business has an ongoing shortfall."
+      ],
+      "improvement": "Discuss how a discount price could anchor customers to lower prices and reduce later full-price sales. Replace the full-price assumption for leftover slow-moving stock with a more conservative value. Spell out a contingency if repayment cannot be made on day 90."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The response is strong and accurate, with a sensible sale-first plan backed by the loan and clear dated triggers. Its weaker points are the risk of clearance price damage and its optimism about the value of unsold stock."
+}

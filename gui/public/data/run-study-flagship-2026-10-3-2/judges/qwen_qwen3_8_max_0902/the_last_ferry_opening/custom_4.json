@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The first-person narrator has a distinctive, consistent perspective: wry, observant, and emotionally guarded, with language rooted in her marine biology background and disillusionment. Metaphors feel authored rather than generic, and her psychology remains coherent throughout.",
+      "quotes": [
+        "You develop a tolerance for futility the way you develop a tolerance for cold. You don't notice it killing you.",
+        "My hand found the rail and held it with a grip I didn't authorize.",
+        "The sentence completed itself in a voice that sounded like mine but had no authority over me anymore."
+      ],
+      "improvement": "A few similes, such as the extended bruise metaphor, risk feeling slightly self-conscious; pruning or spacing them would keep the voice even more seamless."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "Sensory details make the ferry, storm, and emotional tension vivid without overcrowding the prose. The imagery is concrete and atmospheric, moving from smell and touch to visual detail and muscular physicality.",
+      "quotes": [
+        "The sky to the west had gone the color of a bruise three days old—that particular yellow-green that means the blood beneath is still doing its slow work.",
+        "a wall of cloud so low it seemed to be dragging itself across the water on its belly.",
+        "The metal shelf was wet where the suitcase had sat. A single drag mark scored the rubber matting."
+      ],
+      "improvement": "The sensory field is primarily visual and tactile; adding a sharper auditory detail from the storm or cargo hold could deepen immersion without adding clutter."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The opening arc is clear and compelling: recognition, restraint, disappearance, then instinctive pursuit. Revisions effectively sharpen the protagonist's visceral reaction and the final sentence now blends compulsion with trepidation.",
+      "quotes": [
+        "My body moved before I decided anything. That's the only honest way to say it.",
+        "I went through the door with my breath held and my shoulders up around my ears, the way you approach something that might be a mercy or might be the worst thing that ever happens to you, and you go anyway, because not going has already taken twelve years."
+      ],
+      "improvement": "The final clause 'because not going has already taken twelve years' slightly resolves the ambiguity by explaining the compulsion; letting the physical hesitation and motion stand alone could preserve more unresolved tension."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A polished, atmospheric opening with a strong first-person voice and well-managed suspense. The revisions respond directly to feedback and deepen the protagonist's motivation, though the final explanatory clause slightly reduces the intended ambiguity."
+}

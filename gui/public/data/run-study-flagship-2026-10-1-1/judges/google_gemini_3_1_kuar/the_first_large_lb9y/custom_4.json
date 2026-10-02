@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 8,
+      "justification": "The response correctly calculates the $33 wholesale unit price, $66,000 wholesale revenue, $36,000 COGS, $2,000 freight, and $28,000 wholesale contribution. It also correctly states direct contribution of $33 per lamp and uses a five-month full-retail comparison for 2,000 units without assuming immediate retail sell-through. It distinguishes contribution from cash receipts mainly through the separate cash flow map, though it could state the distinction more explicitly.",
+      "quotes": [
+        "Direct Sale Contribution: $60 (retail) - $18 (COGS) - $9 (fees) = $33 per lamp.",
+        "Wholesale Revenue: 2,000 lamps at $33 ($60 less 45%) = $66,000 total.",
+        "Wholesale Contribution: $66,000 (revenue) - $36,000 (COGS) - $2,000 (freight) = $28,000 total (or $14 per lamp).",
+        "Because direct demand is only 400/month, it would take five months to sell 2,000 lamps directly."
+      ],
+      "improvement": "Explicitly compare the total direct contribution from 2,000 units ($66,000 over five months) with the $28,000 wholesale contribution, and clarify that the $28,000 contribution is not the same as the immediate $33,000 deposit cash receipt."
+    },
+    "cash_and_stock_plan": {
+      "score": 8,
+      "justification": "The response maps the 3,000-unit opening stock, 2,000-unit wholesale shipment in week 2, 800 direct sales over eight weeks, and 2,000-unit replenishment arrival in week 8. It also tracks the $16,000 reserve, $33,000 retailer deposit, $18,000 supplier deposit, $2,000 freight, direct cash inflows, and $18,000 supplier balance. The conclusion that the deposit funds the supplier deposit and freight, and that the final Net 45 payment is not required to keep operations funded, is supported by the arithmetic.",
+      "quotes": [
+        "Week 0: 3,000 lamps in stock. Order 2,000 replenishment units.",
+        "Week 2: Ship 2,000 lamps to retailer. (1,000 remain).",
+        "Week 8: 200 lamps remain in stock. Replenishment of 2,000 lamps arrives.",
+        "The retailer’s initial $33,000 deposit fully funds the $18,000 supplier deposit and the $2,000 freight cost, leaving you with $13,000 in positive float."
+      ],
+      "improvement": "Extend the cash projection through week 9+ after the final retailer payment and add a supplier-delay scenario, because the plan leaves only a 200-unit buffer before replenishment arrives."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "The response addresses credit risk and channel conflict with concrete recommendations, including credit verification and a MAP policy, and explicitly avoids assuming immediate retail sell-through. However, it does not address replenishment slippage or defect-related risks, which were specified in the scenario and criteria.",
+      "quotes": [
+        "Channel Conflict (The Biggest Risk): If this boutique sells the lamps for $45, they will undercut your $60 direct-to-consumer business.",
+        "Credit Risk: The retailer will owe you $33,000 as an unsecured creditor for 45 days. If they go bankrupt or refuse to pay, you lose your profit on the deal.",
+        "Institute a MAP Policy: Require a Minimum Advertised Price agreement stating they cannot advertise or sell the lamp online for less than $60."
+      ],
+      "improvement": "Add concrete safeguards for verified defects, such as inspection rights, defect-rate limits, or chargeback terms, and address replenishment slippage with a lead-time buffer, penalty terms, or alternative supplier contingency."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Risk coverage incomplete: replenishment slippage and defect risks are not addressed."
+  ],
+  "overall_impression": "A strong financial and inventory response with correct unit economics and a feasible cash/stock plan, but the risk assessment omits two explicitly requested risks, limiting its completeness."
+}

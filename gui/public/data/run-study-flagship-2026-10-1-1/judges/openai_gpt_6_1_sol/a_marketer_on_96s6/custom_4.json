@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "justification": "The response cleanly separates product margin, per-order costs, advertising, and fixed overhead; current surplus is correctly calculated as $6,000. Loaded employee cost, agency retainer, onboarding/recruiting, and incremental order requirements are computed using a $40 contribution margin without double-counting the $30 paid CAC.",
+      "quotes": [
+        "Each order contributes $40 before advertising and fixed costs: $80 × 60% - $8 = $40",
+        "Employee: $5,800 ÷ $40 = 145 orders",
+        "Agency: $4,500 ÷ $40 = 112.5, rounded up to 113 orders"
+      ],
+      "improvement": "Could add a month-by-month cash-basis view that amortizes one-time costs and shows payback timing, but the core financial reasoning is already strong."
+    },
+    "practicality": {
+      "score": 9,
+      "justification": "The response makes a defensible conditional employee choice, rejects the agency as currently scoped, and gives a usable 90-day plan tied to the four-hour founder limit, six-week start delay, scope gaps, and cash reserve. It includes workload tracking, cash gates, handoff steps, and measurable review metrics.",
+      "quotes": [
+        "Proceed with the employee only if the cash forecast stays above your chosen floor under a realistic downside case",
+        "Track marketing hours by ads, email, creative, and coordination",
+        "The employee is a better scope fit, not yet an obviously safe financial commitment"
+      ],
+      "improvement": "The temporary six-week bridge could specify exactly how the 11-hour weekly gap will be covered and name a concrete day-30 go/no-go metric, but the plan is already actionable."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "The response explicitly identifies cash exposure, hiring ramp time, the agency minimum commitment, and the uncertainty of acquisition and retention gains without assuming growth. It sets measurable review points and quantifies the thin margin of safety under each option.",
+      "quotes": [
+        "At unchanged sales, your monthly cushion falls from $6,000 to $200.",
+        "Just five fewer orders per month, with everything else unchanged, would erase that cushion.",
+        "Repeat purchases, paid-acquisition performance, incremental orders, and unchanged sales during the handoff all remain uncertain."
+      ],
+      "improvement": "Could include a quantified downside scenario such as a 10% order decline and state termination or severance exposure, but risk coverage is already thorough."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "High-quality answer that correctly compares the options, avoids treating growth as guaranteed, and provides a conditional, cash-aware 90-day decision framework."
+}

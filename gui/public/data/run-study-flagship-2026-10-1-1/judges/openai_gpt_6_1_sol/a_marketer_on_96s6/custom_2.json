@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 10,
+      "justification": "Correctly separates product cost, per-order expenses, advertising, and overhead to calculate the $6,000 current surplus. Calculates the $5,800 loaded monthly employee cost, $4,500 agency cost, upfront charges, and 145 versus 113 incremental orders without double-counting CAC. Particularly useful is the distinction between covering the new cost to restore the existing surplus and merely remaining profitable. Cash projections are explicitly approximate and distinguish delayed hiring from lower ongoing expense.",
+      "quotes": [
+        "with advertising spend held flat, the marginal contribution used to cover a new recurring cost is $40 per additional order, not $10",
+        "Those additional orders would restore your current $6,000 surplus after paying for the new option. They are not required merely to remain operating-profitable at today's volume.",
+        "The agency's minimum fee commitment is $15,000, including onboarding"
+      ],
+      "improvement": "Use actual payroll and billing dates in the eventual cash forecast rather than the illustrative 1.5 paid-month approximation."
+    },
+    "practicality": {
+      "score": 8,
+      "justification": "Makes a defensible conditional employee recommendation and rejects the agency's incomplete scope unless a workload audit proves it sufficient. The phased plan addresses cash forecasting, immediate simplification, handoff, and the four-hour limit. However, the six-week start is maintained despite a decision window extending through day 42, and temporary coverage remains unspecified. The proposed $36,000 reserve floor also needs clearer reconciliation with the current $32,000 balance before the hiring gate can be applied.",
+      "quotes": [
+        "unless ads currently consume at least 11 of those hours and agency coordination is minimal, email and creative would still leave you over capacity",
+        "If those conditions fail, defer both options and revisit the scope or budget.",
+        "Use temporary internal coverage or tightly capped outside help only if it fits the forecast."
+      ],
+      "improvement": "Set a firm hiring decision date, clarify whether the six-week lead time begins now or after acceptance, and assign specific bridge tasks and hours. Explain when the reserve floor must first be reached and how recruiting costs affect that gate."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Explicitly identifies the employee's nearly exhausted operating cushion, limited cash reserves, inventory and working-capital exposure, agency minimum commitment, startup delay, and uncertain acquisition and retention outcomes. Includes measurable weekly cash and founder-hour checks and appropriately judges early performance by work transfer rather than assumed growth. A quantified downside forecast and explicit intervention triggers would make the review process stronger.",
+      "quotes": [
+        "Just five fewer orders per month, with everything else unchanged, would erase that cushion.",
+        "Judge early success primarily on work transferred and execution quality, not promised sales growth.",
+        "Repeat purchases, paid-acquisition performance, incremental orders, and unchanged sales during the handoff all remain uncertain."
+      ],
+      "improvement": "Add a numerical sales-downside scenario and dated intervention thresholds, such as reassessing scope if founder involvement remains above four hours after ramp or pausing discretionary spending when forecast cash breaches the chosen floor."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Excellent financial analysis and a well-supported conditional recommendation. The main remaining gaps are operational specificity for interim coverage, hiring timing, and cash-gate enforcement."
+}

@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 6,
+      "justification": "Turn 1 says the outage came from the shop's checkout update. It also adds a claim the user asked it to avoid: 'there was no security incident or breach of your personal data.' The user only said there was no evidence of one. In Turn 2 the candidate improves, with options that state 'we take full responsibility' and that avoid promising the site will never fail. The opening line apologizes 'for the frustration many of you experienced,' which apologizes for customers' feelings rather than for the shop's failure. The candidate never produced a full post that folds the fixes back in.",
+      "quotes": [
+        "Please be assured that this was strictly a technical failure; there was no security incident or breach of your personal data.",
+        "Our checkout update broke the site, and we take full responsibility for the disruption.",
+        "We sincerely apologize for the frustration many of you experienced"
+      ],
+      "improvement": "Apologize for the outage itself, leave security out entirely, and deliver one consolidated final post that uses the stronger ownership wording."
+    },
+    "offer_clarity": {
+      "score": 8,
+      "justification": "The offer details are accurate: automatic 20%, no code, Monday 9 a.m. to Thursday 9 a.m. ET, merchandise only, shipping and gift cards excluded, no stacking. No extra compensation is invented. Turn 3 ties the 72 hours to the outage window. Two minor gaps: Turn 3's deadline snippet leaves out the exclusions, and the revisions are scattered across turns instead of merged into one post.",
+      "quotes": [
+        "running from today, Monday, at 9 a.m. through Thursday at 9 a.m. ET",
+        "It excludes shipping costs and gift cards, and it cannot be combined with other offers.",
+        "we are giving you that exact time back"
+      ],
+      "improvement": "Merge the deadline rationale and all exclusions into one final post so readers see everything in one place."
+    },
+    "trust_and_tone": {
+      "score": 6,
+      "justification": "Payment issues are sent to the private Contact page, and readers are told not to post details publicly, which is good. But Turn 1 calls a pending authorization a 'pending charge,' blurring the two. Turn 3 says 'we will work with you individually to get it sorted' and 'sets firm expectations about the refund timeline,' which suggests refunds are coming even though the shop hasn't confirmed which authorizations became charges. The headline 'An Important Update Regarding' and 'Please be assured' read as corporate boilerplate. The voice does get plainer in later revisions.",
+      "quotes": [
+        "If you are seeing a pending charge",
+        "we will work with you individually to get it sorted",
+        "While we cannot provide a specific date for when refunds will be processed"
+      ],
+      "improvement": "Keep the wording on 'pending authorizations,' say support will check whether any became charges without implying a refund, and use a plainer headline."
+    }
+  },
+  "rule_errors": [
+    "Turn 1 states as fact that there was no security incident, which the user said there was no evidence for and asked not to speculate about"
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Revisions never consolidated into a final post",
+    "Refund wording implies refunds are coming"
+  ],
+  "overall_impression": "The offer details are accurate and the revisions improve ownership and the deadline explanation. The initial security assurance, the conflation of 'pending charge' with an authorization, the refund-implying language, and the lack of a final merged post keep this a solid but flawed response."
+}

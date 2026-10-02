@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "Correctly calculates all requested figures: the $13,000 gap, $28 per-unit sale contribution, $8,800–$15,800 sale cash, 500-unit threshold, $11,000 liquidator proceeds, $14,700 loan advance, $517.81 interest, $15,517.81 repayment, and $817.81 financing cost. The additional 22.6% figure is a simple annualized all-in rate rather than a clearly defined effective annual rate.",
+      "quotes": [
+        "Volume needed to close the gap: ($13,000 + $1,000) ÷ $28 = 500 units.",
+        "Total repayment on day 90: $15,517.81.",
+        "Financing cost: $517.81 + $300 = $817.81."
+      ],
+      "improvement": "Label 22.6% as the simple annualized all-in borrowing cost on net proceeds, or omit this unrequested rate."
+    },
+    "execution_plan": {
+      "score": 7,
+      "justification": "Provides a workable sale-first plan with parallel loan preparation, an early sales checkpoint, three-day funding allowance, bill payment protection, and settlement confirmation before payroll. However, the final recommendation makes the loan trigger depend on the early checkpoint without explicitly requiring another trigger if final sales fall below 500 despite initially adequate pace. The liquidator contingency lacks a five-day payment deadline and cannot assume the original offer survives partial sales. Calendar dates are explicitly assumed but unnecessary.",
+      "quotes": [
+        "Submit the loan application today so it can fund within 3 days of a decision, but don't draw it yet.",
+        "Trigger it at the Oct 5 checkpoint, or by Oct 8 at the latest.",
+        "Ask now whether the offer would hold for the units left after the sale, since it currently covers all 2,000 units."
+      ],
+      "improvement": "Use relative days, require a final day-7 sales and settlement check regardless of early pace, and confirm loan approval and repayment feasibility before relying on it. Give any liquidator fallback a five-day settlement deadline and recalculate proceeds for remaining units only if a revised offer is confirmed."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "Strongly distinguishes sunk inventory cost from spendable cash, identifies the zero cash buffer and uncertain sale volume, explains the loss of all inventory under liquidation, and gives useful repayment forecasting and loan-term checks. It does not meaningfully address clearance damage to normal-price demand, customer price expectations, or brand positioning, and assumes remaining stock may sell at full or near-full price despite its slow-moving seasonal nature.",
+      "quotes": [
+        "The $40,000 is already spent. It is a sunk cost.",
+        "The loan only works if that forecast shows cash left over for repayment.",
+        "Unsold stock stays on hand for later full- or near-full-price selling."
+      ],
+      "improvement": "Discuss discount anchoring and cannibalization of future full-price sales, avoid assuming remaining inventory will recover normal prices, and explicitly condition loan acceptance on a credible day-90 repayment forecast."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Accurate core cash calculations and a useful conditional bridge strategy. The main weaknesses are incomplete fallback closure after the sale and limited treatment of clearance damage."
+}

@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "All core calculations are correct: payroll gap ($13,000), net per unit ($28), minimum volume (500 units), liquidator proceeds ($11,000), loan proceeds ($14,700), interest ($517.81), total repayment ($15,517.81), and financing cost ($817.81). The effective annualized cost of ~22.6% is also correctly derived. The presentation of the gap/promo interaction is slightly non-obvious (gap stated as $13,000 without deducting promo from available cash, then promo added back in the volume formula), but the final answers are all verifiably correct.",
+      "quotes": [
+        "Volume needed to close the gap: ($13,000 + $1,000) ÷ $28 = 500 units",
+        "Interest: $15,000 × 14% × 90/365 = $517.81",
+        "Financing cost: $517.81 + $300 = $817.81"
+      ],
+      "improvement": "Clarify that the $13,000 gap already excludes the promo spend from available cash (or explicitly show the $14,000 gap after promo and then the $14,000 sale target), to avoid any appearance of double-counting or offsetting errors."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "The plan provides specific dates, a clear checkpoint trigger (Oct 5, ~285 units), a parallel loan application without drawing, and a defined fallback sequence. It correctly treats the sales estimate as uncertain rather than guaranteed cash. The 3-day loan funding timeline is properly accounted for in the fallback trigger timing. However, the date 'Jan 2, 2027' for day 90 is almost certainly a year error (should be the following year). The plan also doesn't fully resolve what happens if both the loan is declined AND the sale underperforms—the liquidator still leaves a $2,000 gap with no identified solution.",
+      "quotes": [
+        "If units sold are below ~285 (on pace for under 500), trigger the fallback",
+        "Submit the loan application today so it can fund within 3 days of a decision, but don't draw it yet",
+        "If funded Oct 4, it is due Jan 2, 2027 (day 90)"
+      ],
+      "improvement": "Correct the year in the day-90 due date. Add an explicit contingency for the scenario where the loan is declined and the sale underperforms (e.g., partial payroll deferral negotiation, or a smaller bridge from the liquidator on remaining units after the sale)."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response clearly separates sunk cost from liquidity ('The $40,000 is already spent. It is a sunk cost'), addresses sale uncertainty ('no advance orders. Roughly half the forecast range fails'), distinguishes the flash sale as above-cost (no clearance damage to P&L), notes remaining inventory value, and thoroughly addresses the unknown ability to repay on day 90 with the 13-week forecast requirement and structural shortfall analysis. The observation that the payroll gap may be structural rather than one-off is particularly insightful.",
+      "quotes": [
+        "The $40,000 is already spent. It is a sunk cost. The decision should rest on new cash in",
+        "If other products generate only about $4,000 per three weeks against $18,000 payroll, the business has an ongoing shortfall",
+        "Build a 13-week cash forecast through early January. You currently have none beyond week 3"
+      ],
+      "improvement": "Expand on clearance/brand damage risk: even though the sale is above cost, running a 36%-off flash sale may anchor customer price expectations and erode future full-price sales of remaining units. Also quantify the seasonality risk more concretely (e.g., what happens to the 1,500 remaining units' value if they don't sell before season end)."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Minor factual error: 'Jan 2, 2027' for day-90 due date is almost certainly the wrong year"
+  ],
+  "overall_impression": "A strong, well-structured response with correct mathematics throughout, a practical execution plan with clear triggers, and thorough risk analysis. The main weaknesses are a minor date error, slightly opaque presentation of the gap/promo interaction, and room to deepen the clearance-damage and remaining-inventory-risk discussion."
+}

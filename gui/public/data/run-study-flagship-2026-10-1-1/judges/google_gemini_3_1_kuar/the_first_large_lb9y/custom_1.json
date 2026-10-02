@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 6,
+      "justification": "The core arithmetic is correct. It applies the 45% discount to get $33 per unit and $66,000 revenue, then subtracts $36,000 COGS at $18 and $2,000 freight to reach $28,000 ($14/unit). It also correctly applies the $9 fee only to direct sales, giving $33 per unit. Three things are missing or muddled. It never gives the theoretical full-retail comparison (2,000 direct units would contribute $66,000, or $38,000 more, but only over about five months). It mixes up contribution and cash, claiming the deal provides an 'immediate infusion of... cash', while its own cash map treats direct sales as $51 of cash per unit because COGS is sunk. And it never reconciles these two views.",
+      "quotes": [
+        "Wholesale Contribution: $66,000 (revenue) - $36,000 (COGS) - $2,000 (freight) = $28,000 total (or $14 per lamp)",
+        "Direct Sale Contribution: $60 (retail) - $18 (COGS) - $9 (fees) = $33 per lamp",
+        "This deal does not cannibalize your direct sales; it stacks on top of them."
+      ],
+      "improvement": "Add the explicit comparison: 2,000 units sold direct would contribute $66,000 versus $28,000 wholesale, but only over about 20 weeks. Then separate contribution, which is economic profit, from cash timing, which is $33,000 now plus $33,000 later minus the $36,000 replenishment cost."
+    },
+    "cash_and_stock_plan": {
+      "score": 6,
+      "justification": "The plan is broadly feasible. It ships 2,000 units, deducts 800 direct sales over eight weeks, and ends at week 8 with 200 units left as replenishment arrives. It also excludes the $16,000 reserve, with available cash starting at $6,000. It sequences the $18,000 deposit, $2,000 freight, $18,000 balance, and retailer payment at roughly day 45 after a week-2 delivery. It correctly concludes that the deposit funds the supplier deposit plus freight, and that the replenishment balance does not depend on the final collection. However, the timeline is coarse. It gives no week-by-week positions, so it never shows the 200 units sold in weeks 0–2 before shipment. It presents the $40,800 of direct cash inflow as a lump without timing. It never confirms that the reserve stays untouched at each step or shows the position after replenishment. It also calls 200 units, about two weeks of demand, a 'safety buffer' without examining whether that is adequate.",
+      "quotes": [
+        "Week 8: 200 lamps remain in stock.",
+        "The retailer's initial $33,000 deposit fully funds the $18,000 supplier deposit and the $2,000 freight cost, leaving you with $13,000 in positive float.",
+        "Your available operating cash is $6,000 ($22k total minus $16k reserved)."
+      ],
+      "improvement": "Give a weekly table of inventory and cash, timing direct inflows by week and showing the $16,000 reserve intact throughout. Discuss whether a two-week buffer is enough, and consider ordering replenishment earlier or in larger quantity."
+    },
+    "risk_awareness": {
+      "score": 4,
+      "justification": "It covers channel conflict with a MAP term and credit with trade references and Net 30. It also avoids assuming 2,000 immediate retail sales. Several required risks are missing: replenishment slippage (a few days' delay with a 200-unit buffer causes a stockout), defect returns, and any order-size change. The credit analysis is also wrong. If the final $33,000 is never paid, the deal brings in $33,000 against $38,000 of cost, a roughly $5,000 net loss, not just lost profit. The credit safeguards are weak, with no larger deposit, letter of credit, or staged shipments. There is also an internal contradiction: it recommends 'Negotiate' but then says 'Accept the deal'.",
+      "quotes": [
+        "If they go bankrupt or refuse to pay, you lose your profit on the deal.",
+        "Require a Minimum Advertised Price agreement",
+        "require them to submit trade references"
+      ],
+      "improvement": "Correct the default loss to about -$5,000 versus +$28,000. Propose stronger terms, such as a 60–70% deposit, split shipments tied to payment, a letter of credit or credit insurance, and a cap on defect claims with an inspection window. Model what happens if supplier replenishment slips by one to two weeks. Consider a smaller first order (e.g., 1,000–1,500 units) to protect the stock buffer."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Incorrect default-loss characterization",
+    "Recommendation inconsistency (Negotiate vs Accept)",
+    "Omits defects and replenishment slippage"
+  ],
+  "overall_impression": "The arithmetic is correct and the cash and stock map is plausible, but the analysis is shallow. It skips the full-retail comparison, misstates the downside if the retailer defaults, ignores defect and supply-delay risk, and offers weak credit protections and no order-size alternatives."
+}

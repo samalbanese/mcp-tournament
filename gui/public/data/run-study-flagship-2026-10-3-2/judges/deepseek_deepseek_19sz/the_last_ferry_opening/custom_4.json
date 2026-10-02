@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The voice is distinctive and consistently rooted in the perspective of a burned-out marine biologist, mixing practical exhaustion with metaphor. Lines like 'Not the ocean itself—the ocean I understand. It's the people who claim to love it that wore me down' and 'the way a current pulls a loose buoy' feel authored rather than generic. A few common thriller phrases slightly lower the ceiling, but the perspective is clear and sustained.",
+      "quotes": [
+        "Not the ocean itself—the ocean I understand. It's the people who claim to love it that wore me down.",
+        "I just follow, the way a current pulls a loose buoy, the way I've followed this grief for so long I've forgotten how to walk straight."
+      ],
+      "improvement": "Replace occasional clichés such as 'wall of wind and spray' and 'knuckles white' with more specific marine or personal imagery, and vary the sentence rhythm to keep the voice from becoming too uniformly dramatic."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The ferry and storm are made tangible through layered sensory detail without overwhelming the scene. The smells, sounds, and textures of the cabin and deck are vivid, and the suitcase reveal is especially strong in the final revision, with the zipper opening 'tooth by tooth, a reluctant smile.' The sensory details serve the tension and emotional state rather than merely decorating the prose.",
+      "quotes": [
+        "The cabin smells like wet wool, fried onions, and the sour breath of exhausted passengers.",
+        "it opens—not all at once, but tooth by tooth, a reluctant smile.",
+        "The rain comes sideways now, sharp as thrown gravel."
+      ],
+      "improvement": "A few storm descriptions are effective but expected, such as 'wall of wind and spray' and 'snapping like a flag in a hurricane'; these could be sharpened with more unusual, marine-specific sensations."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The final version forms a clear arc from recognition to visceral reaction, pursuit, gradual revelation, and forced action. The revision successfully makes the contents reveal more gradual and suspenseful, withholding the notebook and vial and instead focusing first on the goggles and hidden photograph. The final clue—the key to the father's fuel locker—provides a compelling turn. The only minor weakness is the physical logic of 'I have to get off this boat' while still at sea, but it works as an urgent impulse.",
+      "quotes": [
+        "Then, with a sound like a fish spine snapping, it opens—not all at once, but tooth by tooth, a reluctant smile.",
+        "I have to get off this boat. I have to get to Vannar before he does.",
+        "Not just any key. The key to our father's fuel locker, the one we pried open as kids to hide our field notes and dead starfish."
+      ],
+      "improvement": "Clarify the protagonist's immediate next move on the ferry—perhaps she runs toward the cabin or crew rather than simply turning and running—so the final impulse is physically legible as well as emotionally urgent."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, atmospheric opening with an authored voice and effective sensory detail. The revisions successfully deepen the protagonist's emotional reaction and make the suitcase reveal more gradual and suspenseful, though the final action could be slightly clarified."
+}

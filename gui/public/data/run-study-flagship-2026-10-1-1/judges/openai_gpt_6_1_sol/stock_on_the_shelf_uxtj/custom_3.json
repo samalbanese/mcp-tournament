@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "The candidate perfectly calculated the payroll gap, flash sale net cash and unit targets, liquidator proceeds, and the loan's advanced cash, interest, and total cost.",
+      "quotes": [
+        "Payroll cash gap $13,000",
+        "(13,000+1,000)/28=500 units",
+        "Net new cash: $11,000",
+        "Day-90 repayment: $15,000 + $517.81 = $15,517.81"
+      ],
+      "improvement": "None needed."
+    },
+    "execution_plan": {
+      "score": 10,
+      "justification": "Provides a clear, day-by-day action plan that respects the timing constraints of the bills, payroll, and funding sources, while correctly utilizing the settlement times and fallback triggers.",
+      "quotes": [
+        "Day 3 If repayment capacity is credible, accept funding",
+        "Day 7 Pay the unavoidable bills and assess final sale volume"
+      ],
+      "improvement": "None needed."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "Excellently distinguished sunk inventory cost from cash liquidity, highlighted the unproven repayment ability for the loan, and noted that running the sale ruins the liquidator's offer for all 2,000 units.",
+      "quotes": [
+        "Historical loss and current cash proceeds are different measures.",
+        "once sale units have been sold, the original offer to buy all 2,000 units cannot be assumed to remain available",
+        "repayment capacity is currently unproven"
+      ],
+      "improvement": "None needed."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional, precise, and highly practical response that handles all complex math correctly and provides a realistic business action plan."
+}

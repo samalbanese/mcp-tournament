@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "Candidate acknowledges missing parcel and frustration, and explicitly separates the required review from fraud accusations. It does not repeat verification checks after the customer confirms them.",
+      "quotes": [
+        "I’m sorry your $86 order is missing again. I understand why you’re asking for a refund after four similar experiences.",
+        "There’s no finding of misuse, and your previous claims alone are not grounds to deny this one. The review is required by policy—not an accusation of fraud."
+      ],
+      "improvement": "Could add a direct apology for the repeated inconvenience and the added effort of contacting another team, rather than only validating the frustration."
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "The response uses only the two required checks, directs the customer to order support to open the review, states the review team owns the investigation, and gives the two-business-day update/deadline plus refund/replacement outcomes.",
+      "quotes": [
+        "Please contact order support through your signed-in account and tell them the address is correct and you’ve checked the lobby and building staff.",
+        "The review team must give you either a decision or a specific progress update within two business days of the review being opened—not from this chat.",
+        "If loss is established, its specialist can authorize the $86 refund to your original payment method or a free replacement."
+      ],
+      "improvement": "Could make the required next step feel less like starting over by framing it as a handoff rather than an instruction to contact another department, and include what the customer should ask for in a more concise actionable checklist."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "Candidate accurately explains the review requirement, avoids claiming to open a case or approve refund, does not name a specialist or guarantee timing beyond the required update, and distinguishes between an update and final resolution. Refund timing was stated accurately in Turn 1.",
+      "quotes": [
+        "I can’t name that person or give an exact update time because I have no access to the case system, and no review has been opened through this chat.",
+        "I also can’t promise a final decision within two business days: the requirement is a decision or a specific progress update within two business days of opening the review.",
+        "An approved refund takes three to five business days to appear."
+      ],
+      "improvement": "Could restate the three-to-five-business-day refund timing in the final turn so the customer has complete policy details without needing to refer back to earlier messages."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong response: empathetic, accurate about policy limitations, and clear about review ownership and timing, though the handoff to order support could be framed more smoothly."
+}

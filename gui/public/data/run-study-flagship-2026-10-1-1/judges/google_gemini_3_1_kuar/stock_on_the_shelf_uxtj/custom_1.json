@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 6,
+      "justification": "The core figures are correct. The payroll gap is $13,000. Flash-sale net cash is $8,800 at 350 units and $15,800 at 600 units. The break-even volume is 500 units. Liquidator net cash is $11,000. Loan proceeds are $14,700, interest is $517.81, repayment is $15,517.81, and financing cost is $817.81. There are three errors. First, the per-unit inventory comparison is wrong: $32 - $4 - $2 of allocated promotion = $26 per unit, which is a $6 gain over the $20 cost, not a loss. Second, the day-4 balance ignores the $1,000 promotion already paid, so it should be $18,700. Third, the day-14 total omits the $4,000 from other products; the correct low-case cash is $26,500, not $23,500. The $28,000 liquidator loss also leaves out the $1,000 freight.",
+      "quotes": [
+        "netting $18 after costs vs $20 original cost",
+        "Current cash is now $19,700.",
+        "your total cash will be $23,500"
+      ],
+      "improvement": "State that the flash sale nets $26 per unit, a gain over cost. Reconcile the timeline: $6,000 - $1,000 + $14,700 - $5,000 + $8,800 + $4,000 = $27,500 before payroll, leaving $9,500 after payroll. Include freight in the liquidation loss ($29,000)."
+    },
+    "execution_plan": {
+      "score": 5,
+      "justification": "The plan has dated steps, and the loan plus flash sale combination is feasible. It respects the 3-day funding time and finishes the sale before payroll. However, it calls the plan a guarantee and says the sale covers the day-90 repayment 'easily.' At 350 units, about $9,500 would remain after payroll, well short of $15,518. There are no triggers based on sales during the sale, and no decision deadline for when the loan is denied. The fallback (liquidator) admits it is $2,000 short and depends on vague discounting or delaying payments. It does not consider a flash sale alone with a mid-sale check, which could close the gap.",
+      "quotes": [
+        "This plan guarantees you meet payroll using the loan while liquidating just enough inventory to easily cover the Day 90 loan repayment.",
+        "You are now $2,000 short for payroll."
+      ],
+      "improvement": "Set a loan-approval deadline around day 3 that triggers the fallback. Add a mid-sale checkpoint, for example 250 units by day 10. Make the fallback actually close the gap, or specify concrete payroll contingencies such as owner capital or a negotiated deferral."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "The response correctly separates sunk cost from cash, notes the uncertainty of the flash sale, and raises day-90 repayment, prepayment terms, and liens. It does not address clearance damage, such as price anchoring or margin erosion on $50 items. It does not mention that the liquidator permanently gives up all 2,000 units, which are worth up to $26 net each through sales. It also undermines its own day-90 caution by claiming the repayment is easily covered.",
+      "quotes": [
+        "Sunk costs (the $40,000 already paid for the inventory) do not impact your current cash flow.",
+        "You must verify that your seasonal sales will generate the $15,517.81"
+      ],
+      "improvement": "Discuss brand and pricing damage from discounting. Quantify the opportunity cost of liquidating all remaining stock. Show the day-90 shortfall in the low-sales case explicitly."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "arithmetic_inconsistency",
+    "overclaim_guarantee"
+  ],
+  "overall_impression": "The headline numbers are correct, but the per-unit 'loss' is mischaracterized and the cash timeline is wrong. The response overstates certainty about repayment, and its fallback plan does not close the payroll gap."
+}

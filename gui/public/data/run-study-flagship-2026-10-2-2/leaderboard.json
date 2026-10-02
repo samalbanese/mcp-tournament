@@ -1,0 +1,302 @@
+[
+  {
+    "modelId": "deepseek/deepseek-v4-pro-0813",
+    "modelName": "deepseek-v4-pro-0813",
+    "tier": "unknown",
+    "overallAverage": 7.92,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 7.67,
+        "scores": {
+          "empathy": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 7 - Gemini saw the direct ownership ('I shouldn't make you jump through more hoops') as fully empathetic, while other judges found the empathy reactive and transactional"
+            ]
+          },
+          "resolution_quality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": []
+          },
+          "policy_clarity": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "openai/gpt-6.1-sol: scored 5 vs median 9 - OpenAI penalized unverified operational promises (same-day refund, credit preventing billing) and the unretracted earlier guarantee; other judges praised the honesty about timelines and limits",
+              "anthropic judge (claude-opus-5-5): scored 6 vs median 9 - focused on the early overpromise about the account credit protecting the external bill and ungrounded timelines"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Turn 1/2 overpromise: account credit claimed to prevent the external bill from failing, later retracted"
+        ]
+      },
+      {
+        "scenarioId": "refund-abuse",
+        "scenarioName": "A Fifth Missing Parcel Claim",
+        "average": 7,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - treated the empathetic first turn as flawless despite later turns becoming purely procedural"
+            ]
+          },
+          "resolution_quality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 7 - overlooked the muddled deadline example and unsupported ownership claims"
+            ]
+          },
+          "policy_honesty": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 6 - viewed 'I'll submit... the review now' as consistent with the prompt's instruction to offer a review, while other judges read it as an unverifiable action claim",
+              "deepseek/deepseek-v4-pro-0813: scored 8 vs median 6 - treated the same wording as a minor phrasing issue rather than a rule violation"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Turn 2 claim 'I'll submit your confirmation and request the review now' implies a completed or in-progress case submission despite no access to order tools (confirmed by 4 of 5 judges)."
+        ],
+        "flags": [
+          "unverifiable_action_claim",
+          "Unsupported claim that replying in this conversation is the quickest contact route.",
+          "Calendar-day example does not account for non-business days.",
+          "Candidate claims to perform an action (submitting/requesting review) that the case notes explicitly prohibit claiming."
+        ]
+      },
+      {
+        "scenarioId": "shipping-delay-gift",
+        "scenarioName": "A Birthday Gift Stalled in Transit",
+        "average": 8.3,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - did not penalize the brief, formulaic empathy and the shift to purely transactional tone in later turns"
+            ]
+          },
+          "resolution_quality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - saw no gaps despite the missed deadline/refund-timing context and the unsupported reinstatement claim affecting the decision",
+              "deepseek judge: scored 9 vs median 8 - slightly more forgiving of the same gaps"
+            ]
+          },
+          "policy_honesty": {
+            "score": 9,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - overlooked the reinstatement claim absent from case notes",
+              "openai judge: scored 6 vs median 9 - weighted both the invented no-reinstatement policy and the unverified promise to email the gift note heavily"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Turn 2 asserts a definitive no-reinstatement-after-cancellation policy that does not appear in the provided case notes"
+        ],
+        "flags": [
+          "unsupported_policy_claim",
+          "Unsupported reinstatement restriction",
+          "Unverified ability to email the gift note"
+        ]
+      },
+      {
+        "scenarioId": "cancellation-save",
+        "scenarioName": "A Subscription That No Longer Fits the Budget",
+        "average": 8.7,
+        "scores": {
+          "empathy": {
+            "score": 9,
+            "confidence": "contested",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 9 - noted the opening never acknowledged the budget concern and used a generic 'stay a bit longer' nudge",
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 9 - saw no empathy gaps at all, requiring no improvement"
+            ]
+          },
+          "resolution_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 9 - viewed the resolution as flawless with no improvement needed",
+              "deepseek judge (deepseek/deepseek-v4-pro-0813): scored 10 vs median 9 - likewise found the route and follow-up answers fully direct and clear"
+            ]
+          },
+          "policy_honesty": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 9 vs median 8 - same $18 omission noted but weighted slightly less"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "qwen/qwen3.8-max-0902",
+    "modelName": "qwen3.8-max-0902",
+    "tier": "unknown",
+    "overallAverage": 6.83,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 4.7,
+        "scores": {
+          "empathy": {
+            "score": 4,
+            "confidence": "high",
+            "outliers": []
+          },
+          "resolution_quality": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 8 vs median 6 - viewed the template and practical workarounds as excellent given AI's lack of access",
+              "deepseek/deepseek-v4-pro-0813: scored 3 vs median 6 - judged that no ownership, escalation, or actual resolution was provided, leaving the customer to do all the work"
+            ]
+          },
+          "policy_clarity": {
+            "score": 4,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 8 vs median 4 - emphasized that the agent honestly stated its limitations and avoided inventing merchant policies"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "candidate_lacks_account_access",
+          "Candidate repeatedly redirects the customer to self-service or the bank without offering direct escalation or resolving the duplicate charge.",
+          "The candidate never resolves the conversation — after 3 turns, the customer still has no company-specific contact information and the core issue remains unresolved."
+        ]
+      },
+      {
+        "scenarioId": "refund-abuse",
+        "scenarioName": "A Fifth Missing Parcel Claim",
+        "average": 6.3,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": []
+          },
+          "resolution_quality": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 8 vs median 6 - judged the follow-up instructions as actionable ownership, overlooking the placeholder deadline and shifted burden"
+            ]
+          },
+          "policy_honesty": {
+            "score": 5,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 2 vs median 5 - treated the review-trigger misstatement as a blatant lie warranting near-zero credit",
+              "openai/gpt-6.1-sol: scored 3 vs median 5 - weighted the policy contradiction plus implied flagging actions heavily"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Contradicts the written policy by stating the delivery review is 'not triggered by your history' and 'applies regardless of how many or how few prior claims someone has,' when policy requires a review after two non-delivery claims in 12 months",
+          "Implies actions the agent cannot take ('I'll get the review started', 'I'm flagging this', 'I'll escalate it') despite having no access to order tools",
+          "Unfilled date placeholder '[two business days from today]' instead of a concrete deadline"
+        ],
+        "flags": [
+          "unfilled date placeholder",
+          "policy misrepresentation",
+          "Unsupported universal and amount-based review rationale.",
+          "Unfilled deadline placeholder.",
+          "Unsupported assurance that any agent can locate review status using the conversation and order number.",
+          "Candidate states the delivery review is not triggered by claim history and applies regardless of prior claims, which conflicts with the written policy requiring a delivery review after two non-delivery claims in 12 months.",
+          "The statement 'it's a step that applies regardless of how many or how few prior claims someone has' directly contradicts the written policy that the review is triggered after two non-delivery claims in 12 months."
+        ]
+      },
+      {
+        "scenarioId": "shipping-delay-gift",
+        "scenarioName": "A Birthday Gift Stalled in Transit",
+        "average": 8.33,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - saw no room for improvement, while other judges wanted explicit ownership of the broken express-delivery promise"
+            ]
+          },
+          "resolution_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "openai/gpt-6.1-sol: scored 7 vs median 9 - faulted unclear sequential refund path and business-day timeline assumptions",
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - found nothing to improve"
+            ]
+          },
+          "policy_honesty": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "openai/gpt-6.1-sol: scored 5 vs median 8 - flagged 'secure the full refund immediately' and possible $12 double-counting as significant accuracy failures",
+              "google/gemini-3.1-pro-preview: scored 9 vs median 8 - judged refund amounts and timing accurate with only minor phrasing concerns"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Possible $12 double-count ambiguity when moving from Option A to cancellation",
+          "'secure the full refund immediately' overstates timing"
+        ]
+      },
+      {
+        "scenarioId": "cancellation-save",
+        "scenarioName": "A Subscription That No Longer Fits the Budget",
+        "average": 8,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - overlooked that the retention offer preceded the cancellation steps and that the customer was asked to choose again after a clear cancellation request"
+            ]
+          },
+          "resolution_quality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 7 - treated the offer-first structure as frictionless despite the criterion requiring the direct route without an offer first",
+              "deepseek/deepseek-v4-pro-0813: scored 6 vs median 7 - weighted the offer-first ordering and the 'let me know which you'd prefer' prompt as adding more friction than other judges"
+            ]
+          },
+          "policy_honesty": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - agreed on accuracy; score difference is minor and not a substantive disagreement",
+              "deepseek/deepseek-v4-pro-0813: scored 10 vs median 9 - agreed on accuracy; score difference is minor and not a substantive disagreement"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Turn 1 presents the retention offer before the cancellation steps, violating the criterion that the direct cancellation route should be provided without making the customer hear an offer first (confirmed by qwen, deepseek, openai, and anthropic judges)"
+        ],
+        "flags": [
+          "Retention offer presented before the cancellation route despite a clear cancel request"
+        ]
+      }
+    ]
+  }
+]

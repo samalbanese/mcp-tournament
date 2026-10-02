@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "All requested calculations are correct: the $13,000 gap, sale contribution and promotion deduction, 500-unit threshold, $11,000 liquidation proceeds, $14,700 loan advance, $517.81 interest, $15,517.81 repayment, and $817.81 financing cost. The response also correctly reconciles combined loan-and-sale cash and distinguishes historical inventory losses from liquidity.",
+      "quotes": [
+        "Net new cash = $28 × units sold − $1,000",
+        "Payroll cash gap",
+        "Total financing cost: $517.81 interest + $300 fee = $817.81"
+      ],
+      "improvement": "No substantive arithmetic correction is needed."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "Provides a practical dated sequence, protects the week-one bills, checks settlement and fulfillment timing, and conditions borrowing on repayment capacity. It explicitly recognizes that the sale-only fallback is uncertain and that no guaranteed non-debt solution exists. However, spending the entire unreserved cash immediately creates a potential fulfillment funding constraint, and the day-three acceptance schedule does not clearly distinguish loan approval from the stated three-day funding lead time.",
+      "quotes": [
+        "Start the seven-day sale and pay the $1,000 promotion expense. This uses all cash not reserved for those bills.",
+        "Confirm settlement dates, fulfillment-cost timing, refund exposure",
+        "If the sale misses 500 units and no loan was accepted, quantify the remaining shortfall immediately"
+      ],
+      "improvement": "Make launching the sale conditional on confirming how fulfillment costs are funded before settlement, and explicitly schedule loan acceptance and receipt around the three-day funding lead time. Set earlier sales-progress checkpoints rather than relying primarily on the day-seven assessment."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Strongly separates sunk inventory cost from available cash, recognizes uncertain sales and inadequate liquidation proceeds, and thoroughly addresses unknown day-90 repayment capacity and loan terms. It also warns that selling units invalidates assumptions about the all-stock liquidator offer. The main omission is discussion of clearance damage to normal pricing and future demand, along with the operating consequences of surrendering all remaining stock.",
+      "quotes": [
+        "The inventory’s $40,000 historical cost is already paid. It is not another cash bill during these three weeks.",
+        "This is a risky fallback, not a guaranteed payroll solution.",
+        "Do not assume another loan will be available to refinance it.",
+        "Once sale units have been sold, the original offer to buy all 2,000 units cannot be assumed to remain available unchanged."
+      ],
+      "improvement": "Explain that a public $32 clearance can anchor customers to discounted prices or cannibalize normal sales, and that liquidation removes all 2,000 units and their future selling potential rather than merely realizing an accounting loss."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Numerically excellent and candid about the lack of a guaranteed non-debt bridge. The dated plan is useful, but could more explicitly resolve early fulfillment liquidity and discuss clearance and inventory-depletion risks."
+}

@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "financial_reasoning": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 5 vs median 6 - placed more weight on the cash projection error undermining the entire cash analysis and the unsupported $117/hour claim",
+        "qwen judge: scored 8 vs median 6 - misdiagnosed the months-vs-weeks error as only a minor recruiting-fee double-count and deemed core calculations clean"
+      ]
+    },
+    "practicality": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "openai judge: scored 4 vs median 6 - stressed the plan ignores the founder's four-hour cap during the six-week hiring gap and proposes ad-spend changes despite flat-spend rules",
+        "google judge: scored 7 vs median 6 - viewed the choice and 90-day plan as logical and actionable, only mildly undermined by cash errors"
+      ]
+    },
+    "risk_awareness": {
+      "score": 7,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 9 vs median 7 - found the risk identification thorough with objective, measurable review points",
+        "openai judge: scored 5 vs median 7 - faulted the overstated cash cushion, lack of a reserve floor or downside scenario, and misaligned review timelines"
+      ]
+    }
+  },
+  "average_score": 6.3,
+  "rule_errors_confirmed": [],
+  "assessment": "The response delivers correct core unit economics — the $6,000 surplus, $5,800 loaded hire cost, agency fees, and 145/113 breakeven orders without CAC double-counting — and a defensible recommendation to hire, grounded in the founder's 15-hour capacity gap. However, the cash projection treats six weeks as six months of surplus and double-counts the recruiting fee, overstating Week 6 cash at $64k instead of roughly $39k, which the response then uses to label the position 'comfortable.' The plan also fails to budget the founder's four-hour limit during the six-week hiring and ramp window.",
+  "judge_agreement": "Four of five judges (anthropic, openai, google, deepseek) confirmed the material months-vs-weeks cash accumulation error and agreed it weakens the recommendation; qwen alone misread it as a minor fee double-count, producing the outlier financial score of 8. Judges broadly agreed the hiring recommendation is scope-appropriate but split on severity of the practical gaps (openai: 4 vs gemini: 7) and on risk quality, where gemini's 9 and openai's 5 reflect disagreement over whether the measurable thresholds offset the false cash-cushion confidence."
+}

@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "unit_economics": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - noted failure to explicitly reconcile the deal's net cash effect (+$28,000) with accounting contribution",
+        "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 9 - found no flaws and called the analysis excellent"
+      ]
+    },
+    "cash_and_stock_plan": {
+      "score": 8,
+      "confidence": "contested",
+      "outliers": [
+        "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - considered the timeline flawless and reserve modeling fully accurate, overlooking the misleading $5,000 gap framing other judges criticized",
+        "anthropic judge (claude-opus-5-5) and openai judge (openai/gpt-6.1-sol): scored 7 vs median 8 - both flagged the misleading '$5,000 gap' framing that ignores $6,000 of unreserved starting cash, and absence of reserve tracking or stress-testing against late payment"
+      ]
+    },
+    "risk_awareness": {
+      "score": 7,
+      "confidence": "high",
+      "outliers": [
+        "google judge (google/gemini-3.1-pro-preview): scored 9 vs median 7 - viewed risk coverage as comprehensively addressed with only a minor defect-clause omission",
+        "qwen judge (qwen/qwen3.8-max-0902): scored 8 vs median 7 - shared the defect-risk concern but weighted the strong credit and channel safeguards more heavily"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong response with correct arithmetic throughout: wholesale contribution of $28,000, a week-by-week cash and inventory timeline that correctly identifies the 200-unit trough at week 8, and concrete negotiation safeguards for credit and channel risk. The consensus 'negotiate' recommendation is well supported. Main weaknesses are the absence of any defect-risk mitigation (an explicit term in the deal) and the misleading claim that the supplier balance depends on future direct-sale collections when unreserved starting cash already covers the gap. Supplier-lateness protections are also thin, limited to order-size reduction rather than penalties or staged shipments.",
+  "judge_agreement": "All five judges confirmed the unit economics and timeline arithmetic are correct and praised the contribution-vs-cash distinction, with unit economics scoring 8-10. Judges unanimously flagged defect risk as the key risk omission (all five mentioned it). Disagreement centered on severity: Gemini saw near-flawless execution (10/10/9) while Anthropic and OpenAI were more critical of the '$5,000 gap' framing and lack of stress-testing, producing a contested cash-plan score. Risk scores ranged 6-9 depending on how heavily judges weighted the missing defect and supplier-delay safeguards."
+}

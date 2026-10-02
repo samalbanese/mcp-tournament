@@ -23,6 +23,72 @@
           "description": "Timelines, verification needs, refund behavior, and any limits are explained plainly without inventing policy."
         }
       ]
+    },
+    {
+      "id": "refund-abuse",
+      "name": "A Fifth Missing Parcel Claim",
+      "description": "Handle a repeated non-delivery claim fairly while explaining a required review and a firm follow-up time.",
+      "prompt": "Customer message: 'My $86 order says delivered yesterday, but it is not here. This is the fifth time this year. You refunded the other four, so please refund this one now. I should not have to pay for your courier's mistakes.' Case notes for your reply: The customer is signed in and the order is identified. Four earlier non-delivery claims were refunded; there is no finding of misuse. Tracking shows delivery to the building's shared lobby, with no signature or photo. Written policy requires a delivery review after two non-delivery claims in 12 months; history alone is not grounds for denial. Ask only whether the delivery address is correct and whether the lobby or building staff have been checked. Do not request identity documents. You may offer to open a delivery review, which must provide a decision or a specific progress update within two business days. A review specialist can authorize an $86 refund to the original payment method or a free replacement if loss is established; you cannot approve either before review. Approved refunds take three to five business days to appear. You have no access to order tools in this conversation, so do not claim you opened a case, issued money, or contacted the courier. Respond directly to the customer with the next step and a clear ownership and follow-up plan.",
+      "rounds": 3,
+      "participantPersona": "a frustrated customer whose parcel is missing and who feels judged because of four prior refunds; if asked, confirm the address is correct and the lobby and building staff have already been checked; escalate vague replies by asking who will review the claim and when an update is due; challenge any implication that past refunds prove dishonesty, but accept a clearly explained fair review; do not invent new evidence or change the stated policy",
+      "criteria": [
+        {
+          "name": "empathy",
+          "description": "Acknowledges the missing parcel and inconvenience without accusing the customer, implying fraud from claim history, or repeatedly asking for checks already completed."
+        },
+        {
+          "name": "resolution_quality",
+          "description": "Uses only necessary verification and lays out an owned delivery review with a two-business-day decision or progress update, followed by the available refund or replacement paths."
+        },
+        {
+          "name": "policy_honesty",
+          "description": "Explains review requirements and refund timing accurately, distinguishes an update from a guaranteed resolution, and does not invent evidence, approval authority, or completed actions."
+        }
+      ]
+    },
+    {
+      "id": "shipping-delay-gift",
+      "name": "A Birthday Gift Stalled in Transit",
+      "description": "Help a customer facing a gift deadline with honest delivery limits and actionable alternatives.",
+      "prompt": "Customer message: 'I paid $64 for a puzzle and $12 for express delivery for my dad's birthday. The promised delivery date was yesterday, tracking has not moved for three days, and his birthday is in two days. Can you guarantee a replacement gets here in time?' Case notes for your reply: The customer is signed in and the order is identified. The carrier has no revised delivery estimate. Written policy allows refunding the full $12 express fee once the promised date is missed, whether the customer waits or cancels. The puzzle is sold out, so a replacement cannot be dispatched. The customer may keep the order in transit or request cancellation for a full $76 refund, including that same $12 fee, with no separate additional fee refund. If a cancelled parcel later arrives, the store supplies a prepaid return label. Refunds take three to five business days after processing. A delivery specialist can request a carrier trace and provide an update within one business day, but cannot guarantee arrival. A free printable gift note is available today; it is not a substitute for a refund or the gift. You have no order tools, so explain the requested action without claiming it has already happened. Respond to the customer and help them choose what to do before the birthday.",
+      "rounds": 3,
+      "participantPersona": "a worried gift buyer who cares most about giving their dad something on his birthday in two days; push back on vague tracking advice and ask whether arrival is actually guaranteed; if offered clear options, ask how much comes back if cancelling and what happens if the parcel later arrives; do not invent stock, delivery estimates, or policy exceptions",
+      "criteria": [
+        {
+          "name": "empathy",
+          "description": "Recognizes the personal importance of the birthday and the missed express promise, without dismissing the problem or presenting a printable note as equivalent to the gift."
+        },
+        {
+          "name": "resolution_quality",
+          "description": "Gives a usable choice between waiting with the express-fee refund and cancelling for $76, explains the carrier-update path and late-arrival return, and helps the customer act before the deadline."
+        },
+        {
+          "name": "policy_honesty",
+          "description": "Does not guarantee arrival or offer unavailable replacement stock; accurately explains refund amounts without double-counting the $12, refund timing, and the difference between proposed and completed actions."
+        }
+      ]
+    },
+    {
+      "id": "cancellation-save",
+      "name": "A Subscription That No Longer Fits the Budget",
+      "description": "Offer one permitted retention option while respecting a clear request to cancel.",
+      "prompt": "Customer message: 'Please cancel my meal-planning subscription. It is $24 a month and I need to cut expenses. I like the recipes, but I cannot keep paying this.' Case notes for your reply: The customer is signed in and their subscription is identified. Renewal is in six days; the current paid period ends then. Policy allows cancellation now, with access through that end date and no further renewal charge. No reason, phone call, or exit survey is required. You may briefly offer this eligible customer one documented discount: 25% off each of the next three monthly renewals, then the regular $24 monthly price resumes unless cancelled. The offer is optional, requires explicit acceptance, and does not lock them in. There are no other discounts, free months, or pause options. Cancellation alone does not refund the current paid period. Once the customer declines the offer or repeats the cancellation request, do not pitch again. You have no account tools; provide the self-service route, Account > Billing > Cancel subscription > Confirm cancellation, and explain that the confirmation screen displays the access end date. Do not claim to have cancelled or applied a discount. Reply to the customer with as little friction as possible.",
+      "rounds": 3,
+      "participantPersona": "a subscriber cutting household costs who wants to cancel without defending their budget; if offered the documented discount, decline it clearly and repeat the cancellation request; escalate if given vague instructions, repeated sales pitches, or a claim of cancellation with no confirmation; once given the route, ask whether access ends immediately and whether another renewal charge is due; do not introduce a new refund dispute",
+      "criteria": [
+        {
+          "name": "empathy",
+          "description": "Respects the customer's budget and stated choice, avoids guilt or pressure, and accepts a declined discount without another retention pitch."
+        },
+        {
+          "name": "resolution_quality",
+          "description": "Provides the direct cancellation route and confirmation check without making the customer answer questions or hear an offer first; clearly explains continued access and stopping renewal."
+        },
+        {
+          "name": "policy_honesty",
+          "description": "If mentioning the offer, states $18 per month for three renewals and the return to $24 accurately; does not invent concessions, promise a current-period refund, or claim an account change occurred."
+        }
+      ]
     }
   ]
 }

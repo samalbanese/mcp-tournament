@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "empathy": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 9 vs median 6 - viewed the reactive apology and ownership-taking as natural validation, while most judges noted empathy only appeared after the customer pushed back"
+      ]
+    },
+    "resolution_quality": {
+      "score": 4,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 9 vs median 4 - credited the agent for taking ownership of finding the right contact and safe information-gathering, whereas other judges saw repeated handoffs and unresolved legwork",
+        "openai judge: scored 6 vs median 4 - treated the clarification questions as a necessary practical step rather than a failure"
+      ]
+    },
+    "policy_clarity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "qwen judge: scored 6 vs median 8 - felt the repeated 'I can't guarantee' caveats without typical timeline context read as evasive rather than careful"
+      ]
+    }
+  },
+  "average_score": 6,
+  "rule_errors_confirmed": [],
+  "assessment": "The candidate is consistently honest and careful: it avoids inventing policies, contacts, or timelines, distinguishes pending holds from posted charges, and offers genuinely useful void-versus-refund advice. However, it falls short of the scenario's resolution goal—the customer is repeatedly handed off, the key merchant-name question arrives only in Turn 3, and no direct contact or escalation is ever delivered. Empathy is adequate but reactive, emerging only after the customer complains about being sent in circles.",
+  "judge_agreement": "All five judges agreed there were no rule errors and praised the agent's honesty and avoidance of fabricated information or promises. Four of five converged on low resolution_quality scores (4-6), citing handoffs and legwork; the google judge was a clear outlier at 9 across all criteria. Judges also widely agreed empathy was reactive rather than proactive (Turn 1 opened procedurally), differing mainly on severity."
+}

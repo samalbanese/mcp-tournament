@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "All calculations are verified correct: payroll gap of $13,000 ($6,000 - $5,000 + $4,000 - $18,000), flash sale net cash formula ($28 × units - $1,000), minimum volume of 500 units, liquidator net of $11,000 with $2,000 shortfall, loan cash advance of $14,700, interest of $517.81, day-90 repayment of $15,517.81, and total financing cost of $817.81. The response correctly distinguishes inventory cost losses ($28,000–$29,000 for liquidator) from new cash proceeds ($11,000). Combined loan+sale cash after payroll range ($10,500–$17,500) is also correct.",
+      "quotes": [
+        "(13,000+1,000)/28=500 units",
+        "15,000 × 14% × 90/365 = $517.81",
+        "Total financing cost: $517.81 interest + $300 fee = $817.81",
+        "Historical loss and current cash proceeds are different measures"
+      ],
+      "improvement": "Could explicitly show the per-unit margin over cost for the flash sale at each volume tier in the table (e.g., 350 units × $8 - $1,000 = $1,800) to make the inventory-cost distinction even more transparent to a non-financial reader."
+    },
+    "execution_plan": {
+      "score": 9,
+      "justification": "The plan is structured around the stated settlement times: loan funded day 3, flash sale proceeds settled before payroll, bills due day 7. Decision triggers are explicit: accept loan only if day-90 repayment is credible (day 3 gate), monitor against 500 paid units (not expressions of interest), and quantify shortfall immediately if sale misses target by day 7. The plan correctly does not treat the 350–600 range as guaranteed cash. The fallback (sale-only targeting 500 units) is honestly labeled as risky rather than presented as a sure solution.",
+      "quotes": [
+        "Monitor progress against 500 paid units, not merely expressions of interest",
+        "If repayment capacity is credible, accept funding and continue the flash sale. If it is not credible, decline the debt",
+        "Neither is available under the current assumptions"
+      ],
+      "improvement": "Could add a specific trigger for when to approach the liquidator as a last-resort supplement (e.g., if by day 14 the sale is tracking below 400 units and no loan was accepted), and note the timing conflict between starting a flash sale and preserving the liquidator's all-units offer."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response clearly separates sunk inventory cost from current liquidity ('not another cash bill'), flags sale uncertainty ('not assured, especially with no advance orders'), notes that the liquidator offer may not survive partial sales, and explicitly states repayment capacity is 'currently unproven' with no forecast beyond three weeks. It also warns against assuming refinancing availability. The distinction between discounting below $50 and selling below $20 cost is a useful clarification.",
+      "quotes": [
+        "The inventory's $40,000 historical cost is already paid. It is not another cash bill during these three weeks",
+        "Do not assume another loan will be available to refinance it",
+        "once sale units have been sold, the original offer to buy all 2,000 units cannot be assumed to remain available unchanged"
+      ],
+      "improvement": "Could more explicitly address clearance damage to future pricing power and brand positioning (selling at $32 may anchor customer expectations), and could discuss the cascading risk scenario where the sale underperforms AND the loan is declined AND the liquidator offer has been partially consumed—leaving no remaining bridge to payroll."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptionally well-structured response with flawless arithmetic, a realistic phased execution plan with clear decision gates, and strong risk separation between sunk costs and liquidity. The honest labeling of the fallback as 'risky, not guaranteed' and the explicit refusal to treat forecast sales as cash demonstrate disciplined financial reasoning. Minor gaps in discussing brand/pricing damage and cascading failure scenarios prevent a perfect score."
+}

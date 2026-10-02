@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 7,
+      "justification": "A small operator could run this plan. It names one offer to test first, gives a primary metric they can compute, offers an A/B or before/after design depending on platform capability, and adds a cheap UX nudge (progress bar). Three gaps weaken it. It never checks whether a small store has enough traffic for a 50/50 split to produce a readable result in 30 days. Its own example of 1,000 cart sessions gives only about 500 per arm, which is likely underpowered to detect a 5% contribution change. It also gives no day-by-day timeline. Finally, the 'flat' branch says to raise the threshold to $90, which is a questionable next step when recovery is the main lever.",
+      "quotes": [
+        "Run a true A/B split (50/50 on sessions) for at least 14 days to smooth day-of-week effects.",
+        "Show a **progress bar or callout** in the cart: *\"You're $13 away from free shipping.\"*",
+        "Try threshold at $90; you may need more AOV lift to offset absorption"
+      ],
+      "improvement": "Add a simple 30-day calendar: setup and tracking in days 1-3, the split running in days 4-28, and analysis in days 29-30. Add a rough minimum-sample check, or advise extending the test if each arm has fewer than about N orders. Justify the next step for a flat result, for example testing $79 versus $90, rather than defaulting to a higher threshold."
+    },
+    "specificity": {
+      "score": 6,
+      "justification": "The answer is concrete: a $85 threshold, a defined contribution-per-session formula, a worked breakeven (about 13% of abandoners recovered), and numeric decision thresholds. However, the core comparison table contains a material calculation error. A 15% price discount does not keep a 42% gross margin. Cost of goods stays at about $41.76, so a $61.20 order yields about $19.44 of gross profit, not $25.70. The real per-order drop is about $10.80, not $4.54, and the volume needed to break even is about 56%, not 17.7%. The recommendation survives and is actually strengthened, but the stated figures are wrong. The decision rule also leaves gaps: results between +3% and +5%, and between -3% and -5%, have no assigned action. The scenario also assumes every recovered abandoner orders exactly $85.",
+      "quotes": [
+        "| 15% sitewide discount | $61.20 | $25.70 | $0 (customer still pays ship) | **$25.70** |",
+        "You'd need a **17.7% increase in order volume** just to break even",
+        "Contribution per session flat (±3%) | Try threshold at $90"
+      ],
+      "improvement": "Recompute the discount scenario with cost of goods held constant: $61.20 - $41.76 = $19.44, a $10.80 loss per order, with about 56% more volume needed to break even. Make the decision rule bands exhaustive, for example ≥+3% roll out, -3% to +3% iterate, <-3% kill. Model recovered abandoners at a realistic mix of order values rather than all at $85."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "The answer flags several real risks: optimizing for revenue instead of profit, giving away shipping on orders that were already ≥$85, attracting low-repeat bargain hunters, and confounds in a before/after design such as promotions, email sends, and seasonality. It misses others. Abandoners whose carts stay below $85 still see the shipping charge, so the recovery rate may be far lower than assumed. Free-shipping baskets may carry higher return or shipping costs, and heavy or bulky home goods can cost much more than the $9 average to ship. Customers may pad orders to reach $85 and then return items. The answer also omits statistical power and novelty effects. Its own arithmetic error in the margin table is itself an unflagged risk, since it understates how damaging the discount would be.",
+      "quotes": [
+        "20% of existing orders already ≥$85 now get free ship (≈124 orders lose $9 each → −$1,116)",
+        "If the test attracts one-time bargain hunters who never return... Tag the cohort and check 60-day repurchase.",
+        "control for any promotions, email sends, or seasonal shifts"
+      ],
+      "improvement": "Note that sub-threshold abandoners are unaffected by the offer. Track actual shipping cost per free-ship order, since heavy home goods can blow past the $9 average. Monitor return rates on threshold-padded orders. Address sample size and the risk of a false positive from a short, low-traffic test."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "calculation_error: 15% discount scenario applies 42% margin to discounted revenue instead of holding COGS constant"
+  ],
+  "overall_impression": "This is a well-structured, actionable answer with a sensible recommendation (free shipping at $85), a profit-focused primary metric, and a decision table. It is undermined by a margin-math error in the discount comparison, a decision rule with gaps between its bands, and limited treatment of statistical power and of abandoners whose carts stay below the threshold."
+}

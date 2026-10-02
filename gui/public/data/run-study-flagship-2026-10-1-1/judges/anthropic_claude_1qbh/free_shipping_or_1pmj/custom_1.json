@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "A small operator can carry this out. It names specific tools (Intelligems, Shipscout) and gives clear control and variant definitions. It includes a 90-day order-distribution check to do first, and practical ways to help customers reach the threshold, such as a progress bar and $15–$25 add-ons. The 30-day plan has a clear structure. However, the sample-size figure likely understates the traffic needed, and many small stores won't reach even 15–25k visitors per arm in 30 days. The fallback is to extend the test, but the answer gives no alternative design for low-traffic stores, such as a sequential or pre/post design or a lower-variance proxy metric.",
+      "quotes": [
+        "Run an A/B split by **visitor**, 50/50, using your platform's split-testing tool or an app like Intelligems or Shipscout.",
+        "Show a progress bar (\"You're $18 away from free shipping\").",
+        "If 30 days won't get you there, extend the test. Don't call it early."
+      ],
+      "improvement": "Add a fallback for low-traffic stores, such as a time-split or pre/post comparison with guardrails, or using profit per visitor with variance reduction. Also give a day-by-day or week-by-week 30-day schedule."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "The calculations use the supplied numbers and are correct: $30.24 gross profit, a $10.80 discount cost, a 36% profit cut, 1.56x orders needed to break even, and a profit-neutral threshold of $9/0.42 ≈ $21.40, or about $93.40. It recommends an exact $95 threshold, gives a fallback range of $85–$89, and defines a clear primary metric (contribution profit per visitor) with a formula. The decision rule is somewhat loose: 'roughly 90%' confidence, and the return rate must not be 'meaningfully higher' without a numeric limit. The sample-size estimate also appears low. Detecting a 10% relative lift on a 2–3% conversion rate at standard power usually takes more like 35–80k visitors per arm.",
+      "quotes": [
+        "You recover that $9 once the order grows by $9 ÷ 0.42 ≈ **$21.40**. That puts the profit-neutral threshold at about **$93.40**.",
+        "(Revenue − COGS − shipping you absorb − payment fees − discounts − refunds/returns) ÷ unique visitors",
+        "Keep it only if the return rate is not meaningfully higher."
+      ],
+      "improvement": "Set numeric guardrails, such as return-rate lift of 2 points or less and a minimum profit-per-visitor lift. Correct the sample-size estimate and state the power and alpha assumptions behind it."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "It covers the main margin risks: subsidizing orders already above $95, higher actual shipping costs on larger orders, and the discount applying to customers who would have bought anyway. It covers customer-behavior risk through cart-padding followed by returns, and experiment-design risk through randomizing by visitor, avoiding overlapping promotions, using full weeks, and not stopping early. It also states its assumption about whether shipping is currently charged. It does not mention customers seeing different shipping offers, cross-device contamination, novelty effects, or how inflated sample-size expectations could lead to underpowered conclusions.",
+      "quotes": [
+        "you'll be giving $9 to customers who didn't need the incentive... It is the main hidden cost of this test.",
+        "Bigger orders may cost more than $9 to ship, so use actual label costs.",
+        "Watch for people padding carts to qualify and then returning items."
+      ],
+      "improvement": "Address contamination and fairness risks in price testing, novelty effects, and the risk of an underpowered test. Explain how to proceed if results are inconclusive."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Sample-size estimate (15–25k per arm for 10% relative lift at 2–3% CVR) is likely understated by roughly 2–3x under standard 80% power / 5% alpha assumptions."
+  ],
+  "overall_impression": "A strong answer that pays close attention to margin. It correctly prefers a $95 free-shipping threshold based on accurate break-even math and centers the test on contribution profit per visitor. Its weaker points are a soft decision rule and an optimistic sample-size estimate for a small store."
+}

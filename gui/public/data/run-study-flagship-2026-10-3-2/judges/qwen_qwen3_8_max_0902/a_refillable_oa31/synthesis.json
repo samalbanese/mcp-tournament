@@ -1,0 +1,31 @@
+{
+  "final_scores": {
+    "clarity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - overlooked the omission that the bottle arrives empty and that the CTA dropped the price anchor noted by other judges"
+      ]
+    },
+    "persuasion": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - praised the clutter angle without engaging the critiques that the benefit is implied rather than explicit and 'sends tablets your way' could imply a subscription"
+      ]
+    },
+    "brand_voice": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - found no flaws where others noted the generic 'Buy Now' CTA and muddled subject line"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [
+    "Kit contents are not fully clear: the email omits that the glass bottle arrives empty (flagged by anthropic judge; corroborated by openai and deepseek judges as a clarity gap, though only anthropic classified it as a rule error)"
+  ],
+  "assessment": "A concise, accurate, on-voice launch email that stays well under the word limit, preserves all key product facts, and handles both user revision requests cleanly. Recurring weaknesses are the omitted 'empty bottle' detail, the generic 'Buy Now' CTA that lost the price anchor, and an implied rather than explicit cabinet-space benefit. The 'sends three fresh tablets your way' phrasing was also flagged as potentially implying an unsupported subscription.",
+  "judge_agreement": "Four of five judges clustered tightly at 7-8 across all criteria, agreeing the email is strong but slightly weakened by the empty-bottle omission and generic CTA. The google judge was a clear outlier, awarding perfect 10s across the board with no identified improvements, while the other four each offered concrete refinements. The anthropic judge was the most stringent, uniquely counting the bottle omission as a rule error."
+}

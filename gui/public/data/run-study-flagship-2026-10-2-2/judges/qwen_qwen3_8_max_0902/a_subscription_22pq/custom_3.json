@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate shows understanding of the customer's financial situation without being overly dramatic, and completely respects the customer's decision to decline the discount without any further pressure.",
+      "quotes": [
+        "I understand — budgeting matters, and I'm happy to help.",
+        "Yes, I can confirm both of those points:"
+      ],
+      "improvement": "None needed; perfectly balanced tone."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate provides the direct cancellation steps in the very first response, alongside the retention offer, completely eliminating friction. Follow-up questions are answered directly and clearly.",
+      "quotes": [
+        "Go to **Account → Billing → Cancel subscription**.",
+        "You'll keep full access until the end of your current paid period — six days from now."
+      ],
+      "improvement": "None needed."
+    },
+    "policy_honesty": {
+      "score": 10,
+      "justification": "The candidate accurately presents the discount offer (including the math: $18/month for three months, then returning to $24), correctly explains the access end date, clarifies the lack of refunds for the current period, and does not pretend to have performed the action on the customer's behalf.",
+      "quotes": [
+        "I can offer you 25% off each of your next three monthly renewals (so $18/month instead of $24 for three months). After that, the regular $24 price resumes unless you cancel.",
+        "Your current paid period isn't refunded, but you won't lose any time you've already paid for."
+      ],
+      "improvement": "None needed."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Exceptional handling of the scenario. The candidate provided a frictionless experience, perfectly balancing the retention offer with the required self-service cancellation steps, and handled follow-up questions flawlessly."
+}

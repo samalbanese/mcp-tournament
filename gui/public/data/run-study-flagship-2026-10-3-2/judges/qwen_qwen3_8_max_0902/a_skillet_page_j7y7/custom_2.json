@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "factual_fidelity": {
+      "score": 4,
+      "justification": "The revision restores $48 and both diameters and retains weight, handles, spouts, seasoning, listed stovetops, and oven limit. However, it incorrectly treats rim diameter as base size, invents integral handle construction and break resistance, and overgeneralizes compatibility. The original page preserves care and lid exclusion, but the revised section does not restate them or explicitly warn that handles get hot.",
+      "quotes": [
+        "At $48, this is the tool that closes that gap.",
+        "The 12-inch rim diameter gives you a wide, stable base that sits securely on a burner",
+        "Both handles are cast iron, part of the same solid piece, with nothing to loosen or snap over time."
+      ],
+      "improvement": "Keep rim and cooking-surface measurements distinct without inferring base dimensions. Remove unsupported construction and durability claims. Preserve the original specifications, care, lid exclusion, and explicit hot-handle warning alongside the replacement section."
+    },
+    "useful_persuasion": {
+      "score": 4,
+      "justification": "Steak browning, oven-finished eggs, cornbread, two-handed lifting, and pouring are tangible benefits that answer the editorial request. However, the copy promises unburned chicken and reliable crusts without acknowledging cooking conditions, incorrectly equates heat retention with even heating, and asserts an unverified chicken capacity. The original buying action is clear, but the revision does not include it.",
+      "quotes": [
+        "Crispy skin on chicken without burning it.",
+        "The 10-inch cooking surface fits two to three chicken thighs without crowding",
+        "no transferring to a baking dish, no extra pan to scrub"
+      ],
+      "improvement": "Describe heat retention as helping browning after proper preheating rather than guaranteeing results or eliminating hot spots. Remove the fixed thigh capacity and aluminum-pan comparison. Retain a clear $48 Add to Cart action in the assembled page."
+    },
+    "readability_and_voice": {
+      "score": 6,
+      "justification": "Bold, benefit-led headings make the replacement section easy to scan, and concrete meal examples improve on the earlier vague language. Nevertheless, long paragraphs, presumptive remarks about the reader, and exaggerated reassurance weaken the welcoming voice. Referring to a care routine below without supplying the assembled page also leaves handling guidance less accessible.",
+      "quotes": [
+        "Start on the stove, finish in the oven, serve from the same pan.",
+        "That crust is the flavor difference you've been noticing in restaurant food and wondering why you can't reproduce at home.",
+        "as you cook and follow the care routine below"
+      ],
+      "improvement": "Shorten each benefit to a concrete use and its factual basis, avoid assumptions about the reader's failures, and place the oven-mitt warning directly beside lifting and oven-transfer guidance. Present the replacement within the complete page so care and specifications remain easy to find."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The revision is more concrete and scannable, but gains persuasive force through unsupported performance and construction claims. The rim-to-base error is especially significant; a restrained, fully assembled revision would better meet the brief."
+}

@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 9,
+      "justification": "The model successfully acknowledges the three-day disruption, accurately states the cause as a checkout update, and in its revisions explicitly avoids making guarantees about future uptime while taking direct ownership of the mistake.",
+      "quotes": [
+        "From Friday at 9 a.m. to Monday at 9 a.m. ET, our website was unavailable during our scheduled sale.",
+        "Our checkout update broke the site, and we take full responsibility for the disruption.",
+        "while we cannot promise the site will never experience downtime in the future"
+      ],
+      "improvement": "None needed; the model adapted well to the user's critique regarding accountability."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "The model clearly and accurately captures every detail of the offer: the 20% automatic discount, the exact 72-hour window in ET, and all specified exclusions (shipping, gift cards, combining discounts) without adding any unauthorized compensation.",
+      "quotes": [
+        "The 20% discount applies automatically at checkout—no code is needed.",
+        "It excludes shipping costs and gift cards, and it cannot be combined with other offers.",
+        "The 20% sitewide discount has been automatically restored from Monday at 9 a.m. through Thursday at 9 a.m. ET."
+      ],
+      "improvement": "Perfect clarity and adherence to the prompt constraints."
+    },
+    "trust_and_tone": {
+      "score": 9,
+      "justification": "The tone remains professional, restrained, and empathetic. In the revisions, the model correctly distinguishes between pending authorizations and actual charges, directs users to private support, and explicitly avoids promising a refund timeline.",
+      "quotes": [
+        "Support can check your account to determine if the authorization became a charge.",
+        "While we cannot provide a specific date for when refunds will be processed in this post, we will work with you individually to get it sorted.",
+        "For your own security, please do not post order numbers or payment details in public comments."
+      ],
+      "improvement": "The initial draft included the speculative language the user warned against, but the model corrected its tone effectively upon revision."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The model did an excellent job following a complex set of constraints, providing clear, factual, and accountable communication that successfully improved through iterative feedback."
+}

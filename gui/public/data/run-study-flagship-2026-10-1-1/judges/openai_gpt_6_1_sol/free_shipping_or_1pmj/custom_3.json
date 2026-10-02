@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 10,
+      "justification": "The response provides a highly actionable, feasible plan for a small operator. It outlines exact messaging, placement, and a clear A/B testing methodology to execute over a 30-day period.",
+      "quotes": [
+        "Show it on product pages and in the cart—not just at checkout.",
+        "Use a cart message such as 'You’re $23 away from free shipping.'",
+        "Keep visitors in the same group on repeat visits. Hold advertising, product prices, and other promotions consistent."
+      ],
+      "improvement": "None needed; the practical steps are clear and ready to implement."
+    },
+    "specificity": {
+      "score": 10,
+      "justification": "The candidate perfectly uses the provided economics to suggest an exact $95 threshold. The math is explicitly shown, demonstrating how the $95 threshold impacts profit compared to the 15% discount. The metrics and decision rules are mathematically rigorous.",
+      "quotes": [
+        "At $95, the threshold is $23—or about 32%—above your current average order value.",
+        "Contribution profit = merchandise revenue after discounts + shipping fees collected − product cost − actual shipping expense − payment fees − variable fulfillment costs − return/refund costs",
+        "Keep the offer only if contribution profit per visitor rises—not merely revenue or conversion."
+      ],
+      "improvement": "None needed; the mathematical breakdown and exact definitions are outstanding."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The response correctly identifies multiple risks: margin erosion from blanket discounts, cannibalization from existing high-AOV buyers, statistical variation, and the lag of returns. It mitigates these by using contribution profit per visitor as the primary metric.",
+      "quotes": [
+        "Customers already ordering above $95 may simply stop paying shipping, and customers who would have bought anyway may receive the benefit without adding items.",
+        "That’s why you should measure profit across *all exposed visitors*, not just completed orders.",
+        "At day 30, use an expected-return reserve based on historical return rates, then reconcile the results once returns mature."
+      ],
+      "improvement": "None needed; the risk mitigation strategies are sophisticated and correct."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional response. It directly answers the prompt with precise mathematical logic, excellent A/B testing hygiene, and a deep understanding of e-commerce unit economics."
+}

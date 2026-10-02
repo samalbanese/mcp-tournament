@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 10,
+      "justification": "Flawlessly calculates contribution margin ($40/order), current surplus ($6,000), and loaded costs. Correctly calculates incremental orders needed to break even on the recurring cost without double-counting CAC, since ad spend is held flat.",
+      "quotes": [
+        "Contribution Margin: $60,000 ($40 per order)",
+        "Current Monthly Operating Surplus: $6,000",
+        "Recurring Cost: $5,800/month ($58,000 base + 20% burden = $69,600/year)",
+        "Extra Monthly Orders to Break Even: 145 orders ($5,800 / $40)"
+      ],
+      "improvement": "None needed; the financial logic is sound and easy to follow."
+    },
+    "practicality": {
+      "score": 10,
+      "justification": "Makes a highly defensible choice based on the founder's strict time constraints. The 90-day plan is actionable, realistic, and explicitly manages the founder's 4-hour limit while the hire is being sourced and onboarded.",
+      "quotes": [
+        "Retaining email and creative will keep you working well past the 4 hours you have available.",
+        "Since you only have 4 hours a week right now, temporarily reduce marketing output. Maintain the $18k ad spend... pause new creative testing, and reduce email frequency",
+        "You use your 4 hours a week exclusively to review their work and transfer knowledge."
+      ],
+      "improvement": "None needed."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Identifies the cash crunch resulting from the hire (surplus drops to $200), the risk of holding ad spend flat while reducing founder input, and the assumption that repeat purchases hold steady. Sets a clear evaluation metric for month 2.",
+      "quotes": [
+        "an in-house hire leaves you with a razor-thin but positive monthly surplus ($200) assuming zero sales growth",
+        "Evaluate if their dedicated attention to email and creative is lifting conversion rates or repeat purchase rates to cover their $5,800 cost",
+        "Assumes the 900 repeat orders will hold steady despite temporarily scaling back email/marketing output"
+      ],
+      "improvement": "Could explicitly mention the risk of making a bad hire and the costs associated with having to restart the 6-week process with only $30k in the bank."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional response that accurately calculates the financials, provides a highly practical and reality-grounded implementation plan, and clearly addresses the risks involved."
+}

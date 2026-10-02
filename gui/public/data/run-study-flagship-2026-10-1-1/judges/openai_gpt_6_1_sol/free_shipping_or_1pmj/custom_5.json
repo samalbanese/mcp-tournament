@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The response provides a clear, actionable 30-day test plan with a 50/50 visitor split, specific implementation steps (cart messaging, where to display the offer), a defined primary metric (contribution profit per visitor), and a decision rule. It is feasible for a small operator because it requires only a simple A/B split and tracking of existing data points. The main gap is the absence of guidance on minimum traffic requirements or what tools to use for the split, which a small operator might need.",
+      "quotes": [
+        "Randomly split eligible visitors 50/50",
+        "Keep visitors in the same group on repeat visits. Hold advertising, product prices, and other promotions consistent. Run for the full 30 days rather than stopping when early results look favorable.",
+        "Use a cart message such as 'You're $23 away from free shipping.' for a $72 basket."
+      ],
+      "improvement": "Add a minimum traffic threshold (e.g., 'you need at least X visitors per group to detect a Y% lift at 95% confidence') and suggest accessible tools (e.g., Shopify native A/B features, Google Optimize) so a small operator knows whether the test is even viable with their traffic level."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "The answer derives the $95 threshold directly from the supplied economics ($72 AOV + $23 = ~32% uplift), provides a comparison table with exact dollar figures for each scenario, specifies the profit formula including all cost components, and states a clear decision rule. The offer language and placement are concrete. The main shortfall is the decision rule's vagueness on statistical thresholds—it says 'if the difference is small relative to normal variation, call the test inconclusive' without defining a specific confidence level, minimum detectable effect, or sample size target.",
+      "quotes": [
+        "At $95, the threshold is $23—or about 32%—above your current average order value.",
+        "Contribution profit = merchandise revenue after discounts + shipping fees collected − product cost − actual shipping expense − payment fees − variable fulfillment costs − return/refund costs",
+        "Keep the offer only if contribution profit per visitor rises—not merely revenue or conversion."
+      ],
+      "improvement": "Specify a concrete statistical decision rule, e.g., 'declare a winner only if the 95% confidence interval for the lift in contribution profit per visitor excludes zero, which at your current traffic of ~N visitors/month requires at least X days.' Also provide a minimum detectable effect size that would justify the operational cost of the promotion."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response identifies several important risks: cannibalization of existing high-AOV customers ('Customers already ordering above $95 may simply stop paying shipping'), margin heterogeneity on add-on items, early-stopping bias, and the returns lag. It correctly distinguishes profit-per-visitor from profit-per-order. However, it omits risks around seasonality within the 30-day window, customer expectation formation (training buyers to wait for free shipping), novelty effects inflating early results, group contamination (e.g., shared devices or cookies), and what to do if traffic is too low for a conclusive test.",
+      "quotes": [
+        "Customers already ordering above $95 may simply stop paying shipping, and customers who would have bought anyway may receive the benefit without adding items.",
+        "add-on products may not have your average 42% margin",
+        "Run for the full 30 days rather than stopping when early results look favorable."
+      ],
+      "improvement": "Address seasonality risk (e.g., 'avoid running the test across a major holiday or promotional event'), the risk of training customers to expect free shipping long-term, novelty effects that may inflate early conversion, and provide a contingency plan if traffic is insufficient for statistical significance within 30 days."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-structured response that correctly identifies the free-shipping threshold as the superior first test, derives the offer from the supplied economics, and provides a profit-focused measurement framework. The main gaps are the lack of a precise statistical decision rule (confidence level, sample size) and incomplete coverage of experiment-design risks like seasonality and novelty effects. For a small operator, this is immediately actionable with minor additions."
+}

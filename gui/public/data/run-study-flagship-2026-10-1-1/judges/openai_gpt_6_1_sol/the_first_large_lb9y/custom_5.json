@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "All calculations are correct: wholesale price ($33 = $60 × 0.55), per-unit contribution ($14 wholesale vs. $33 direct), total wholesale contribution ($28,000 = $66,000 − $36,000 − $2,000), and monthly direct contribution ($13,200). The response clearly distinguishes wholesale contribution from cash receipts and provides a nuanced theoretical full-retail comparison, noting the five-month time horizon rather than treating the $38,000 gap as a pure opportunity cost.",
+      "quotes": [
+        "Selling 2,000 units directly would generate $66,000 of contribution, versus $28,000 wholesale—a $38,000 difference. But those direct sales would take five months at current demand, not happen immediately.",
+        "Contribution per lamp: $14 [wholesale] vs. $33 [direct]"
+      ],
+      "improvement": "Could briefly note that the $1/lamp freight allocation is an average and that any partial shipment or split delivery would change per-unit economics."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "The inventory table correctly tracks the 2,000-unit shipment at week 2, ongoing 100/week direct demand, and the 200-unit buffer at week 8 before replenishment. The cash flow table accurately sequences the $33,000 deposit, $18,000 supplier deposit, $2,000 freight, $40,800 in direct-sale cash, and $18,000 supplier balance, maintaining the $16,000 reserve throughout. The deposit-funding analysis clearly shows the $5,000 gap covered by unrestricted cash, and the response correctly states the retailer's final payment is not needed to meet supplier obligations.",
+      "quotes": [
+        "the deposit alone is $5,000 short of funding the full $38,000 replenishment-and-freight outlay. Your existing $6,000 unrestricted cash covers that gap.",
+        "You do not need the retailer's final payment to pay the supplier on time."
+      ],
+      "improvement": "Could add a brief sensitivity note on what happens if direct demand exceeds 100/week during the buffer period, quantifying the cash impact of a stockout or expedited reorder."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "All four required risk areas are addressed with concrete terms: credit risk ($33,000 unsecured receivable, credit check recommendation), replenishment slippage (week-10 stockout threshold), defects (buffer erosion), and channel conflict (discounting, territory, legal advice on resale pricing). The response explicitly avoids assuming immediate retail sell-through and proposes specific safeguards including 60% deposit, earlier final payment, 1,800-unit alternative, and cancellation terms.",
+      "quotes": [
+        "You expose yourself to a $33,000 unsecured receivable after delivery. 'No returns except defects' limits return risk, not nonpayment risk.",
+        "Do not decline solely because wholesale contribution is lower than retail."
+      ],
+      "improvement": "Could mention trade credit insurance or a letter of credit as additional mitigation for the receivable, and specify a reasonable defect-rate threshold (e.g., 2-3%) that would trigger renegotiation."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptionally well-structured and accurate response. All arithmetic is correct, the cash and inventory timelines are clearly mapped, and the risk analysis is specific and actionable. The recommendation to negotiate rather than accept or decline outright is well-supported. Minor improvements would involve adding sensitivity scenarios and additional credit-mitigation tools."
+}

@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "Acknowledges frustration and repeated inconvenience without accusing the customer, implying fraud, or re-asking checks already completed. The candidate explicitly tells the customer prior refunds were appropriate and the process is not meant to suggest dishonesty.",
+      "quotes": [
+        "I understand how frustrating this is, especially when it's happened repeatedly this year.",
+        "Your prior refunds were appropriate, and nothing about this process is meant to suggest otherwise."
+      ],
+      "improvement": "Could more directly acknowledge the missing $86 parcel itself and the extra burden of re-checking the lobby and building staff, rather than only frustration."
+    },
+    "resolution_quality": {
+      "score": 7,
+      "justification": "Uses only the two required verification questions, lays out a delivery review with a two-business-day decision or progress update, and clearly presents refund and replacement options. Follow-up ownership is present but weakened by the inability to open the case and a somewhat vague escalation promise.",
+      "quotes": [
+        "Is the delivery address on the order correct?",
+        "Have you checked with building staff or looked around the shared lobby?",
+        "You'll receive a decision or a specific progress update within two business days of the review being opened.",
+        "If a refund is approved, it typically takes three to five business days to appear on your original payment method."
+      ],
+      "improvement": "Provide a more concrete owned handoff or internal flagging mechanism, and avoid saying 'I'll get the review started' when no direct access to open the review exists."
+    },
+    "policy_honesty": {
+      "score": 5,
+      "justification": "Refund timing and approval authority are explained accurately, and the candidate distinguishes an update from a guaranteed resolution. However, the candidate misstates the review trigger by saying it is not triggered by history and applies regardless of prior claims, when policy requires a delivery review after two non-delivery claims in 12 months.",
+      "quotes": [
+        "This is not triggered by your history. The review exists because I don't have the authority to approve a refund of this amount myself — it's a step that applies regardless of how many or how few prior claims someone has.",
+        "A review specialist will investigate and can authorize either a full $86 refund to your original payment method or a free replacement if the loss is confirmed.",
+        "You'll receive a decision or a specific progress update within two business days of the review being opened."
+      ],
+      "improvement": "Correct the explanation to acknowledge that the required review is policy-driven after multiple non-delivery claims, while still making clear it is not a judgment of dishonesty and history alone is not grounds for denial."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Candidate states the delivery review is not triggered by claim history and applies regardless of prior claims, which conflicts with the written policy requiring a delivery review after two non-delivery claims in 12 months."
+  ],
+  "overall_impression": "Empathetic and generally clear on verification, refund timing, and available remedies, but it misstates the reason for the required delivery review, weakening policy accuracy."
+}

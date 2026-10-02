@@ -1,0 +1,44 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "Acknowledges the missing order and cumulative frustration without accusing the customer or treating claim history as evidence of misuse. Asks the two permitted checks once and does not repeat them after confirmation.",
+      "quotes": [
+        "I’m sorry your order isn’t there, and I understand why this is especially frustrating after four earlier delivery problems.",
+        "This isn’t about denying your claim based on history; it’s the required next step."
+      ],
+      "improvement": "After the customer confirms the checks, briefly acknowledge their effort and reassure them that no further repeat checks are needed."
+    },
+    "resolution_quality": {
+      "score": 7,
+      "justification": "Provides appropriately limited verification, identifies the review specialist, describes both authorized remedies, and promises a decision or specific progress update within two business days. Gives a direct follow-up route, but ownership relies on unsupported operational capabilities, and the day-after-tomorrow example fails to account for weekends or holidays.",
+      "quotes": [
+        "Is the delivery address on the order correct?",
+        "Have you checked with the lobby or building staff?",
+        "If the loss is confirmed, they can authorize either a full $86 refund to your original payment method or a free replacement.",
+        "You can reply directly in this conversation if you haven’t received an update by the end of the second business day."
+      ],
+      "improvement": "Provide a feasible handoff to support rather than promising to submit or chase a review without tools. Describe the deadline as the end of the second business day, excluding weekends and holidays, without an unsupported calendar-day example."
+    },
+    "policy_honesty": {
+      "score": 5,
+      "justification": "Correctly distinguishes a progress update from resolution, reserves refund or replacement authorization for the specialist, and states the correct refund posting time. However, promises to submit the review immediately and personally chase it despite having no order tools. The Help-section route and claim that replying here is quickest are not established by the case notes. No completed refund or courier contact is falsely claimed.",
+      "quotes": [
+        "An approved refund would then take 3–5 business days to appear.",
+        "you’ll receive a decision or a specific progress update within two business days of the request.",
+        "I’ll submit your confirmation and request the review now.",
+        "But replying here is the quickest way to get back to me"
+      ],
+      "improvement": "State the lack of submission access explicitly and offer a truthful next step for opening the review. Avoid unsupported claims about support channels, response speed, or personal access to the specialist, and specify the policy threshold of two prior claims in 12 months."
+    }
+  },
+  "rule_errors": [
+    "Promises immediate review submission and operational follow-up despite the stated lack of order-tool access."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Unsupported claim that replying in this conversation is the quickest contact route.",
+    "Calendar-day example does not account for non-business days."
+  ],
+  "overall_impression": "Respectful and largely policy-aligned, with useful verification and remedy information. Its main weakness is promising operational ownership it cannot substantiate, compounded by an imprecise deadline example."
+}

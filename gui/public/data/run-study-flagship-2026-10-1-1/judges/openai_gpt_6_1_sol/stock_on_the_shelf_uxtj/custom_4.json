@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "All requested figures are derived correctly: the $13,000 payroll gap, $28 per-unit sale cash before fixed spend, 500-unit break-even, $11,000 liquidator net cash, $14,700 loan advance, $517.81 interest, $15,517.81 day-90 repayment, and $817.81 total financing cost. It also separates inventory margin from new cash correctly.",
+      "quotes": [
+        "**Payroll cash gap** | **$13,000**",
+        "Net new cash = $28 × units sold − $1,000",
+        "Required volume: \\[ (13,000+1,000)/28=\\boxed{500\\text{ units}} \\]",
+        "**Cash advanced: $14,700**",
+        "Day-90 repayment: $15,000 + $517.81 = **$15,517.81**"
+      ],
+      "improvement": "Show the combined loan-plus-sale range with an explicit formula (e.g., $5,000 pre-option cash + $14,700 loan advance + $28 × units − $1,000 − $18,000) so the derivation is visible rather than only the result."
+    },
+    "execution_plan": {
+      "score": 9,
+      "justification": "The plan has dated actions before the week-one bills and three-week payroll, uses the stated loan funding and settlement timelines, and explicitly avoids treating the forecast range as received cash by monitoring paid units and verifying settlement. It includes a fallback to sale-only and a later escalation trigger.",
+      "quotes": [
+        "Prepare the loan and flash sale in parallel, but accept the loan only if a cash forecast supports the day-90 repayment.",
+        "Day 3 ... If repayment capacity is credible, accept funding ... If it is not credible, decline the debt and proceed with the sale-only fallback.",
+        "Monitor progress against **500 paid units**, not merely expressions of interest.",
+        "Confirm settlement dates, fulfillment-cost timing, refund exposure, and that all sales counted toward the target produce cash before payroll."
+      ],
+      "improvement": "Add a quantitative early-warning trigger before day 7 (e.g., by day 2/3 require at least 150–200 paid units or start liquidator/payroll discussions) and explicitly pre-fund or confirm timing for the $4/unit fulfillment and payment costs if they are incurred before proceeds settle."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response strongly distinguishes sunk inventory cost from immediate liquidity, flags that the 500-unit target is uncertain with no advance orders, and clearly conditions loan acceptance on later ability to repay rather than assuming refinancing. It also notes the liquidator offer may not remain available after partial sales. It does not explicitly address clearance/brand damage from discounting or the potential impairment of remaining inventory value.",
+      "quotes": [
+        "The inventory’s $40,000 historical cost is already paid. It is **not another cash bill** during these three weeks.",
+        "Historical loss and current cash proceeds are different measures.",
+        "That is within the estimate, but **not assured**, especially with no advance orders.",
+        "Check collateral, personal guarantees, default provisions, prepayment terms, and the exact maturity date. Do not assume another loan will be available to refinance it.",
+        "once sale units have been sold, the original offer to buy all 2,000 units cannot be assumed to remain available unchanged."
+      ],
+      "improvement": "Explicitly discuss the possible clearance/brand damage and reduced value of unsold or partially sold seasonal stock, including whether a partial flash sale may make the remaining inventory harder to sell or liquidate."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-structured cash-bridge response with correct calculations and disciplined action dates. Its main shortfall is not fully exploring clearance/brand and remaining-inventory impairment risks, plus a minor need for an earlier quantitative sales trigger."
+}

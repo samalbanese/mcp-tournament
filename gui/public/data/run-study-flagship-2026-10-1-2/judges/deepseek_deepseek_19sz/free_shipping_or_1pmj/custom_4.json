@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 7,
+      "justification": "The free-shipping threshold is simple for a small operator to implement, and the response includes a clear 50/50 test with primary/secondary metrics and a roll-out decision rule. However, it lacks practical steps such as sample size/timing details, promotion implementation specifics, or how to avoid seasonal/novelty confounds in a real 30-day window.",
+      "quotes": [
+        "Free standard shipping on orders $95 or more.",
+        "Run a proper A/B test.",
+        "If the $95 free-shipping variant has higher contribution per visitor than control with reasonable confidence, roll it out."
+      ],
+      "improvement": "Add a concrete 30-day implementation checklist with sample-size requirements, exact traffic split tooling, and guardrails for excluding returning visitors or seasonal effects."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "The response uses the $72 AOV, 42% margin, and $9 shipping cost to derive a specific $95 threshold, gives a profit-per-visitor formula, lists secondary metrics, and states a decision rule. The only specificity gap is that 'reasonable confidence' is not defined as a statistical threshold and no minimal detectable effect or sample size is given.",
+      "quotes": [
+        "$95 is the lowest threshold that protects contribution margin at your current gross margin.",
+        "Use contribution profit per visitor, not revenue.",
+        "If contribution per visitor is flat or down, do not scale it."
+      ],
+      "improvement": "Define the exact statistical confidence level (e.g., 90% or 95% one-sided) and a minimum detectable lift in contribution per visitor before starting, along with required sample size."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "It clearly identifies margin loss from existing $95+ orders, the high break-even lift for the 15% discount, and the risk of giving away shipping without a profit increase. It also selects contribution profit per visitor to control for revenue illusion. However, experiment-design risks such as lack of statistical power, novelty/seasonality, and customer-mix differences are not explicitly controlled.",
+      "quotes": [
+        "The main profit leak is existing customers who already spend $95+ and would have bought anyway.",
+        "The 15% sitewide discount is far more expensive and targets price sensitivity broadly.",
+        "Do not run the 15% discount at the same time."
+      ],
+      "improvement": "Add explicit controls for experiment risks: pre-test sample-size/power analysis, a holdback period for existing customers, and checks for seasonality or new-visitor skew between variants."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A well-reasoned, margin-aware answer that correctly chooses free shipping and provides a concrete test, but it would be stronger with explicit statistical thresholds and practical experiment controls."
+}

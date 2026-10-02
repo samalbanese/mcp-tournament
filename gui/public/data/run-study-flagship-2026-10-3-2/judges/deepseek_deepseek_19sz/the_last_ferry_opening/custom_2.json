@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "voice": {
+      "score": 7,
+      "justification": "The narrator's professional exhaustion, marine vocabulary, and intimate knowledge of the suitcase establish a recognizable perspective. The repaired handle is especially effective personal history. However, stock panic language and an awkward correction about opening her eyes interrupt the otherwise authored voice.",
+      "quotes": [
+        "Not the ocean itself—the ocean I understand. It's the people who claim to love it that wore me down.",
+        "a loop of nylon cord I braided myself in the back of a pickup truck while he drove us through a monsoon",
+        "My body reacts before my brain gives permission.",
+        "Not with my eyes closed—I open them, and there it is."
+      ],
+      "improvement": "Replace generic descriptions of panic with one involuntary response particular to her scientific or diving experience, and remove the unnecessary eyes-closed correction."
+    },
+    "imagery": {
+      "score": 7,
+      "justification": "Smell, taste, sound, and physical movement make the ferry and storm tangible; environmental forces also participate in the reveal by carrying away a page. The imagery becomes crowded when several figurative descriptions accompany the same emotional or physical beat.",
+      "quotes": [
+        "The cabin smells like wet wool, fried onions, and the sour breath of exhausted passengers.",
+        "The rain comes sideways now, sharp as thrown gravel.",
+        "it opens—not all at once, but tooth by tooth, a reluctant smile",
+        "both of us bent over the suitcase like animals over a carcass"
+      ],
+      "improvement": "Keep the strongest sensory details and reduce competing metaphors around the zipper, struggle, and closing image so the physical action remains immediate."
+    },
+    "coherence": {
+      "score": 5,
+      "justification": "The opening supplies a clear reason for traveling and a persuasive reason to pursue the suitcase. The revision improves suspense through a lost page and a struggle over the goggles, but immediately identifies both goggles and key rather than substantially postponing interpretation. The final decision to reach Vannar before another passenger on the same ferry lacks a practical or causal bridge. The passage also remains substantially beyond the requested 500–700 words.",
+      "quotes": [
+        "because the grant money ran out and the only lab still willing to take me is a two-room shack",
+        "It flattens against the man's leg, then tears free and whips over the rail before I can see what it was.",
+        "Not just any key. The key to our father's fuel locker",
+        "I have to get off this boat. I have to get to Vannar before he does."
+      ],
+      "improvement": "Trim to the requested length, leave one recovered object's significance unresolved, and connect the photograph to a specific urgent destination or action she can realistically take while sharing the ferry with the man."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An atmospheric opening with credible professional fatigue and emotionally specific belongings. The revised reveal adds physical suspense, but overextended prose, rapid clue interpretation, and an insufficiently motivated final action keep it from becoming a fully convincing opening arc."
+}

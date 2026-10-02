@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "The candidate accurately calculated the payroll gap, net cash from all options, the exact flash-sale volume needed (500 units), and the loan's interest, repayment, and total financing cost using the correct formulas.",
+      "quotes": [
+        "Cash Gap: $13,000",
+        "Low end (350 units): $8,800 net cash",
+        "Option 2 (Liquidator): $11,000 net cash",
+        "Total Repayment on Day 90: $15,517.81"
+      ],
+      "improvement": "None needed; all calculations perfectly reflect the constraints and math rules."
+    },
+    "execution_plan": {
+      "score": 9,
+      "justification": "The plan establishes a clear, chronological sequence of events, accurately tracking cash flow timing around the 7-day bill due date and 21-day payroll. The fallback plan offers a realistic pivot if the loan fails, though heavily discounting 'other products' could cannibalize the $4k already expected from them.",
+      "quotes": [
+        "Day 4: Loan funds ($14,700). Current cash is now $19,700.",
+        "Day 7: Pay the $5,000 unavoidable bills. Launch the 7-day flash sale.",
+        "Fallback Plan: Option 2 (Liquidator)... Days 7-20: Immediately discount your \"other products\""
+      ],
+      "improvement": "Acknowledge that discounting 'other products' might reduce the $4,000 net cash already forecasted from them, requiring even more volume to make up the difference."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "The response clearly separates sunk inventory costs from liquid cash flow. It addresses the uncertainty of flash sale volumes and explicitly calls out the risk of a Day 90 debt obligation when forecasting is non-existent.",
+      "quotes": [
+        "Sunk costs (the $40,000 already paid for the inventory) do not impact your current cash flow.",
+        "Cash Flow Projections for Day 90: You currently have no forecast past 3 weeks. You must verify that your seasonal sales will generate the $15,517.81",
+        "Option 1 alone is too risky, as selling 350 units leaves you $4,200 short."
+      ],
+      "improvement": "Could briefly mention the brand or pricing impact (clearance damage) of running deep discounts alongside a flash sale."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent, highly practical response. The math is flawless, the timeline is realistic and tracks cash flow accurately, and the risk assessment correctly targets the main operational and financial threats."
+}

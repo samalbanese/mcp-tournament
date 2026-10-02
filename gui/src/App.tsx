@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { detectAppMode, loadDefaults, loadModels, loadPlugins, loadRunProgress, saveBench, startRun, suggestCriteria, type ApiDefaults, type ApiModel, type ApiPlugin, type BenchCriterion, type RunProgress } from './api';
 import { loadIndex, loadJudges, loadLeaderboard, loadRun, loadSynthesis, loadTurns } from './data';
 import { humanizePlugin } from './format';
 import JudgeSpread from './JudgeSpread';
 import RunWorkspace, { WorkspaceShell } from './Workspace';
+import Study from './Study';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Turn } from './types';
@@ -411,8 +413,37 @@ function Progress({ runId, onViewResults }: { runId: string; onViewResults: (run
 function Why() { return <div className="page about why reveal"><p className="eyebrow">WHY A PANEL / NOT A SCORE</p><h1>One judge lies.<br/>A panel argues.</h1><p className="about-copy">Single-evaluator scores average away exactly the information you need — <strong>where</strong> models fail. Disagreement is not noise to remove. It is evidence about the boundary between plausible output and dependable behavior.</p><section className="why-example outliers"><div className="section-label"><span>COMMITTED RUN / D&amp;D DEMO</span><b>REAL DISSENT</b></div><article className="outlier"><span>RULES ACCURACY</span><div><strong>Rules Judge / 3.0</strong><p>The Rules Judge scored Rules Accuracy 3/10, citing initiative-order violations, while the panel median was 6. The confirmed error list proves the dissent right: “Initiative order error: Goblin 1 (12) acted before Goblin 2 (13).”</p><small>A mean would have buried it at 5.3. The synthesizer surfaced it as contested and kept the dissent on the record.</small></div></article></section><div className="about-grid"><article><b>01</b><h2>Independent first</h2><p>Judges never see each other’s scores. Each perspective reaches its verdict without social pressure from the panel.</p></article><article><b>02</b><h2>Arbitrated, not averaged</h2><p>The synthesizer resolves conflicts with reasons, flags outliers, and preserves contested signals.</p></article><article><b>03</b><h2>Evidence attached</h2><p>Every score links back to the transcript and tool calls that produced it.</p></article></div><a className="why-replay-link" href="#/replay/run-2026-07-18-194500">WATCH A COMMITTED RUN UNFOLD <span>→</span></a><RunItYourself/></div>; }
 function About() { return <div className="page about reveal"><p className="eyebrow">HOW SCORES BECOME SIGNAL</p><h1>One run.<br/>Four accountable stages.</h1><p className="about-copy">EXECUTE captures every candidate response, tool call, and timing metric. A multi-judge panel scores the evidence independently, then a synthesizer resolves disagreements and documents its reasoning. Finally, AGGREGATE ranks candidates across scenarios without hiding the underlying transcript.</p><Pipeline/><div className="about-grid"><article><b>01</b><h2>Evidence first</h2><p>Every score links back to the exact conversation and tool behavior that produced it.</p></article><article><b>02</b><h2>Disagreement visible</h2><p>Outliers are surfaced as signal, not averaged into silence.</p></article><article><b>03</b><h2>Static by design</h2><p>This viewer reads local JSON only. No backend, accounts, tracking, or live model calls.</p></article></div><RunItYourself/></div>; }
 
+function StudyNav({ studyId, active, title }: { studyId?: string; active: boolean; title?: string }) {
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
+  const [breadcrumbSlot, setBreadcrumbSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!active) return;
+    const topbar = document.querySelector('.workspace-topbar');
+    if (!topbar) return;
+    // The shared shell has no breadcrumb slot; keep this route's context local.
+    const host = document.createElement('div');
+    host.className = 'study-breadcrumb-slot';
+    topbar.append(host);
+    setBreadcrumbSlot(host);
+    return () => { host.remove(); setBreadcrumbSlot(null); };
+  }, [active]);
+  useEffect(() => {
+    if (!studyId) return;
+    const nav = document.querySelector('.workspace-sidebar > nav[aria-label="Workspace"]');
+    if (!nav) return;
+    // Keep the study entry first in both reading and keyboard order.
+    const host = document.createElement('div');
+    host.className = 'study-nav-slot';
+    nav.prepend(host);
+    setSlot(host);
+    return () => { host.remove(); setSlot(null); };
+  }, [studyId]);
+  return <>{slot && studyId && createPortal(<a className="study-nav-link" href={href({ view: 'study', studyId })} aria-current={active ? 'page' : undefined}>Study</a>, slot)}{active && breadcrumbSlot && createPortal(<><span>Studies</span><i aria-hidden="true">/</i><b title={title}>{title ?? 'Study report'}</b></>, breadcrumbSlot)}</>;
+}
+
 export default function App() {
   const route = useRoute();
+  const [studyHeader, setStudyHeader] = useState<{ id: string; title: string }>();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     document.getElementById('main-content')?.focus({ preventScroll: true });
@@ -445,6 +476,7 @@ export default function App() {
     location.hash = href({ view: 'home', runId });
   };
   const content = useMemo(() => {
+    if (route.view === 'study') return <Study key={route.studyId} studyId={route.studyId} onLoad={setStudyHeader}/>;
     if (route.view === 'why') return <Why/>;
     if (route.view === 'about') return <About/>;
     if (isAppRoute) {
@@ -464,5 +496,5 @@ export default function App() {
     if (!scenario) return <Empty title="Scenario not found"/>;
     return route.view === 'judges' ? <JudgePanel run={runState.data} entry={entry} scenario={scenario}/> : <Transcript run={runState.data} entry={entry} scenario={scenario}/>;
   }, [route, isAppRoute, appMode, apiKey, index, activeRun, runState, leaderboardState, entry, scenario]);
-  return <WorkspaceShell runs={runs} activeRun={activeRun} route={route} appMode={appMode === true}>{content}</WorkspaceShell>;
+  return <WorkspaceShell runs={runs} activeRun={route.view === 'study' ? undefined : activeRun} route={route} appMode={appMode === true}><StudyNav studyId={route.view === 'study' ? route.studyId : index.data?.studies?.[0]} active={route.view === 'study'} title={studyHeader?.id === route.studyId ? studyHeader?.title : undefined}/>{content}</WorkspaceShell>;
 }

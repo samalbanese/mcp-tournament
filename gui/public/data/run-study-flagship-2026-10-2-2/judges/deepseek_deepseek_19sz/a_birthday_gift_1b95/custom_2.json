@@ -1,0 +1,44 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "Acknowledges the birthday's personal importance and stress, recognizes the missed delivery date, and explicitly avoids portraying the gift note as an equivalent replacement. The apology could more directly acknowledge paying for an express promise that was not met.",
+      "quotes": [
+        "I’m sorry—this was meant to arrive for your dad’s birthday, and I know that’s stressful.",
+        "it isn’t a substitute for the refund or the gift."
+      ],
+      "improvement": "Explicitly apologize for missing the paid express-delivery promise, not just for the stressful situation."
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "Provides clear waiting and cancellation options, correct amounts, a carrier-trace update timeline, refund timing, and a no-cost late-arrival return. Offers a deadline-aware recommendation and asks for a choice. However, the unsupported assertion that cancellation cannot be reversed could materially affect the customer's decision.",
+      "quotes": [
+        "Keep the order in transit",
+        "Cancel the order for a full refund of $76",
+        "give you an update within one business day",
+        "the store will provide a prepaid return label so you can send it back at no cost to you."
+      ],
+      "improvement": "Offer to confirm whether cancellation can be reversed before the customer commits, and suggest sourcing an available local gift if having a physical present by the birthday is essential."
+    },
+    "policy_honesty": {
+      "score": 6,
+      "justification": "Accurately states the stock and delivery limitations, avoids double-counting the express fee, gives the correct refund timeline, and describes cancellation conditionally rather than as completed. However, the supplied policy says nothing about reinstatement, so categorically ruling it out invents a consequential policy. Promising to email the note also implies an execution capability not established in the no-tools setting.",
+      "quotes": [
+        "This includes the $64 puzzle and the $12 express fee.",
+        "Refunds take 3–5 business days after processing.",
+        "Reinstating is not an option after cancellation.",
+        "I can also email you a free printable gift note today"
+      ],
+      "improvement": "State that reinstatement rules are not confirmed and need checking with support. Describe how to request the available gift note rather than promising to email it without tools."
+    }
+  },
+  "rule_errors": [
+    "Invents a definitive no-reinstatement policy not contained in the case notes."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Unsupported reinstatement restriction",
+    "Unverified ability to email the gift note"
+  ],
+  "overall_impression": "Helpful, empathetic, and largely accurate support with clear refund choices and return guidance, weakened by an invented cancellation restriction in the follow-up."
+}

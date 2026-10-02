@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate consistently acknowledges the urgency and importance of the dad's birthday. It presents the printable gift note appropriately (not as a substitute for the gift). The tone is highly empathetic and honest.",
+      "quotes": [
+        "I completely understand the urgency, and I'm sorry this is happening right before your dad's birthday.",
+        "It's not a substitute for the puzzle or the refund, but it gives you something to hand your dad on the day if the parcel hasn't landed yet."
+      ],
+      "improvement": "None needed; excellent empathy and tone."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate clearly lays out the options, explains the return process for late arrivals, details the carrier trace timeline, and helps the customer make an informed decision given the tight deadline.",
+      "quotes": [
+        "Your dad's birthday is in two days. The trace update takes up to one business day. So you'd likely have that information by tomorrow, giving you a window to decide whether to cancel before the birthday itself.",
+        "You'd just need to attach it and drop the parcel off or hand it to the carrier — no cost to you, but it does require that small step on your end."
+      ],
+      "improvement": "None needed; highly actionable and clear."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "The candidate accurately explains the refund amounts (not double-counting the $12 fee), the lack of replacement stock, the lack of delivery guarantee, and the timing of refunds. One minor note: the candidate states 'I'll refund the full $12 express fee' in Turn 1, which slightly implies it has already been processed or will be processed by them, but in the context of offering the option, it is acceptable. The explanation of actions is generally accurate.",
+      "quotes": [
+        "No. The puzzle is currently sold out, so I'm unable to dispatch a replacement at all.",
+        "You'd receive a full $76 refund (puzzle + express fee combined)."
+      ],
+      "improvement": "Ensure phrasing consistently reflects that the agent will initiate the request rather than directly processing it ('I can process a request for...'), given the lack of order tools."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate provided an exceptional, highly structured, and empathetic response that perfectly guided the customer through a stressful situation with clear, honest policy application."
+}

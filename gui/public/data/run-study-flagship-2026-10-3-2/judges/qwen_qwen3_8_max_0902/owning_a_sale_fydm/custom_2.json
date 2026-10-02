@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 8,
+      "justification": "The revised paragraph clearly identifies the full three-day sale outage and owns the checkout update without blaming anyone else. It explicitly avoids a guarantee of future uptime. However, the post never directly says sorry, and the initial security disclaimer distracted from accountability before being removed.",
+      "quotes": [
+        "From Friday at 9 a.m. to Monday at 9 a.m. ET, our website was down during what was supposed to be a sale weekend.",
+        "A checkout update we rolled out broke the site, and it stayed broken until we could fix it. That's on us.",
+        "We won't promise it will never happen again"
+      ],
+      "improvement": "Add a direct apology for the lost shopping time, and replace 'working to make sure it doesn't' with less absolute language about reducing the risk of another outage."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "The final revision accurately puts merchandise scope upfront while retaining the automatic 20% discount, no-code requirement, exact Eastern Time window, fresh 72 hours, exclusions, and no stacking. No extra compensation is invented.",
+      "quotes": [
+        "The original 20% discount on merchandise has been restored automatically—no code needed.",
+        "It runs from Monday at 9 a.m. through Thursday at 9 a.m. ET, giving you a fresh 72 hours to shop.",
+        "Shipping and gift cards are not included",
+        "Cannot be combined with other discounts"
+      ],
+      "improvement": "Spell out 'Eastern Time' rather than 'ET' for maximum clarity in the public-facing deadline."
+    },
+    "trust_and_tone": {
+      "score": 7,
+      "justification": "The revisions materially improve the voice by removing the defensive security statement and making responsibility plain. Payment guidance correctly distinguishes pending authorizations from confirmed charges, directs customers to private support, and avoids refund promises. The initial unsupported security framing and the somewhat defensive refund wording keep the overall execution from being exceptional.",
+      "quotes": [
+        "We don't believe this was a security incident, and we're not treating it as one.",
+        "That's on us.",
+        "We haven't yet confirmed which of those authorizations became actual charges",
+        "Please don't post order numbers, payment details, or account information in the comments or replies."
+      ],
+      "improvement": "Keep the revised accountable voice throughout and simplify payment guidance to: 'If you saw a pending authorization without an order confirmation, contact us through our site's Contact page so we can check your specific situation.'"
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A useful, accurate recovery offer and substantially improved accountability through revision. The main weaknesses are the initial defensive security language and the absence of an explicit apology."
+}

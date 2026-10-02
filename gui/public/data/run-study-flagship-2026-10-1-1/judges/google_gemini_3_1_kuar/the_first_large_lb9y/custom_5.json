@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 8,
+      "justification": "All core calculations are correct: wholesale price at $33 (55% of $60), total revenue $66,000, COGS $36,000, freight $2,000, yielding $28,000 contribution ($14/unit). Direct contribution correctly computed at $33/unit. The candidate distinguishes contribution from cash receipts by showing the $33,000 deposit and final payment separately from the $28,000 contribution figure. The per-unit comparison ($14 vs. $33) is clear. Minor gap: no explicit aggregate theoretical comparison (e.g., '2,000 units at retail would yield $66,000 contribution vs. $28,000 wholesale').",
+      "quotes": [
+        "Wholesale Contribution: $66,000 (revenue) - $36,000 (COGS) - $2,000 (freight) = $28,000 total (or $14 per lamp).",
+        "Direct Sale Contribution: $60 (retail) - $18 (COGS) - $9 (fees) = $33 per lamp.",
+        "The retailer's initial $33,000 deposit fully funds the $18,000 supplier deposit and the $2,000 freight cost"
+      ],
+      "improvement": "Add an explicit aggregate opportunity-cost comparison: 'If all 2,000 units sold at full retail, contribution would be $66,000; the wholesale deal yields $28,000, a $38,000 shortfall, but only if those units would have sold within the relevant timeframe.'"
+    },
+    "cash_and_stock_plan": {
+      "score": 8,
+      "justification": "The plan correctly tracks the 2,000-unit shipment at week 2, 800 units of direct demand over 8 weeks, the 2,000-unit replenishment arriving at week 8, the $18,000 supplier deposit at signing, the $18,000 balance at arrival, and the 45-day payment delay (approximately week 8.5). The $16,000 reserve is identified and implicitly protected throughout (cash never drops below it). The key insight that the deposit funds the supplier deposit and freight without depending on the final payment is clearly stated. Minor imprecision: inventory tracking doesn't explicitly account for direct sales occurring before the week-2 wholesale shipment, though the net result (200 units at week 8) is correct.",
+      "quotes": [
+        "Your available operating cash is $6,000 ($22k total minus $16k reserved).",
+        "The retailer's initial $33,000 deposit fully funds the $18,000 supplier deposit and the $2,000 freight cost, leaving you with $13,000 in positive float.",
+        "Week 8: 200 lamps remain in stock."
+      ],
+      "improvement": "Show week-by-week inventory more precisely (e.g., ~200 direct sales in weeks 0–2 before the wholesale shipment, leaving 800 at week 2 rather than 1,000), and explicitly state that the $16,000 reserve is never breached at any point in the timeline."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "Credit risk is addressed with concrete mitigations (trade references, Net 30 negotiation). Channel conflict is identified with a MAP policy recommendation. The candidate does not assume immediate retail sell-through, noting it would take five months to sell 2,000 units directly. However, two risks explicitly required by the criteria are entirely missing: replenishment slippage (what if the supplier is late?) and defect risk (the contract allows returns for verified defects, which could create unexpected costs or inventory issues). The channel conflict analysis is also somewhat superficial—it doesn't discuss enforceability of MAP or the retailer's incentive to discount.",
+      "quotes": [
+        "If they go bankrupt or refuse to pay, you lose your profit on the deal.",
+        "Require a Minimum Advertised Price agreement stating they cannot advertise or sell the lamp online for less than $60.",
+        "This deal does not cannibalize your direct sales; it stacks on top of them."
+      ],
+      "improvement": "Add analysis of replenishment slippage risk (e.g., 'If the supplier is delayed beyond 8 weeks, the 200-unit buffer erodes at 100 units/week, creating a stockout by week 10') and defect risk (e.g., 'A 2–3% defect rate on 2,000 units could mean 40–60 returns, costing $720–$1,080 in replacements and eroding the $28,000 contribution')."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong quantitative work with correct unit economics and a well-structured cash/stock plan that identifies the key insight about deposit funding. The main weakness is incomplete risk coverage: replenishment slippage and defect risk are entirely absent, and channel conflict analysis lacks depth on enforceability and retailer incentives."
+}

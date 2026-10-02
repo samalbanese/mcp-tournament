@@ -1,0 +1,45 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "The candidate correctly calculates wholesale revenue at $33/unit, applies the $18 landed cost and $2,000 freight to arrive at $28,000 contribution, and compares it to the $66,000 direct contribution. It also explicitly distinguishes contribution from cash receipts by noting that direct cash per lamp is $51 because inventory is already paid for, and it frames the full-retail comparison as a $38,000 opportunity cost.",
+      "quotes": [
+        "Wholesale revenue | $33 | $66,000",
+        "Contribution after freight | $14 | $28,000",
+        "Direct sale contribution: 60 - 18 - 9 = $33 per lamp",
+        "the same 2,000 units sold direct would produce $66,000 contribution. That is $38,000 less",
+        "Cash from direct sales is shown as revenue minus the $9 direct-sale cost: 60 - 9 = $51 cash per direct lamp. That is because the existing inventory has already been paid for."
+      ],
+      "improvement": "Could more explicitly label the $66,000 direct contribution as a theoretical full-retail comparison and state that the $28,000 wholesale contribution is incremental only if direct demand is not cannibalized."
+    },
+    "cash_and_stock_plan": {
+      "score": 8,
+      "justification": "The candidate builds a week-by-week inventory and cash timeline that tracks the 2,000-unit shipment, ongoing direct demand, supplier deposit and balance, retailer payment delay, and the $16,000 reserve. The numbers are largely correct and the recommendation is feasible. Minor omissions include not explicitly showing the reserve is never breached at each step and not accounting for direct sales between week 8 and week 8.4, though the final free cash figure is still conservative.",
+      "quotes": [
+        "Week 0 events | 3,000 | $37,000 | +$33,000 retailer deposit, -$18,000 supplier deposit",
+        "Week 2 | 800 | $45,200 | 200 direct units sold, +$10,200 direct cash; -$2,000 freight; ship 2,000 units; $33,000 receivable",
+        "Week 8 before supplier delivery | 200 | $75,800 | 600 more direct units sold, +$30,600 direct cash",
+        "Week 8 after supplier delivery | 2,200 | $57,800 | +2,000 supplier units; pay remaining -$18,000 supplier balance",
+        "After the final retail payment, cash is about $90,800, leaving $74,800 free cash after the $16,000 reserve.",
+        "The remaining supplier payment of $18,000 is due at week 8, slightly before the retailer’s final $33,000 payment at about week 8.4. Direct-sale cash flow between week 0 and week 8, about $40,800, covers that timing gap under your assumptions."
+      ],
+      "improvement": "Explicitly state that the $16,000 reserve remains untouched at every step and include the small direct-sale cash flow between week 8 and week 8.4 for full precision."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The candidate addresses delayed or missing payment, replenishment slippage, and channel conflict with concrete terms such as letters of credit, credit insurance, higher deposits, Net 15, reduced order size, and MAP policies. It also avoids assuming immediate retail sell-through by noting the wholesale contribution is likely incremental only if the boutique does not undercut direct sales. However, it does not address defect risk or propose any defect-related safeguard, which is a notable gap given the prompt explicitly mentions verified defects.",
+      "quotes": [
+        "If the retailer delays or defaults, you lose the profit margin and tie up inventory.",
+        "If the supplier is late, you risk stocking out of your higher-margin direct channel.",
+        "The boutique is buying at $33 per lamp. It could discount below your $60 direct price and damage your direct-to-consumer business.",
+        "Require: No selling below your direct price. No online discounting without approval. No marketplace sales without approval. A minimum advertised price policy if possible.",
+        "Let you test the boutique’s sell-through before committing to 2,000 units."
+      ],
+      "improvement": "Add a specific defect/returns safeguard, such as a cap on defect claims, inspection or QA terms, or a warranty reserve, and propose concrete supplier-lateness remedies like a penalty clause or backup supplier."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-structured response that correctly handles unit economics and cash/inventory planning, with solid risk mitigation for credit and channel conflict. The main weakness is the absence of any defect-risk discussion, which prevents a higher risk-awareness score."
+}

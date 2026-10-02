@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - Gave perfect scores despite the acknowledged lack of a day-by-day schedule and low-traffic fallback, which other judges flagged as concrete gaps"
+      ]
+    },
+    "specificity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - Overlooked the loose decision rule ('roughly 90% confidence', 'not meaningfully higher' returns) and likely understated sample-size estimate that other judges penalized"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - Did not flag missing coverage of novelty effects, cross-device contamination, or underpowered-test risk noted by three other judges"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong, economics-driven recommendation that correctly prefers a $95 free-shipping threshold derived from accurate break-even math ($9 ÷ 0.42 ≈ $21.40 → $93.40) and centers the experiment on contribution profit per visitor. The plan is genuinely executable for a small operator, with named tooling, control/variant definitions, and practical UX tactics. Weaknesses are a soft statistical decision rule, a likely understated sample-size estimate (flagged by the anthropic judge as off by 2–3x), no low-traffic fallback design, and missing coverage of novelty effects and contamination.",
+  "judge_agreement": "Four of five judges scored the answer 8–9 across all criteria, converging on the same strengths (break-even math, profit-focused metric, actionable test plan) and largely the same weaknesses (loose decision rule, missing schedule granularity, sample-size concerns). The google/gemini judge was a clear outlier, awarding perfect 10s across the board and finding 'no improvement needed,' whereas the anthropic judge specifically flagged the sample-size estimate as understated by roughly 2–3x. No judge identified rule errors."
+}

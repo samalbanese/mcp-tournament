@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate shows excellent empathy, acknowledging the customer's need to cut expenses without adding guilt. When the customer declines the discount, the candidate accepts it graciously without repitching.",
+      "quotes": [
+        "I understand you need to cut expenses right now, though I am so glad to hear you have enjoyed the recipes!",
+        "I completely understand."
+      ],
+      "improvement": "None needed."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate provides the self-service cancellation steps in the very first turn alongside the optional offer, reducing friction. They clearly and correctly answer subsequent questions about access and billing.",
+      "quotes": [
+        "If you prefer to proceed with the cancellation, you can do so quickly online with no phone call required.",
+        "You will continue to have full access to the meal plans and recipes until the end of your current paid period.",
+        "No, there will be no further renewal charges."
+      ],
+      "improvement": "None needed."
+    },
+    "policy_honesty": {
+      "score": 8,
+      "justification": "The candidate accurately describes the 25% discount for three renewals and the return to the $24 price. However, they failed to explicitly state the discounted price of '$18 per month' as specified in the criteria.",
+      "quotes": [
+        "25% off your next three monthly renewals. After three months, it would return to the regular $24 price"
+      ],
+      "improvement": "Explicitly state the exact discounted dollar amount ($18 per month) so the customer does not have to do the math."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate provided excellent, frictionless support. They respected the customer's wishes, offered clear instructions, and answered questions accurately. The only minor flaw was not explicitly calculating and stating the discounted price of $18."
+}

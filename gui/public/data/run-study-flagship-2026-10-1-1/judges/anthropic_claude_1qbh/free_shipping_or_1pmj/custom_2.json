@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "Provides an implementable visitor-level A/B test, named tooling, clear control and treatment, merchandising suggestions, and a profit-focused evaluation over 30 days. It appropriately allows an inconclusive result when traffic is insufficient. However, it lacks a concrete setup/review schedule and a low-traffic fallback suitable for a small operator.",
+      "quotes": [
+        "Run an A/B split by visitor, 50/50",
+        "Control: current shipping.",
+        "Variant: free shipping on orders of $95 or more.",
+        "If 30 days won't get you there, extend the test. Don't call it early."
+      ],
+      "improvement": "Specify prelaunch checks, weekly data-quality reviews, and a day-30 decision process, including retaining the control offer if results remain inconclusive."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "Uses the supplied economics correctly to calculate discount erosion and a $93.40 profit-neutral threshold for a representative $72 order, then recommends an exact $95 offer. It identifies appropriate primary and secondary metrics. The decision rule is less precise than the offer: 'roughly 90%' confidence and 'not meaningfully higher' returns lack an explicit statistical method or numerical guardrail. The profit formula also leaves shipping receipts and net-versus-gross revenue treatment ambiguous.",
+      "quotes": [
+        "A 15% discount takes $10.80 per order out of margin, leaving about $19.44.",
+        "That puts the profit-neutral threshold at about $93.40.",
+        "(Revenue − COGS − shipping you absorb − payment fees − discounts − refunds/returns) ÷ unique visitors",
+        "Adopt the threshold if the variant's contribution per visitor beats control with reasonable confidence, roughly 90% or better."
+      ],
+      "improvement": "Define contribution using net merchandise revenue plus shipping collected minus actual shipping and other variable costs, avoiding double-counted discounts or refunds. Prespecify a confidence interval for profit-per-visitor lift and a numerical returns guardrail."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Addresses subsidy leakage to existing high-value orders, increased shipping costs, cart-padding returns, inadequate sample size, competing promotions, and weekday effects, with useful controls. However, the claim that every bumped-up order is profitable overgeneralizes average-margin arithmetic, and recovered carts are not necessarily 'pure upside' after all variable costs. The conversion-based sample-size estimate does not establish adequate power for the actual profit-per-visitor endpoint.",
+      "quotes": [
+        "you'll be giving $9 to customers who didn't need the incentive",
+        "Bigger orders may cost more than $9 to ship, so use actual label costs.",
+        "Watch for people padding carts to qualify and then returning items.",
+        "Don't run other promotions during the test.",
+        "every recovered abandoned cart is pure upside."
+      ],
+      "improvement": "Qualify the threshold math by item-level margin and incremental basket size, estimate power using profit-per-visitor variance, maintain persistent visitor assignments, and account for delayed returns before declaring a winner."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, actionable recommendation with sound first-pass economics and a useful profit-centered experiment. More precise accounting, statistical decision rules, and small-store execution details would make it exceptional."
+}

@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's first-person perspective is dry, self-aware, and specific, avoiding generic genre phrasing. Lines like the professional bargain with the sea and the practical manner of addressing the child keep the voice consistent through both the original and revised passages.",
+      "quotes": [
+        "Mine, after nineteen years, was that I named what it killed and it refrained from killing me.",
+        "Slowly, I said, though I was the one lifting her."
+      ],
+      "improvement": "A few meditative asides, such as 'Twelve years is enough time to become reasonable about most things,' lean toward general reflection; grounding them in one further concrete habit or image would keep every sentence feeling authored."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "The ferry, storm, and suitcase are rendered through sharp sensory and kinetic detail without overloading the prose. The revision improves the discovery by moving from a grey sock to a small knee to a moving eye, which makes the child's presence viscerally tangible and unsettling.",
+      "quotes": [
+        "Somewhere beneath my boots, a crate broke loose and travelled the vehicle deck with the slow, deliberate scrape of furniture moved upstairs by people who hated one another.",
+        "Inside was a grey sock. For a moment I saw only that, and the small knee drawn up behind it. Then an eye moved in the gap between the knee and the lining."
+      ],
+      "improvement": "The emotional tension of the storm could be briefly tied to the child's physical state—cold, damp, stillness—to unify the external and internal weather without explaining the mystery."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The original opening establishes a clean arc from seasickness and family errand to suitcase recognition and the forced discovery of the child. The advice and revisions effectively slow the reveal, connect the narrator's competence to her brother, and make the child's silence a meaningful clue. However, the material is presented as separate revision options rather than one final merged draft, and the passenger-count addition could create a blocking inconsistency with the man originally seated above the case.",
+      "quotes": [
+        "Then the ferry rolled and the suitcase slid out from under the bench opposite.",
+        "As the ferry rolled, she moved it clear of the brass clasp so the two would not touch.",
+        "I had counted six passengers leaving the harbour. Now there were five in their seats and one standing by the stairwell."
+      ],
+      "improvement": "Produce a single integrated opening that includes the strongest revisions while reconciling the passenger count, the hooded man's exit, and the narrator's physical position, so the final turn remains immediate without small continuity questions."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, distinctive opening with measured voice, vivid sensory construction, and an effective unsettling final turn; the revision advice meaningfully sharpens subtext and pacing, though it stops short of delivering one fully integrated final draft."
+}

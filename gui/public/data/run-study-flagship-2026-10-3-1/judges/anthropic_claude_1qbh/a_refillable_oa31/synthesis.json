@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "clarity": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - gave a flawless rating while other judges noted minor wording refinements"
+      ]
+    },
+    "persuasion": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - found no improvement needed",
+        "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - wanted a more concrete statement of ongoing refill value",
+        "openai/gpt-6.1-sol: scored 8 vs median 9 - felt the absolute cabinet promise and environmental disclaimer were slightly weak"
+      ]
+    },
+    "brand_voice": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - considered the tone perfectly captured",
+        "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - flagged the familiar 'X called' joke format and only-CTA revisions"
+      ]
+    }
+  },
+  "average_score": 9,
+  "rule_errors_confirmed": [],
+  "assessment": "A polished, constraint-compliant launch email that accurately conveys all product facts within the word limit and incorporates revision feedback cleanly. The renter-focused cabinet-space angle provides a credible, honest hook without invented claims or urgency. Weaknesses are minor: one unsupported descriptor ('Tiny tablets'), a familiar joke format, and a slightly absolute storage promise. Overall an excellent response.",
+  "judge_agreement": "Judges strongly agreed on clarity (four 9s and one 10) and uniformly confirmed no rule errors. Gemini was the consistent positive outlier, awarding perfect 10s across all criteria, while Anthropic and OpenAI scored slightly lower on persuasion and brand voice, citing the familiar subject-line joke, the defensive environmental disclaimer, and a missed opportunity to make the ongoing refill value concrete. No judge flagged substantive rule violations."
+}

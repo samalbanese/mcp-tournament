@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "factual_fidelity": {
+      "score": 7,
+      "justification": "All care-related facts from the original spec are preserved: hand-wash, dry immediately, lightly oil, not dishwasher-safe, and hot-handle/oven-mitt warning. However, the candidate introduces details not present in the source material—'a little dish soap,' 'Do not...leave it soaking,' and 'lingering moisture can cause rust'—which are reasonable inferences but technically invented instructions beyond the supplied specification. The original simply says 'Hand-wash' without mentioning soap, and the soaking prohibition and rust explanation are editorial additions.",
+      "quotes": [
+        "wash it by hand with warm water, a little dish soap, and a sponge or brush",
+        "Do not put it in the dishwasher or leave it soaking",
+        "lingering moisture can cause rust"
+      ],
+      "improvement": "Remove or flag as optional the dish-soap mention and soaking prohibition since they are not in the original spec. If kept, frame them as general guidance rather than product-specific instructions to avoid inventing care requirements."
+    },
+    "useful_persuasion": {
+      "score": 7,
+      "justification": "The section successfully reframes care as manageable ('A little attention after cooking is all this skillet asks') without claiming maintenance-free status. The three numbered steps give a beginner a concrete mental model of what to do. The hot-handle reminder is preserved. However, since this is only a care section revision, there is no buying action, no broader benefit framing, and no connection back to the cooking experience—limiting its persuasive scope within the full page context.",
+      "quotes": [
+        "A little attention after cooking is all this skillet asks",
+        "Aim for a thin film, not a wet or sticky coating, before storing"
+      ],
+      "improvement": "Add a brief closing line that connects the care routine back to the cooking payoff (e.g., 'This 30-second routine keeps your skillet cooking beautifully for years') to reinforce the value proposition without inventing warranty or longevity claims."
+    },
+    "readability_and_voice": {
+      "score": 8,
+      "justification": "The section is well-structured with numbered steps, bold action verbs, and clear sub-instructions. The voice is warm and reassuring without being saccharine. The 'Hot-handle reminder' is visually separated and easy to spot. The opening line sets expectations gently. The only minor issue is that step 1 is noticeably longer than steps 2 and 3, creating slight visual imbalance.",
+      "quotes": [
+        "A little attention after cooking is all this skillet asks. Follow these three steps after each use:",
+        "**Hot-handle reminder:** Both cast-iron handles get hot."
+      ],
+      "improvement": "Consider trimming step 1 slightly or breaking the 'do not' warning into its own bolded line to balance visual weight across the three steps."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Dish soap and soaking prohibition are added care instructions not present in the original specification"
+  ],
+  "overall_impression": "A strong care-section revision that makes the three-step routine concrete and approachable for beginners. The main weakness is the introduction of a few unsourced care details (soap, soaking, rust) that go beyond the supplied spec. The voice and structure are well-suited to the target audience."
+}

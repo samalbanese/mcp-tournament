@@ -1,0 +1,33 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 6,
+      "justification": "The revised deadline explanation directly acknowledges the exact 72-hour outage window and frames the restored period as giving back lost time, but the final response does not explicitly say the shop's checkout update caused the disruption or take responsibility for it within the revised text itself. It avoids excuses and does not guarantee future uptime, but ownership is incomplete without carrying forward the earlier turn's explicit accountability language.",
+      "quotes": [
+        "Because the site was down for exactly 72 hours during the original sale—from Friday at 9 a.m. to Monday at 9 a.m. ET—we are giving you that exact time back."
+      ],
+      "improvement": "Include an explicit statement such as 'A checkout update on our end caused the outage' in the final revised block so the accountability does not depend on a previous turn or an earlier draft."
+    },
+    "offer_clarity": {
+      "score": 5,
+      "justification": "The response accurately gives the automatic 20% discount and the Monday 9 a.m. to Thursday 9 a.m. ET deadline, but it omits the required limitations: no code is not explicitly stated, and it does not mention that the discount applies to merchandise only, excludes shipping and gift cards, and cannot be combined with other discounts. It does not invent extra compensation, but the offer is not fully explained.",
+      "quotes": [
+        "The 20% sitewide discount has been automatically restored from Monday at 9 a.m. through Thursday at 9 a.m. ET."
+      ],
+      "improvement": "Add a concise bulleted list stating no code is needed, merchandise only, excludes shipping and gift cards, and cannot be combined with other discounts."
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "justification": "The revised payment instructions use a calm, restrained voice and improve on the original by directing users to the Contact page, clearly distinguishing pending authorizations from confirmed charges, avoiding a commitment to a refund date, and warning users not to post payment details publicly. The tone is appropriate for a small stationery shop.",
+      "quotes": [
+        "If you attempted to check out during the outage and saw a pending card authorization without receiving an order confirmation, please reach out to us via the Contact page on our website.",
+        "While we cannot provide a specific date for when refunds will be processed in this post, we will work with you individually to get it sorted."
+      ],
+      "improvement": "Consider replacing 'we will work with you individually to get it sorted' with more precise language about what support can check, without overpromising an outcome."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The final response improves the deadline explanation and payment-help instructions, but it does not stand alone as a complete public apology: it omits explicit checkout-update ownership and key offer limits."
+}

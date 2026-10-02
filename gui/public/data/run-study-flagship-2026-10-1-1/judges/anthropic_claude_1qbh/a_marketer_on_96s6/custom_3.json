@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 10,
+      "justification": "The candidate perfectly calculates the operating surplus ($6,000), contribution margin per order ($40), and the loaded monthly costs for both options. It correctly calculates the break-even in incremental orders without double-counting CAC, as advertising spend is explicitly held flat.",
+      "quotes": [
+        "Operating surplus $6,000",
+        "Contribution per order: $80 × 60% – $8 = $40",
+        "5,800 ÷ 40 = 145/month (+9.7%)"
+      ],
+      "improvement": "None needed; flawless financial breakdown."
+    },
+    "practicality": {
+      "score": 10,
+      "justification": "The 90-day plan is highly actionable and tailored to the founder's specific constraints (4 hours vs 15 hours needed). It clearly addresses scope gaps and provides a fallback plan.",
+      "quotes": [
+        "Spend your 4 hours on two things only: keeping ads stable and running the existing email automations.",
+        "if no strong candidate appears by day 35, consider a 1–2 month freelancer for ads"
+      ],
+      "improvement": "None needed; exceptionally practical and easy to follow."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The response identifies all key risks, including the 3-month agency lock-in, cash burn rate if orders drop, and highlights important assumptions like inventory cash cycle and non-guaranteed sales growth.",
+      "quotes": [
+        "If orders fall 10% (150 orders × $40 = $6,000), your surplus drops to zero.",
+        "The $6,000 surplus is not cash in the bank. It ignores inventory purchases, taxes, and any owner draw.",
+        "No sales growth is promised by either option."
+      ],
+      "improvement": "None needed; comprehensive risk analysis."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An outstanding response that perfectly balances precise financial modeling with highly practical, reality-grounded business advice."
+}

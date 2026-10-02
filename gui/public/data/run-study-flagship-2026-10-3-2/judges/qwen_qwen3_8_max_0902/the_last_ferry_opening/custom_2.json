@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The revised ending preserves the narrator's candid, self-scrutinizing perspective and replaces the earlier decisive maxim with an emotionally conflicted admission. Its closing reference to twelve years gives the compulsion a personal history. The shift into generalized second person slightly dilutes the otherwise specific first-person voice.",
+      "quotes": [
+        "I went through the door with my breath held and my shoulders up around my ears",
+        "because not going has already taken twelve years"
+      ],
+      "improvement": "Keep the final reflection in first person rather than shifting to 'you,' and give the feared outcome a more narrator-specific expression than 'the worst thing that ever happens to you.'"
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The ending combines a tangible physical threshold, threatening water, and an embodied fear response without adding a distracting new image. Held breath and raised shoulders effectively convey trepidation. The abstract mercy-versus-catastrophe explanation is less vivid than the physical details surrounding it.",
+      "quotes": [
+        "the water was going black and white with fury",
+        "with my breath held and my shoulders up around my ears"
+      ],
+      "improvement": "Let one concrete sensation at the cargo-hold threshold carry more of the uncertainty, reducing the explanatory phrase about mercy and the worst possible outcome."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The replacement ending clearly joins action to both dread and compulsion, answering the latest revision request while preserving the unresolved mystery. The twelve-year callback makes crossing the threshold feel consequential rather than merely curious. However, the ending still declares a completed decision, and the broader scene's unsupported inference that an empty rack indicates hurried removal remains a weak link in the pursuit's logic.",
+      "quotes": [
+        "The service door opened onto the cargo hold.",
+        "something that might be a mercy or might be the worst thing that ever happens to you",
+        "and you go anyway, because not going has already taken twelve years"
+      ],
+      "improvement": "Preserve the action but introduce a brief hesitation at the threshold; in the surrounding scene, ground the inference of hurried removal in a specific observable disturbance rather than the rack's emptiness alone."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, emotionally coherent revision that replaces blunt resolve with fear-bound compulsion. Its physical details and twelve-year callback work well; the generalized explanation of possible mercy or catastrophe is the main opportunity for greater precision."
+}

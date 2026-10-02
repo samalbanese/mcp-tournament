@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "justification": "The candidate correctly separates product margin, per-order fulfillment costs, advertising, and fixed overhead; loads the employee cost; keeps ad spend flat when calculating incremental order requirements; and avoids double-counting CAC. Upfront costs and 90-day cash effects are also handled accurately.",
+      "quotes": [
+        "Gross margin after product cost | $72,000",
+        "$80 × 60% = $48 ... $48 - $8 = **$40 contribution per order**",
+        "$58,000 × 1.20 = $69,600/year = **$5,800/month**",
+        "$5,800 ÷ $40 = **145 orders/month**",
+        "If those extra orders came from paid acquisition with $30 CAC, the requirement would be much higher, but you stated ad spend stays flat."
+      ],
+      "improvement": "Could amortize the one-time recruiting and onboarding costs over the comparison period and add a monthly downside cash-runway projection for the in-house scenario, where the remaining cushion is very small."
+    },
+    "practicality": {
+      "score": 8,
+      "justification": "The response makes a defensible conditional choice—try the agency for 90 days—and provides a specific week-by-week plan tied to the four-hour management limit, startup timing, performance targets, and cash reserves. It also directly addresses the agency's scope gap by testing whether email and creative can be compressed into the founder's available time.",
+      "quotes": [
+        "Choose the agency for 90 days, not the full-time hire right now.",
+        "Build templated email/promotional calendar to fit within 4 hours/week.",
+        "If your remaining workload is still over 4 hours/week, start drafting an in-house marketer job description.",
+        "Keep at least a $25,000–$30,000 cash floor."
+      ],
+      "improvement": "The plan could specify an immediate fallback if email and creative prove impossible to fit within four hours, and give an earlier trigger for starting the in-house hiring process rather than waiting until weeks 5–8."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The candidate explicitly treats growth as unguaranteed, identifies the employee's near-breakeven cash exposure, compares ramp timing and commitment lengths, and uses measurable review points such as CAC, creative testing velocity, and repeat uplift without assuming either option creates growth.",
+      "quotes": [
+        "No automatic growth in repeat purchases.",
+        "The agency costs more cash in the first 90 days because it starts immediately. The employee starts later but then becomes the more expensive ongoing commitment.",
+        "If the agency is not on pace to generate roughly 113 incremental orders/month or reduce CAC from $30 toward ~$25, treat renewal as unlikely.",
+        "Keep at least a $25,000–$30,000 cash floor."
+      ],
+      "improvement": "Could quantify the worst-case cash runway if repeat orders fall or agency performance is flat while the founder remains over capacity, including the point at which an in-house hire becomes too risky."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-quantified answer that correctly separates unit economics, makes a conditional lower-risk agency recommendation, and gives a practical 90-day review plan. Minor improvements would add more explicit downside runway analysis and earlier triggers for the founder time constraint."
+}

@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 8,
+      "justification": "The revised paragraph directly names the checkout update as the cause, takes explicit responsibility with 'That's on us,' and avoids excuses or blame shifting. It also appropriately declines to guarantee future reliability without being evasive. The removal of the security-incident disclaimer after feedback shows good responsiveness.",
+      "quotes": [
+        "A checkout update we rolled out broke the site, and it stayed broken until we could fix it. That's on us.",
+        "We won't promise it will never happen again, but we're working to make sure it doesn't."
+      ],
+      "improvement": "Could briefly acknowledge the specific impact on customers (e.g., missed the sale window they were planning for) to deepen the accountability beyond naming the technical cause."
+    },
+    "offer_clarity": {
+      "score": 8,
+      "justification": "The Turn 3 revision places 'on merchandise' directly in the discount description, making scope clear before the exclusion bullets. All required elements are present: 20% automatic discount, no code, 72-hour window, ET deadline, shipping/gift-card exclusions, no stacking, no invented extra compensation. The structure of confirmation-after-statement reduces ambiguity.",
+      "quotes": [
+        "The original 20% discount on merchandise has been restored automatically—no code needed.",
+        "Shipping and gift cards are not included",
+        "Cannot be combined with other discounts"
+      ],
+      "improvement": "Could explicitly restate 'no code needed' in the bullet list for scannability, since social posts are often skimmed and the inline mention may be missed."
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "justification": "The voice is restrained and human throughout. The revision from legal-sounding disclaimer to direct accountability is a genuine improvement. Payment concerns are directed to the Contact page privately, the distinction between pending authorizations and confirmed charges is handled accurately ('We haven't yet confirmed which of those authorizations became actual charges'), and no refund promises are made. The instruction not to post payment details publicly is included.",
+      "quotes": [
+        "We haven't yet confirmed which of those authorizations became actual charges, so we don't want to make promises about refunds we can't keep right now—but we will check your specific situation.",
+        "Please don't post order numbers, payment details, or account information in the comments or replies."
+      ],
+      "improvement": "The closing line ('sticking with a small shop even when things go sideways') is warm but slightly glib given the severity of a three-day outage during a sale; a simpler 'Thank you for your patience' might land better."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, responsive work that improved meaningfully across turns. The candidate correctly identified and fixed the defensive security-incident language, refined the discount scope for clarity, and maintained accurate handling of payment concerns throughout. The final product is accountable, clear, and appropriately toned for a small-business public apology."
+}

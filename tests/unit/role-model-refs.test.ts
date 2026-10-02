@@ -12,7 +12,8 @@ async function freshJudges(env: Record<string, string>) {
   return import('../../src/config/judges.js');
 }
 
-describe('TOURNAMENT_MODEL_* env refs', () => {
+// Each test re-imports the config graph cold; under a busy machine that can pass 5 s.
+describe('TOURNAMENT_MODEL_* env refs', { timeout: 30_000 }, () => {
   it('routes an anthropic: judge default to the anthropic route', async () => {
     const { JUDGES } = await freshJudges({ TOURNAMENT_MODEL_JUDGE_RULES: 'anthropic:claude-sonnet-5-5' });
     expect(JUDGES.find(judge => judge.role === 'rules')).toMatchObject({

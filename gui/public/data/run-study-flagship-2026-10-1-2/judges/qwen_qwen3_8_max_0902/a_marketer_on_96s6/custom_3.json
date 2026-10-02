@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 6,
+      "justification": "Correctly calculates current surplus, loaded costs, and incremental order contribution margin without double-counting CAC. However, makes a critical unit error in the cash projection by multiplying a monthly surplus by weeks.",
+      "quotes": [
+        "Operating surplus $6,000 / month",
+        "Employee $5,800 145 orders",
+        "Cash check at Week 6: ~$30,000 + (6 × $6,000 surplus) – $2,000 recruiting ≈ $64,000."
+      ],
+      "improvement": "Ensure time units match when projecting cash flow; 6 weeks is ~1.5 months, meaning the surplus added should be ~$9,000, not $36,000."
+    },
+    "practicality": {
+      "score": 7,
+      "justification": "Provides a very logical and defensible choice based on the founder's time constraints and scope gaps. The 90-day plan is structured and actionable, but its usefulness is slightly undermined by the flawed cash projections.",
+      "quotes": [
+        "If ads consume roughly 5–6 of those 15 hours, the agency removes that slice and leaves you still 5–6 hours over on email and creative",
+        "Your hours on marketing ≤ 4 hrs/week"
+      ],
+      "improvement": "Fix the cash milestone math so the founder isn't operating on a falsely inflated expectation of cash reserves at week 6 and week 10."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Thoroughly identifies risks, including agency lock-in, hiring ramp wobbles, and the danger of assuming growth. Sets objective, measurable review points.",
+      "quotes": [
+        "The 3-month lock-in ($13,500) is nearly half your cash reserve if things go sideways.",
+        "In practice, a new person managing the account may cause a 10–20% CPA wobble in weeks 1–3.",
+        "If CPA has risen above $35 or surplus has turned negative for two consecutive months: Have a corrective conversation."
+      ],
+      "improvement": "Could explicitly mention the risk of cash dipping lower than expected during the 6-week wait since the surplus margins are quite tight once the hire starts."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong strategic analysis and unit economics breakdown, marred by a significant time-unit math error in the cash flow projections."
+}

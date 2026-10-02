@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "voice": {
+      "score": 6,
+      "justification": "Cora's exhausted, guarded perspective remains consistent, and the final revision makes recognition intimate through specific handwriting details. However, much of her language relies on familiar thriller reactions rather than a distinctive marine biologist's sensibility. Clinical explanation and explicit emotional labeling also persist despite the request for subtlety.",
+      "quotes": [
+        "The sharp, left-handed slant. The high cross of the ‘t’. The tight, pinched loop of the ‘C’.",
+        "I didn't turn around to look at the other passengers. I couldn't.",
+        "my fine motor skills were entirely gone",
+        "I yanked harder, desperate now"
+      ],
+      "improvement": "Replace the clinical summary and 'desperate now' with one precise failed movement. Give Cora an idiosyncratic observation or remembered association that distinguishes her from a generic frightened narrator."
+    },
+    "imagery": {
+      "score": 7,
+      "justification": "The revised passage effectively anchors distress in tactile details: fresh string, smearing ink, concealed letters, and an unmanageable knot. Engine vibration and pitching water keep the ferry present. The accumulation of throat constriction, sweat, white knuckles, locked joints, and numb fingers nevertheless overstates the response, and the shadow-pinning image is more decorative than physically clear.",
+      "quotes": [
+        "I pressed my thumb against the ‘C’. The ink smeared slightly.",
+        "The diesel engines kept vibrating through the floorboards, but I couldn't feel them anymore.",
+        "My knuckles turned bone-white, the joints locking up.",
+        "A rubber-soled boot stepped into my peripheral vision, pinning my shadow to the linoleum."
+      ],
+      "improvement": "Keep the ink smear and failed attempt to remove the string as the dominant physical details; cut several overlapping stress symptoms and replace the shadow metaphor with a concrete indication of the stranger's proximity."
+    },
+    "coherence": {
+      "score": 7,
+      "justification": "The revision has a clear progression from recognition to concealment, attempted removal, and confrontation. The tag supplies an actionable destination while the stranger's ownership claim complicates it without explaining the disappearance. However, fresh ink does not establish that someone aboard wrote the tag, so Cora's inference is presented with more certainty than the evidence supports. The added physical struggle also delays the final interruption slightly.",
+      "quotes": [
+        "Cora—Bring this to the lighthouse. Tell no one.",
+        "someone on this boat had written my name",
+        "I just curled my fingers over the tag, burying it in my palm to hide the letters from view.",
+        "You're touching my bag."
+      ],
+      "improvement": "Frame the onboard writer as Cora's fearful possibility rather than established fact. Compress the knot struggle so the stranger interrupts at the instant she commits to taking the tag."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A useful, tense revision with a strong tactile clue and effective closing confrontation. It improves on the earlier overt panic but remains somewhat conventional and over-explained, with one unsupported inference weakening the mystery's logic."
+}

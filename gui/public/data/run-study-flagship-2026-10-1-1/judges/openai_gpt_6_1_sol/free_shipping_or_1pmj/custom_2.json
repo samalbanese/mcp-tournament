@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "Provides a usable 30-day randomized test with clear control and treatment policies, consistent visitor assignment, customer-facing messaging, and a profit calculation. The main implementation gap for a small operator is how to set up assignment and link visitor groups to order-cost data; it also does not assess whether traffic is sufficient for a useful result.",
+      "quotes": [
+        "Randomly split eligible visitors 50/50:",
+        "Keep visitors in the same group on repeat visits.",
+        "Run for the full 30 days rather than stopping when early results look favorable."
+      ],
+      "improvement": "Add a short setup checklist covering storefront split-test implementation, order-level group tagging, and a spreadsheet export, plus a prelaunch traffic check and a next step if 30 days produces insufficient data."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "Specifies the exact $95 offer, threshold basis, below-threshold policy, and primary and secondary metrics. The supplied margin and order economics are calculated correctly, including holding product cost constant under the discount. The decision rule is directionally sound but leaves uncertainty undefined, and the threshold could be tied more explicitly to incremental margin and foregone shipping fees.",
+      "quotes": [
+        "Apply the threshold to the merchandise subtotal before tax, and keep other promotions unchanged.",
+        "The discount calculation holds product cost constant: a $72 basket has $41.76 in product cost, but discounted merchandise revenue is only $61.20.",
+        "Keep the offer only if contribution profit per visitor rises—not merely revenue or conversion."
+      ],
+      "improvement": "Show that the additional $23 generates $9.66 in gross profit at 42% margin, compare that with the actual shipping fee forfeited, and predefine a statistical decision rule such as a positive lower confidence bound for profit-per-visitor lift."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Strongly addresses margin dilution, subsidies to existing buyers, heterogeneous item margins and shipping costs, delayed returns, misleading revenue metrics, repeat-visitor contamination, and premature stopping. Controls are concrete and directly connected to the risks. Remaining gaps include explicit handling of low statistical power and unusually expensive shipping destinations or bulky products.",
+      "quotes": [
+        "Customers already ordering above $95 may simply stop paying shipping",
+        "Use actual item margins and shipping costs where possible; add-on products may not have your average 42% margin.",
+        "At day 30, use an expected-return reserve based on historical return rates, then reconcile the results once returns mature.",
+        "If the difference is small relative to normal variation, call the test inconclusive rather than a win."
+      ],
+      "improvement": "Define eligible shipping regions and bulky-item exclusions before launch, and specify how to handle insufficient sample size without declaring a win from a noisy positive estimate."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, economically correct recommendation with a clear offer and profit-focused experiment. More operational setup detail and a prespecified uncertainty threshold would make it fully execution-ready."
+}

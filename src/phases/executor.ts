@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getModelClient } from '../clients/index.js';
 import type { ModelMessage, ModelToolDefinition } from '../clients/types.js';
-import { MAX_TOKENS_CANDIDATE, MAX_TOOL_ROUNDS } from '../config/constants.js';
+import { reasoningEffortFromEnv } from '../clients/openrouter.js';
+import { MAX_TOKENS_CANDIDATE, MAX_TOKENS_CANDIDATE_REASONING, MAX_TOOL_ROUNDS } from '../config/constants.js';
 import type { CandidateModel } from '../config/models.js';
 import {
   modelSlug,
@@ -84,6 +85,7 @@ export async function runScenario(
   const tools = clientTools(plugin);
 
   try {
+    const maxTokens = reasoningEffortFromEnv() ? MAX_TOKENS_CANDIDATE_REASONING : MAX_TOKENS_CANDIDATE;
     log(`  [${model.name}/${scenario.name}] Starting`);
     for (let turnNumber = 1; turnNumber <= scenario.maxTurns; turnNumber++) {
       const startedAt = Date.now();
@@ -98,12 +100,20 @@ export async function runScenario(
           model: model.apiModel ?? model.id,
           system,
           messages,
-          max_tokens: MAX_TOKENS_CANDIDATE,
+          max_tokens: maxTokens,
           tools,
         });
         inputTokens += response.usage.input_tokens;
         outputTokens += response.usage.output_tokens;
         if (response.text) textParts.push(response.text);
+        // An empty or cut-off reply is a failed call, not an answer: judges would score the
+        // output limit (often spent on hidden reasoning) as if it were model quality. Check every
+        // response, so a cut-off one that also asked for tools is never run or scored.
+        if (response.stop_reason === 'max_tokens') {
+          throw new Error(textParts.join('\n').trim()
+            ? `Reply cut off on turn ${turnNumber}: the model reached the ${maxTokens}-token output limit.`
+            : `Empty reply on turn ${turnNumber}: the model used all ${maxTokens} output tokens (likely on reasoning) before answering.`);
+        }
 
         const requestedTools = response.content.filter(block => block.type === 'tool_use');
         if (!requestedTools.length) {
@@ -144,6 +154,7 @@ export async function runScenario(
         ...(turnToolCalls.length ? { toolCalls: turnToolCalls } : {}),
         metrics: { ttfbMs: null, totalTimeMs, inputTokens, outputTokens },
       };
+      if (!candidateTurn.content) throw new Error(`Empty reply on turn ${turnNumber}.`);
       turns.push(candidateTurn);
       metrics.candidateInputTokens += inputTokens;
       metrics.candidateOutputTokens += outputTokens;

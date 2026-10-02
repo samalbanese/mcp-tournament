@@ -1,0 +1,34 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 6 vs median 8 - weighed stock thriller phrasing and cut Turn 2 texture more heavily",
+        "google judge: scored 9 vs median 8 - found the marine-biologist voice exceptionally strong and consistent"
+      ]
+    },
+    "imagery": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 8 - penalized stacked/strained similes like 'knuckle cracking' and 'geological' rhythm",
+        "google judge: scored 9 vs median 8 - praised sensory layering as vivid without being overwritten"
+      ]
+    },
+    "coherence": {
+      "score": 8,
+      "confidence": "contested",
+      "outliers": [
+        "anthropic judge: scored 5 vs median 8 - flagged logical contradictions (impossible 'get off this boat' plan, men's room vs deck, explicit key identification undercutting ambiguity)",
+        "openai judge: scored 5 vs median 8 - cited rapid clue interpretation, weak final-action motivation, and length overage"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [
+    "Word count likely exceeds the 500-700 word limit in the revised versions (noted by two judges; unconfirmed by others)"
+  ],
+  "assessment": "A strong, atmospheric opening with a distinctive marine-biologist voice and rich, well-paced sensory imagery that grounds the ferry crossing and suitcase reveal. The revision successfully made the reveal more gradual and physical through the lost page, the goggles, and the hidden photograph. The main weakness is contested: two judges found serious plot-logic problems (the incoherent 'get off this boat' plan, spatial contradictions, and an explicit key identification that undermines the requested ambiguity), while others viewed these as minor or even effective. Length creep past the 700-word limit is a probable but unconfirmed rule issue.",
+  "judge_agreement": "All five judges agreed the voice is distinctive and the imagery vivid, scoring 7-9 with most noting occasional thriller clichés. Sharp disagreement centered on coherence: anthropic and openai scored 5, citing concrete logical contradictions and an unmotivated final action, while google, deepseek, and qwen scored 8-9, treating the same final turn as compelling urgency. Google was the most generous overall (9 across all criteria); anthropic was the harshest and the only judge to flag rule and logic errors formally."
+}

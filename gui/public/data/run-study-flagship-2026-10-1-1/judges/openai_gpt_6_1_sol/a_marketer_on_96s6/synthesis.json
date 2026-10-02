@@ -1,0 +1,31 @@
+{
+  "final_scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - uniformly maximal scores with 'no improvement needed' justifications, offering less critical granularity than peers"
+      ]
+    },
+    "practicality": {
+      "score": 8,
+      "confidence": "contested",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - flagged unreconciled $36k cash floor and vague six-week bridge as blocking weaknesses",
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found the plan flawless despite the same cash-floor and bridge gaps other judges identified"
+      ]
+    },
+    "risk_awareness": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - wanted numeric kill criteria and CAC ceilings rather than qualitative review points",
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - maximal score again, less differentiated"
+      ]
+    }
+  },
+  "average_score": 8.7,
+  "rule_errors_confirmed": [],
+  "assessment": "A consultant-grade response with flawless financial mechanics: the $6,000 surplus, $40 contribution margin, $5,800/$4,500 loaded costs, and 145/113 break-even orders are all correct, and the CAC is handled without double-counting. The conditional employee recommendation is well-reasoned and tied to the 11-hour workload gap and the agency's ads-only scope. Recurring weaknesses across judges are operational specificity — the six-week bridge is vague, the $36,000 cash floor is unreconciled with the current $32,000 balance, and review points lack numeric kill triggers.",
+  "judge_agreement": "All five judges agree the financial reasoning is essentially correct (9-10) and that risk coverage is strong. Gemini is a clear positive outlier, awarding perfect 10s across all criteria while other judges identified concrete gaps. The main disagreement is practicality (7-10): Claude and OpenAI both flagged the unreconciled cash floor and the unspecified interim coverage, while Gemini considered the plan fully actionable. Several judges also noted the lack of quantified downside scenarios or dated exit triggers as the residual risk-analysis gap."
+}

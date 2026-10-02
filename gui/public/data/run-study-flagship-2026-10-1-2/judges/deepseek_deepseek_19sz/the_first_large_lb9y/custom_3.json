@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 10,
+      "justification": "The response perfectly calculates the wholesale contribution ($28,000) using the 45% discount, unit cost, and freight, while correctly contrasting it with both the theoretical direct contribution ($66,000) and the cash receipts from already-paid inventory.",
+      "quotes": [
+        "Contribution after freight | $14 | $28,000",
+        "Cash from direct sales is shown as revenue minus the $9 direct-sale cost: 60 - 9 = $51 cash per direct lamp. That is because the existing inventory has already been paid for."
+      ],
+      "improvement": "None needed; excellent analysis."
+    },
+    "cash_and_stock_plan": {
+      "score": 10,
+      "justification": "The timeline flawlessly maps inventory depletion alongside direct sales, the timing of wholesale shipments, and all cash inflows and outflows, including supplier deposits and the retailer's 45-day delay. It accurately models the $16,000 reserve constraint.",
+      "quotes": [
+        "Week 8 before supplier delivery | 200 | $75,800",
+        "Week 8 after supplier delivery | 2,200 | $57,800 | +2,000 supplier units; pay remaining -$18,000 supplier balance"
+      ],
+      "improvement": "None needed; highly detailed and accurate."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "The candidate comprehensively addresses credit risk, channel conflict, and inventory/replenishment risks, offering concrete safeguards like MAP policies and reduced initial order sizes. It misses a direct mention of mitigating the 'verified defects' return clause.",
+      "quotes": [
+        "If the supplier is late, you risk stocking out of your higher-margin direct channel.",
+        "Require: No selling below your direct price... A minimum advertised price policy if possible."
+      ],
+      "improvement": "Include a brief recommendation on how to handle the 'verified defects' clause, such as requiring proof or capping defect return rates."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An outstanding, highly accurate, and strategically sound response that perfectly maps the financial and operational constraints."
+}

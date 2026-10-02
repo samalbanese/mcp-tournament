@@ -70,7 +70,9 @@ export async function evaluateWithJudges(
     ? [{ judge: judges[index].name, error: result.reason instanceof Error
       ? result.reason.message : String(result.reason) }]
     : []);
-  if (!judgeResults.length) throw new Error('All judges failed');
+  if (!judgeResults.length) {
+    throw new Error(`All judges failed: ${failedJudges.map(failure => `${failure.judge}: ${failure.error}`).join('; ')}`);
+  }
 
   let synthesis: SynthesisResult;
   if (useSynthesizer) {

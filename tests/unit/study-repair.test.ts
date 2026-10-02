@@ -562,7 +562,10 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(result.answersRerun).toBe(stage === 'some judges' ? 2 : 0);
     expect(result.judgeSeatsFilled).toBe(0);
     expect(result.remaining).toHaveLength(2);
-    expect(result.remaining.every(gap => gap.model === 'anthropic:claude-test@low' && gap.error === error)).toBe(true);
+    // An all-judges failure names each judge's own error.
+    const matches = (text: string) => stage === 'all judges'
+      ? text.startsWith(`${error}: `) && text.includes('New judge failure') : text === error;
+    expect(result.remaining.every(gap => gap.model === 'anthropic:claude-test@low' && matches(gap.error))).toBe(true);
     expect(read(failuresFile())).toEqual(result.remaining.map(({ model, scenario, error }) => ({ model, scenario, error })));
     if (stage === 'answer') expect(calls.every(call => call.phase === 'answer')).toBe(true);
   });

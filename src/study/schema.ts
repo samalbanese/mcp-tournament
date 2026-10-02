@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ModelRefError, parseModelRef } from '../config/model-ref.js';
 import { ModelRefSchema } from '../run-plan.js';
 
 export const StudyFamilySchema = z.string().regex(/^[a-z0-9-]{2,30}$/);
@@ -41,11 +42,29 @@ export function parseStudy(input: unknown): Study {
     throw new StudyError(parsed.error.issues.map(issue =>
       `${issue.path.join('.') || 'study'}: ${issue.message}`).join('\n'));
   }
-  const study = parsed.data;
+  const errors: string[] = [];
+  // Store every ref in canonical form, so "openrouter:x" and "x" are one model everywhere:
+  // in the duplicate checks below, in saved progress, and when scores are matched to candidates.
+  const canonical = (ref: string, where: string) => {
+    try {
+      return parseModelRef(ref).ref;
+    } catch (error) {
+      if (!(error instanceof ModelRefError)) throw error;
+      errors.push(`${where}: ${error.message}`);
+      return ref;
+    }
+  };
+  const data = parsed.data;
+  const study: Study = {
+    ...data,
+    candidates: data.candidates.map((candidate, index) => ({ ...candidate, ref: canonical(candidate.ref, `candidates.${index}.ref`) })),
+    judges: data.judges.map((judge, index) => ({ ...judge, ref: canonical(judge.ref, `judges.${index}.ref`) })),
+    participant: canonical(data.participant, 'participant'),
+    synthesizer: canonical(data.synthesizer, 'synthesizer'),
+  };
   const seenCandidates = new Set<string>();
   const seenJudges = new Set<string>();
   const seenFamilies = new Set<string>();
-  const errors: string[] = [];
   study.candidates.forEach((candidate, index) => {
     if (seenCandidates.has(candidate.ref)) errors.push(`candidates.${index}.ref: duplicate candidate "${candidate.ref}"`);
     seenCandidates.add(candidate.ref);

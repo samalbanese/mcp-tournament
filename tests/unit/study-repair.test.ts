@@ -347,6 +347,57 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(calls.some(call => ['deepseek/test', 'qwen/test'].includes(call.model))).toBe(false);
   });
 
+  it('counts spend a hard-killed run never recorded before repairing its finished batches', async () => {
+    const input = study();
+    input.candidates.push({ ref: 'deepseek/test', family: 'deepseek', label: 'DeepSeek' },
+      { ref: 'qwen/test', family: 'qwen', label: 'Qwen' });
+    failure = call => missingJudge(call) ? 'Subscription exhausted'
+      : ['deepseek/test', 'qwen/test'].includes(call.model) ? 'Interrupted' : undefined;
+    await expect(runStudy(input, options())).rejects.toThrow(/Every candidate/);
+    // As if the process died mid-way through batch 2: the last saved reading is from after batch 1.
+    const progressFile = path.join(studyDir(), 'progress.json');
+    write(progressFile, { ...read(progressFile), spentUsd: 2, lastUsage: 12 });
+    calls.length = 0; failure = () => undefined;
+    const opts = options(); opts.fetchUsage.mockResolvedValueOnce(15).mockResolvedValueOnce(16);
+    await repairStudy(input, opts);
+    expect(read(progressFile)).toMatchObject({ spentUsd: 6, lastUsage: 16 });
+  });
+
+  it('refuses to start while another run or repair holds the study', async () => {
+    await finishedWithGap();
+    const lock = path.join(studyDir(), '.lock');
+    write(lock, { pid: process.pid, token: 'other-run' });
+    const before = snapshot();
+    const opts = options();
+    await expect(repairStudy(study(), opts)).rejects.toThrow(/Another run or repair of this study is in progress/);
+    await expect(runStudy(study(), options())).rejects.toThrow(/Another run or repair of this study is in progress/);
+    expect(snapshot()).toEqual(before);
+    expect(calls).toHaveLength(0);
+    expect(opts.fetchUsage).not.toHaveBeenCalled();
+  });
+
+  it('replaces a lock left by a process that has exited and removes its own when done', async () => {
+    await finishedWithGap();
+    const lock = path.join(studyDir(), '.lock');
+    write(lock, { pid: 2 ** 22 + 7, token: 'crashed-run' });
+    const result = await repairStudy(study(), options());
+    expect(result.judgeSeatsFilled).toBe(1);
+    expect(fs.existsSync(lock)).toBe(false);
+  });
+
+  it('stops if another repair changed the study while the prompt was open', async () => {
+    await finishedWithGap();
+    const opts = options();
+    opts.confirm.mockImplementation(async () => {
+      fs.rmSync(failuresFile());
+      return true;
+    });
+    await expect(repairStudy(study(), opts)).rejects.toThrow(/changed this study while waiting for confirmation/);
+    expect(calls).toHaveLength(0);
+    expect(opts.fetchUsage).not.toHaveBeenCalled();
+    expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
+  });
+
   it.each([undefined, 'high'])('sets reasoning effort and restores previous %s', async previous => {
     await finishedWithGap();
     if (previous) process.env.TOURNAMENT_REASONING_EFFORT = previous;

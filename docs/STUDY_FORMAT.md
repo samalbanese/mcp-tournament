@@ -56,7 +56,8 @@ Save a JSON file with these fields:
   is recorded as a failed answer, never scored.
 
 Model refs use OpenRouter IDs or `anthropic:claude-...` for the registered Claude
-subscription client. Configure that client through the local integration before
+client. Refs are stored in canonical form, so `openrouter:openai/gpt-6.1-sol` and
+`openai/gpt-6.1-sol` count as the same model, including in the duplicate checks. Configure that client through the local integration before
 running subscription roles. All batches must have ready routes before the first
 batch starts. The runner does not register or bypass a provider's billing guard.
 
@@ -74,9 +75,11 @@ a rough dollar estimate. Answer `y` or `yes` to proceed; Enter defaults to No.
 text go to stderr; a successful command prints only the output folder path to
 stdout. The default results root is `TOURNAMENT_RESULTS_DIR`, or `./results`.
 
-The estimate covers the full study, including batches already completed. It
-excludes `anthropic:` refs because they run on the subscription. Other refs with
-missing prices are listed separately. An offline catalog makes the estimate
+The estimate covers the full study, including batches already completed. Calls
+on routes the caller marks as subscription (`subscriptionRoutes`, such as a local
+Claude subscription client) are left out. Paid Anthropic API calls are priced,
+and the summary warns that recorded spend will not include them, because spend is
+read from OpenRouter. Other refs with missing prices are listed separately. An offline catalog makes the estimate
 unavailable. These are token-based estimates, not spending caps. When
 `reasoningEffort` is set, reasoning tokens come on top of the estimate, and the
 summary says so.
@@ -118,7 +121,10 @@ the second candidate group on the first bench.
 time, and the absolute `studyFile` path when called from the CLI. Completion is
 saved after each successful batch. Rerunning the same input skips those batches.
 An unfinished run folder is renamed to `<runId>-abandoned-<epochMs>` and the batch
-starts again. Existing run data is never deleted. A changed saved study is
+starts again. Only one run or repair of a study works at a time: the second one
+stops with an error naming the first one's process. A lock left by a process
+that has exited is replaced. If another run changes the study while the
+confirmation prompt is open, the command stops and asks to be run again. Existing run data is never deleted. A changed saved study is
 rejected rather than combining incompatible evidence.
 
 `study.json` contains `{ study, meta, analysis }`. Metadata includes `runIds`,
@@ -157,7 +163,8 @@ Unfinished batches still belong to the normal `study` resume command.
 
 If a repair is interrupted, run it again. It finishes the remaining gaps,
 counts the interrupted run's spend, and refreshes the report even when no gaps
-are left.
+are left. A repair after a study run that stopped early also counts the spend
+that run never recorded.
 
 The command shows the answers and judge seats to repair before asking for y/N
 confirmation. Use `--yes` to accept that summary without prompting. Declining
@@ -204,6 +211,7 @@ The package exports `runStudy`, `repairStudy`, `reanalyzeStudy`, `parseStudy`,
 `planBatches`, and `analyzeStudy`, plus their main input and result types.
 Register benches first with `loadDiscoveredBenches()` (the CLI does this), then
 call `runStudy(parseStudy(input), { confirm: async summary => ... })`; optional
-settings are `resultsRoot`, `onProgress`, `catalog`, `fetchUsage`, and `studyFile`.
+settings are `resultsRoot`, `onProgress`, `catalog`, `fetchUsage`, `studyFile`, and
+`subscriptionRoutes`.
 `fetchUsage` returns a cumulative dollar reading or `null`. A declined confirmation
 returns an outcome with `cancelled: true` and creates no output folders.

@@ -2,12 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
 import { getCatalog, type Catalog } from '../catalog.js';
+import type { ClientRoute } from '../clients/index.js';
 import { estimateRunCost } from '../estimate.js';
 import { assertRoutesReady, defaultResultsRoot, evaluateTournament } from '../pipeline.js';
 import { normalizeRunPlan, type ResolvedRunPlan } from '../run-plan.js';
 import { analyzeStudy, type StudyAnalysis } from './analyze.js';
 import { planBatches, validateStudyAgainstBenches } from './batches.js';
 import { collectScores } from './collect.js';
+import { acquireStudyLock, assertUnchanged } from './lock.js';
 import { writeStudyOutputs, type StudyMeta } from './export.js';
 import { parseStudy, StudyError, StudySchema, type Study } from './schema.js';
 
@@ -20,6 +22,11 @@ export interface RunStudyOptions {
   fetchUsage?: () => Promise<number | null>;
   /** Original input path, saved for reanalysis of interrupted CLI runs. */
   studyFile?: string;
+  /**
+   * Routes billed to a flat subscription rather than per call (the local Claude client, for one).
+   * Their calls are left out of the estimate. Any other route is priced like an API call.
+   */
+  subscriptionRoutes?: ClientRoute[];
 }
 export interface StudyOutcome {
   studyDir: string;
@@ -76,17 +83,28 @@ export async function readUsage(fetchUsage: () => Promise<number | null>): Promi
   }
 }
 
-function estimateSubscriptionRun(plan: ResolvedRunPlan, catalog: Catalog) {
+function planRoutes(plan: ResolvedRunPlan): ClientRoute[] {
+  return [
+    ...plan.candidates.map(candidate => candidate.route ?? 'openrouter'),
+    ...plan.judges.map(judge => judge.route),
+    plan.participant.route,
+    plan.synthesizer.route,
+  ];
+}
+
+function estimateSubscriptionRun(plan: ResolvedRunPlan, catalog: Catalog, subscriptionRoutes: readonly ClientRoute[]) {
   // Keep every workload in the estimate, but give subscription roles an unpriced ID.
-  // The shared estimator otherwise looks up Claude's API price in the catalog.
+  // The shared estimator otherwise looks up the model's API price in the catalog.
+  const free = (route: ClientRoute | undefined) => subscriptionRoutes.includes(route ?? 'openrouter');
   const model = 'claude-study-subscription-excluded';
   const ref = `anthropic:${model}`;
+  const route = 'anthropic' as const;
   const pricedPlan: ResolvedRunPlan = {
     ...plan,
-    candidates: plan.candidates.map(candidate => candidate.route === 'anthropic' ? { ...candidate, id: ref } : candidate),
-    judges: plan.judges.map(judge => judge.route === 'anthropic' ? { ...judge, model } : judge),
-    participant: plan.participant.route === 'anthropic' ? { ...plan.participant, ref, model } : plan.participant,
-    synthesizer: plan.synthesizer.route === 'anthropic' ? { ...plan.synthesizer, ref, model } : plan.synthesizer,
+    candidates: plan.candidates.map(candidate => free(candidate.route) ? { ...candidate, id: ref, route } : candidate),
+    judges: plan.judges.map(judge => free(judge.route) ? { ...judge, model, route } : judge),
+    participant: free(plan.participant.route) ? { ...plan.participant, ref, model, route } : plan.participant,
+    synthesizer: free(plan.synthesizer.route) ? { ...plan.synthesizer, ref, model, route } : plan.synthesizer,
   };
   const estimate = estimateRunCost(pricedPlan, {
     ...catalog, models: catalog.models.filter(entry => entry.id !== `anthropic/${model}`),
@@ -105,7 +123,8 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
   const root = path.resolve(options.resultsRoot ?? defaultResultsRoot());
   const studyDir = path.join(root, 'studies', study.id);
   const progressFile = path.join(studyDir, 'progress.json');
-  const progress = fs.existsSync(progressFile) ? ProgressSchema.parse(readJson(progressFile)) : { done: [] as string[] };
+  const progressText = fs.existsSync(progressFile) ? fs.readFileSync(progressFile, 'utf8') : null;
+  const progress = progressText === null ? { done: [] as string[] } : ProgressSchema.parse(JSON.parse(progressText));
   if (progress.study && JSON.stringify(progress.study) !== JSON.stringify(study)) {
     throw new StudyError('The saved study differs from this input. Use a new study ID for a changed study.');
   }
@@ -113,7 +132,12 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     throw new StudyError('Progress contains a batch that is not in this study.');
   }
   const catalog = options.catalog ?? await getCatalog();
-  const estimates = plans.map(plan => estimateSubscriptionRun(plan, catalog));
+  const subscriptionRoutes = options.subscriptionRoutes ?? [];
+  const estimates = plans.map(plan => estimateSubscriptionRun(plan, catalog, subscriptionRoutes));
+  const routes = new Set(plans.flatMap(planRoutes));
+  const freeRoutes = [...routes].filter(route => subscriptionRoutes.includes(route));
+  // Recorded spend reads OpenRouter key usage, so other paid routes are estimated but never recorded.
+  const unrecordedRoutes = [...routes].filter(route => route !== 'openrouter' && !subscriptionRoutes.includes(route));
   const estimateUsd = estimates.some(estimate => estimate.usd === null)
     ? null : estimates.reduce((sum, estimate) => sum + estimate.usd!, 0);
   const excluded = [...new Set(estimates.flatMap(estimate => estimate.excluded))];
@@ -122,7 +146,12 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     `${study.title}: ${batches.length} batch(es), ${study.candidates.length} models, ${study.judges.length} judges, ${answers} answers.`,
     `Models: ${study.candidates.map(candidate => candidate.ref).join(', ')}`,
     estimateUsd === null ? 'Cost estimate unavailable (model catalog offline).' : `≈ $${estimateUsd.toFixed(2)} (rough, could be ±50%).`,
-    'anthropic: refs are excluded from the estimate because they run on the subscription.',
+    ...(freeRoutes.length
+      ? [`${freeRoutes.join(', ')} calls run on a subscription, so the estimate and recorded spend leave them out.`]
+      : []),
+    ...(unrecordedRoutes.length
+      ? [`${unrecordedRoutes.join(', ')} API calls are in the estimate, but recorded spend reads OpenRouter usage only and will not include them.`]
+      : []),
     ...(study.reasoningEffort
       ? [`Reasoning effort "${study.reasoningEffort}" adds reasoning tokens the estimate does not count; expect actual spend above it.`]
       : []),
@@ -135,19 +164,22 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
   }
 
   fs.mkdirSync(studyDir, { recursive: true });
-  progress.study = study;
-  progress.startedAt ??= new Date().toISOString();
-  if (options.studyFile) progress.studyFile = path.resolve(options.studyFile);
   const saveProgress = () => {
     const temporary = `${progressFile}.tmp`;
     fs.writeFileSync(temporary, `${JSON.stringify(progress, null, 2)}\n`);
     fs.renameSync(temporary, progressFile);
   };
-  saveProgress();
   const previousEffort = process.env.TOURNAMENT_REASONING_EFFORT;
   let batchesRun = 0;
   let batchesSkipped = 0;
+  const release = acquireStudyLock(studyDir);
   try {
+    // Another run may have finished batches while the confirmation prompt was open.
+    assertUnchanged([progressFile], [progressText]);
+    progress.study = study;
+    progress.startedAt ??= new Date().toISOString();
+    if (options.studyFile) progress.studyFile = path.resolve(options.studyFile);
+    saveProgress();
     if (study.reasoningEffort) process.env.TOURNAMENT_REASONING_EFFORT = study.reasoningEffort;
     const fetchUsage = options.fetchUsage ?? defaultFetchUsage;
     const hasPending = batches.some(batch => !progress.done.includes(batch.batchId));
@@ -210,6 +242,7 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     });
     return { studyDir, analysis, batchesRun, batchesSkipped, cancelled: false };
   } finally {
+    release();
     if (previousEffort === undefined) delete process.env.TOURNAMENT_REASONING_EFFORT;
     else process.env.TOURNAMENT_REASONING_EFFORT = previousEffort;
   }

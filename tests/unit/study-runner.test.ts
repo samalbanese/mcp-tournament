@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { getModelClient, registerModelClient } from '../../src/clients/index.js';
+import { getModelClient, registerModelClient, type ClientRoute } from '../../src/clients/index.js';
 import type { CreateMessageParams, ModelClient, ModelResponse } from '../../src/clients/types.js';
 import type { Catalog } from '../../src/catalog.js';
 import { createCustomPlugin } from '../../src/plugins/custom.js';
@@ -78,7 +78,10 @@ function fake(): ModelClient {
 }
 
 function options() {
-  return { resultsRoot: root, catalog, confirm: vi.fn(async (_summary: string) => true), fetchUsage: vi.fn(async (): Promise<number | null> => null) };
+  return {
+    resultsRoot: root, catalog, confirm: vi.fn(async (_summary: string) => true),
+    fetchUsage: vi.fn(async (): Promise<number | null> => null), subscriptionRoutes: ['anthropic'] as ClientRoute[],
+  };
 }
 function read(file: string) { return JSON.parse(fs.readFileSync(file, 'utf8')); }
 function studyDir() { return path.join(root, 'studies', study().id); }
@@ -116,7 +119,8 @@ describe('study runner', { timeout: 30_000 }, () => {
     expect(output.meta.estimateUsd).toBeGreaterThan(0);
     expect(output.meta.runIds).toEqual(planBatches(study()).map(batch => batch.runId));
     expect(fs.existsSync(path.join(result.studyDir, 'scores.csv'))).toBe(true);
-    expect(opts.confirm.mock.calls[0][0]).toMatch(/anthropic:.*excluded.*subscription/s);
+    expect(opts.confirm.mock.calls[0][0]).toMatch(/anthropic calls run on a subscription, so the estimate and recorded spend leave them out/);
+    expect(opts.confirm.mock.calls[0][0]).not.toMatch(/recorded spend reads OpenRouter usage only/);
     expect(opts.confirm.mock.calls[0][0]).toMatch(/1 batch.*3.*judge.*6.*answer.*≈ \$/s);
     const rows = collectScores(study(), runDirs());
     expect(rows).toHaveLength(18);
@@ -135,6 +139,21 @@ describe('study runner', { timeout: 30_000 }, () => {
     opts.catalog = { ...catalog, models: catalog.models.filter(model => !model.id.startsWith('anthropic/')) };
     await runStudy(study(), opts);
     expect(opts.confirm.mock.calls[1][0]).toBe(first);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('prices paid Anthropic API calls and warns that recorded spend will miss them', async () => {
+    const subscription = options();
+    subscription.confirm.mockResolvedValue(false);
+    await runStudy(study(), subscription);
+    const paid = { ...options(), subscriptionRoutes: undefined };
+    paid.confirm.mockResolvedValue(false);
+    await runStudy(study(), paid);
+    const [subscriptionSummary, paidSummary] = [subscription.confirm.mock.calls[0][0], paid.confirm.mock.calls[0][0]];
+    const usd = (summary: string) => Number(summary.match(/≈ \$([\d.]+)/)![1]);
+    expect(usd(paidSummary)).toBeGreaterThan(usd(subscriptionSummary));
+    expect(paidSummary).toMatch(/anthropic API calls are in the estimate, but recorded spend reads OpenRouter usage only/);
+    expect(paidSummary).not.toMatch(/run on a subscription/);
     expect(calls).toHaveLength(0);
   });
 

@@ -47,6 +47,30 @@ describe('parseStudy', () => {
     expect(StudySchema.safeParse(fixture()).success).toBe(true);
   });
 
+  it('stores every model ref in canonical form', () => {
+    const input = fixture();
+    input.candidates[1].ref = 'openrouter:openai/gpt-6.1-sol';
+    input.judges[0].ref = 'Anthropic:claude-opus-5-5';
+    input.participant = 'openrouter:meta-llama/llama-4-maverick';
+    expect(parseStudy(input)).toEqual(fixture());
+  });
+
+  it('treats an aliased ref as a duplicate of the bare one', () => {
+    const input = fixture();
+    input.candidates[4].ref = 'openrouter:openai/gpt-6.1-sol';
+    expect(() => parseStudy(input)).toThrow(/candidates\.4\.ref: duplicate candidate "openai\/gpt-6\.1-sol"/);
+    const judges = fixture();
+    judges.judges[4].ref = 'openrouter:openai/gpt-6.1-sol';
+    expect(() => parseStudy(judges)).toThrow(/judges\.4\.ref: duplicate judge/);
+  });
+
+  it('rejects a ref with an unsupported provider prefix', () => {
+    const input = fixture();
+    input.candidates[1].ref = 'anthropic:gpt-6.1-sol';
+    expect(() => parseStudy(input)).toThrow(StudyError);
+    expect(() => parseStudy(input)).toThrow(/candidates\.1\.ref: .*not an Anthropic model/);
+  });
+
   it('allows candidates without a matching judge family and repeated candidate families', () => {
     const input = fixture();
     input.candidates[0].family = 'new-lab';

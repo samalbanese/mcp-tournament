@@ -14,6 +14,7 @@ import { effectiveScenario, normalizeRunPlan, type ResolvedRunPlan } from '../ru
 import { JudgeScoreSchema } from '../schemas/judge-score.js';
 import type { StudyAnalysis } from './analyze.js';
 import { planBatches, validateStudyAgainstBenches } from './batches.js';
+import { acquireStudyLock, assertUnchanged, snapshotFiles } from './lock.js';
 import { defaultFetchUsage, ProgressSchema, readUsage, reanalyzeStudy } from './runner.js';
 import { parseStudy, StudyError, type Study } from './schema.js';
 
@@ -154,6 +155,9 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     studyDir, answersRerun: 0, judgeSeatsFilled: 0,
     remaining: work.flatMap(item => item.unmatched), cancelled: false, analysis: null,
   };
+  // Everything the gap list was built from, checked again once this repair holds the study lock.
+  const inputs = [progressFile, ...work.map(item => item.file)];
+  const inputsBefore = snapshotFiles(inputs);
   const pending = work.filter(item => item.answers.length);
   const interrupted = progress.repairing === true;
   if (!pending.length && !interrupted) return outcome;
@@ -170,7 +174,10 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
 
   const previousEffort = process.env.TOURNAMENT_REASONING_EFFORT;
   const report = (text: string) => options.onProgress?.(text);
+  const release = acquireStudyLock(studyDir);
   try {
+    // The gap list above came from files another run or repair may have changed during the prompt.
+    assertUnchanged(inputs, inputsBefore);
     if (study.reasoningEffort) process.env.TOURNAMENT_REASONING_EFFORT = study.reasoningEffort;
     const fetchUsage = options.fetchUsage ?? defaultFetchUsage;
     const saveProgress = () => {
@@ -185,7 +192,10 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
       progress.lastUsage = usage;
     };
     let lastUsage = await readUsage(fetchUsage);
-    if (interrupted) addSpend(lastUsage, progress.lastUsage);
+    // A run or repair that stopped early never recorded its last calls; count them, as a resume would.
+    // After a clean finish, usage since then is other activity on the key and is left out.
+    const unsettled = interrupted || batches.some(batch => !progress.done.includes(batch.batchId));
+    if (unsettled) addSpend(lastUsage, progress.lastUsage);
     else progress.lastUsage = lastUsage;
     progress.repairing = true;
     saveProgress();
@@ -289,6 +299,7 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     saveProgress();
     return outcome;
   } finally {
+    release();
     if (previousEffort === undefined) delete process.env.TOURNAMENT_REASONING_EFFORT;
     else process.env.TOURNAMENT_REASONING_EFFORT = previousEffort;
   }

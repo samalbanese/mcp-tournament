@@ -1594,8 +1594,15 @@ button:disabled {
   .workspace-brand {
     font-size: 22px;
   }
+  .workspace-brand > span:last-child {
+    min-width: 0;
+  }
+  /* The narrow sidebar can't hold the caption on one line. */
   .brand-caption {
     font-size: 12px;
+    white-space: normal;
+    text-wrap: balance;
+    line-height: 1.35;
   }
   .workspace-picker {
     font-size: 13px;
@@ -1867,6 +1874,7 @@ button:disabled {
   .brand-caption {
     font-size: 12px;
     letter-spacing: 0.04em;
+    white-space: nowrap;
   }
   .workspace-picker,
   .nav-caption,

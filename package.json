@@ -25,8 +25,7 @@
     "start": "node dist/index.js",
     "test": "vitest run --config tests/vitest.config.ts --configLoader runner --pool threads",
     "test:unit": "vitest run --config tests/vitest.config.ts --configLoader runner --pool threads tests/unit",
-    "test:e2e": "vitest run --config tests/vitest.config.ts --configLoader runner --pool threads tests/e2e",
-    "lint": "eslint src/"
+    "test:e2e": "vitest run --config tests/vitest.config.ts --configLoader runner --pool threads tests/e2e"
   },
   "keywords": ["mcp", "model-evaluation", "ai-benchmark", "multi-judge", "llm-eval"],
   "license": "MIT",

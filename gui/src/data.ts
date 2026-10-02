@@ -1,4 +1,4 @@
-import type { JudgeScore, LeaderboardEntry, RunIndex, RunManifest, Synthesis, Turn } from './types';
+import type { JudgeScore, LeaderboardEntry, RunIndex, RunManifest, StudyDocument, Synthesis, Turn } from './types';
 
 const root = 'data';
 export const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -22,6 +22,40 @@ export async function getJson<T>(path: string): Promise<T> {
 export const loadIndex = () => getJson<RunIndex>('index.json');
 export const loadRun = (runId: string) => getJson<RunManifest>(`${runId}/run.json`);
 export const loadLeaderboard = (runId: string) => getJson<LeaderboardEntry[]>(`${runId}/leaderboard.json`);
+export const loadStudy = (studyId: string) => getJson<StudyDocument>(`studies/${encodeURIComponent(studyId)}/study.json`);
+export const studyScoresUrl = (studyId: string) => `${root}/studies/${encodeURIComponent(studyId)}/scores.csv`;
+
+export function countStudyScorecards(csv: string): number {
+  // CSV fields can contain commas, escaped quotes, and line breaks.
+  const records: string[][] = [];
+  let record: string[] = [], field = '', quoted = false;
+  for (let i = 0; i < csv.length; i++) {
+    const char = csv[i];
+    if (char === '"') {
+      if (quoted && csv[i + 1] === '"') { field += '"'; i++; }
+      else quoted = !quoted;
+    } else if (!quoted && (char === ',' || char === '\n' || char === '\r')) {
+      record.push(field); field = '';
+      if (char !== ',') {
+        if (record.some(Boolean)) records.push(record);
+        record = [];
+        if (char === '\r' && csv[i + 1] === '\n') i++;
+      }
+    } else field += char;
+  }
+  if (quoted) throw new Error('Incomplete scores CSV.');
+  if (field || record.length) records.push([...record, field]);
+  const header = records.shift() ?? [];
+  const keys = ['runId', 'scenarioId', 'candidateRef', 'judgeRef'].map(key => header.indexOf(key));
+  if (keys.some(key => key < 0)) throw new Error('Scorecard columns unavailable.');
+  return new Set(records.filter(row => keys.every(key => row[key])).map(row => JSON.stringify(keys.map(key => row[key])))).size;
+}
+
+export async function loadStudyScorecards(studyId: string): Promise<number> {
+  const response = await fetch(studyScoresUrl(studyId));
+  if (!response.ok) throw new Error(`Scores unavailable (${response.status})`);
+  return countStudyScorecards(await response.text());
+}
 
 function scenarioSlugs(id: string, name: string) {
   const number = /^\d+$/.test(id) ? id.padStart(2, '0') : '';

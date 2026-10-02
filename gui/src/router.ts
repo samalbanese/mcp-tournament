@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-export type Route = { view: 'home' | 'compare' | 'lab' | 'model' | 'judges' | 'transcript' | 'replay' | 'why' | 'about' | 'settings' | 'new' | 'build' | 'progress'; runId?: string; modelId?: string; scenarioId?: string };
+export type Route = { view: 'home' | 'study' | 'compare' | 'lab' | 'model' | 'judges' | 'transcript' | 'replay' | 'why' | 'about' | 'settings' | 'new' | 'build' | 'progress'; studyId?: string; runId?: string; modelId?: string; scenarioId?: string };
 export function href(route: Route) {
+  if (route.view === 'study') return `#/study/${encodeURIComponent(route.studyId ?? '')}`;
   if (route.view === 'why') return '#/why';
   if (route.view === 'about') return '#/about';
   if (route.view === 'settings') return '#/settings';
@@ -19,6 +20,7 @@ export function href(route: Route) {
 }
 function parse(): Route {
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts[0] === 'study') return { view: 'study', studyId: parts[1] };
   if (parts[0] === 'compare' || parts[0] === 'lab') return { view: parts[0], runId: parts[1] };
   if (parts[0] === 'why') return { view: 'why' };
   if (parts[0] === 'about') return { view: 'about' };

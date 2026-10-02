@@ -7,7 +7,8 @@
     "dev": "vite --host",
     "build": "tsc -b && node scripts/prepare-build.mjs && tsc -p tsconfig.emit.json && vite build --configLoader native",
     "preview": "vite preview --host",
-    "import-run": "node scripts/import-run.mjs"
+    "import-run": "node scripts/import-run.mjs",
+    "import-study": "node scripts/import-study.mjs"
   },
   "dependencies": {
     "react": "19.2.7",

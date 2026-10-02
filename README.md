@@ -6,7 +6,7 @@
 ![Node >= 20](https://img.shields.io/badge/Node-%3E%3D%2020-339933?logo=nodedotjs&logoColor=white)
 ![MCP server](https://img.shields.io/badge/MCP-server-5A67D8)
 
-**In this study, all five AI judges scored their own lab's answers higher than the rest of the panel did.** Five frontier models answered twelve business scenarios and then judged each other blind. **[Read the findings](https://mcp-tournament.pages.dev/#/study/flagship-2026-10)**.
+**In this study, all five AI judges went easier on their own lab's answers than on everyone else's.** Five frontier models answered twelve business scenarios and then judged each other blind. **[Read the findings](https://mcp-tournament.pages.dev/#/study/flagship-2026-10)**.
 
 Build a custom LLM benchmark in a form, run it from a local GUI, MCP client, or CLI, and turn independent judge opinions into ranked, auditable results.
 
@@ -27,12 +27,13 @@ each answered the same twelve scenarios across business strategy, customer
 support and creative writing. Every model then scored every answer, its own
 included, without seeing who wrote it: 300 scorecards in all.
 
-- **Every judge favored its own lab.** After adjusting for how generous each
-  judge was overall, all five scored their own family higher than the rest of
-  the panel did. The pull ranged from about 0.3 points (DeepSeek) to 1.4 points
-  (GPT) on a 10-point scale, and every 95% interval sits above zero.
-- **No clear winner at the top.** GPT-6.1 Sol led at 8.4, with Claude Opus 5.5
-  (8.2) and DeepSeek V4 Pro (8.0) inside its margin of error.
+- **Every judge favored its own lab.** Compared with the rest of the panel,
+  each judge scored its own lab's answers more generously than it scored the
+  other four labs. The lift ranged from about 0.3 points (DeepSeek) to 1.4
+  points (GPT) on a 10-point scale, and every 95% interval sits above zero.
+- **No clear winner at the top.** GPT-6.1 Sol led at 8.4, but its interval
+  overlaps those of Claude Opus 5.5 (8.2) and DeepSeek V4 Pro (8.0), so the
+  study can't separate the three.
 - **One judge alone picks a different winner.** GPT and Claude each named
   themselves best when judging alone, and the panel agreed only weakly overall
   (Krippendorff's alpha 0.30).

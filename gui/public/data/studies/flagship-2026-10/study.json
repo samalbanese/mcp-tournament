@@ -104,11 +104,11 @@
     "headlines": [
       {
         "title": "Every AI judge favored its own lab",
-        "body": "All five judges scored their own lab's answers higher than the rest of the panel did, even after adjusting for how generous each judge was overall. GPT-6.1 Sol showed the strongest pull, about 1.4 points on a 10-point scale. DeepSeek V4 Pro showed the weakest, about 0.3."
+        "body": "Each judge went easier on its own lab's answers than on the other four labs' answers, compared with the rest of the panel. Some judges were strict with everyone: Claude's judge scored Claude below the panel average, but less far below than it scored everyone else. GPT-6.1 Sol's judge showed the biggest lift, about 1.4 points on a 10-point scale, and DeepSeek V4 Pro's the smallest, about 0.3."
       },
       {
         "title": "No clear winner at the top",
-        "body": "GPT-6.1 Sol scored highest overall at 8.4 out of 10, but Claude Opus 5.5 (8.2) and DeepSeek V4 Pro (8.0) sit within its margin of error. Qwen3.8 Max (7.3) and Gemini 3.1 Pro (7.2) trail, and Gemini placed last on the panel's average."
+        "body": "GPT-6.1 Sol scored highest overall at 8.4 out of 10, but its interval overlaps those of Claude Opus 5.5 (8.2) and DeepSeek V4 Pro (8.0), so this study can't separate the three. Qwen3.8 Max (7.3) and Gemini 3.1 Pro (7.2) trail on average, and Gemini placed last."
       },
       {
         "title": "One judge alone picks a different winner",

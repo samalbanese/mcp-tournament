@@ -83,6 +83,7 @@ export function createAnthropicModelClient(
       };
       if (params.system) body.system = params.system;
       if (params.tools?.length) body.tools = params.tools;
+      if (params.reasoning) body.output_config = { effort: params.reasoning };
 
       let lastError: unknown;
       for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createMessage, reasoningEffortFromEnv } from '../../src/clients/openrouter.js';
+import { createMessage } from '../../src/clients/openrouter.js';
+import { REASONING_LEVELS } from '../../src/config/reasoning.js';
 import type { CreateMessageParams } from '../../src/clients/types.js';
 
 const { createCompletion } = vi.hoisted(() => ({ createCompletion: vi.fn() }));
@@ -10,7 +11,6 @@ vi.mock('openai', () => ({
   },
 }));
 
-const errorMessage = 'TOURNAMENT_REASONING_EFFORT must be one of minimal, low, medium, high';
 const params: CreateMessageParams = {
   model: 'test/model',
   max_tokens: 100,
@@ -33,34 +33,9 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe('reasoningEffortFromEnv', () => {
-  it('returns undefined when unset', () => {
-    expect(reasoningEffortFromEnv({})).toBeUndefined();
-  });
-
-  it.each(['minimal', 'low', 'medium', 'high'])('accepts %s', effort => {
-    expect(reasoningEffortFromEnv({ TOURNAMENT_REASONING_EFFORT: effort })).toBe(effort);
-  });
-
-  it.each(['', '   '])('treats a blank value as unset (%j)', value => {
-    expect(reasoningEffortFromEnv({ TOURNAMENT_REASONING_EFFORT: value })).toBeUndefined();
-  });
-
-  it('trims surrounding whitespace', () => {
-    expect(reasoningEffortFromEnv({ TOURNAMENT_REASONING_EFFORT: ' low ' })).toBe('low');
-  });
-
-  it.each(['turbo', 'LOW'])('rejects invalid value %s', value => {
-    expect(() => reasoningEffortFromEnv({ TOURNAMENT_REASONING_EFFORT: value }))
-      .toThrow(new Error(errorMessage));
-  });
-});
-
 describe('OpenRouter reasoning effort', () => {
-  it('adds low reasoning effort to the request body', async () => {
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'low');
-
-    await createMessage(params);
+  it.each(REASONING_LEVELS)('adds per-call %s reasoning effort to the request body', async reasoning => {
+    await createMessage({ ...params, reasoning });
 
     expect(createCompletion).toHaveBeenCalledTimes(1);
     expect(createCompletion.mock.calls[0][0]).toEqual({
@@ -70,7 +45,7 @@ describe('OpenRouter reasoning effort', () => {
         { role: 'system', content: 'Be concise.' },
         { role: 'user', content: 'Hello.' },
       ],
-      reasoning: { effort: 'low' },
+      reasoning: { effort: reasoning },
     });
   });
 
@@ -89,12 +64,9 @@ describe('OpenRouter reasoning effort', () => {
     });
   });
 
-  it('reads the environment again on each call', async () => {
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'low');
-    await createMessage(params);
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'high');
-    await createMessage(params);
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', undefined);
+  it('uses the level supplied on each call', async () => {
+    await createMessage({ ...params, reasoning: 'low' });
+    await createMessage({ ...params, reasoning: 'high' });
     await createMessage(params);
 
     expect(createCompletion.mock.calls[0][0].reasoning).toEqual({ effort: 'low' });
@@ -102,10 +74,9 @@ describe('OpenRouter reasoning effort', () => {
     expect(createCompletion.mock.calls[2][0]).not.toHaveProperty('reasoning');
   });
 
-  it('rejects invalid effort before sending a request', async () => {
+  it('ignores the removed environment setting', async () => {
     vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'turbo');
-
-    await expect(createMessage(params)).rejects.toThrow(new Error(errorMessage));
-    expect(createCompletion).not.toHaveBeenCalled();
+    await createMessage(params);
+    expect(createCompletion.mock.calls[0][0]).not.toHaveProperty('reasoning');
   });
 });

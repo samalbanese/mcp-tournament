@@ -12,18 +12,6 @@ import type {
   ModelToolDefinition,
 } from './types.js';
 
-const REASONING_EFFORTS = ['minimal', 'low', 'medium', 'high'] as const;
-export type ReasoningEffort = typeof REASONING_EFFORTS[number];
-
-export function reasoningEffortFromEnv(env: NodeJS.ProcessEnv = process.env): ReasoningEffort | undefined {
-  const value = env.TOURNAMENT_REASONING_EFFORT?.trim();
-  if (!value) return undefined;
-  if (!(REASONING_EFFORTS as readonly string[]).includes(value)) {
-    throw new Error(`TOURNAMENT_REASONING_EFFORT must be one of ${REASONING_EFFORTS.join(', ')}`);
-  }
-  return value as ReasoningEffort;
-}
-
 let _client: OpenAI | null = null;
 
 function getClient(): OpenAI {
@@ -212,9 +200,8 @@ export async function createMessage(params: CreateMessageParams): Promise<ModelR
   };
   if (openaiTools) requestParams.tools = openaiTools;
 
-  const effort = reasoningEffortFromEnv();
   // OpenRouter extension; the OpenAI types do not know it.
-  if (effort) (requestParams as unknown as Record<string, unknown>).reasoning = { effort };
+  if (params.reasoning) (requestParams as unknown as Record<string, unknown>).reasoning = { effort: params.reasoning };
 
   // Long judge/synthesis generations on cheap models can take minutes and
   // OpenRouter occasionally 429s/5xxs — retry transient failures with backoff

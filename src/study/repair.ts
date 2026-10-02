@@ -224,7 +224,7 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
             if (!execution.success) throw new Error(execution.error ?? 'Scenario execution failed');
             fs.rmSync(path.join(candidateDir, 'error.json'), { force: true });
             const result = await evaluateWithJudges(plan.plugin, scenarioCase, execution.turns, candidate.id,
-              runDir, plan.judges, useSynthesizer, plan.synthesizer.model, plan.synthesizer.route);
+              runDir, plan.judges, useSynthesizer, plan.synthesizer.model, { route: plan.synthesizer.route, reasoning: plan.synthesizer.reasoning, thinks: plan.synthesizer.thinks });
             result.failedJudges.forEach(failure => gap(`judge ${failure.judge}: ${failure.error}`));
             outcome.answersRerun++;
           } catch (error) {
@@ -259,7 +259,7 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
         if ((filled || answer.synthesis) && useSynthesizer) {
           try {
             const result = await runSynthesis(scenarioCase, savedJudges(judgeDir, plan),
-              plan.synthesizer.model, plan.synthesizer.route);
+              plan.synthesizer.model, { route: plan.synthesizer.route, reasoning: plan.synthesizer.reasoning, thinks: plan.synthesizer.thinks });
             if (!result.synthesis) throw new Error(result.raw);
             fs.writeFileSync(path.join(judgeDir, 'synthesis.json'), JSON.stringify(result.synthesis, null, 2));
           } catch (error) {

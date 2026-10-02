@@ -1,5 +1,6 @@
 import { getModelClient, type ClientRoute } from '../clients/index.js';
-import { MAX_TOKENS_SYNTHESIS, RETRY_ATTEMPTS } from '../config/constants.js';
+import { RETRY_ATTEMPTS } from '../config/constants.js';
+import { outputAllowance, type ReasoningLevel } from '../config/reasoning.js';
 import { SYNTHESIZER } from '../config/judges.js';
 import type { TestCase } from '../plugins/base.js';
 import { buildSynthesisPrompt } from '../prompts/judge-prompts.js';
@@ -11,6 +12,12 @@ export interface SynthesisResult {
   raw: string;
   parseSuccess: boolean;
   metrics: { inputTokens: number; outputTokens: number; timeMs: number };
+}
+
+export interface SynthesisOptions {
+  route?: ClientRoute;
+  reasoning?: ReasoningLevel;
+  thinks?: boolean;
 }
 
 /**
@@ -50,7 +57,7 @@ export async function runSynthesis(
   scenario: TestCase,
   judgeResults: JudgeResult[],
   model = SYNTHESIZER.model,
-  route: ClientRoute = SYNTHESIZER.route,
+  { route = SYNTHESIZER.route, reasoning, thinks }: SynthesisOptions = {},
 ): Promise<SynthesisResult> {
   const parsedJudges = judgeResults.filter(result => result.parsed);
   if (parsedJudges.length < 2) {
@@ -77,7 +84,8 @@ export async function runSynthesis(
   for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
     const response = await getModelClient(route).createMessage({
       model,
-      max_tokens: MAX_TOKENS_SYNTHESIS,
+      max_tokens: outputAllowance('synthesis', thinks),
+      reasoning,
       system: 'Synthesize independent evaluations into final scores. Return only valid JSON.',
       messages: [{ role: 'user', content: prompt }],
     });

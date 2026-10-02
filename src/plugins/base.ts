@@ -8,9 +8,10 @@
 
 import { shortSlug } from '../utils/slug.js';
 import type { ClientRoute } from '../clients/index.js';
+import type { ReasoningLevel } from '../config/reasoning.js';
 
 export interface ParticipantRuntime {
-  participant: { route: ClientRoute; model: string };
+  participant: { route: ClientRoute; model: string; reasoning?: ReasoningLevel; thinks?: boolean };
 }
 
 /** A single test case the candidate model must handle. */

@@ -1,3 +1,5 @@
+import type { ReasoningLevel } from '../config/reasoning.js';
+
 export interface ModelMessage {
   role: 'user' | 'assistant';
   content: string | Array<{ type: string; [key: string]: unknown }>;
@@ -28,6 +30,7 @@ export interface ModelResponse {
 
 export interface CreateMessageParams {
   model: string;
+  reasoning?: ReasoningLevel;
   system?: string;
   messages: ModelMessage[];
   max_tokens: number;

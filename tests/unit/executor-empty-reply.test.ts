@@ -52,8 +52,7 @@ describe('runScenario candidate replies', () => {
 
   it('fails the pair when reasoning uses the whole output allowance and no answer comes back', async () => {
     useReplies(reply('', 'max_tokens'));
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'low');
-    const result = await runScenario(model, scenario, plugin, dir);
+    const result = await runScenario({ ...model, reasoning: 'low', thinks: true }, scenario, plugin, dir);
     expect(result.success).toBe(false);
     expect(result.error).toBe(`Empty reply on turn 1: the model used all ${MAX_TOKENS_CANDIDATE_REASONING} output tokens (likely on reasoning) before answering.`);
     expect(result.turns.filter(turn => turn.role === 'candidate')).toHaveLength(0);
@@ -90,13 +89,13 @@ describe('runScenario candidate replies', () => {
 
   it('gives reasoning runs the larger output allowance', async () => {
     useReplies(reply('Offer free shipping over $60.', 'end_turn'));
-    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'low');
-    await expect(runScenario(model, scenario, plugin, dir)).resolves.toMatchObject({ success: true });
+    await expect(runScenario({ ...model, reasoning: 'low', thinks: true }, scenario, plugin, dir)).resolves.toMatchObject({ success: true });
     expect(calls[0].max_tokens).toBe(MAX_TOKENS_CANDIDATE_REASONING);
   });
 
   it('keeps the standard allowance without reasoning', async () => {
     useReplies(reply('Offer free shipping over $60.', 'end_turn'));
+    vi.stubEnv('TOURNAMENT_REASONING_EFFORT', 'high');
     await runScenario(model, scenario, plugin, dir);
     expect(calls[0].max_tokens).toBe(MAX_TOKENS_CANDIDATE);
   });

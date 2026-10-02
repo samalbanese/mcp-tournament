@@ -2,6 +2,12 @@ import type { ClientRoute } from '../clients/index.js';
 import type { Catalog } from '../catalog.js';
 import type { ResolvedRunPlan } from '../run-plan.js';
 import { ModelRefError } from './model-ref-error.js';
+import {
+  MAX_TOKENS_CANDIDATE, MAX_TOKENS_CANDIDATE_REASONING,
+  MAX_TOKENS_JUDGE, MAX_TOKENS_JUDGE_REASONING,
+  MAX_TOKENS_SYNTHESIS, MAX_TOKENS_SYNTHESIS_REASONING,
+  MAX_TOKENS_PARTICIPANT, MAX_TOKENS_PARTICIPANT_REASONING,
+} from './constants.js';
 
 export const REASONING_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'] as const;
 export type ReasoningLevel = typeof REASONING_LEVELS[number];
@@ -105,4 +111,13 @@ export function applyReasoningCatalog(plan: ResolvedRunPlan, catalog: Catalog): 
     }
   }
   return { errors, warnings };
+}
+
+export function outputAllowance(kind: 'candidate' | 'judge' | 'synthesis' | 'participant', thinks: boolean | undefined): number {
+  switch (kind) {
+    case 'candidate': return thinks ? MAX_TOKENS_CANDIDATE_REASONING : MAX_TOKENS_CANDIDATE;
+    case 'judge': return thinks ? MAX_TOKENS_JUDGE_REASONING : MAX_TOKENS_JUDGE;
+    case 'synthesis': return thinks ? MAX_TOKENS_SYNTHESIS_REASONING : MAX_TOKENS_SYNTHESIS;
+    case 'participant': return thinks ? MAX_TOKENS_PARTICIPANT_REASONING : MAX_TOKENS_PARTICIPANT;
+  }
 }

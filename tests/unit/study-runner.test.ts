@@ -356,8 +356,12 @@ describe('study runner', { timeout: 30_000 }, () => {
     delete process.env.OPENROUTER_API_KEY;
     process.env.OPENROUTER_DICE_ORACLE_API_KEY = 'fixture-legacy';
     if (key === 'primary') process.env.OPENROUTER_API_KEY = 'fixture-primary';
-    const fetcher = vi.fn().mockResolvedValueOnce({ ok: true, json: async () => ({ data: { usage: 1.25 } }) })
+    const usage = vi.fn().mockResolvedValueOnce({ ok: true, json: async () => ({ data: { usage: 1.25 } }) })
       .mockResolvedValueOnce({ ok: true, json: async () => ({ data: { usage: 4.75 } }) });
+    const fetcher = vi.fn(async (url: string) => {
+      if (url !== 'https://openrouter.ai/api/v1/key') throw new Error('Unexpected network request');
+      return usage();
+    });
     vi.stubGlobal('fetch', fetcher);
     const { fetchUsage: _unused, ...opts } = options();
     await runStudy(study(), opts);

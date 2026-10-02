@@ -1,12 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { getCatalog, type Catalog } from './catalog.js';
+import { applyReasoningCatalog } from './config/reasoning.js';
 import { isRouteReady, routeSetupHint, type ClientRoute } from './clients/index.js';
 import { buildLeaderboard, type LeaderboardEntry } from './phases/aggregator.js';
 import { runScenario } from './phases/executor.js';
 import { evaluateWithJudges } from './phases/judge-runner.js';
 import { getPlugin } from './plugins/index.js';
-import { logError } from './utils/logger.js';
-import { effectiveScenario, normalizeRunPlan, type JudgeSeat, type ResolvedRunPlan } from './run-plan.js';
+import { log, logError } from './utils/logger.js';
+import { effectiveScenario, normalizeRunPlan, RunPlanError, type JudgeSeat, type ResolvedRunPlan } from './run-plan.js';
 
 export { selectJudges } from './run-plan.js';
 
@@ -18,6 +20,7 @@ export interface EvaluateProgress {
 
 export interface EvaluateOptions {
   models: string[];
+  catalog?: Catalog;
   plugin?: string;
   scenarios?: string[];
   judges?: number;
@@ -30,7 +33,7 @@ export interface EvaluateOptions {
   quick?: boolean;
   runId?: string;
   /**
-   * Called once when a candidate/scenario pair starts and once when it finishes
+   * Called for catalog warnings, once when a candidate/scenario pair starts and once when it finishes
    * (success or failure). `completed` strictly increases (MCP progress requires
    * it) and equals `total` on the final call.
    */
@@ -92,10 +95,23 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
     participant: options.participantModel,
     turns: options.turns,
   }, { judges: options.judges, judgeModels: options.judgeModels, quick: options.quick });
+  const catalog = options.catalog ?? await getCatalog();
+  const check = applyReasoningCatalog(plan, catalog);
+  if (check.errors.length) throw new RunPlanError(check.errors.join('\n'));
+  const totalProgressSteps = plan.candidates.length * plan.scenarios.length * 2 + check.warnings.length;
+  let completedProgressSteps = 0;
+  for (const message of check.warnings) {
+    completedProgressSteps += 1;
+    if (options.onProgress) options.onProgress({ completed: completedProgressSteps, total: totalProgressSteps, message });
+    else log(message);
+  }
   assertRoutesReady(plan);
   const { plugin, scenarios, candidates, judges: selectedJudges } = plan;
   const useSynthesizer = !plan.quick && selectedJudges.length >= 2;
-  const runtime = { participant: { route: plan.participant.route, model: plan.participant.model } };
+  const runtime = { participant: {
+    route: plan.participant.route, model: plan.participant.model,
+    reasoning: plan.participant.reasoning, thinks: plan.participant.thinks,
+  } };
   const outputRoot = path.resolve(options.outputRoot ?? defaultResultsRoot());
   if (options.runId && (!/^run-[a-zA-Z0-9-]+$/.test(options.runId) || path.basename(options.runId) !== options.runId)) {
     throw new Error('Invalid run ID');
@@ -115,15 +131,24 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
     runId: actualRunId,
     plugin: plugin.name,
     createdAt: new Date().toISOString(),
-    candidates: candidates.map(({ id, name, tier, route }) => ({ id, name, tier, route })),
-    judges: selectedJudges.map(({ role, name, model, persona, route, lens }) => ({
+    candidates: candidates.map(({ id, name, tier, route, reasoning }) => ({
+      id, name, tier, route, ...(reasoning ? { reasoning } : {}),
+    })),
+    judges: selectedJudges.map(({ role, name, model, persona, route, lens, reasoning }) => ({
       role, name, model, persona: persona ?? role, route,
+      ...(reasoning ? { reasoning } : {}),
       ...(persona === 'custom' ? { customLens: lens } : {}),
     })),
-    synthesizer: useSynthesizer ? { model: plan.synthesizer.model, route: plan.synthesizer.route } : null,
+    synthesizer: useSynthesizer ? {
+      model: plan.synthesizer.model, route: plan.synthesizer.route,
+      ...(plan.synthesizer.reasoning ? { reasoning: plan.synthesizer.reasoning } : {}),
+    } : null,
     scenarios: scenarios.map(({ id, name }) => ({ id, name })),
     turns: plan.turns,
-    participant: { model: plan.participant.ref, route: plan.participant.route },
+    participant: {
+      model: plan.participant.ref, route: plan.participant.route,
+      ...(plan.participant.reasoning ? { reasoning: plan.participant.reasoning } : {}),
+    },
   };
   fs.writeFileSync(path.join(runDir, 'run.json'), JSON.stringify(manifest, null, 2));
 
@@ -131,8 +156,6 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
   // whole tournament — one flaky model must not waste every other model's run.
   const failures: Array<{ model: string; scenario: string; error: string }> = [];
   const judgeFailures: Array<{ model: string; scenario: string; error: string }> = [];
-  const totalProgressSteps = candidates.length * scenarios.length * 2;
-  let completedProgressSteps = 0;
   for (const candidate of candidates) {
     for (const scenario of scenarios) {
       const runScenarioCase = effectiveScenario(scenario, plan.turns);
@@ -156,7 +179,7 @@ export async function evaluateTournament(options: EvaluateOptions): Promise<Tour
           selectedJudges,
           useSynthesizer,
           plan.synthesizer.model,
-          plan.synthesizer.route,
+          { route: plan.synthesizer.route, reasoning: plan.synthesizer.reasoning, thinks: plan.synthesizer.thinks },
         );
         for (const failure of judgePhase.failedJudges) {
           const message = `judge ${failure.judge}: ${failure.error}`;

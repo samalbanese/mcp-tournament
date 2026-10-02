@@ -64,11 +64,13 @@ registerPlugin(BENCH);
 registerPlugin(LONG_PLUGIN);
 
 beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('Unexpected network request'); }));
   outputRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'swap-'));
   process.env.OPENROUTER_API_KEY = 'test-key';
 });
 
 afterEach(() => {
+  vi.unstubAllGlobals();
   registerModelClient('openrouter', originalOpenRouter);
   registerModelClient('anthropic', originalAnthropic);
   process.env = { ...savedEnv };

@@ -15,14 +15,15 @@ import {
 import { assertRoutesReady, evaluateTournament, quickTest, readLeaderboard, type EvaluateProgress } from '../pipeline.js';
 import { logWarn } from '../utils/logger.js';
 import { JUDGES, PARTICIPANT_AGENT_MODEL, resolveRoleModel } from '../config/judges.js';
-import { buildShortlist, closestModelIds, getCatalog } from '../catalog.js';
+import { buildShortlist, closestModelIds, getCatalog, type Catalog } from '../catalog.js';
 import { routeHasCredentials, routeSetupHint } from '../clients/index.js';
 import { parseModelRef } from '../config/model-ref.js';
+import { applyReasoningCatalog, seatRef } from '../config/reasoning.js';
 import { DEFAULT_SEAT_ORDER, PERSONAS } from '../config/personas.js';
 import { estimateRunCost, type CostEstimate } from '../estimate.js';
 import { getPlugin } from '../plugins/index.js';
 import {
-  describePlan, JudgeSeatSchema, normalizeRunPlan, PLAN_LIMITS, RunPlanSchema,
+  describePlan, JudgeSeatSchema, normalizeRunPlan, PLAN_LIMITS, RunPlanError, RunPlanSchema,
   type LegacyJudgeOptions, type ResolvedRunPlan, type RunPlanInput,
 } from '../run-plan.js';
 import {
@@ -162,6 +163,7 @@ const planInputShape = {
 
 export interface PlanPreview {
   plan: ResolvedRunPlan;
+  catalog: Catalog;
   summary: string;
   estimate: CostEstimate;
   warnings: string[];
@@ -170,7 +172,7 @@ export interface PlanPreview {
 function planModelRefs(plan: ResolvedRunPlan) {
   return [
     ...plan.candidates.map(candidate => parseModelRef(candidate.id)),
-    ...plan.judges.map(judge => parseModelRef(judge.route === 'openrouter' ? judge.model : `${judge.route}:${judge.model}`)),
+    ...plan.judges.map(judge => parseModelRef(seatRef(judge.route, judge.model, judge.reasoning))),
     plan.synthesizer, plan.participant,
   ];
 }
@@ -178,9 +180,11 @@ function planModelRefs(plan: ResolvedRunPlan) {
 export async function buildPlanPreview(ctx: McpContext, input: RunPlanInput, legacy?: LegacyJudgeOptions): Promise<PlanPreview> {
   const plan = normalizeRunPlan(input, legacy);
   const catalog = await getCatalog(ctx.fetch);
+  const check = applyReasoningCatalog(plan, catalog);
+  if (check.errors.length) throw new RunPlanError(check.errors.join('\n'));
   const catalogIds = catalog.models.map(model => model.id);
   const knownIds = new Set(catalogIds);
-  const warnings = new Set(plan.warnings);
+  const warnings = new Set([...plan.warnings, ...check.warnings]);
   for (const ref of planModelRefs(plan)) {
     if (catalog.source === 'live' && ref.route === 'openrouter' && !knownIds.has(ref.model)) {
       throw new Error(`Unknown OpenRouter model "${ref.model}". Closest matches: ${closestModelIds(ref.model, catalogIds).join(', ')}.`);
@@ -195,7 +199,7 @@ export async function buildPlanPreview(ctx: McpContext, input: RunPlanInput, leg
   if (catalog.source === 'curated-fallback') {
     warnings.add('Model catalog offline. Model IDs could not be checked and the cost estimate is unavailable.');
   }
-  return { plan, summary: describePlan(plan), estimate: estimateRunCost(plan, catalog), warnings: [...warnings] };
+  return { plan, catalog, summary: describePlan(plan), estimate: estimateRunCost(plan, catalog), warnings: [...warnings] };
 }
 
 function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSchema> {
@@ -581,6 +585,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         ? Object.fromEntries(judgeModels.map((model, index) => [JUDGES[index].role, model]))
         : undefined;
       const caps = server.server.getClientCapabilities();
+      let catalog: Catalog | undefined;
       if (caps?.elicitation) {
         const preview = await buildPlanPreview(ctx, {
           bench: plugin, scenarios, candidates: models, judgePanel,
@@ -588,6 +593,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         }, { judges: judgeModels?.length ?? judges, judgeModels: judgeModelsByRole });
         // Fail on a missing provider key before asking, so the user never confirms a run that cannot start.
         assertRoutesReady(preview.plan);
+        catalog = preview.catalog;
         let confirmed = false;
         try {
           const result = await server.server.elicitInput({
@@ -617,6 +623,8 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
       }
       const run = await evaluateTournament({
         models,
+        // Reuse the preview's catalog so the run checks levels against what the user confirmed.
+        catalog: catalog ?? await getCatalog(ctx.fetch),
         plugin,
         scenarios,
         judges: judgeModels?.length ?? judges,

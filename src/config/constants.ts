@@ -5,8 +5,14 @@ export const MAX_TOKENS_CANDIDATE = 4096;
 // reasoning plus 1.8K answer tokens, so leave room well above that.
 export const MAX_TOKENS_CANDIDATE_REASONING = 32768;
 export const MAX_TOKENS_PARTICIPANT = 512;
+// Reasoning tokens count against max_tokens.
+export const MAX_TOKENS_PARTICIPANT_REASONING = 8192;
 export const MAX_TOKENS_JUDGE = 16384;
+// Reasoning tokens count against max_tokens.
+export const MAX_TOKENS_JUDGE_REASONING = 32768;
 export const MAX_TOKENS_SYNTHESIS = 4096;
+// Reasoning tokens count against max_tokens.
+export const MAX_TOKENS_SYNTHESIS_REASONING = 16384;
 
 // Conversation limits
 export const MAX_TOOL_ROUNDS = 8;

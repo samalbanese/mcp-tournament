@@ -21,12 +21,23 @@ const shortSlug = (value, max = 24) => {
 const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
 const writeJson = async (file, value) => { await mkdir(path.dirname(file), { recursive: true }); await writeFile(file, `${JSON.stringify(value, null, 2)}\n`); };
 
+/** Puts a run first in the index, keeping every other field (the study list, for one). */
+export function mergeRunIndex(index, runId) {
+  const runs = index.runs ?? [];
+  return { ...index, runs: [runId, ...runs.filter((id) => id !== runId)] };
+}
+
 async function updateIndex(runId) {
   await mkdir(dataDir, { recursive: true });
   const indexFile = path.join(dataDir, 'index.json');
-  let runs = [];
-  try { runs = (await readJson(indexFile)).runs ?? []; } catch { /* first import */ }
-  await writeJson(indexFile, { runs: [runId, ...runs.filter((id) => id !== runId)] });
+  let index = {};
+  try {
+    index = await readJson(indexFile);
+  } catch (error) {
+    // Only a missing index means a first import; a broken one must not be overwritten.
+    if (error.code !== 'ENOENT') throw error;
+  }
+  await writeJson(indexFile, mergeRunIndex(index, runId));
 }
 
 function unwrapJudge(legacy) {

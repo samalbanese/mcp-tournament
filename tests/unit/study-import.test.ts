@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { mergeStudyIndex, validateStudyImport } from '../../gui/scripts/study-import-lib.mjs';
+import { mergeRunIndex } from '../../gui/scripts/run-import-lib.mjs';
 import { countStudyScorecards } from '../../gui/src/data.js';
 
 describe('study import helpers', () => {
@@ -18,6 +19,13 @@ describe('study import helpers', () => {
     const index = { runs: ['run-b', 'run-a'], studies: ['older'], note: 'keep' };
     expect(mergeStudyIndex(index, 'new-study')).toEqual({ ...index, studies: ['new-study', 'older'] });
     expect(index.studies).toEqual(['older']);
+  });
+
+  it('keeps the study list when a run is imported afterwards', () => {
+    const index = { runs: ['run-a', 'run-b'], studies: ['flagship-2026-10'] };
+    expect(mergeRunIndex(index, 'run-b')).toEqual({ runs: ['run-b', 'run-a'], studies: ['flagship-2026-10'] });
+    expect(mergeRunIndex({}, 'run-a')).toEqual({ runs: ['run-a'] });
+    expect(index.runs).toEqual(['run-a', 'run-b']);
   });
 
   it('adds a study only once, even on repeated imports', () => {

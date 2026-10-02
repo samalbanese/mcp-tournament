@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createInterface } from 'node:readline/promises';
+import { parseStudy, runStudy, reanalyzeStudy } from './study/index.js';
+import { defaultResultsRoot } from './pipeline.js';
 
 /**
  * CLI results are user-facing program output, so they belong on stdout —
@@ -80,6 +85,42 @@ program.command('leaderboard')
       limit: options.limit,
       outputRoot: options.out,
     })));
+  });
+
+program.command('study <file>')
+  .description('Run or resume a model study')
+  .option('--yes', 'Accept the cost estimate without prompting')
+  .option('--out <directory>', 'Root directory for result runs')
+  .action(async (file: string, options) => {
+    loadDiscoveredBenches();
+    const studyFile = path.resolve(file);
+    const study = parseStudy(JSON.parse(fs.readFileSync(studyFile, 'utf8')));
+    const result = await runStudy(study, {
+      resultsRoot: options.out, studyFile,
+      confirm: async summary => {
+        process.stderr.write(`${summary}\n`);
+        if (options.yes) return true;
+        const prompt = createInterface({ input: process.stdin, output: process.stderr });
+        try {
+          return /^y(?:es)?$/i.test((await prompt.question('Run this study? [y/N] ')).trim());
+        } catch {
+          return false;
+        } finally {
+          prompt.close();
+        }
+      },
+      onProgress: progress => process.stderr.write(`[${progress.batch}/${progress.batches}] ${progress.message}\n`),
+    });
+    if (result.cancelled) process.stderr.write('Study cancelled.\n');
+    else print(result.studyDir);
+  });
+
+program.command('study-analyze <id>')
+  .description('Reanalyze saved study scores without model calls')
+  .option('--out <directory>', 'Root directory containing result runs')
+  .action(async (id: string, options) => {
+    await reanalyzeStudy(id, options.out);
+    print(path.resolve(options.out ?? defaultResultsRoot(), 'studies', id));
   });
 
 program.parseAsync().catch(error => {

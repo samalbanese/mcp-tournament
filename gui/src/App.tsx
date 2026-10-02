@@ -9,6 +9,7 @@ import Study from './Study';
 import Replay, { RunItYourself } from './Replay';
 import { href, useRoute, type Route } from './router';
 import type { Confidence, JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Turn } from './types';
+import { joinLevel, levelOptions, splitLevel, swapModel } from './reasoning.js';
 
 type LoadState<T> = { data?: T; error?: string; loading: boolean };
 function useLoad<T>(loader: (() => Promise<T>) | null, deps: unknown[]): LoadState<T> {
@@ -167,12 +168,21 @@ function TurnCard({ turn }: { turn: Turn }) { const long = turn.content.length >
 
 function ViewHeader({ eyebrow, title, detail, back }: { eyebrow: string; title: string; detail: string; back: string }) { return <section className="view-heading"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{detail}</p></div><a href={back}>← SCORECARD</a></section>; }
 
+function ThinkingSelect({ id, model, value, onChange, disabledLevels = [] }: { id: string; model?: ApiModel; value?: string; onChange: (level: string) => void; disabledLevels?: string[] }) {
+  const options = levelOptions(model);
+  if (!options.length) return null;
+  return <div className="thinking-select"><label htmlFor={id}>Thinking</label><select id={id} aria-label="Thinking level" value={value ?? ''} onChange={event => onChange(event.target.value)}>
+    {options.map(option => <option key={option.value} value={option.value} disabled={disabledLevels.includes(option.value)}>{option.label}</option>)}
+  </select></div>;
+}
+
 function ModelRouteSelect({ id, models, value, onChange }: { id: string; models: ApiModel[]; value: string; onChange: (model: string) => void }) {
-  const selectedInCatalog = models.some(model => model.id === value);
-  return <select id={id} value={value} onChange={(event) => onChange(event.target.value)}>
-    {!selectedInCatalog && <option value={value}>{value}</option>}
-    {models.map(model => <option value={model.id} key={model.id}>{model.name} — {model.id}</option>)}
-  </select>;
+  const { base, level } = splitLevel(value);
+  const model = models.find(model => model.id === base);
+  return <div className="model-route-select"><select id={id} value={base} onChange={event => onChange(swapModel(value, event.target.value, models))}>
+    {!model && <option value={base}>{base}</option>}
+    {models.map(model => <option value={model.id} key={model.id}>{model.name} · {model.id}</option>)}
+  </select><ThinkingSelect id={`${id}-thinking`} model={model} value={level} onChange={next => onChange(joinLevel(base, next))}/></div>;
 }
 
 function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: string) => void }) {
@@ -204,10 +214,11 @@ function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: 
     });
   };
   const toggleCandidate = (model: string) => updateRouting(current => {
-    if (current.candidates.includes(model)) {
-      return current.candidates.length === 1
+    const remaining = current.candidates.filter(candidate => splitLevel(candidate).base !== model);
+    if (remaining.length !== current.candidates.length) {
+      return remaining.length < 1
         ? current
-        : { ...current, candidates: current.candidates.filter(candidate => candidate !== model) };
+        : { ...current, candidates: remaining };
     }
     return current.candidates.length < 4
       ? { ...current, candidates: [...current.candidates, model] }
@@ -227,7 +238,7 @@ function Settings({ apiKey, onKeyChange }: { apiKey: string; onKeyChange: (key: 
       {routingError ? <p className="run-error">{routingError}</p> : (defaultsState.loading || modelsState.loading || !routing) ? <Skeleton/> : <>
         <div className="routing-block candidates-routing">
           <div className="section-label"><span>DEFAULT CANDIDATES</span><b>SELECT 1–4</b></div>
-          <ModelPicker models={modelsState.data ?? []} selected={routing.candidates} search={search} onSearch={setSearch} onToggle={toggleCandidate} minimum={1}/>
+          <ModelPicker models={modelsState.data ?? []} selected={routing.candidates} search={search} onSearch={setSearch} onToggle={toggleCandidate} onChange={candidates => updateRouting(current => ({ ...current, candidates }))} minimum={1}/>
         </div>
         <div className="routing-block">
           <div className="section-label"><span>JUDGE PANEL</span><b>ORDERED / FIRST N RUN</b></div>
@@ -315,12 +326,28 @@ function BenchBuilder({ apiKey }: { apiKey: string }) {
   </div>;
 }
 
-function ModelPicker({ models, selected, search, onSearch, onToggle, minimum = 0 }: { models: ApiModel[]; selected: string[]; search: string; onSearch: (value: string) => void; onToggle: (id: string) => void; minimum?: number }) {
+function ModelPicker({ models, selected, search, onSearch, onToggle, onChange, minimum = 0 }: { models: ApiModel[]; selected: string[]; search: string; onSearch: (value: string) => void; onToggle: (id: string) => void; onChange: (refs: string[]) => void; minimum?: number }) {
+  const bases = selected.map(ref => splitLevel(ref).base);
   // Selected models sort to the top so current picks stay visible in a 300+ model catalog.
   const visible = models.filter((model) => `${model.name} ${model.id}`.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => Number(selected.includes(b.id)) - Number(selected.includes(a.id)))
+    .sort((a, b) => Number(bases.includes(b.id)) - Number(bases.includes(a.id)))
     .slice(0, 80);
-  return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = selected.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={checked ? selected.length <= minimum : selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div><p className="pick-count">{selected.length}/4 MODELS SELECTED</p></div>;
+  return <div className="model-picker"><input aria-label="Search models" type="search" value={search} onChange={(event) => onSearch(event.target.value)} placeholder="Search model catalog…"/><div className="model-list">{visible.map((model) => { const checked = bases.includes(model.id); return <label className={checked ? 'selected' : ''} key={model.id}><input type="checkbox" checked={checked} disabled={checked ? bases.filter(base => base !== model.id).length < minimum : selected.length >= 4} onChange={() => onToggle(model.id)}/><span><b>{model.name}</b><small>{model.id}</small></span><em>${model.completionPrice.toFixed(2)}/M OUT</em></label>; })}</div>
+    <div className="selected-models">{selected.map((ref, index) => {
+      const { base, level } = splitLevel(ref);
+      const model = models.find(model => model.id === base);
+      const usedLevels = selected.filter((_, other) => other !== index).filter(ref => splitLevel(ref).base === base).map(ref => splitLevel(ref).level ?? '');
+      const unused = model?.reasoningLevels?.find(level => !selected.includes(joinLevel(base, level)));
+      return <div className="selected-model" key={ref}>
+        <div className="selected-model-name"><b>{model?.name ?? base}</b><small>{ref}</small></div>
+        <ThinkingSelect id={`candidate-${index}-thinking`} model={model} value={level} disabledLevels={usedLevels} onChange={next => {
+          const updated = joinLevel(base, next);
+          if (!selected.includes(updated)) onChange(selected.map((ref, seat) => seat === index ? updated : ref));
+        }}/>
+        <button type="button" className="remove-model" aria-label={`Remove ${ref}`} disabled={selected.length <= minimum} onClick={() => onChange(selected.filter((_, seat) => seat !== index))}>Remove</button>
+        {unused && selected.length < 4 && <button type="button" className="add-model-level" onClick={() => onChange([...selected, joinLevel(base, unused)])}>Add at another level</button>}
+      </div>;
+    })}</div><p className="pick-count">{selected.length}/4 MODELS SELECTED</p></div>;
 }
 
 function NewRun({ apiKey }: { apiKey: string }) {
@@ -351,7 +378,7 @@ function NewRun({ apiKey }: { apiKey: string }) {
     }
   }, [routing, defaultsState.data]);
   const plugin: ApiPlugin | undefined = plugins.find((item) => item.name === pluginName);
-  const toggleModel = (id: string) => setModels((current) => current.includes(id) ? current.filter((model) => model !== id) : current.length < 4 ? [...current, id] : current);
+  const toggleModel = (id: string) => setModels(current => current.some(ref => splitLevel(ref).base === id) ? current.filter(ref => splitLevel(ref).base !== id) : current.length < 4 ? [...current, id] : current);
   const submit = async () => {
     setSubmitting(true); setError(undefined);
     try {
@@ -372,11 +399,11 @@ function NewRun({ apiKey }: { apiKey: string }) {
   return <div className="page app-page reveal">
     <section className="app-heading"><div><p className="eyebrow">TOURNAMENT CONTROL</p><h1>New run</h1><p>Choose the field, the evidence scenario, and the size of the judge panel.</p></div><span className="step-mark">01 / CONFIGURE</span></section>
     {(pluginsState.error || modelsState.error || defaultsState.error) ? <Empty title="Local catalog unavailable" detail={pluginsState.error ?? modelsState.error ?? defaultsState.error}/> : (pluginsState.loading || modelsState.loading || defaultsState.loading || !routing) ? <Skeleton/> : <form className="run-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
-      <section className="form-block"><label htmlFor="plugin">PLUGIN</label><select id="plugin" value={pluginName} onChange={(event) => { setPluginName(event.target.value); setScenarioId(''); }}>{plugins.map((item) => <option value={item.name} key={item.name}>{item.name} — {item.description}</option>)}</select></section>
+      <section className="form-block"><label htmlFor="plugin">PLUGIN</label><select id="plugin" value={pluginName} onChange={(event) => { setPluginName(event.target.value); setScenarioId(''); }}>{plugins.map((item) => <option value={item.name} key={item.name}>{item.name} · {item.description}</option>)}</select></section>
       <section className="form-block"><label htmlFor="scenario">SCENARIO</label><select id="scenario" value={scenarioId} onChange={(event) => setScenarioId(event.target.value)}><option value="">ALL SCENARIOS</option>{plugin?.scenarios.map((scenario) => <option value={scenario.id} key={scenario.id}>{scenario.name}</option>)}</select></section>
-      <section className="form-block model-block"><div className="form-label"><label>MODEL FIELD</label><span>SELECT 1–4</span></div><ModelPicker models={modelsState.data ?? []} selected={models} search={search} onSearch={setSearch} onToggle={toggleModel}/></section>
+      <section className="form-block model-block"><div className="form-label"><label>MODEL FIELD</label><span>SELECT 1–4</span></div><ModelPicker models={modelsState.data ?? []} selected={models} search={search} onSearch={setSearch} onToggle={toggleModel} onChange={setModels}/></section>
       <section className="form-block judge-block"><label htmlFor="judges">JUDGES</label><input id="judges" type="number" min="1" max="5" value={judges} onChange={(event) => setJudges(Number(event.target.value))}/><span>independent scoring perspectives</span><a href="#/settings">judge models set in SETTINGS</a></section>
-      <div className="run-submit"><p>budget defaults — a run like the demo costs cents</p>{!apiKey && <a href="#/settings">ADD YOUR OPENROUTER KEY →</a>}{error && <strong>{error}</strong>}<button type="submit" disabled={!apiKey || models.length < 1 || submitting}>{submitting ? 'STARTING…' : 'RUN TOURNAMENT'} <span>→</span></button></div>
+      <div className="run-submit"><p>budget defaults: a run like the demo costs cents</p>{!apiKey && <a href="#/settings">ADD YOUR OPENROUTER KEY →</a>}{error && <strong>{error}</strong>}<button type="submit" disabled={!apiKey || models.length < 1 || submitting}>{submitting ? 'STARTING…' : 'RUN TOURNAMENT'} <span>→</span></button></div>
     </form>}
   </div>;
 }

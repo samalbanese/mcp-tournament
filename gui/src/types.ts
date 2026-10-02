@@ -1,9 +1,9 @@
 export type Confidence = 'high' | 'medium' | 'contested';
 export interface RunIndex { runs: string[]; studies?: string[] }
-export interface Candidate { id: string; name: string; tier: string }
-export interface JudgeManifest { role: string; name: string; model: string }
+export interface Candidate { id: string; name: string; tier: string; reasoning?: string }
+export interface JudgeManifest { role: string; name: string; model: string; reasoning?: string }
 export interface ScenarioManifest { id: string; name: string }
-export interface RunManifest { runId: string; plugin: string; createdAt: string; candidates: Candidate[]; judges: JudgeManifest[]; synthesizer: { model: string }; scenarios: ScenarioManifest[] }
+export interface RunManifest { runId: string; plugin: string; createdAt: string; candidates: Candidate[]; judges: JudgeManifest[]; synthesizer: { model: string; reasoning?: string }; scenarios: ScenarioManifest[] }
 export interface FinalCriterion { score: number; confidence: Confidence; outliers: string[] }
 export interface ScenarioScore { scenarioId: string; scenarioName: string; average: number; scores: Record<string, FinalCriterion>; ruleErrors: string[]; flags: string[] }
 export interface LeaderboardEntry { modelId: string; modelName: string; tier: string; overallAverage: number; scenarioScores: ScenarioScore[] }
@@ -67,7 +67,7 @@ export interface StudyMeta {
 export interface StudyDefinition {
   id: string;
   title: string;
-  reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
+  reasoningEffort?: 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max';
   benches: Array<{ bench: string; label: string; scenarios: string[] }>;
   candidates: Array<{ ref: string; family: string; label: string }>;
   judges: Array<{ ref: string; family: string }>;

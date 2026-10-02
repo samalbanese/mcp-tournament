@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react';
 import { loadStudy, loadStudyScorecards, studyScoresUrl } from './data';
 import { href } from './router';
 import type { Interval, StudyAnalysis, StudyDocument } from './types';
+import { splitLevel } from './reasoning.js';
 // The production build stages scripts separately from their source stylesheets.
 import '../src/study.css';
 
@@ -101,6 +102,15 @@ function Report({ document, scorecards }: { document: StudyDocument; scorecards?
   const candidateName = (ref: string) => study.candidates.find(candidate => candidate.ref === ref)?.label ?? ref;
   const overallWinner = analysis.leaderboards.find(board => board.bench === 'overall')?.rows[0];
   const fixture = study.id === 'fixture';
+  const reasoningSeats = [
+    ...study.candidates.map(candidate => ({ name: candidate.label, ref: candidate.ref })),
+    ...study.judges.map(judge => ({ name: `${familyName(judge.family)} judge`, ref: judge.ref })),
+    { name: 'Simulated participant', ref: study.participant },
+    { name: 'Synthesizer', ref: study.synthesizer },
+  ].map(seat => ({ ...seat, level: splitLevel(seat.ref).level ?? study.reasoningEffort ?? 'provider default' }));
+  const reasoningSummary = new Set(reasoningSeats.map(seat => seat.level)).size === 1
+    ? `${reasoningSeats[0].level} for all seats`
+    : reasoningSeats.map(seat => `${seat.name}: ${seat.level}`).join(' · ');
   return <article className="study-report">
     <header className="study-hero">
       <p className="study-eyebrow">Research report <span>/</span> {fixture ? 'Synthetic preview' : 'Model study'}</p>
@@ -160,7 +170,7 @@ function Report({ document, scorecards }: { document: StudyDocument; scorecards?
           <div><dt>Observed answers</dt><dd>{analysis.answers.total} recorded · {analysis.answers.analyzed} analyzed · {analysis.answers.dropped} dropped</dd></div>
           <div><dt>Unobserved answers</dt><dd>{Math.max(0, study.candidates.length * scenarioCount - analysis.answers.total)} planned answers without score rows</dd></div>
           <div><dt>Judges and scorecards</dt><dd>{study.judges.length} judges · {scorecards == null ? 'Count unavailable' : `${scorecards} recorded scorecards`}</dd></div>
-          <div><dt>Reasoning effort</dt><dd>{study.reasoningEffort ?? 'Not set (provider default)'}{study.reasoningEffort && ' for candidates and judges'}</dd></div>
+          <div><dt>Reasoning levels</dt><dd>{reasoningSummary}</dd></div>
           <div><dt>Dates (UTC)</dt><dd>Started {meta.startedAt || 'Not recorded'}<br/>Finished {meta.finishedAt || 'Not recorded'}</dd></div>
           <div><dt>Estimated cost</dt><dd>{money(meta.estimateUsd)}</dd></div>
           <div><dt>Recorded cost</dt><dd>{money(meta.actualUsd)}</dd></div>

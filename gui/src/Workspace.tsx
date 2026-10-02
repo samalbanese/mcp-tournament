@@ -497,9 +497,9 @@ export default function RunWorkspace({
         <p>
           Panel:{" "}
           {run.judges
-            .map((judge) => `${judge.name} (${judge.model})`)
+            .map((judge) => `${judge.name} (${judge.model}${judge.reasoning ? ` · ${judge.reasoning}` : ''})`)
             .join(" · ")}
-          . Synthesizer: {run.synthesizer.model}.
+          . Synthesizer: {run.synthesizer.model}{run.synthesizer.reasoning ? ` · ${run.synthesizer.reasoning}` : ''}.
         </p>
         <code>{run.runId}</code>
       </details>

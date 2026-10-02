@@ -1,7 +1,10 @@
 import type { LeaderboardEntry } from './types';
 
 export interface Health { ok: true; version: string }
-export interface ApiModel { id: string; name: string; contextLength: number; promptPrice: number; completionPrice: number }
+export interface ApiModel {
+  id: string; name: string; contextLength: number; promptPrice: number; completionPrice: number;
+  reasoningLevels?: string[]; defaultReasoning?: string; reasonsByDefault?: boolean; hasReasoning?: boolean;
+}
 export interface ApiScenario { id: string; name: string }
 export interface ApiPlugin { name: string; description: string; scenarios: ApiScenario[] }
 export interface ApiJudgeDefault { role: string; name: string; model: string }

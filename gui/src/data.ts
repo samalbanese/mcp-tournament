@@ -64,8 +64,15 @@ function scenarioSlugs(id: string, name: string) {
   const legacy = [slugify(name), slugify(id), slugify(`${id}-${name}`), number && slugify(`scenario-${number}-${name}`)].filter(Boolean);
   return [...new Set([...legacy.map((slug) => shortSlug(slug)), ...legacy])];
 }
+const REASONING_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'];
+// A reasoning level becomes a readable folder suffix; must stay identical to modelSlug in src/plugins/base.ts.
+export function modelSlug(id: string) {
+  const at = id.lastIndexOf('@');
+  const level = at < 0 ? '' : id.slice(at + 1);
+  return REASONING_LEVELS.includes(level) ? `${shortSlug(id.slice(0, at), 23 - level.length)}_${level}` : shortSlug(id);
+}
 function modelSlugs(id: string) {
-  return [...new Set([shortSlug(id), slugify(id)])];
+  return [...new Set([modelSlug(id), shortSlug(id), slugify(id)])];
 }
 function artifactPaths(runId: string, area: 'candidates' | 'judges', modelId: string, scenarioId: string, scenarioName: string, filename: string) {
   return modelSlugs(modelId).flatMap((model) => scenarioSlugs(scenarioId, scenarioName)

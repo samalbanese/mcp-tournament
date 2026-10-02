@@ -70,14 +70,18 @@ export function parseStudy(input: unknown): Study {
   const seenCandidates = new Set<string>();
   const seenJudges = new Set<string>();
   const seenFamilies = new Set<string>();
+  // Compare the refs that will run: with reasoningEffort "low", "x" and "x@low" are one model.
+  const effective = (ref: string) => withReasoning(ref, data.reasoningEffort);
   study.candidates.forEach((candidate, index) => {
-    if (seenCandidates.has(candidate.ref)) errors.push(`candidates.${index}.ref: duplicate candidate "${candidate.ref}"`);
-    seenCandidates.add(candidate.ref);
+    const ref = effective(candidate.ref);
+    if (seenCandidates.has(ref)) errors.push(`candidates.${index}.ref: duplicate candidate "${ref}"`);
+    seenCandidates.add(ref);
   });
   study.judges.forEach((judge, index) => {
-    if (seenJudges.has(judge.ref)) errors.push(`judges.${index}.ref: duplicate judge "${judge.ref}"`);
+    const ref = effective(judge.ref);
+    if (seenJudges.has(ref)) errors.push(`judges.${index}.ref: duplicate judge "${ref}"`);
     if (seenFamilies.has(judge.family)) errors.push(`judges.${index}.family: duplicate judge family "${judge.family}"`);
-    seenJudges.add(judge.ref);
+    seenJudges.add(ref);
     seenFamilies.add(judge.family);
   });
   if (errors.length) throw new StudyError(errors.join('\n'));

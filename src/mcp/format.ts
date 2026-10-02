@@ -70,6 +70,11 @@ export function toLeaderboardRows(entries: ScoredEntry[]): LeaderboardRow[] {
   }));
 }
 
+/** A judge's model with its reasoning level, when one was picked. */
+function judgeModelLabel(judge: { model: string; reasoning?: string }): string {
+  return judge.reasoning ? `${judge.model} · ${judge.reasoning}` : judge.model;
+}
+
 /** Overall scores are averages, so every table shows them to two decimals. */
 export function formatScore(score: number): string {
   return score.toFixed(2);
@@ -165,14 +170,14 @@ export function formatRunResultMarkdown(result: {
   failures: RunFailure[];
   judgeFailures: RunFailure[];
   resultsDir: string;
-  judges: Array<{ role: string; name: string; model: string }>;
+  judges: Array<{ role: string; name: string; model: string; reasoning?: string }>;
 }): string {
   const headline = result.entries.length
     ? `Winner: ${result.entries[0].modelName} (${formatScore(result.entries[0].score)}/10) on "${result.plugin}"`
     : `No scored results for "${result.plugin}" (every candidate/scenario pair failed or produced no score)`;
   const table = result.entries.length ? `\n\n${scoreTable(result.entries)}` : '';
   const judgesLine = result.judges.length
-    ? `\n\nJudges: ${result.judges.map(judge => `${judge.name} (${judge.model})`).join(', ')}`
+    ? `\n\nJudges: ${result.judges.map(judge => `${judge.name} (${judgeModelLabel(judge)})`).join(', ')}`
     : '';
   const footer = `\n\nRun ID: \`${result.runId}\`. Call tournament_get_run with this ID for full detail, or read resource tournament://runs/${result.runId}/report.`;
   return `${headline}${table}${judgesLine}${issuesSections(result.failures, result.judgeFailures)}${footer}`;
@@ -185,7 +190,7 @@ export function formatRunSummaryMarkdown(run: RunSummary): string {
     `**Run \`${run.runId}\`** · ${run.plugin} bench · ${formatTimestamp(run.createdAt)}`,
     '',
     `- Models: ${run.candidates.map(candidate => candidate.name).join(', ') || '(none)'}`,
-    `- Judges: ${run.judges.map(judge => `${judge.name} (${judge.model})`).join(', ') || '(none)'}`,
+    `- Judges: ${run.judges.map(judge => `${judge.name} (${judgeModelLabel(judge)})`).join(', ') || '(none)'}`,
   ].join('\n');
 
   if (!run.leaderboard?.length) {

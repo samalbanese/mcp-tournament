@@ -88,7 +88,9 @@ afterEach(() => {
 
 describe('study reasoning', { timeout: 30_000 }, () => {
   it.each(REASONING_LEVELS)('accepts study default %s and keeps explicit seat levels', level => {
-    const input = parseStudy({ ...study(), reasoningEffort: level });
+    // A distinct second model: at default high, "gpt" and "gpt@high" would be one candidate twice.
+    const candidates = [study().candidates[0], { ref: 'google/gemini-3.1-pro-preview@high', family: 'google', label: 'Gemini' }];
+    const input = parseStudy({ ...study(), reasoningEffort: level, candidates });
     expect(studySeatRef('openrouter:openai/gpt-6.1-sol', input)).toBe(`openai/gpt-6.1-sol@${level}`);
     expect(studySeatRef('openai/gpt-6.1-sol@HIGH', input)).toBe('openai/gpt-6.1-sol@high');
   });
@@ -190,5 +192,21 @@ describe('study reasoning', { timeout: 30_000 }, () => {
     const manifest = JSON.parse(fs.readFileSync(file, 'utf8'));
     manifest.judges[0].reasoning = 'high'; write(file, manifest);
     expect(() => collectScores(study(), [runDir()])).toThrow(/Judge seat 1 mismatch/);
+  });
+});
+
+describe('study duplicate checks use the level that will run', () => {
+  it('refuses a bare candidate and the same model at the study default', () => {
+    const input = study();
+    input.reasoningEffort = 'low';
+    input.candidates.push({ ...input.candidates[0], ref: `${input.candidates[0].ref}@low`, label: 'Same model again' });
+    expect(() => parseStudy(input)).toThrow(/duplicate candidate/);
+  });
+
+  it('allows the same model at two different levels', () => {
+    const input = study();
+    input.reasoningEffort = 'low';
+    input.candidates.push({ ...input.candidates[0], ref: `${input.candidates[0].ref}@medium`, label: 'Same model, medium' });
+    expect(() => parseStudy(input)).not.toThrow();
   });
 });

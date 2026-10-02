@@ -8,7 +8,7 @@
 
 import { shortSlug } from '../utils/slug.js';
 import type { ClientRoute } from '../clients/index.js';
-import type { ReasoningLevel } from '../config/reasoning.js';
+import { isReasoningLevel, type ReasoningLevel } from '../config/reasoning.js';
 
 export interface ParticipantRuntime {
   participant: { route: ClientRoute; model: string; reasoning?: ReasoningLevel; thinks?: boolean };
@@ -151,9 +151,18 @@ export type BuiltinPlugin = typeof BUILTIN_PLUGINS[number];
 
 // ── Slug helpers (ported from oracle-tournament) ────────
 
-/** Slugify a model name for file paths */
+/**
+ * Slugify a model name for file paths. A reasoning level becomes a readable
+ * suffix: the truncation hash barely changes when only the last characters
+ * differ, so `x@low` and `x@max` could otherwise share a folder. The result
+ * stays within shortSlug's 24 characters so re-slugging leaves it unchanged.
+ * Mirrored in gui/src/data.ts.
+ */
 export function modelSlug(model: string): string {
-  return shortSlug(model);
+  const at = model.lastIndexOf('@');
+  const level = at < 0 ? '' : model.slice(at + 1);
+  if (!isReasoningLevel(level)) return shortSlug(model);
+  return `${shortSlug(model.slice(0, at), 23 - level.length)}_${level}`;
 }
 
 /** Slugify a scenario name for file paths */

@@ -55,7 +55,7 @@ export async function fetchCatalogModels(fetcher: typeof fetch = fetch): Promise
           ...(levels.length ? { reasoningLevels: levels } : {}),
           ...(defaultLevel ? { defaultReasoning: defaultLevel } : {}),
           reasonsByDefault: reasoning.mandatory === true || reasoning.default_enabled === true
-            || (reasoning.default_enabled !== false && defaultLevel !== undefined),
+            || (reasoning.default_enabled !== false && defaultLevel !== undefined && defaultLevel !== 'none'),
         } : {}),
       };
     })

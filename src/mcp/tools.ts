@@ -69,7 +69,7 @@ const RunSummarySchema = z.object({
   plugin: z.string(),
   createdAt: z.string(),
   candidates: z.array(z.object({ id: z.string(), name: z.string(), tier: z.string() })),
-  judges: z.array(z.object({ role: z.string(), name: z.string(), model: z.string() })),
+  judges: z.array(z.object({ role: z.string(), name: z.string(), model: z.string(), reasoning: z.string().optional() })),
   scenarios: z.array(z.object({ id: z.string(), name: z.string() })),
   leaderboard: z.array(LeaderboardEntrySchema).nullable(),
   failures: z.array(RunFailureSchema),
@@ -89,7 +89,7 @@ const LeaderboardRowSchema = z.object({
   score: z.number(),
 });
 
-const JudgeInfoSchema = z.object({ role: z.string(), name: z.string(), model: z.string() });
+const JudgeInfoSchema = z.object({ role: z.string(), name: z.string(), model: z.string(), reasoning: z.string().optional() });
 
 const RunResultSchema = {
   status: z.enum(['completed', 'cancelled']),
@@ -214,7 +214,8 @@ function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSch
       bench: plan.bench,
       scenarios: plan.scenarios.map(scenario => ({ id: scenario.id, name: scenario.name, turns: plan.turns ?? scenario.maxTurns })),
       candidates: plan.candidates.map(candidate => ({ ref: candidate.id, route: candidate.route ?? 'openrouter' })),
-      judges: plan.judges.map(judge => ({ role: judge.role, name: judge.name, persona: judge.persona ?? judge.role, model: judge.model, route: judge.route })),
+      judges: plan.judges.map(judge => ({ role: judge.role, name: judge.name, persona: judge.persona ?? judge.role, model: judge.model, route: judge.route,
+        ...(judge.reasoning ? { reasoning: judge.reasoning } : {}) })),
       synthesizer: { ref: plan.synthesizer.ref, route: plan.synthesizer.route },
       participant: { ref: plan.participant.ref, route: plan.participant.route },
       turns: plan.turns,
@@ -228,7 +229,7 @@ function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSch
  * The judge panel actually used for a run, read back from the saved manifest. Tolerant of a
  * missing or malformed run.json (returns []) so a run result is never blocked on this detail.
  */
-function readRunJudges(ctx: McpContext, runId: string): Array<{ role: string; name: string; model: string }> {
+function readRunJudges(ctx: McpContext, runId: string): Array<{ role: string; name: string; model: string; reasoning?: string }> {
   try {
     return readRun(ctx, runId).judges;
   } catch {

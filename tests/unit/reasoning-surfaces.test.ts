@@ -87,3 +87,37 @@ describe('reasoning surfaces', () => {
     }
   });
 });
+
+describe('GUI defaults', () => {
+  it('keeps a judge default level so picking Default in Settings does not hide it', async () => {
+    vi.resetModules();
+    vi.stubEnv('TOURNAMENT_MODEL_JUDGE_RULES', 'a/b@high');
+    try {
+      const server = await import('../../src/server.js');
+      const incoming = Readable.from([]) as IncomingMessage;
+      Object.assign(incoming, { method: 'GET', url: '/api/defaults', headers: {} });
+      let data: any;
+      const response = { writeHead() {}, end(value: string) { data = JSON.parse(value); } } as unknown as ServerResponse;
+      await server.createRequestHandler({ rootDir: root, port: 4790, fetch: catalogFetch, evaluate })(incoming, response);
+      expect(data.judges.find((judge: { role: string }) => judge.role === 'rules').model).toBe('a/b@high');
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
+  });
+});
+
+describe('MCP reports', () => {
+  it('show each judge level so two levels of one judge model are told apart', async () => {
+    const { formatRunResultMarkdown } = await import('../../src/mcp/format.js');
+    const text = formatRunResultMarkdown({
+      runId: 'run-test', plugin: 'dnd', entries: [], failures: [], judgeFailures: [], resultsDir: root,
+      judges: [
+        { role: 'rules', name: 'Accuracy', model: 'openai/gpt-6.1-sol', reasoning: 'low' },
+        { role: 'skeptic', name: 'Skeptic', model: 'openai/gpt-6.1-sol', reasoning: 'high' },
+        { role: 'holistic', name: 'Holistic', model: 'qwen/qwen3.5-flash-02-23' },
+      ],
+    });
+    expect(text).toContain('Accuracy (openai/gpt-6.1-sol · low), Skeptic (openai/gpt-6.1-sol · high), Holistic (qwen/qwen3.5-flash-02-23)');
+  });
+});

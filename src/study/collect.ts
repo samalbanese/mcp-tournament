@@ -40,9 +40,9 @@ export function collectScores(study: Study, runDirs: string[]): ScoreRow[] {
       });
     }
     for (const candidate of manifest.candidates) {
-      // Runs made before per-seat levels recorded the bare ID.
-      const source = study.candidates.find(item => parseModelRef(item.ref).ref === candidate.id
-        || studySeatRef(item.ref, study) === candidate.id);
+      // Match the ref that ran first; runs made before per-seat levels recorded the bare ID.
+      const source = study.candidates.find(item => studySeatRef(item.ref, study) === candidate.id)
+        ?? study.candidates.find(item => parseModelRef(item.ref).ref === candidate.id);
       if (!source) throw new StudyError(`Unknown candidate "${candidate.id}" in ${manifest.runId}`);
       for (const scenario of manifest.scenarios) {
         const bench = study.benches.find(item => item.bench === manifest.plugin && item.scenarios.includes(scenario.id));

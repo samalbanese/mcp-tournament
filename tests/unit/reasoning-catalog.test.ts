@@ -27,12 +27,15 @@ describe('catalog reasoning metadata', () => {
       { id: 'a/r', name: 'R', pricing: { prompt: '0', completion: '0' }, reasoning: { mandatory: true, supported_efforts: ['high', 'low', 'turbo'], default_effort: 'low' } },
       { id: 'a/off', name: 'Off', pricing: { prompt: '0', completion: '0' }, reasoning: { mandatory: false, default_enabled: false } },
       { id: 'a/plain', name: 'Plain', pricing: { prompt: '0', completion: '0' } },
+      { id: 'a/none', name: 'None', pricing: { prompt: '0', completion: '0' }, reasoning: { mandatory: false, supported_efforts: ['none', 'high'], default_effort: 'none' } },
     ] }));
     const models = await fetchCatalogModels(fetcher as typeof fetch);
     expect(models[0]).toMatchObject({ hasReasoning: true, reasoningLevels: ['high', 'low'], defaultReasoning: 'low', reasonsByDefault: true });
     expect(models[1]).toMatchObject({ hasReasoning: true, reasonsByDefault: false });
     expect(models[1].reasoningLevels).toBeUndefined();
     expect(models[2].hasReasoning).toBeUndefined();
+    // A default of "none" means the model does not think unless asked.
+    expect(models[3]).toMatchObject({ defaultReasoning: 'none', reasonsByDefault: false });
   });
 
   it.each([

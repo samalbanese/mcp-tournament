@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { fetchCatalogModels as getModels, type Catalog } from './catalog.js';
 import { ModelRefError, parseModelRef } from './config/model-ref.js';
-import { applyReasoningCatalog } from './config/reasoning.js';
+import { applyReasoningCatalog, seatRef } from './config/reasoning.js';
 import { normalizeRunPlan, RunPlanError } from './run-plan.js';
 import { JUDGES, resolveRoleModel } from './config/judges.js';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
@@ -296,7 +296,7 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
       if (request.method === 'GET' && pathname === '/api/defaults') {
         sendJson(response, 200, {
           candidates: DEFAULT_CANDIDATE_MODELS,
-          judges: JUDGES.map(({ role, name, model, route }) => ({ role, name, model: route === 'anthropic' ? `anthropic:${model}` : model })),
+          judges: JUDGES.map(({ role, name, model, route, reasoning }) => ({ role, name, model: seatRef(route, model, reasoning) })),
           synthesizer: resolveRoleModel('synthesizer'),
         });
         return;

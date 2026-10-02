@@ -24,11 +24,6 @@ function readLock(file: string): { pid: number; token: string } | null {
   }
 }
 
-/**
- * Claims a study folder for one run or repair at a time, so two processes never write the same
- * batches, failure lists or spend totals. A lock left by a process that has exited is replaced.
- * Returns a function that releases the lock; it only removes a lock this call created.
- */
 /** Creates the file only if it does not exist yet; false when it already does. */
 function createExclusive(file: string, contents: string): boolean {
   try {
@@ -40,45 +35,59 @@ function createExclusive(file: string, contents: string): boolean {
   }
 }
 
-/** Throws unless the lock is gone or was left by a process that has exited. */
-function assertAbandoned(file: string): void {
-  if (!fs.existsSync(file)) return;
-  const holder = readLock(file);
-  if (holder && isAlive(holder.pid)) {
-    throw new StudyError(`Another run or repair of this study is in progress (process ${holder.pid}). Wait for it to finish.`);
-  }
-  // An unreadable lock may be one another process is still writing; only an old one is abandoned.
-  if (!holder && Date.now() - (fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? 0) < 10_000) {
-    throw new StudyError('Another run or repair of this study is starting. Wait for it to finish.');
-  }
+function sleepSync(ms: number): void {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 }
 
+/**
+ * Claims a study folder for one run, repair or reanalysis at a time, so two processes never write
+ * the same batches, failure lists, spend totals or reports. A lock left by a process that has
+ * exited is replaced. Returns a function that releases the lock; it only removes this call's lock.
+ *
+ * Every claim happens inside a short exclusive guard (`.lock.guard`), so checking the lock and
+ * creating or replacing it is one step that no other process can interleave with. Releasing needs
+ * no guard: it removes only this call's own token, which no other process may replace while this
+ * process is alive.
+ */
 export function acquireStudyLock(studyDir: string): () => void {
   const file = path.join(studyDir, LOCK_FILE);
+  const guard = `${file}.guard`;
   const token = randomUUID();
   const contents = JSON.stringify({ pid: process.pid, token, startedAt: new Date().toISOString() });
   const release = () => {
     if (readLock(file)?.token === token) fs.rmSync(file, { force: true });
   };
-  if (createExclusive(file, contents)) return release;
-  assertAbandoned(file);
-  // Replacing an abandoned lock is exclusive too: only the process that creates the takeover file
-  // may remove it, so two processes recovering at once can never both end up holding the study.
-  const takeover = `${file}.takeover`;
-  if (!createExclusive(takeover, String(process.pid))) {
-    throw new StudyError(`Another process is taking over this study. Wait a moment and try again; if no run is active, delete ${takeover}.`);
+  // The guard is held for a few file operations, so a short wait covers two commands started together.
+  let guarded = createExclusive(guard, String(process.pid));
+  for (let waited = 0; !guarded && waited < 2_000; waited += 25) {
+    sleepSync(25);
+    guarded = createExclusive(guard, String(process.pid));
   }
+  if (!guarded) {
+    throw new StudyError(`Another process is claiming this study. Try again in a moment; if no run is active, delete ${guard}.`);
+  }
+  let claimed = false;
   try {
-    // Re-check: the lock may have been replaced by a live run before this process got the takeover file.
-    assertAbandoned(file);
-    fs.rmSync(file, { force: true });
     if (!createExclusive(file, contents)) {
-      throw new StudyError('Another run or repair of this study is starting. Wait for it to finish.');
+      // Only guard holders write the lock, so an unreadable one was left by a crash mid-write.
+      const holder = readLock(file);
+      if (holder && isAlive(holder.pid)) {
+        throw new StudyError(`Another run or repair of this study is in progress (process ${holder.pid}). Wait for it to finish.`);
+      }
+      fs.rmSync(file, { force: true });
+      if (!createExclusive(file, contents)) throw new StudyError(`Could not claim the study folder: ${file} reappeared.`);
     }
-    return release;
+    claimed = true;
   } finally {
-    fs.rmSync(takeover, { force: true });
+    try {
+      fs.rmSync(guard, { force: true });
+    } catch (error) {
+      // A guard that cannot be removed must not also leave this process holding the study.
+      if (claimed) release();
+      throw error;
+    }
   }
+  return release;
 }
 
 /** The current contents of these files (`null` for a missing one), to check later with assertUnchanged. */

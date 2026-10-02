@@ -383,17 +383,27 @@ describe('study repair', { timeout: 30_000 }, () => {
     const result = await repairStudy(study(), options());
     expect(result.judgeSeatsFilled).toBe(1);
     expect(fs.existsSync(lock)).toBe(false);
-    expect(fs.existsSync(`${lock}.takeover`)).toBe(false);
+    expect(fs.existsSync(`${lock}.guard`)).toBe(false);
   });
 
-  it('leaves an abandoned lock alone while another process is taking it over', async () => {
+  it('replaces a lock a crash left half-written', async () => {
     await finishedWithGap();
     const lock = path.join(studyDir(), '.lock');
-    write(lock, { pid: 2 ** 22 + 7, token: 'crashed-run' });
-    fs.writeFileSync(`${lock}.takeover`, '4242');
+    fs.writeFileSync(lock, '{"pid": 12');
+    await expect(repairStudy(study(), options())).resolves.toMatchObject({ judgeSeatsFilled: 1 });
+    expect(fs.existsSync(lock)).toBe(false);
+  });
+
+  it.each([
+    ['no lock at all', false],
+    ['an abandoned lock', true],
+  ])('claims nothing while another process holds the claim guard, with %s', async (_name, stale) => {
+    await finishedWithGap();
+    const lock = path.join(studyDir(), '.lock');
+    if (stale) write(lock, { pid: 2 ** 22 + 7, token: 'crashed-run' });
+    fs.writeFileSync(`${lock}.guard`, '4242');
     const before = snapshot();
-    const opts = options();
-    await expect(repairStudy(study(), opts)).rejects.toThrow(/Another process is taking over this study/);
+    await expect(repairStudy(study(), options())).rejects.toThrow(/Another process is claiming this study/);
     expect(snapshot()).toEqual(before);
     expect(calls).toHaveLength(0);
   });

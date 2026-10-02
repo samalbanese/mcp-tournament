@@ -6,9 +6,11 @@
 ![Node >= 20](https://img.shields.io/badge/Node-%3E%3D%2020-339933?logo=nodedotjs&logoColor=white)
 ![MCP server](https://img.shields.io/badge/MCP-server-5A67D8)
 
+**In this study, all five AI judges scored their own lab's answers higher than the rest of the panel did.** Five frontier models answered twelve business scenarios and then judged each other blind. **[Read the findings](https://mcp-tournament.pages.dev/#/study/flagship-2026-10)**.
+
 Build a custom LLM benchmark in a form, run it from a local GUI, MCP client, or CLI, and turn independent judge opinions into ranked, auditable results.
 
-![Evaluation workspace with recorded model rankings and judge disagreement](docs/images/leaderboard-1440.png)
+![Study findings: which AI is best at real business work, and can you trust AI judges to tell you?](docs/images/study-1440.png)
 
 **[Explore the interactive demo](https://mcp-tournament.pages.dev/#/run/run-2026-07-18-194500)**: compare a recorded business-strategy experiment, inspect the evidence, and try your own criterion weights. No key needed.
 
@@ -17,6 +19,30 @@ Why this is interesting:
 - **Disagreement is data:** multiple specialist judges score independently; the arbiter preserves outliers and explains where they diverged.
 - **Benches are declarative:** anyone can define scenarios and criteria as JSON or build them in a form, no pipeline code required.
 - **BYOK and local-first:** bring one OpenRouter key, keep the GUI on your machine, and run budget-tier tournaments for cents.
+
+## The flagship study
+
+Claude Opus 5.5, GPT-6.1 Sol, Gemini 3.1 Pro, DeepSeek V4 Pro and Qwen3.8 Max
+each answered the same twelve scenarios across business strategy, customer
+support and creative writing. Every model then scored every answer, its own
+included, without seeing who wrote it: 300 scorecards in all.
+
+- **Every judge favored its own lab.** After adjusting for how generous each
+  judge was overall, all five scored their own family higher than the rest of
+  the panel did. The pull ranged from about 0.3 points (DeepSeek) to 1.4 points
+  (GPT) on a 10-point scale, and every 95% interval sits above zero.
+- **No clear winner at the top.** GPT-6.1 Sol led at 8.4, with Claude Opus 5.5
+  (8.2) and DeepSeek V4 Pro (8.0) inside its margin of error.
+- **One judge alone picks a different winner.** GPT and Claude each named
+  themselves best when judging alone, and the panel agreed only weakly overall
+  (Krippendorff's alpha 0.30).
+
+![Self-preference heatmap: each judge's score offset from the rest of the panel, by candidate family](docs/images/study-heatmap.png)
+
+The findings page links every number back to the transcripts and judge
+reasoning behind it, and the raw scores download as CSV. Recorded API cost:
+$7.25. Results apply to these scenarios and settings; the page lists what the
+study does not show. To run your own, see [the study format](docs/STUDY_FORMAT.md).
 
 ## A model choice you can explain
 

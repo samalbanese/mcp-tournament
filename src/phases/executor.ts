@@ -94,7 +94,6 @@ export async function runScenario(
       let inputTokens = 0;
       let outputTokens = 0;
       let toolBudgetExhausted = false;
-      let lastStopReason = '';
 
       for (let toolRound = 0; toolRound <= MAX_TOOL_ROUNDS; toolRound++) {
         const response = await client.createMessage({
@@ -104,10 +103,17 @@ export async function runScenario(
           max_tokens: maxTokens,
           tools,
         });
-        lastStopReason = response.stop_reason;
         inputTokens += response.usage.input_tokens;
         outputTokens += response.usage.output_tokens;
         if (response.text) textParts.push(response.text);
+        // An empty or cut-off reply is a failed call, not an answer: judges would score the
+        // output limit (often spent on hidden reasoning) as if it were model quality. Check every
+        // response, so a cut-off one that also asked for tools is never run or scored.
+        if (response.stop_reason === 'max_tokens') {
+          throw new Error(textParts.join('\n').trim()
+            ? `Reply cut off on turn ${turnNumber}: the model reached the ${maxTokens}-token output limit.`
+            : `Empty reply on turn ${turnNumber}: the model used all ${maxTokens} output tokens (likely on reasoning) before answering.`);
+        }
 
         const requestedTools = response.content.filter(block => block.type === 'tool_use');
         if (!requestedTools.length) {
@@ -148,13 +154,6 @@ export async function runScenario(
         ...(turnToolCalls.length ? { toolCalls: turnToolCalls } : {}),
         metrics: { ttfbMs: null, totalTimeMs, inputTokens, outputTokens },
       };
-      // An empty or cut-off reply is a failed call, not an answer: judges would score the
-      // output limit (often spent on hidden reasoning) as if it were model quality.
-      if (lastStopReason === 'max_tokens') {
-        throw new Error(candidateTurn.content
-          ? `Reply cut off on turn ${turnNumber}: the model reached the ${maxTokens}-token output limit.`
-          : `Empty reply on turn ${turnNumber}: the model used all ${maxTokens} output tokens (likely on reasoning) before answering.`);
-      }
       if (!candidateTurn.content) throw new Error(`Empty reply on turn ${turnNumber}.`);
       turns.push(candidateTurn);
       metrics.candidateInputTokens += inputTokens;

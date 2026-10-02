@@ -68,6 +68,20 @@ describe('runScenario candidate replies', () => {
     expect(result).toMatchObject({ success: false, error: 'Reply cut off on turn 1: the model reached the 4096-token output limit.' });
   });
 
+  it('never runs a tool requested by a reply that was cut off', async () => {
+    const handler = vi.fn(async () => 'stock: 12');
+    const withTool = { ...plugin, tools: [{ name: 'check_stock', description: '', parameters: { type: 'object' }, handler }] } as TournamentPlugin;
+    useReplies({
+      text: 'Let me check stock first.',
+      content: [{ type: 'text', text: 'Let me check stock first.' }, { type: 'tool_use', id: 't1', name: 'check_stock', input: {} }],
+      stop_reason: 'max_tokens', usage: { input_tokens: 120, output_tokens: 4096 }, model: model.id,
+    } as ModelResponse);
+    const result = await runScenario(model, scenario, withTool, dir);
+    expect(result).toMatchObject({ success: false, error: 'Reply cut off on turn 1: the model reached the 4096-token output limit.' });
+    expect(handler).not.toHaveBeenCalled();
+    expect(calls).toHaveLength(1);
+  });
+
   it('fails an empty reply that ended normally too', async () => {
     useReplies(reply('', 'end_turn'));
     const result = await runScenario(model, scenario, plugin, dir);

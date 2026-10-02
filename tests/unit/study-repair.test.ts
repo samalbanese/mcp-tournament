@@ -421,6 +421,41 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
   });
 
+  it('removes a guard whose close failed after it was written', async () => {
+    await finishedWithGap();
+    const realClose = fs.closeSync;
+    const spy = vi.spyOn(fs, 'closeSync').mockImplementation((handle: number) => {
+      realClose(handle);
+      throw Object.assign(new Error('close failed'), { code: 'EIO' });
+    });
+    try {
+      await expect(repairStudy(study(), options())).rejects.toThrow('close failed');
+    } finally {
+      spy.mockRestore();
+    }
+    expect(fs.existsSync(path.join(studyDir(), '.lock.guard'))).toBe(false);
+    expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
+  });
+
+  it('restores the reasoning setting even when releasing the lock fails', async () => {
+    await finishedWithGap();
+    process.env.TOURNAMENT_REASONING_EFFORT = 'high';
+    const lock = path.join(studyDir(), '.lock');
+    const realRead = fs.readFileSync;
+    // No lock exists yet, so the claim never reads it; the only read of the lock is the release.
+    const spy = vi.spyOn(fs, 'readFileSync').mockImplementation(((file: fs.PathOrFileDescriptor, ...rest: unknown[]) => {
+      if (file === lock) throw Object.assign(new Error('i/o error'), { code: 'EIO' });
+      return (realRead as (...args: unknown[]) => unknown)(file, ...rest);
+    }) as typeof fs.readFileSync);
+    try {
+      await expect(repairStudy(study(), options())).rejects.toThrow('i/o error');
+      await expect(runStudy(study(), options())).rejects.toThrow('i/o error');
+    } finally {
+      spy.mockRestore();
+    }
+    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('high');
+  });
+
   it('replaces a lock a crash left half-written', async () => {
     await finishedWithGap();
     const lock = path.join(studyDir(), '.lock');

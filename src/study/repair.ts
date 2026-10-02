@@ -302,8 +302,9 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     saveProgress();
     return outcome;
   } finally {
-    release();
+    // Restored before releasing: releasing can throw, and the setting must not leak into a later run.
     if (previousEffort === undefined) delete process.env.TOURNAMENT_REASONING_EFFORT;
     else process.env.TOURNAMENT_REASONING_EFFORT = previousEffort;
+    release();
   }
 }

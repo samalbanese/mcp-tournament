@@ -44,15 +44,23 @@ function createExclusive(file: string, contents: string): boolean {
     if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
     throw error;
   }
+  // A file that could not be written or closed (a full disk, say) must not be left behind to block
+  // others. The first failure is the one reported.
+  let failure: unknown;
   try {
     fs.writeFileSync(handle, contents);
   } catch (error) {
-    // A file created but not written (a full disk, say) must not be left behind to block others.
-    fs.closeSync(handle);
-    fs.rmSync(file, { force: true });
-    throw error;
+    failure = error;
   }
-  fs.closeSync(handle);
+  try {
+    fs.closeSync(handle);
+  } catch (error) {
+    failure ??= error;
+  }
+  if (failure !== undefined) {
+    fs.rmSync(file, { force: true });
+    throw failure;
+  }
   return true;
 }
 

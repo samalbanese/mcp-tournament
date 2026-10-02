@@ -34,8 +34,9 @@ const ProgressSchema = z.object({
   studyFile: z.string().optional(),
   study: StudySchema.optional(),
   startedAt: z.string().optional(),
-  // OpenRouter spend summed across invocations; null once any usage reading failed.
+  // OpenRouter spend summed across invocations, recovering gaps on resume; null once any usage reading failed.
   spentUsd: z.number().nullable().optional(),
+  lastUsage: z.number().nullable().optional(),
 });
 const MetaSchema = z.object({
   runIds: z.array(z.string().regex(/^run-[a-zA-Z0-9-]+$/)),
@@ -149,12 +150,19 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     const fetchUsage = options.fetchUsage ?? defaultFetchUsage;
     const hasPending = batches.some(batch => !progress.done.includes(batch.batchId));
     let lastUsage = hasPending ? await readUsage(fetchUsage) : null;
+    if (hasPending) {
+      progress.spentUsd = lastUsage === null || progress.spentUsd === null
+        ? null : (progress.spentUsd ?? 0) + (typeof progress.lastUsage === 'number' ? lastUsage - progress.lastUsage : 0);
+      progress.lastUsage = lastUsage;
+      saveProgress();
+    }
     // Read usage after every batch, failed ones included, so a crash and resume keeps earlier spend.
     const recordSpend = async () => {
       const usage = await readUsage(fetchUsage);
       progress.spentUsd = lastUsage === null || usage === null || progress.spentUsd === null
         ? null : (progress.spentUsd ?? 0) + usage - lastUsage;
       lastUsage = usage;
+      progress.lastUsage = usage;
       saveProgress();
     };
     for (const [index, batch] of batches.entries()) {

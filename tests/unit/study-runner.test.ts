@@ -192,7 +192,7 @@ describe('study runner', () => {
     expect(read(path.join(studyDir(), 'progress.json')).done).toEqual(['1-1', '1-2']);
   });
 
-  it('keeps spend from a crashed invocation in the resumed total', async () => {
+  it.each(['caught failure', 'hard kill', 'legacy progress', 'failed reading'])('keeps spend on resume after %s', async kind => {
     const input = study();
     input.candidates.push({ ref: 'deepseek/test', family: 'deepseek', label: 'DeepSeek' },
       { ref: 'qwen/test', family: 'qwen', label: 'Qwen' });
@@ -201,12 +201,40 @@ describe('study runner', () => {
     // Start 10, after batch 1 12, after the failed batch 13: 3 spent before the crash.
     first.fetchUsage.mockResolvedValueOnce(10).mockResolvedValueOnce(12).mockResolvedValueOnce(13);
     await expect(runStudy(input, first)).rejects.toThrow(/Every candidate\/scenario pair failed/);
-    expect(read(path.join(studyDir(), 'progress.json')).spentUsd).toBe(3);
+    const progressFile = path.join(studyDir(), 'progress.json');
+    const progress = read(progressFile);
+    expect(progress).toMatchObject({ done: ['1-1'], spentUsd: 3, lastUsage: 13, study: input });
+    if (kind === 'hard kill') {
+      // The process died before recording usage after the in-flight batch.
+      progress.spentUsd = 2;
+      progress.lastUsage = 12;
+    } else if (kind === 'legacy progress') {
+      delete progress.lastUsage;
+    } else if (kind === 'failed reading') {
+      progress.spentUsd = null;
+      progress.lastUsage = null;
+    }
+    fs.writeFileSync(progressFile, JSON.stringify(progress));
     failModels.clear();
     const second = options();
-    second.fetchUsage.mockResolvedValueOnce(13.5).mockResolvedValueOnce(16);
-    await runStudy(input, second);
-    expect(read(path.join(studyDir(), 'study.json')).meta.actualUsd).toBe(5.5);
+    const initialUsage = kind === 'hard kill' ? 12.4 : 13.5;
+    const finalUsage = kind === 'hard kill' ? 15 : 16;
+    second.fetchUsage.mockResolvedValueOnce(initialUsage).mockResolvedValueOnce(finalUsage);
+    const onProgress = vi.fn(({ message }: { message: string }) => {
+      if (message !== 'Running batch 1-2') return;
+      const saved = read(progressFile);
+      expect(saved.lastUsage).toBe(initialUsage);
+      if (kind === 'failed reading') expect(saved.spentUsd).toBeNull();
+      else expect(saved.spentUsd).toBeCloseTo(kind === 'hard kill' ? 2.4 : kind === 'legacy progress' ? 3 : 3.5);
+    });
+    const result = await runStudy(input, { ...second, onProgress });
+    expect(result).toMatchObject({ batchesRun: 1, batchesSkipped: 1 });
+    expect(onProgress).toHaveBeenCalledWith(expect.objectContaining({ message: 'Running batch 1-2' }));
+    expect(second.fetchUsage).toHaveBeenCalledTimes(2);
+    expect(read(progressFile).lastUsage).toBe(finalUsage);
+    const actualUsd = read(path.join(studyDir(), 'study.json')).meta.actualUsd;
+    if (kind === 'failed reading') expect(actualUsd).toBeNull();
+    else expect(actualUsd).toBeCloseTo(kind === 'hard kill' ? 5 : kind === 'legacy progress' ? 5.5 : 6);
   });
 
   it('skips missing judge files and verifies manifest seats before assigning families', async () => {

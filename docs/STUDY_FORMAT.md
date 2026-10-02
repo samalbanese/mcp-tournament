@@ -81,7 +81,7 @@ summary says so.
 Actual cost is a best-effort sum of OpenRouter key usage differences. The runner
 reads usage before the first pending batch and after every batch, including a
 batch that fails, and keeps the running total in `progress.json` as `spentUsd`.
-A crash and resume therefore keeps the spend from earlier invocations. It uses
+A hard-killed run's missing spend is recovered on resume from the saved `lastUsage` reading. It uses
 `OPENROUTER_API_KEY`, falling back to `OPENROUTER_DICE_ORACLE_API_KEY`, with the same
 precedence as the client. Any failed or non-numeric reading makes the total
 `null` and does not stop the study. Keys and raw usage responses are never saved

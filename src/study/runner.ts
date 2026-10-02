@@ -125,7 +125,8 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
   const progressFile = path.join(studyDir, 'progress.json');
   const progressText = fs.existsSync(progressFile) ? fs.readFileSync(progressFile, 'utf8') : null;
   const progress = progressText === null ? { done: [] as string[] } : ProgressSchema.parse(JSON.parse(progressText));
-  if (progress.study && JSON.stringify(progress.study) !== JSON.stringify(study)) {
+  // Canonicalize the saved copy too: a study saved before refs were canonical must still resume.
+  if (progress.study && JSON.stringify(parseStudy(progress.study)) !== JSON.stringify(study)) {
     throw new StudyError('The saved study differs from this input. Use a new study ID for a changed study.');
   }
   if (progress.done.some(id => !batches.some(batch => batch.batchId === id))) {
@@ -248,7 +249,21 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
   }
 }
 
+/** Rewrites a study's report from saved scores, holding the study lock so no run or repair overlaps. */
 export async function reanalyzeStudy(studyId: string, resultsRoot = defaultResultsRoot()): Promise<StudyAnalysis> {
+  StudySchema.shape.id.parse(studyId);
+  const studyDir = path.join(path.resolve(resultsRoot), 'studies', studyId);
+  if (!fs.existsSync(studyDir)) throw new StudyError(`No saved study "${studyId}" in ${path.dirname(studyDir)}.`);
+  const release = acquireStudyLock(studyDir);
+  try {
+    return await reanalyzeWithLockHeld(studyId, resultsRoot);
+  } finally {
+    release();
+  }
+}
+
+/** reanalyzeStudy for a caller that already holds the study lock (taking it twice would fail). */
+export async function reanalyzeWithLockHeld(studyId: string, resultsRoot = defaultResultsRoot()): Promise<StudyAnalysis> {
   StudySchema.shape.id.parse(studyId);
   const root = path.resolve(resultsRoot);
   const studyDir = path.join(root, 'studies', studyId);

@@ -121,9 +121,10 @@ the second candidate group on the first bench.
 time, and the absolute `studyFile` path when called from the CLI. Completion is
 saved after each successful batch. Rerunning the same input skips those batches.
 An unfinished run folder is renamed to `<runId>-abandoned-<epochMs>` and the batch
-starts again. Only one run or repair of a study works at a time: the second one
-stops with an error naming the first one's process. A lock left by a process
-that has exited is replaced. If another run changes the study while the
+starts again. Only one run, repair, or `study-analyze` of a study works at a
+time: the second one stops with an error naming the first one's process. A lock
+left by a process that has exited is replaced, and only one process can replace
+it. Study outputs are written to a temporary file and renamed into place. If another run changes the study while the
 confirmation prompt is open, the command stops and asks to be run again. Existing run data is never deleted. A changed saved study is
 rejected rather than combining incompatible evidence.
 

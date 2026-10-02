@@ -14,8 +14,9 @@ import { effectiveScenario, normalizeRunPlan, type ResolvedRunPlan } from '../ru
 import { JudgeScoreSchema } from '../schemas/judge-score.js';
 import type { StudyAnalysis } from './analyze.js';
 import { planBatches, validateStudyAgainstBenches } from './batches.js';
-import { acquireStudyLock, assertUnchanged, snapshotFiles } from './lock.js';
-import { defaultFetchUsage, ProgressSchema, readUsage, reanalyzeStudy } from './runner.js';
+import { acquireStudyLock, assertUnchanged } from './lock.js';
+import { writeFileAtomic } from './export.js';
+import { defaultFetchUsage, ProgressSchema, readUsage, reanalyzeWithLockHeld } from './runner.js';
 import { parseStudy, StudyError, type Study } from './schema.js';
 
 export interface RepairStudyOptions {
@@ -91,8 +92,10 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
   const studyDir = path.join(root, 'studies', study.id);
   const progressFile = path.join(studyDir, 'progress.json');
   if (!fs.existsSync(progressFile)) throw new StudyError('No progress for this study');
-  const progress = ProgressSchema.parse(JSON.parse(fs.readFileSync(progressFile, 'utf8')));
-  if (progress.study && JSON.stringify(progress.study) !== JSON.stringify(study)) {
+  // Keep the exact bytes parsed, so the check after confirmation compares what this plan was built from.
+  const progressText = fs.readFileSync(progressFile, 'utf8');
+  const progress = ProgressSchema.parse(JSON.parse(progressText));
+  if (progress.study && JSON.stringify(parseStudy(progress.study)) !== JSON.stringify(study)) {
     throw new StudyError('The saved study differs from this input. Use a new study ID for a changed study.');
   }
   if (progress.done.some(id => !batches.some(batch => batch.batchId === id))) {
@@ -104,8 +107,8 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     const plan = plans[index];
     const runDir = path.join(root, batch.runId);
     const file = path.join(runDir, 'failures.json');
-    const failures = fs.existsSync(file)
-      ? FailuresSchema.parse(JSON.parse(fs.readFileSync(file, 'utf8'))) : [];
+    const failuresText = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
+    const failures = failuresText === null ? [] : FailuresSchema.parse(JSON.parse(failuresText));
     const groups = new Map<string, AnswerGaps>();
     const unmatched: RepairGap[] = [];
     for (const entry of failures) {
@@ -146,7 +149,7 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
       group.judges = open;
     }
     const answers = [...groups.values()];
-    return [{ batch, plan, runDir, file, failures, unmatched, answers,
+    return [{ batch, plan, runDir, file, failuresText, failures, unmatched, answers,
       pairs: answers.filter(answer => answer.pair).length,
       seats: answers.reduce((sum, answer) => sum + (answer.pair ? 0 : answer.judges.length), 0),
     }];
@@ -157,7 +160,7 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
   };
   // Everything the gap list was built from, checked again once this repair holds the study lock.
   const inputs = [progressFile, ...work.map(item => item.file)];
-  const inputsBefore = snapshotFiles(inputs);
+  const inputsBefore = [progressText, ...work.map(item => item.failuresText)];
   const pending = work.filter(item => item.answers.length);
   const interrupted = progress.repairing === true;
   if (!pending.length && !interrupted) return outcome;
@@ -292,9 +295,9 @@ export async function repairStudy(input: Study, options: RepairStudyOptions): Pr
     if (fs.existsSync(outputFile)) {
       const output = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
       output.meta.actualUsd = progress.spentUsd ?? null;
-      fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
+      writeFileAtomic(outputFile, JSON.stringify(output, null, 2));
     }
-    outcome.analysis = await reanalyzeStudy(study.id, root);
+    outcome.analysis = await reanalyzeWithLockHeld(study.id, root);
     delete progress.repairing;
     saveProgress();
     return outcome;

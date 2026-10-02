@@ -29,35 +29,60 @@ function readLock(file: string): { pid: number; token: string } | null {
  * batches, failure lists or spend totals. A lock left by a process that has exited is replaced.
  * Returns a function that releases the lock; it only removes a lock this call created.
  */
+/** Creates the file only if it does not exist yet; false when it already does. */
+function createExclusive(file: string, contents: string): boolean {
+  try {
+    fs.writeFileSync(file, contents, { flag: 'wx' });
+    return true;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
+    throw error;
+  }
+}
+
+/** Throws unless the lock is gone or was left by a process that has exited. */
+function assertAbandoned(file: string): void {
+  if (!fs.existsSync(file)) return;
+  const holder = readLock(file);
+  if (holder && isAlive(holder.pid)) {
+    throw new StudyError(`Another run or repair of this study is in progress (process ${holder.pid}). Wait for it to finish.`);
+  }
+  // An unreadable lock may be one another process is still writing; only an old one is abandoned.
+  if (!holder && Date.now() - (fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? 0) < 10_000) {
+    throw new StudyError('Another run or repair of this study is starting. Wait for it to finish.');
+  }
+}
+
 export function acquireStudyLock(studyDir: string): () => void {
   const file = path.join(studyDir, LOCK_FILE);
   const token = randomUUID();
   const contents = JSON.stringify({ pid: process.pid, token, startedAt: new Date().toISOString() });
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      fs.writeFileSync(file, contents, { flag: 'wx' });
-      return () => {
-        if (readLock(file)?.token === token) fs.rmSync(file, { force: true });
-      };
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-    }
-    const holder = readLock(file);
-    if (holder && isAlive(holder.pid)) {
-      throw new StudyError(`Another run or repair of this study is in progress (process ${holder.pid}). Wait for it to finish.`);
-    }
-    // An unreadable lock may be one another process is still writing; only an old one is abandoned.
-    if (!holder && Date.now() - (fs.statSync(file, { throwIfNoEntry: false })?.mtimeMs ?? 0) < 10_000) {
+  const release = () => {
+    if (readLock(file)?.token === token) fs.rmSync(file, { force: true });
+  };
+  if (createExclusive(file, contents)) return release;
+  assertAbandoned(file);
+  // Replacing an abandoned lock is exclusive too: only the process that creates the takeover file
+  // may remove it, so two processes recovering at once can never both end up holding the study.
+  const takeover = `${file}.takeover`;
+  if (!createExclusive(takeover, String(process.pid))) {
+    throw new StudyError(`Another process is taking over this study. Wait a moment and try again; if no run is active, delete ${takeover}.`);
+  }
+  try {
+    // Re-check: the lock may have been replaced by a live run before this process got the takeover file.
+    assertAbandoned(file);
+    fs.rmSync(file, { force: true });
+    if (!createExclusive(file, contents)) {
       throw new StudyError('Another run or repair of this study is starting. Wait for it to finish.');
     }
-    // Stale or unreadable: re-check right before removing, so a lock another process just took is kept.
-    if (readLock(file)?.token === holder?.token) fs.rmSync(file, { force: true });
+    return release;
+  } finally {
+    fs.rmSync(takeover, { force: true });
   }
-  throw new StudyError(`Could not claim the study folder: ${file} keeps reappearing.`);
 }
 
 /** The current contents of these files (`null` for a missing one), to check later with assertUnchanged. */
-export function snapshotFiles(files: string[]): Array<string | null> {
+function snapshotFiles(files: string[]): Array<string | null> {
   return files.map(file => fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null);
 }
 

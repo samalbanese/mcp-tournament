@@ -11,7 +11,7 @@ import { modelSlug, scenarioSlug } from '../../src/plugins/base.js';
 import { parseStudy, StudyError, type Study } from '../../src/study/schema.js';
 import { planBatches } from '../../src/study/batches.js';
 import { collectScores } from '../../src/study/collect.js';
-import { runStudy } from '../../src/study/runner.js';
+import { reanalyzeStudy, runStudy } from '../../src/study/runner.js';
 import { repairStudy } from '../../src/study/repair.js';
 
 const originals = { openrouter: getModelClient('openrouter'), anthropic: getModelClient('anthropic') };
@@ -383,6 +383,43 @@ describe('study repair', { timeout: 30_000 }, () => {
     const result = await repairStudy(study(), options());
     expect(result.judgeSeatsFilled).toBe(1);
     expect(fs.existsSync(lock)).toBe(false);
+    expect(fs.existsSync(`${lock}.takeover`)).toBe(false);
+  });
+
+  it('leaves an abandoned lock alone while another process is taking it over', async () => {
+    await finishedWithGap();
+    const lock = path.join(studyDir(), '.lock');
+    write(lock, { pid: 2 ** 22 + 7, token: 'crashed-run' });
+    fs.writeFileSync(`${lock}.takeover`, '4242');
+    const before = snapshot();
+    const opts = options();
+    await expect(repairStudy(study(), opts)).rejects.toThrow(/Another process is taking over this study/);
+    expect(snapshot()).toEqual(before);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('locks standalone reanalysis and reports a study that does not exist', async () => {
+    await finishedWithGap();
+    write(path.join(studyDir(), '.lock'), { pid: process.pid, token: 'running-repair' });
+    const before = snapshot();
+    await expect(reanalyzeStudy(study().id, root)).rejects.toThrow(/Another run or repair of this study is in progress/);
+    expect(snapshot()).toEqual(before);
+    fs.rmSync(path.join(studyDir(), '.lock'));
+    await expect(reanalyzeStudy(study().id, root)).resolves.toMatchObject({ answers: { analyzed: 6 } });
+    expect(fs.readdirSync(studyDir()).sort()).toEqual(['progress.json', 'scores.csv', 'study.json']);
+    await expect(reanalyzeStudy('missing-study', root)).rejects.toThrow(/No saved study "missing-study"/);
+  });
+
+  it('resumes and repairs a study saved before model refs were canonical', async () => {
+    await finishedWithGap();
+    const progressFile = path.join(studyDir(), 'progress.json');
+    const legacy = read(progressFile);
+    legacy.study.candidates[1].ref = 'openrouter:openai/test';
+    legacy.study.judges[1].ref = 'openrouter:openai/test';
+    write(progressFile, legacy);
+    await expect(runStudy(study(), options())).resolves.toMatchObject({ batchesSkipped: 1, batchesRun: 0 });
+    write(progressFile, legacy);
+    await expect(repairStudy(study(), options())).resolves.toMatchObject({ judgeSeatsFilled: 1 });
   });
 
   it('stops if another repair changed the study while the prompt was open', async () => {

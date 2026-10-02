@@ -22,11 +22,18 @@ function csvField(value: string | number): string {
   return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
+/** Writes through a temporary file and a rename, so a reader or a crash never sees half a file. */
+export function writeFileAtomic(file: string, contents: string): void {
+  const temporary = `${file}.${process.pid}.tmp`;
+  fs.writeFileSync(temporary, contents);
+  fs.renameSync(temporary, file);
+}
+
 export function writeStudyOutputs(
   studyDir: string, study: Study, analysis: StudyAnalysis, rows: ScoreRow[], meta: StudyMeta,
 ): void {
   fs.mkdirSync(studyDir, { recursive: true });
-  fs.writeFileSync(path.join(studyDir, 'study.json'), `${JSON.stringify({ study, meta, analysis }, null, 2)}\n`);
+  writeFileAtomic(path.join(studyDir, 'study.json'), `${JSON.stringify({ study, meta, analysis }, null, 2)}\n`);
   const records = [columns.join(','), ...rows.map(row => columns.map(key => csvField(row[key])).join(','))];
-  fs.writeFileSync(path.join(studyDir, 'scores.csv'), `${records.join('\r\n')}\r\n`);
+  writeFileAtomic(path.join(studyDir, 'scores.csv'), `${records.join('\r\n')}\r\n`);
 }

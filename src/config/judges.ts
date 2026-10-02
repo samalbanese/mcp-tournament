@@ -1,5 +1,6 @@
 import type { ClientRoute } from '../clients/index.js';
 import { ModelRefError, parseModelRef, type ParsedModelRef } from './model-ref.js';
+import type { ReasoningLevel } from './reasoning.js';
 
 export type JudgeRoute = ClientRoute;
 
@@ -10,6 +11,8 @@ export interface JudgeConfig {
   family: string;
   route: JudgeRoute;
   focus: string[];
+  reasoning?: ReasoningLevel;
+  thinks?: boolean;
   /** Persona lens text; absent for legacy judge selections. */
   lens?: string;
   /** Role passed to plugin.buildJudgePrompt; defaults to role. */
@@ -64,6 +67,7 @@ function defaultJudge(role: string, name: string, family: string, focus: string[
   const ref = resolveRoleRef(role);
   return {
     role, name, model: ref.model, route: ref.route,
+    ...(ref.reasoning ? { reasoning: ref.reasoning } : {}),
     family: ref.route === 'anthropic' ? 'anthropic' : family, focus,
   };
 }
@@ -84,6 +88,7 @@ export const SYNTHESIZER: Omit<JudgeConfig, 'focus'> = {
   model: synthesizerRef.model,
   family: synthesizerRef.route === 'anthropic' ? 'anthropic' : 'deepseek',
   route: synthesizerRef.route,
+  ...(synthesizerRef.reasoning ? { reasoning: synthesizerRef.reasoning } : {}),
 };
 
 export const PARTICIPANT_AGENT_MODEL = resolveRoleModel('participant');

@@ -1,5 +1,6 @@
 import type { ClientRoute } from '../clients/index.js';
 import { parseModelRef } from './model-ref.js';
+import type { ReasoningLevel } from './reasoning.js';
 
 export interface CandidateModel {
   id: string;
@@ -8,6 +9,8 @@ export interface CandidateModel {
   notes: string;
   route?: ClientRoute;
   apiModel?: string;
+  reasoning?: ReasoningLevel;
+  thinks?: boolean;
 }
 
 export const CANDIDATE_MODELS: CandidateModel[] = [
@@ -69,6 +72,7 @@ export function resolveCandidateModel(ref: string): CandidateModel {
     id: parsed.ref,
     route: parsed.route,
     apiModel: parsed.model,
+    ...(parsed.reasoning ? { reasoning: parsed.reasoning } : {}),
   };
 }
 

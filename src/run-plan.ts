@@ -3,6 +3,7 @@ import { JUDGES, resolveRoleModel, type JudgeConfig } from './config/judges.js';
 import { ModelRefError, parseModelRef, type ParsedModelRef } from './config/model-ref.js';
 import { resolveCandidateModel, type CandidateModel } from './config/models.js';
 import { DEFAULT_SEAT_ORDER, PERSONAS, PERSONA_IDS } from './config/personas.js';
+import { seatRef } from './config/reasoning.js';
 import { modelSlug, type TestCase, type TournamentPlugin } from './plugins/base.js';
 import { getPlugin } from './plugins/index.js';
 
@@ -86,10 +87,12 @@ export function selectJudges(
 ): JudgeConfig[] {
   return JUDGES.slice(0, judgeCount).map(judge => {
     const override = judgeModels?.[judge.role];
-    if (!override) return judge;
+    if (!override) return { ...judge };
     const parsed = parseRef(override, `judgeModels.${judge.role}`);
+    const { reasoning: _reasoning, thinks: _thinks, ...base } = judge;
     return {
-      ...judge, model: parsed.model, route: parsed.route,
+      ...base, model: parsed.model, route: parsed.route,
+      ...(parsed.reasoning ? { reasoning: parsed.reasoning } : {}),
       family: parsed.route === 'anthropic' ? 'anthropic' : judge.family,
     };
   });
@@ -110,6 +113,7 @@ function resolveSeat(seat: JudgeSeat, index: number): JudgeConfig {
     persona: custom ? 'custom' : preset.id,
     route: parsed.route,
     model: parsed.model,
+    ...(parsed.reasoning ? { reasoning: parsed.reasoning } : {}),
     family: parsed.route === 'anthropic' ? 'anthropic' : parsed.model.split('/')[0],
     focus: custom ? ['custom'] : [...preset.focus],
   };
@@ -182,7 +186,7 @@ export function effectiveScenario(scenario: TestCase, turns: number | null): Tes
 }
 
 export function describePlan(plan: ResolvedRunPlan): string {
-  const judgeRef = (judge: JudgeConfig) => judge.route === 'openrouter' ? judge.model : `${judge.route}:${judge.model}`;
+  const judgeRef = (judge: JudgeConfig) => seatRef(judge.route, judge.model, judge.reasoning);
   return [
     `Bench: ${plan.bench} (${plan.scenarios.length} scenario${plan.scenarios.length === 1 ? '' : 's'}: ${plan.scenarios.map(scenario => scenario.name).join(', ')})`,
     `Models: ${plan.candidates.map(candidate => candidate.id).join(', ')}`,

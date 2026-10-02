@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getModelClient } from '../clients/index.js';
 import type { ModelMessage, ModelToolDefinition } from '../clients/types.js';
-import { MAX_TOKENS_CANDIDATE, MAX_TOOL_ROUNDS } from '../config/constants.js';
+import { reasoningEffortFromEnv } from '../clients/openrouter.js';
+import { MAX_TOKENS_CANDIDATE, MAX_TOKENS_CANDIDATE_REASONING, MAX_TOOL_ROUNDS } from '../config/constants.js';
 import type { CandidateModel } from '../config/models.js';
 import {
   modelSlug,
@@ -84,6 +85,7 @@ export async function runScenario(
   const tools = clientTools(plugin);
 
   try {
+    const maxTokens = reasoningEffortFromEnv() ? MAX_TOKENS_CANDIDATE_REASONING : MAX_TOKENS_CANDIDATE;
     log(`  [${model.name}/${scenario.name}] Starting`);
     for (let turnNumber = 1; turnNumber <= scenario.maxTurns; turnNumber++) {
       const startedAt = Date.now();
@@ -92,15 +94,17 @@ export async function runScenario(
       let inputTokens = 0;
       let outputTokens = 0;
       let toolBudgetExhausted = false;
+      let lastStopReason = '';
 
       for (let toolRound = 0; toolRound <= MAX_TOOL_ROUNDS; toolRound++) {
         const response = await client.createMessage({
           model: model.apiModel ?? model.id,
           system,
           messages,
-          max_tokens: MAX_TOKENS_CANDIDATE,
+          max_tokens: maxTokens,
           tools,
         });
+        lastStopReason = response.stop_reason;
         inputTokens += response.usage.input_tokens;
         outputTokens += response.usage.output_tokens;
         if (response.text) textParts.push(response.text);
@@ -144,6 +148,14 @@ export async function runScenario(
         ...(turnToolCalls.length ? { toolCalls: turnToolCalls } : {}),
         metrics: { ttfbMs: null, totalTimeMs, inputTokens, outputTokens },
       };
+      // An empty or cut-off reply is a failed call, not an answer: judges would score the
+      // output limit (often spent on hidden reasoning) as if it were model quality.
+      if (lastStopReason === 'max_tokens') {
+        throw new Error(candidateTurn.content
+          ? `Reply cut off on turn ${turnNumber}: the model reached the ${maxTokens}-token output limit.`
+          : `Empty reply on turn ${turnNumber}: the model used all ${maxTokens} output tokens (likely on reasoning) before answering.`);
+      }
+      if (!candidateTurn.content) throw new Error(`Empty reply on turn ${turnNumber}.`);
       turns.push(candidateTurn);
       metrics.candidateInputTokens += inputTokens;
       metrics.candidateOutputTokens += outputTokens;

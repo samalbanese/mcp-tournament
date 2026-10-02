@@ -1,5 +1,9 @@
 // API token limits
 export const MAX_TOKENS_CANDIDATE = 4096;
+// Reasoning tokens count against max_tokens. At 4096, DeepSeek V4 Pro on "low" effort spent
+// the whole allowance thinking and returned empty answers; one business answer took 17.5K
+// reasoning plus 1.8K answer tokens, so leave room well above that.
+export const MAX_TOKENS_CANDIDATE_REASONING = 32768;
 export const MAX_TOKENS_PARTICIPANT = 512;
 export const MAX_TOKENS_JUDGE = 16384;
 export const MAX_TOKENS_SYNTHESIS = 4096;
@@ -9,9 +13,9 @@ export const MAX_TOOL_ROUNDS = 8;
 export const MAX_TURNS = 5;
 export const MIN_TURNS = 3;
 
-// Timeouts — judge/synthesis calls generate up to 16K tokens on budget models,
-// which regularly takes >2 minutes. 120s aborts killed real runs.
-export const API_TIMEOUT_MS = 300_000;
+// Timeouts: judge/synthesis calls generate up to 16K tokens on budget models, and reasoning
+// candidates up to 32K; a 19K-token DeepSeek reply took 4.5 minutes. 120s aborts killed real runs.
+export const API_TIMEOUT_MS = 600_000;
 export const RETRY_ATTEMPTS = 2;
 export const RETRY_BASE_DELAY_MS = 2000;
 

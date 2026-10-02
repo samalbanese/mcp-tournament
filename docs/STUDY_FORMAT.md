@@ -51,6 +51,9 @@ Save a JSON file with these fields:
 - `reasoningEffort`: optional `minimal`, `low`, `medium`, or `high`. It temporarily
   sets `TOURNAMENT_REASONING_EFFORT`; the previous value, including an unset
   value, is restored on success or failure. If omitted, the environment is used.
+  With reasoning on, candidates get a 32,768-token output limit because hidden
+  reasoning counts against it. A reply that comes back empty or hits the limit
+  is recorded as a failed answer, never scored.
 
 Model refs use OpenRouter IDs or `anthropic:claude-...` for the registered Claude
 subscription client. Configure that client through the local integration before

@@ -437,7 +437,10 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
   });
 
-  it('restores the reasoning setting even when releasing the lock fails', async () => {
+  it.each([
+    ['repair', () => repairStudy(study(), options())],
+    ['run', () => runStudy(study(), options())],
+  ])('restores the reasoning setting even when releasing the lock fails (%s)', async (_name, operation) => {
     await finishedWithGap();
     process.env.TOURNAMENT_REASONING_EFFORT = 'high';
     const lock = path.join(studyDir(), '.lock');
@@ -448,8 +451,7 @@ describe('study repair', { timeout: 30_000 }, () => {
       return (realRead as (...args: unknown[]) => unknown)(file, ...rest);
     }) as typeof fs.readFileSync);
     try {
-      await expect(repairStudy(study(), options())).rejects.toThrow('i/o error');
-      await expect(runStudy(study(), options())).rejects.toThrow('i/o error');
+      await expect(operation()).rejects.toThrow('i/o error');
     } finally {
       spy.mockRestore();
     }

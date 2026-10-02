@@ -570,13 +570,6 @@ function Overview({
           <span>CRITERIA WITH DISSENT</span>
           <strong className="dissent-value">
             {String(dissent).padStart(2, "0")}
-            <span className="signal-bars" aria-hidden="true">
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-            </span>
           </strong>
           <small>Disagreements kept in the record</small>
         </div>
@@ -672,20 +665,6 @@ function Overview({
             Would your priorities change this?
             <Icon name="arrow" size={17} />
           </a>
-          <div className="finding-decoration" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
         </aside>
       </div>
       <div className="analysis-grid">

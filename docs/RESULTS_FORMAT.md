@@ -52,6 +52,16 @@ continue accepting those runs.
 - Synthesizer `route`: the provider used for synthesis. Its `model` is the API
   model ID. `synthesizer` is `null` for quick tests and one-judge panels, which use
   the judge's scores directly without a synthesis model call.
+- `reasoning` on a candidate, judge, synthesizer or participant: the reasoning
+  level that seat ran at (`none`, `minimal`, `low`, `medium`, `high`, `xhigh` or
+  `max`). It is absent when the seat ran at the provider's default, and runs made
+  before per-seat levels never have it.
+- Candidate `id` and participant `model` keep a level as an `@level` suffix, such
+  as `google/gemini-3.1-flash-lite@high`. The same model at two levels is two
+  candidates with two result folders and two leaderboard rows. Judge and
+  synthesizer `model` stay the bare API model ID; read their level from `reasoning`.
+- Candidate `name` carries the level as a label, such as `Gemini 3.1 Flash Lite · high`,
+  or `· default` for a model that offers levels but ran without one.
 
 For example, a custom judge seat can be recorded as:
 

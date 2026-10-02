@@ -1,23 +1,33 @@
 import type { ClientRoute } from '../clients/index.js';
+import { ModelRefError } from './model-ref-error.js';
+import { ANTHROPIC_LEVELS, splitReasoning, type ReasoningLevel } from './reasoning.js';
+
+export { ModelRefError } from './model-ref-error.js';
 
 export interface ParsedModelRef {
-  /** Canonical ref: bare id for OpenRouter, `anthropic:<model>` for Anthropic. Used as the result id. */
+  /** Canonical ref, including any @level suffix. Used as the result id. */
   ref: string;
   route: ClientRoute;
   /** The model name sent to the provider API. */
   model: string;
-}
-
-export class ModelRefError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'ModelRefError';
-  }
+  reasoning?: ReasoningLevel;
+  /** Set by applyReasoningCatalog; undefined until then. */
+  thinks?: boolean;
 }
 
 const PREFIX = /^([a-z][a-z0-9-]*):(.*)$/i;
 
 export function parseModelRef(input: string): ParsedModelRef {
+  const { base, reasoning } = splitReasoning(input.trim());
+  const result = parseBaseRef(base);
+  if (!reasoning) return result;
+  if (result.route === 'anthropic' && !(ANTHROPIC_LEVELS as readonly ReasoningLevel[]).includes(reasoning)) {
+    throw new ModelRefError(`"${input.trim()}": the Anthropic API accepts ${ANTHROPIC_LEVELS.join(', ')}.`);
+  }
+  return { ...result, ref: `${result.ref}@${reasoning}`, reasoning };
+}
+
+function parseBaseRef(input: string): ParsedModelRef {
   const raw = input.trim();
   if (!raw) throw new ModelRefError('Model ID is empty. Use an OpenRouter ID like "deepseek/deepseek-v3.2".');
   const match = raw.match(PREFIX);

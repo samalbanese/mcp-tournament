@@ -8,7 +8,7 @@
  * model.
  */
 import type { RunSummary } from './data.js';
-import { describeFailure, formatScore, scoreTable, splitFailures, toLeaderboardRows } from './format.js';
+import { describeFailure, formatScore, judgeModelLabel, scoreTable, splitFailures, toLeaderboardRows } from './format.js';
 import type { FinalCriterion } from '../schemas/synthesis.js';
 
 function formatDate(iso: string): string {
@@ -83,7 +83,7 @@ export function buildReport(run: RunSummary): string {
   if (run.judges.length) {
     lines.push('| Role | Name | Model |', '|---|---|---|');
     for (const judge of run.judges) {
-      lines.push(`| ${judge.role} | ${judge.name} | ${judge.model} |`);
+      lines.push(`| ${judge.role} | ${judge.name} | ${judgeModelLabel(judge)} |`);
     }
   } else {
     lines.push('_No judge panel recorded for this run._');

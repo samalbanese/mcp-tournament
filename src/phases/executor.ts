@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getModelClient } from '../clients/index.js';
 import type { ModelMessage, ModelToolDefinition } from '../clients/types.js';
-import { reasoningEffortFromEnv } from '../clients/openrouter.js';
-import { MAX_TOKENS_CANDIDATE, MAX_TOKENS_CANDIDATE_REASONING, MAX_TOOL_ROUNDS } from '../config/constants.js';
+import { outputAllowance } from '../config/reasoning.js';
+import { MAX_TOOL_ROUNDS } from '../config/constants.js';
 import type { CandidateModel } from '../config/models.js';
 import {
   modelSlug,
@@ -85,7 +85,7 @@ export async function runScenario(
   const tools = clientTools(plugin);
 
   try {
-    const maxTokens = reasoningEffortFromEnv() ? MAX_TOKENS_CANDIDATE_REASONING : MAX_TOKENS_CANDIDATE;
+    const maxTokens = outputAllowance('candidate', model.thinks);
     log(`  [${model.name}/${scenario.name}] Starting`);
     for (let turnNumber = 1; turnNumber <= scenario.maxTurns; turnNumber++) {
       const startedAt = Date.now();
@@ -98,6 +98,7 @@ export async function runScenario(
       for (let toolRound = 0; toolRound <= MAX_TOOL_ROUNDS; toolRound++) {
         const response = await client.createMessage({
           model: model.apiModel ?? model.id,
+          reasoning: model.reasoning,
           system,
           messages,
           max_tokens: maxTokens,

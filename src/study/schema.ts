@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ModelRefError, parseModelRef } from '../config/model-ref.js';
+import { REASONING_LEVELS, withReasoning } from '../config/reasoning.js';
 import { ModelRefSchema } from '../run-plan.js';
 
 export const StudyFamilySchema = z.string().regex(/^[a-z0-9-]{2,30}$/);
@@ -7,7 +8,7 @@ export const StudyFamilySchema = z.string().regex(/^[a-z0-9-]{2,30}$/);
 export const StudySchema = z.object({
   id: z.string().regex(/^[a-z0-9-]{3,40}$/),
   title: z.string().trim().min(1).max(120),
-  reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
+  reasoningEffort: z.enum(REASONING_LEVELS).optional(),
   benches: z.array(z.object({
     bench: z.string().trim().min(1),
     label: z.string().trim().min(1).max(40),
@@ -28,6 +29,10 @@ export const StudySchema = z.object({
 }).strict();
 
 export type Study = z.infer<typeof StudySchema>;
+
+export function studySeatRef(ref: string, study: Study): string {
+  return withReasoning(parseModelRef(ref).ref, study.reasoningEffort);
+}
 
 export class StudyError extends Error {
   constructor(message: string) {
@@ -65,14 +70,18 @@ export function parseStudy(input: unknown): Study {
   const seenCandidates = new Set<string>();
   const seenJudges = new Set<string>();
   const seenFamilies = new Set<string>();
+  // Compare the refs that will run: with reasoningEffort "low", "x" and "x@low" are one model.
+  const effective = (ref: string) => withReasoning(ref, data.reasoningEffort);
   study.candidates.forEach((candidate, index) => {
-    if (seenCandidates.has(candidate.ref)) errors.push(`candidates.${index}.ref: duplicate candidate "${candidate.ref}"`);
-    seenCandidates.add(candidate.ref);
+    const ref = effective(candidate.ref);
+    if (seenCandidates.has(ref)) errors.push(`candidates.${index}.ref: duplicate candidate "${ref}"`);
+    seenCandidates.add(ref);
   });
   study.judges.forEach((judge, index) => {
-    if (seenJudges.has(judge.ref)) errors.push(`judges.${index}.ref: duplicate judge "${judge.ref}"`);
+    const ref = effective(judge.ref);
+    if (seenJudges.has(ref)) errors.push(`judges.${index}.ref: duplicate judge "${ref}"`);
     if (seenFamilies.has(judge.family)) errors.push(`judges.${index}.family: duplicate judge family "${judge.family}"`);
-    seenJudges.add(judge.ref);
+    seenJudges.add(ref);
     seenFamilies.add(judge.family);
   });
   if (errors.length) throw new StudyError(errors.join('\n'));

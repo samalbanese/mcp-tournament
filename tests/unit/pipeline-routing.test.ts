@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getModelClient, registerModelClient } from '../../src/clients/index.js';
 import type { CreateMessageParams, ModelClient, ModelResponse } from '../../src/clients/types.js';
 import { JUDGES } from '../../src/config/judges.js';
@@ -67,7 +67,12 @@ function response(text: string, model: string): ModelResponse {
   };
 }
 
+beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('Unexpected network request'); }));
+});
+
 afterEach(() => {
+  vi.unstubAllGlobals();
   registerModelClient('openrouter', originalClient);
   for (const directory of temporaryDirectories.splice(0)) {
     fs.rmSync(directory, { recursive: true, force: true });

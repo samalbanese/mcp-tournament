@@ -15,14 +15,15 @@ import {
 import { assertRoutesReady, evaluateTournament, quickTest, readLeaderboard, type EvaluateProgress } from '../pipeline.js';
 import { logWarn } from '../utils/logger.js';
 import { JUDGES, PARTICIPANT_AGENT_MODEL, resolveRoleModel } from '../config/judges.js';
-import { buildShortlist, closestModelIds, getCatalog } from '../catalog.js';
+import { buildShortlist, closestModelIds, getCatalog, type Catalog } from '../catalog.js';
 import { routeHasCredentials, routeSetupHint } from '../clients/index.js';
 import { parseModelRef } from '../config/model-ref.js';
+import { applyReasoningCatalog, REASONING_LEVELS, seatRef } from '../config/reasoning.js';
 import { DEFAULT_SEAT_ORDER, PERSONAS } from '../config/personas.js';
 import { estimateRunCost, type CostEstimate } from '../estimate.js';
 import { getPlugin } from '../plugins/index.js';
 import {
-  describePlan, JudgeSeatSchema, normalizeRunPlan, PLAN_LIMITS, RunPlanSchema,
+  describePlan, JudgeSeatSchema, normalizeRunPlan, PLAN_LIMITS, RunPlanError, RunPlanSchema,
   type LegacyJudgeOptions, type ResolvedRunPlan, type RunPlanInput,
 } from '../run-plan.js';
 import {
@@ -68,7 +69,7 @@ const RunSummarySchema = z.object({
   plugin: z.string(),
   createdAt: z.string(),
   candidates: z.array(z.object({ id: z.string(), name: z.string(), tier: z.string() })),
-  judges: z.array(z.object({ role: z.string(), name: z.string(), model: z.string() })),
+  judges: z.array(z.object({ role: z.string(), name: z.string(), model: z.string(), reasoning: z.string().optional() })),
   scenarios: z.array(z.object({ id: z.string(), name: z.string() })),
   leaderboard: z.array(LeaderboardEntrySchema).nullable(),
   failures: z.array(RunFailureSchema),
@@ -88,7 +89,7 @@ const LeaderboardRowSchema = z.object({
   score: z.number(),
 });
 
-const JudgeInfoSchema = z.object({ role: z.string(), name: z.string(), model: z.string() });
+const JudgeInfoSchema = z.object({ role: z.string(), name: z.string(), model: z.string(), reasoning: z.string().optional() });
 
 const RunResultSchema = {
   status: z.enum(['completed', 'cancelled']),
@@ -105,6 +106,7 @@ const RunResultSchema = {
 const ShortlistEntrySchema = z.object({
   ref: z.string(), name: z.string(), notes: z.string(),
   inputPrice: z.number().nullable(), outputPrice: z.number().nullable(),
+  reasoningLevels: z.array(z.enum(REASONING_LEVELS)).optional(),
 });
 
 const OptionsSchema = z.object({
@@ -150,18 +152,23 @@ const PlanPreviewSchema = z.object({
   readyToRun: z.boolean(),
 });
 
+const reasoningHelp = 'Add @level to set how hard a model thinks, e.g. "openai/gpt-6.1-sol@high". ' +
+  'Levels: none, minimal, low, medium, high, xhigh, max; each model accepts only some (see tournament_options). ' +
+  "Leave it off for the model's default. The same model may appear twice at different levels.";
+
 const planInputShape = {
   bench: RunPlanSchema.shape.bench.describe('Bench name. Defaults to "dnd". Call tournament_options for choices.'),
   scenarios: RunPlanSchema.shape.scenarios.describe('Scenario IDs. Omit for every scenario in the bench.'),
-  candidates: RunPlanSchema.shape.candidates.describe('1-4 model refs. Bare IDs use OpenRouter. Use anthropic:claude-... for your Anthropic API key.'),
-  judgePanel: RunPlanSchema.shape.judgePanel.describe('1-5 judge seats. Each may set model and either persona or customPersona with a lens (1-1000 characters) and optional name (1-60 characters).'),
-  synthesizer: RunPlanSchema.shape.synthesizer.describe('Model ref used to reconcile judge scores. Omit for the default. Not used for one judge.'),
-  participant: RunPlanSchema.shape.participant.describe('Model ref for the simulated user who sends follow-up messages. Omit for the default.'),
+  candidates: RunPlanSchema.shape.candidates.describe('1-4 model refs. Bare IDs use OpenRouter. Use anthropic:claude-... for your Anthropic API key.' + ' ' + reasoningHelp),
+  judgePanel: RunPlanSchema.shape.judgePanel.describe('1-5 judge seats. Each may set model and either persona or customPersona with a lens (1-1000 characters) and optional name (1-60 characters).' + ' ' + reasoningHelp),
+  synthesizer: RunPlanSchema.shape.synthesizer.describe('Model ref used to reconcile judge scores. Omit for the default. Not used for one judge.' + ' ' + reasoningHelp),
+  participant: RunPlanSchema.shape.participant.describe('Model ref for the simulated user who sends follow-up messages. Omit for the default.' + ' ' + reasoningHelp),
   turns: RunPlanSchema.shape.turns.describe('1-10 turns for every scenario. Omit to use each scenario\'s own default.'),
 };
 
 export interface PlanPreview {
   plan: ResolvedRunPlan;
+  catalog: Catalog;
   summary: string;
   estimate: CostEstimate;
   warnings: string[];
@@ -170,7 +177,7 @@ export interface PlanPreview {
 function planModelRefs(plan: ResolvedRunPlan) {
   return [
     ...plan.candidates.map(candidate => parseModelRef(candidate.id)),
-    ...plan.judges.map(judge => parseModelRef(judge.route === 'openrouter' ? judge.model : `${judge.route}:${judge.model}`)),
+    ...plan.judges.map(judge => parseModelRef(seatRef(judge.route, judge.model, judge.reasoning))),
     plan.synthesizer, plan.participant,
   ];
 }
@@ -178,9 +185,11 @@ function planModelRefs(plan: ResolvedRunPlan) {
 export async function buildPlanPreview(ctx: McpContext, input: RunPlanInput, legacy?: LegacyJudgeOptions): Promise<PlanPreview> {
   const plan = normalizeRunPlan(input, legacy);
   const catalog = await getCatalog(ctx.fetch);
+  const check = applyReasoningCatalog(plan, catalog);
+  if (check.errors.length) throw new RunPlanError(check.errors.join('\n'));
   const catalogIds = catalog.models.map(model => model.id);
   const knownIds = new Set(catalogIds);
-  const warnings = new Set(plan.warnings);
+  const warnings = new Set([...plan.warnings, ...check.warnings]);
   for (const ref of planModelRefs(plan)) {
     if (catalog.source === 'live' && ref.route === 'openrouter' && !knownIds.has(ref.model)) {
       throw new Error(`Unknown OpenRouter model "${ref.model}". Closest matches: ${closestModelIds(ref.model, catalogIds).join(', ')}.`);
@@ -195,7 +204,7 @@ export async function buildPlanPreview(ctx: McpContext, input: RunPlanInput, leg
   if (catalog.source === 'curated-fallback') {
     warnings.add('Model catalog offline. Model IDs could not be checked and the cost estimate is unavailable.');
   }
-  return { plan, summary: describePlan(plan), estimate: estimateRunCost(plan, catalog), warnings: [...warnings] };
+  return { plan, catalog, summary: describePlan(plan), estimate: estimateRunCost(plan, catalog), warnings: [...warnings] };
 }
 
 function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSchema> {
@@ -205,7 +214,8 @@ function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSch
       bench: plan.bench,
       scenarios: plan.scenarios.map(scenario => ({ id: scenario.id, name: scenario.name, turns: plan.turns ?? scenario.maxTurns })),
       candidates: plan.candidates.map(candidate => ({ ref: candidate.id, route: candidate.route ?? 'openrouter' })),
-      judges: plan.judges.map(judge => ({ role: judge.role, name: judge.name, persona: judge.persona ?? judge.role, model: judge.model, route: judge.route })),
+      judges: plan.judges.map(judge => ({ role: judge.role, name: judge.name, persona: judge.persona ?? judge.role, model: judge.model, route: judge.route,
+        ...(judge.reasoning ? { reasoning: judge.reasoning } : {}) })),
       synthesizer: { ref: plan.synthesizer.ref, route: plan.synthesizer.route },
       participant: { ref: plan.participant.ref, route: plan.participant.route },
       turns: plan.turns,
@@ -219,7 +229,7 @@ function planPreviewPayload(preview: PlanPreview): z.infer<typeof PlanPreviewSch
  * The judge panel actually used for a run, read back from the saved manifest. Tolerant of a
  * missing or malformed run.json (returns []) so a run result is never blocked on this detail.
  */
-function readRunJudges(ctx: McpContext, runId: string): Array<{ role: string; name: string; model: string }> {
+function readRunJudges(ctx: McpContext, runId: string): Array<{ role: string; name: string; model: string; reasoning?: string }> {
   try {
     return readRun(ctx, runId).judges;
   } catch {
@@ -363,7 +373,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
           source: catalog.source, liveCount: catalog.source === 'live' ? catalog.models.length : 0,
           shortlist,
           note: 'Any OpenRouter model ID works, not just this list. Prefix with "anthropic:" ' +
-            '(e.g. "anthropic:claude-sonnet-5-5") to bill an Anthropic model to your own Anthropic API key instead.',
+            '(e.g. "anthropic:claude-sonnet-5-5") to bill an Anthropic model to your own Anthropic API key instead. Add @level to any model ID to set its reasoning level; reasoningLevels lists what each model accepts.',
         },
         providers: [
           { id: 'openrouter', label: 'OpenRouter', status: routeHasCredentials('openrouter') ? 'ready' : 'not_set_up',
@@ -506,10 +516,10 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         'Optional judge picks the judge model and persona; turns sets 1-10 turns. No confirm form. ' +
         'Call tournament_options if you need bench or scenario IDs.',
       inputSchema: {
-        model: z.string().describe('Model ref, e.g. "deepseek/deepseek-v3.2" or "anthropic:claude-haiku-4-5".'),
+        model: z.string().describe('Model ref, e.g. "deepseek/deepseek-v3.2" or "anthropic:claude-haiku-4-5".' + ' ' + reasoningHelp),
         plugin: z.string().default('dnd').describe('Bench to test against, e.g. "dnd" or "coding". Defaults to "dnd".'),
         scenario: z.string().optional().describe('Scenario ID within the plugin. Defaults to the plugin\'s first scenario.'),
-        judge: JudgeSeatSchema.optional().describe('One judge seat with an optional model and either persona or customPersona (lens and optional name).'),
+        judge: JudgeSeatSchema.optional().describe('One judge seat with an optional model and either persona or customPersona (lens and optional name).' + ' ' + reasoningHelp),
         turns: planInputShape.turns,
       },
       outputSchema: RunResultSchema,
@@ -552,7 +562,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         'synthesizerModel reconciles judge scores. OpenRouter is the default; anthropic: refs bill ' +
         'the user\'s Anthropic API key. Use tournament_quick_test for a cheap check.',
       inputSchema: {
-        models: z.array(z.string()).min(1).max(4).describe('1-4 model refs to compare. Bare IDs use OpenRouter. anthropic: refs use your Anthropic API key.'),
+        models: z.array(z.string()).min(1).max(4).describe('1-4 model refs to compare. Bare IDs use OpenRouter. anthropic: refs use your Anthropic API key.' + ' ' + reasoningHelp),
         plugin: z.string().default('dnd').describe('Bench to run, e.g. "dnd" or "coding". Defaults to "dnd".'),
         scenarios: z.array(z.string()).optional().describe('Scenario IDs to run. Omit to run every scenario in the bench.'),
         judges: z.number().int().min(1).max(5).default(3).describe('Number of judges on the scoring panel, 1-5. Defaults to 3. Ignored when `judgeModels` is provided.'),
@@ -560,9 +570,9 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
           `1-5 OpenRouter model IDs, one per judge seat, filled in this fixed order: ${
             JUDGES.map((judge, index) => `${index + 1}. ${judge.name} (${judge.focus.join(', ')})`).join('; ')
           }. When provided, the panel size equals the length of this list and overrides \`judges\`. ` +
-            'Omit to use the default model for each seat.',
+            'Omit to use the default model for each seat. ' + reasoningHelp,
         ),
-        synthesizerModel: z.string().optional().describe('OpenRouter model ID that reconciles the judges\' scores into one final score. Omit to use the default synthesizer model.'),
+        synthesizerModel: z.string().optional().describe('OpenRouter model ID that reconciles the judges\' scores into one final score. Omit to use the default synthesizer model.' + ' ' + reasoningHelp),
         judgePanel: planInputShape.judgePanel,
         turns: planInputShape.turns,
         participantModel: planInputShape.participant,
@@ -581,6 +591,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         ? Object.fromEntries(judgeModels.map((model, index) => [JUDGES[index].role, model]))
         : undefined;
       const caps = server.server.getClientCapabilities();
+      let catalog: Catalog | undefined;
       if (caps?.elicitation) {
         const preview = await buildPlanPreview(ctx, {
           bench: plugin, scenarios, candidates: models, judgePanel,
@@ -588,6 +599,7 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
         }, { judges: judgeModels?.length ?? judges, judgeModels: judgeModelsByRole });
         // Fail on a missing provider key before asking, so the user never confirms a run that cannot start.
         assertRoutesReady(preview.plan);
+        catalog = preview.catalog;
         let confirmed = false;
         try {
           const result = await server.server.elicitInput({
@@ -617,6 +629,8 @@ export function registerTools(server: McpServer, ctx: McpContext): void {
       }
       const run = await evaluateTournament({
         models,
+        // Reuse the preview's catalog so the run checks levels against what the user confirmed.
+        catalog: catalog ?? await getCatalog(ctx.fetch),
         plugin,
         scenarios,
         judges: judgeModels?.length ?? judges,

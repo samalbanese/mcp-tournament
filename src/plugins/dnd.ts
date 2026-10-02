@@ -8,7 +8,7 @@
 import type { ParticipantRuntime, TournamentPlugin, TestCase, Turn, ToolDefinition } from './base.js';
 import { getModelClient, routeHasCredentials } from '../clients/index.js';
 import { resolveRoleRef } from '../config/judges.js';
-import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
+import { outputAllowance } from '../config/reasoning.js';
 
 // ── Test Character ──────────────────────────────────────
 
@@ -221,12 +221,13 @@ ${scenario.setupMessage}`;
         .join('\n\n');
       const response = await getModelClient(participant.route).createMessage({
         model: participant.model,
+        reasoning: participant.reasoning,
         system: `You are roleplaying ${TEST_CHARACTER.name}, a level ${TEST_CHARACTER.level} ${TEST_CHARACTER.race} ${TEST_CHARACTER.class}, as a player at a D&D table. Reply with what the PLAYER says: 1-3 sentences of action and/or dialogue, first person, in character. Declare intent — never narrate outcomes, roll dice, or speak for NPCs (that is the DM's job).`,
         messages: [{
           role: 'user',
           content: `Scenario goal: ${scenario.goalCard}\n\nSession so far:\n${transcript}\n\nWhat do you do next?`,
         }],
-        max_tokens: MAX_TOKENS_PARTICIPANT,
+        max_tokens: outputAllowance('participant', participant.thinks),
       });
       return response.text.trim() || fallback;
     } catch {

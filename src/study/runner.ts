@@ -3,6 +3,8 @@ import path from 'node:path';
 import { z } from 'zod';
 import { getCatalog, type Catalog } from '../catalog.js';
 import type { ClientRoute } from '../clients/index.js';
+import { parseModelRef } from '../config/model-ref.js';
+import { applyReasoningCatalog } from '../config/reasoning.js';
 import { estimateRunCost } from '../estimate.js';
 import { assertRoutesReady, defaultResultsRoot, evaluateTournament } from '../pipeline.js';
 import { normalizeRunPlan, type ResolvedRunPlan } from '../run-plan.js';
@@ -11,7 +13,7 @@ import { planBatches, validateStudyAgainstBenches } from './batches.js';
 import { collectScores } from './collect.js';
 import { acquireStudyLock, assertUnchanged } from './lock.js';
 import { writeStudyOutputs, type StudyMeta } from './export.js';
-import { parseStudy, StudyError, StudySchema, type Study } from './schema.js';
+import { parseStudy, studySeatRef, StudyError, StudySchema, type Study } from './schema.js';
 
 export interface StudyProgress { batch: number; batches: number; message: string }
 export interface RunStudyOptions {
@@ -109,7 +111,7 @@ function estimateSubscriptionRun(plan: ResolvedRunPlan, catalog: Catalog, subscr
   const estimate = estimateRunCost(pricedPlan, {
     ...catalog, models: catalog.models.filter(entry => entry.id !== `anthropic/${model}`),
   });
-  return { ...estimate, excluded: estimate.excluded.filter(entry => entry !== ref) };
+  return { ...estimate, excluded: estimate.excluded.filter(entry => parseModelRef(entry).model !== model) };
 }
 
 // Callers register benches first (loadDiscoveredBenches); registering twice warns for every bench.
@@ -117,7 +119,13 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
   const study = parseStudy(input);
   validateStudyAgainstBenches(study);
   const batches = planBatches(study);
-  const plans = batches.map(batch => normalizeRunPlan(batch.plan));
+  const plans = batches.map(batch => normalizeRunPlan({
+    ...batch.plan,
+    candidates: batch.candidates.map(ref => studySeatRef(ref, study)),
+    judgePanel: batch.plan.judgePanel?.map((seat, index) => ({ ...seat, model: studySeatRef(study.judges[index].ref, study) })),
+    participant: studySeatRef(study.participant, study),
+    synthesizer: studySeatRef(study.synthesizer, study),
+  }));
   for (const plan of plans) assertRoutesReady(plan);
 
   const root = path.resolve(options.resultsRoot ?? defaultResultsRoot());
@@ -133,6 +141,10 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     throw new StudyError('Progress contains a batch that is not in this study.');
   }
   const catalog = options.catalog ?? await getCatalog();
+  const checks = plans.map(plan => applyReasoningCatalog(plan, catalog));
+  const errors = checks.flatMap(check => check.errors);
+  if (errors.length) throw new StudyError(errors.join('\n'));
+  const warnings = [...new Set(checks.flatMap(check => check.warnings))];
   const subscriptionRoutes = options.subscriptionRoutes ?? [];
   const estimates = plans.map(plan => estimateSubscriptionRun(plan, catalog, subscriptionRoutes));
   const routes = new Set(plans.flatMap(planRoutes));
@@ -143,6 +155,12 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     ? null : estimates.reduce((sum, estimate) => sum + estimate.usd!, 0);
   const excluded = [...new Set(estimates.flatMap(estimate => estimate.excluded))];
   const answers = plans.reduce((sum, plan) => sum + plan.candidates.length * plan.scenarios.length, 0);
+  const levelsSummary = [
+    ...study.candidates.map(seat => `${seat.label}: ${parseModelRef(studySeatRef(seat.ref, study)).reasoning ?? 'provider default'}`),
+    ...study.judges.map(seat => `${seat.family} judge: ${parseModelRef(studySeatRef(seat.ref, study)).reasoning ?? 'provider default'}`),
+    `synthesizer: ${plans[0].synthesizer.reasoning ?? 'provider default'}`,
+    `simulated user: ${plans[0].participant.reasoning ?? 'provider default'}`,
+  ].join(', ');
   const summary = [
     `${study.title}: ${batches.length} batch(es), ${study.candidates.length} models, ${study.judges.length} judges, ${answers} answers.`,
     `Models: ${study.candidates.map(candidate => candidate.ref).join(', ')}`,
@@ -153,9 +171,8 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     ...(unrecordedRoutes.length
       ? [`${unrecordedRoutes.join(', ')} API calls are in the estimate, but recorded spend reads OpenRouter usage only and will not include them.`]
       : []),
-    ...(study.reasoningEffort
-      ? [`Reasoning effort "${study.reasoningEffort}" adds reasoning tokens the estimate does not count; expect actual spend above it.`]
-      : []),
+    `Reasoning: ${levelsSummary}`,
+    ...warnings,
     ...(excluded.length ? [`Other unpriced refs excluded: ${excluded.join(', ')}`] : []),
     `${progress.done.length} completed batch(es) will be skipped. The estimate covers the full study.`,
     estimates[0].assumptions,
@@ -170,7 +187,6 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     fs.writeFileSync(temporary, `${JSON.stringify(progress, null, 2)}\n`);
     fs.renameSync(temporary, progressFile);
   };
-  const previousEffort = process.env.TOURNAMENT_REASONING_EFFORT;
   let batchesRun = 0;
   let batchesSkipped = 0;
   const release = acquireStudyLock(studyDir);
@@ -181,7 +197,6 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     progress.startedAt ??= new Date().toISOString();
     if (options.studyFile) progress.studyFile = path.resolve(options.studyFile);
     saveProgress();
-    if (study.reasoningEffort) process.env.TOURNAMENT_REASONING_EFFORT = study.reasoningEffort;
     const fetchUsage = options.fetchUsage ?? defaultFetchUsage;
     const hasPending = batches.some(batch => !progress.done.includes(batch.batchId));
     let lastUsage = hasPending ? await readUsage(fetchUsage) : null;
@@ -216,9 +231,11 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
       report(`Running batch ${batch.batchId}`);
       try {
         await evaluateTournament({
-          models: batch.candidates, plugin: batch.bench, scenarios: batch.plan.scenarios,
-          judgePanel: batch.plan.judgePanel, participantModel: study.participant,
-          synthesizerModel: study.synthesizer, runId: batch.runId, outputRoot: root,
+          catalog, models: batch.candidates.map(ref => studySeatRef(ref, study)),
+          plugin: batch.bench, scenarios: batch.plan.scenarios,
+          judgePanel: batch.plan.judgePanel?.map((seat, index) => ({ ...seat, model: studySeatRef(study.judges[index].ref, study) })),
+          participantModel: studySeatRef(study.participant, study),
+          synthesizerModel: studySeatRef(study.synthesizer, study), runId: batch.runId, outputRoot: root,
           onProgress: event => report(event.message),
         });
       } catch (error) {
@@ -243,9 +260,6 @@ export async function runStudy(input: Study, options: RunStudyOptions): Promise<
     });
     return { studyDir, analysis, batchesRun, batchesSkipped, cancelled: false };
   } finally {
-    // Restored before releasing: releasing can throw, and the setting must not leak into a later run.
-    if (previousEffort === undefined) delete process.env.TOURNAMENT_REASONING_EFFORT;
-    else process.env.TOURNAMENT_REASONING_EFFORT = previousEffort;
     release();
   }
 }

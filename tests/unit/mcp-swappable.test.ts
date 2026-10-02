@@ -325,6 +325,8 @@ describe('tournament_evaluate confirm step', () => {
     answer(client, { action: 'accept', content: { confirm: true } });
     await client.callTool({ name: 'tournament_evaluate', arguments: runArgs });
     expect(spyClient.createMessage).toHaveBeenCalled();
+    // The preview's catalog is reused for the run, not fetched again.
+    expect(okFetch).toHaveBeenCalledTimes(1);
     await close();
   });
 
@@ -333,7 +335,7 @@ describe('tournament_evaluate confirm step', () => {
     const { client, close } = await connect(okFetch);
     await client.callTool({ name: 'tournament_evaluate', arguments: runArgs });
     expect(spyClient.createMessage).toHaveBeenCalled();
-    expect(okFetch).not.toHaveBeenCalled();
+    expect(okFetch).toHaveBeenCalledTimes(1);
     expect(globalThis.fetch).not.toHaveBeenCalled();
     await close();
   });
@@ -379,7 +381,11 @@ describe('tournament_evaluate confirm step', () => {
     expect(result.isError).toBeFalsy();
     expect(result.structuredContent?.status).toBe('completed');
     expect(form).not.toHaveBeenCalled();
-    expect(okFetch).not.toHaveBeenCalled();
+    // The catalog is still read once for reasoning levels, but an unknown ID does not block the run.
+    expect(okFetch).toHaveBeenCalledTimes(1);
+    expect(pipeline.evaluateTournament).toHaveBeenCalledWith(expect.objectContaining({
+      catalog: expect.objectContaining({ source: 'live' }),
+    }));
   });
 });
 

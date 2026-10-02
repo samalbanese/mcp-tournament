@@ -1,5 +1,6 @@
 import { getModelClient } from '../clients/index.js';
-import { MAX_TOKENS_JUDGE, RETRY_ATTEMPTS } from '../config/constants.js';
+import { RETRY_ATTEMPTS } from '../config/constants.js';
+import { outputAllowance } from '../config/reasoning.js';
 import type { JudgeConfig } from '../config/judges.js';
 import type { TestCase, TournamentPlugin, Turn } from '../plugins/base.js';
 import { JudgeScoreSchema, type JudgeScore } from '../schemas/judge-score.js';
@@ -45,7 +46,8 @@ export async function runJudge(
   for (let attempt = 0; attempt <= RETRY_ATTEMPTS; attempt++) {
     const response = await getModelClient(judge.route).createMessage({
       model: judge.model,
-      max_tokens: MAX_TOKENS_JUDGE,
+      max_tokens: outputAllowance('judge', judge.thinks),
+      reasoning: judge.reasoning,
       system,
       messages: [{ role: 'user', content: prompt }],
     });

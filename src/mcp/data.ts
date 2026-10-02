@@ -33,7 +33,7 @@ export interface RunSummary {
   plugin: string;
   createdAt: string;
   candidates: Array<{ id: string; name: string; tier: string }>;
-  judges: Array<{ role: string; name: string; model: string }>;
+  judges: Array<{ role: string; name: string; model: string; reasoning?: string }>;
   scenarios: Array<{ id: string; name: string }>;
   /** Null when the run was interrupted before a leaderboard was written. */
   leaderboard: LeaderboardEntry[] | null;

@@ -3,7 +3,10 @@ import http, { type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { fetchCatalogModels as getModels } from './catalog.js';
+import { fetchCatalogModels as getModels, type Catalog } from './catalog.js';
+import { ModelRefError, parseModelRef } from './config/model-ref.js';
+import { applyReasoningCatalog, seatRef } from './config/reasoning.js';
+import { normalizeRunPlan, RunPlanError } from './run-plan.js';
 import { JUDGES, resolveRoleModel } from './config/judges.js';
 import { evaluateTournament, type TournamentRun } from './pipeline.js';
 import {
@@ -177,7 +180,10 @@ export function findUnknownModelId(
   availableModelIds: Iterable<string>,
 ): string | undefined {
   const available = new Set(availableModelIds);
-  return requestedModelIds.find(modelId => !available.has(modelId));
+  return requestedModelIds.find(modelId => {
+    const ref = parseModelRef(modelId);
+    return ref.route === 'openrouter' && !available.has(ref.model);
+  });
 }
 
 function stripJsonFence(value: string): string {
@@ -215,7 +221,7 @@ async function suggestCriteria(fetcher: typeof fetch, apiKey: string, question: 
   throw new Error('OpenRouter did not return three valid scoring criteria after one retry');
 }
 
-function runInBackground(input: z.infer<typeof runRequestSchema>, runId: string, resultsDir: string, evaluate: typeof evaluateTournament): void {
+function runInBackground(input: z.infer<typeof runRequestSchema>, runId: string, resultsDir: string, evaluate: typeof evaluateTournament, catalog: Catalog): void {
   const state: ActiveRun = { runId, status: 'running', logTail: [] };
   runs.set(runId, state);
   activeApiKey = input.apiKey;
@@ -227,6 +233,7 @@ function runInBackground(input: z.infer<typeof runRequestSchema>, runId: string,
   });
   logInfo(`Starting local GUI run ${runId}`);
   void evaluate({
+    catalog,
     models: input.models,
     plugin: input.plugin,
     scenarios: input.scenarioId ? [input.scenarioId] : undefined,
@@ -289,7 +296,7 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
       if (request.method === 'GET' && pathname === '/api/defaults') {
         sendJson(response, 200, {
           candidates: DEFAULT_CANDIDATE_MODELS,
-          judges: JUDGES.map(({ role, name, model, route }) => ({ role, name, model: route === 'anthropic' ? `anthropic:${model}` : model })),
+          judges: JUDGES.map(({ role, name, model, route, reasoning }) => ({ role, name, model: seatRef(route, model, reasoning) })),
           synthesizer: resolveRoleModel('synthesizer'),
         });
         return;
@@ -348,14 +355,15 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
           sendJson(response, 409, { error: 'a run is already in progress' });
           return;
         }
+        let catalog: Catalog;
         try {
-          const catalog = await getModels(fetcher);
+          catalog = { source: 'live', models: await getModels(fetcher) };
           const requestedModels = [
             ...parsed.data.models,
             ...Object.values(parsed.data.judgeModels ?? {}),
             ...(parsed.data.synthesizerModel ? [parsed.data.synthesizerModel] : []),
           ];
-          const unknownModel = findUnknownModelId(requestedModels, catalog.map(model => model.id));
+          const unknownModel = findUnknownModelId(requestedModels, catalog.models.map(model => model.id));
           if (unknownModel) {
             sendJson(response, 400, {
               error: scrub(`Unknown OpenRouter model ID: "${unknownModel}"`, parsed.data.apiKey),
@@ -363,13 +371,29 @@ export function createRequestHandler(options: HandlerOptions): http.RequestListe
             return;
           }
         } catch (error) {
-          sendJson(response, 502, {
+          sendJson(response, error instanceof ModelRefError ? 400 : 502, {
+            error: scrub(error instanceof Error ? error.message : String(error), parsed.data.apiKey),
+          });
+          return;
+        }
+        try {
+          // Same checks the run makes, so a bad level or scenario fails here instead of in the background.
+          const plan = normalizeRunPlan({
+            bench: parsed.data.plugin,
+            candidates: parsed.data.models,
+            scenarios: parsed.data.scenarioId ? [parsed.data.scenarioId] : undefined,
+            synthesizer: parsed.data.synthesizerModel,
+          }, { judges: parsed.data.judges, judgeModels: parsed.data.judgeModels });
+          const check = applyReasoningCatalog(plan, catalog);
+          if (check.errors.length) throw new RunPlanError(check.errors.join('\n'));
+        } catch (error) {
+          sendJson(response, 400, {
             error: scrub(error instanceof Error ? error.message : String(error), parsed.data.apiKey),
           });
           return;
         }
         const runId = allocateRunId(resultsDir);
-        runInBackground(parsed.data, runId, resultsDir, evaluate);
+        runInBackground(parsed.data, runId, resultsDir, evaluate, catalog);
         sendJson(response, 202, { runId });
         return;
       }

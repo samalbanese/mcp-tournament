@@ -54,12 +54,12 @@ export function registerPrompts(server: McpServer, ctx: McpContext): void {
         'choose_model_for_task instead if an existing leaderboard would already answer the ' +
         'question.',
       argsSchema: {
-        models: z.string().optional().describe('Comma-separated model IDs to compare, e.g. "deepseek/deepseek-v3.2,openai/gpt-5.4-mini". Omit for guided setup.'),
+        models: z.string().optional().describe('Comma-separated model IDs to compare, e.g. "deepseek/deepseek-v3.2,openai/gpt-5.4-mini". Omit for guided setup. Add @level to set reasoning, e.g. "openai/gpt-6.1-sol@high".'),
         plugin: completable(
           z.string().optional().describe('Bench (plugin) name to run, e.g. "dnd" or "customer-support". Defaults to "dnd".'),
           value => describeBenches().map(bench => bench.name).filter(name => name.startsWith(value ?? '')),
         ),
-        judges: z.string().optional().describe('Comma-separated OpenRouter model IDs, one per judge seat, e.g. "deepseek/deepseek-v3.2,qwen/qwen3.5-flash-02-23". Omit to use the default judge panel.'),
+        judges: z.string().optional().describe('Comma-separated OpenRouter model IDs, one per judge seat, e.g. "deepseek/deepseek-v3.2,qwen/qwen3.5-flash-02-23". Omit to use the default judge panel. Add @level to any model ref, e.g. "openai/gpt-6.1-sol@high"; see tournament_options for accepted levels.'),
       },
     },
     async ({ models, plugin, judges }) => {

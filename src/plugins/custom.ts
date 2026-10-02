@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { getModelClient, routeHasCredentials } from '../clients/index.js';
-import { MAX_TOKENS_PARTICIPANT } from '../config/constants.js';
+import { outputAllowance } from '../config/reasoning.js';
 import { resolveRoleRef } from '../config/judges.js';
 import { buildCriteriaJsonInstruction } from '../prompts/judge-prompts.js';
 import { logWarn } from '../utils/logger.js';
@@ -155,12 +155,13 @@ ${buildCriteriaJsonInstruction(criteria)}`;
       try {
         const response = await getModelClient(participant.route).createMessage({
           model: participant.model,
+          reasoning: participant.reasoning,
           system: `You are ${persona}. Stay in character. React to the candidate's last answer and push deeper with exactly one follow-up question. Never answer the original task yourself. Keep your response to 80 words or fewer.`,
           messages: [{
             role: 'user',
             content: `Original task:\n${scenarioDefinition.prompt}\n\nCandidate's last answer:\n${candidateTurns.at(-1)?.content ?? ''}\n\nAsk the next follow-up.`,
           }],
-          max_tokens: MAX_TOKENS_PARTICIPANT,
+          max_tokens: outputAllowance('participant', participant.thinks),
         });
         return response.text.trim() || fallback;
       } catch {

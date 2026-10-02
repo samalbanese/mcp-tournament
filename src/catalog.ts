@@ -1,35 +1,64 @@
 import { CANDIDATE_MODELS, type CandidateModel } from './config/models.js';
 import type { ParsedModelRef } from './config/model-ref.js';
+import { isReasoningLevel, type ReasoningLevel } from './config/reasoning.js';
 
 const MODEL_CACHE_MS = 10 * 60 * 1000;
 const CATALOG_URL = 'https://openrouter.ai/api/v1/models';
 const CATALOG_TIMEOUT_MS = 8000;
 
-export interface CatalogModel { id: string; name: string; contextLength: number; promptPrice: number; completionPrice: number }
+export interface CatalogModel {
+  id: string; name: string; contextLength: number; promptPrice: number; completionPrice: number;
+  reasoningLevels?: ReasoningLevel[];
+  defaultReasoning?: ReasoningLevel;
+  reasonsByDefault?: boolean;
+  hasReasoning?: boolean;
+}
 export interface Catalog { source: 'live' | 'curated-fallback'; models: CatalogModel[]; error?: string }
 export type ShortlistTier = 'budget' | 'mid' | 'premium' | 'wildcards';
-export interface ShortlistEntry { ref: string; name: string; notes: string; inputPrice: number | null; outputPrice: number | null }
+export interface ShortlistEntry {
+  ref: string; name: string; notes: string; inputPrice: number | null; outputPrice: number | null;
+  reasoningLevels?: ReasoningLevel[];
+}
 
 let cache: { expiresAt: number; models: CatalogModel[] } | null = null;
 
 export function resetCatalogCache(): void { cache = null; }
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 export async function fetchCatalogModels(fetcher: typeof fetch = fetch): Promise<CatalogModel[]> {
   if (cache && cache.expiresAt > Date.now()) return cache.models;
   // A hung request must become an error so getCatalog can fall back to the curated list.
   const response = await fetcher(CATALOG_URL, { signal: AbortSignal.timeout(CATALOG_TIMEOUT_MS) });
   if (!response.ok) throw new Error(`OpenRouter models request failed (${response.status})`);
-  const body = await response.json() as { data?: Array<{ id?: unknown; name?: unknown; context_length?: unknown; pricing?: { prompt?: unknown; completion?: unknown } }> };
+  const body = await response.json() as { data?: Array<{ id?: unknown; name?: unknown; context_length?: unknown; pricing?: { prompt?: unknown; completion?: unknown }; reasoning?: unknown }> };
   if (!Array.isArray(body.data)) throw new Error('OpenRouter returned an invalid models response');
   const models = body.data
     .filter((model): model is typeof model & { id: string } => typeof model.id === 'string')
-    .map(model => ({
-      id: model.id,
-      name: typeof model.name === 'string' ? model.name : model.id,
-      contextLength: Number(model.context_length) || 0,
-      promptPrice: Number(model.pricing?.prompt) * 1e6 || 0,
-      completionPrice: Number(model.pricing?.completion) * 1e6 || 0,
-    }))
+    .map(model => {
+      const reasoning = isRecord(model.reasoning) ? model.reasoning : undefined;
+      const levels = Array.isArray(reasoning?.supported_efforts)
+        ? reasoning.supported_efforts.filter((level): level is ReasoningLevel => typeof level === 'string' && isReasoningLevel(level))
+        : [];
+      const defaultLevel = typeof reasoning?.default_effort === 'string' && isReasoningLevel(reasoning.default_effort)
+        ? reasoning.default_effort : undefined;
+      return {
+        id: model.id,
+        name: typeof model.name === 'string' ? model.name : model.id,
+        contextLength: Number(model.context_length) || 0,
+        promptPrice: Number(model.pricing?.prompt) * 1e6 || 0,
+        completionPrice: Number(model.pricing?.completion) * 1e6 || 0,
+        ...(reasoning ? {
+          hasReasoning: true,
+          ...(levels.length ? { reasoningLevels: levels } : {}),
+          ...(defaultLevel ? { defaultReasoning: defaultLevel } : {}),
+          reasonsByDefault: reasoning.mandatory === true || reasoning.default_enabled === true
+            || (reasoning.default_enabled !== false && defaultLevel !== undefined && defaultLevel !== 'none'),
+        } : {}),
+      };
+    })
     // OpenRouter marks meta-entries like the Auto Router with -1 pricing;
     // they aren't real candidates and render as absurd negative prices.
     .filter(model => model.promptPrice >= 0 && model.completionPrice >= 0);
@@ -63,6 +92,7 @@ export function buildShortlist(catalog: Catalog): Record<ShortlistTier, Shortlis
     result[curated.tier].push({
       ref: curated.id, name: curated.name, notes: curated.notes,
       inputPrice: priced ? match.promptPrice : null, outputPrice: priced ? match.completionPrice : null,
+      ...(match.reasoningLevels ? { reasoningLevels: match.reasoningLevels } : {}),
     });
   }
   return result;

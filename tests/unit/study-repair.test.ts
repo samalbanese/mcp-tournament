@@ -8,7 +8,7 @@ import type { Catalog } from '../../src/catalog.js';
 import { createCustomPlugin } from '../../src/plugins/custom.js';
 import { registerPlugin } from '../../src/plugins/index.js';
 import { modelSlug, scenarioSlug } from '../../src/plugins/base.js';
-import { parseStudy, StudyError, type Study } from '../../src/study/schema.js';
+import { parseStudy, studySeatRef, StudyError, type Study } from '../../src/study/schema.js';
 import { planBatches } from '../../src/study/batches.js';
 import { collectScores } from '../../src/study/collect.js';
 import { reanalyzeStudy, runStudy } from '../../src/study/runner.js';
@@ -27,7 +27,7 @@ registerPlugin(bench);
 const catalog: Catalog = {
   source: 'live',
   models: ['openai/test', 'google/test', 'meta/participant', 'z-ai/synthesis', 'deepseek/test', 'qwen/test']
-    .map(id => ({ id, name: id, contextLength: 10000, promptPrice: 2, completionPrice: 10 })),
+    .map(id => ({ id, name: id, contextLength: 10000, promptPrice: 2, completionPrice: 10, reasoningLevels: ['low', 'high'] })),
 };
 interface Call {
   route: ClientRoute;
@@ -71,7 +71,7 @@ function fake(route: ClientRoute): ModelClient {
       const phase = params.system?.startsWith('Synthesize') ? 'synthesis'
         : params.system?.includes('Score each listed criterion') ? 'judge' : 'answer';
       const call: Call = { route, model: params.model, phase, text: JSON.stringify(params.messages),
-        effort: process.env.TOURNAMENT_REASONING_EFFORT };
+        effort: params.reasoning };
       calls.push(call);
       await duringCall(call);
       const error = failure(call);
@@ -98,7 +98,7 @@ function write(file: string, value: unknown) { fs.writeFileSync(file, JSON.strin
 function studyDir() { return path.join(root, 'studies', study().id); }
 function runDirs(input = study()) { return planBatches(input).map(batch => path.join(root, batch.runId)); }
 function artifact(area: 'judges' | 'candidates', file: string, model = 'openai/test', scenario = 0) {
-  return path.join(runDirs()[0], area, modelSlug(model), scenarioSlug(bench.scenarios[scenario]), file);
+  return path.join(runDirs()[0], area, modelSlug(studySeatRef(model, study())), scenarioSlug(bench.scenarios[scenario]), file);
 }
 function failuresFile() { return path.join(runDirs()[0], 'failures.json'); }
 function missingJudge(call: Call) {
@@ -123,7 +123,6 @@ beforeEach(() => {
   root = fs.mkdtempSync(path.join(os.tmpdir(), 'study-repair-'));
   calls = []; failure = () => undefined; invalid = () => false; synthesisScore = 7;
   duringCall = async () => undefined;
-  delete process.env.TOURNAMENT_REASONING_EFFORT;
   registerModelClient('openrouter', fake('openrouter'));
   registerModelClient('anthropic', fake('anthropic'));
   vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('Unexpected network request'); }));
@@ -157,7 +156,7 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(fs.existsSync(artifact('judges', 'custom_1.failed.txt'))).toBe(false);
     expect(fs.existsSync(failuresFile())).toBe(false);
     expect(read(artifact('judges', 'synthesis.json')).average_score).toBe(9);
-    expect(read(path.join(runDirs()[0], 'leaderboard.json')).find((row: { modelId: string }) => row.modelId === 'openai/test').overallAverage).toBe(8);
+    expect(read(path.join(runDirs()[0], 'leaderboard.json')).find((row: { modelId: string }) => row.modelId === 'openai/test@low').overallAverage).toBe(8);
     const rows = collectScores(study(), runDirs());
     expect(rows).toHaveLength(18);
     expect(rows.filter(row => row.candidateRef === 'openai/test' && row.scenarioId === 'one' && row.judgeRole === 'custom_1')).toHaveLength(1);
@@ -170,8 +169,8 @@ describe('study repair', { timeout: 30_000 }, () => {
     }
     expect(opts.confirm.mock.calls[0][0]).toContain('0 answer(s) to rerun and 1 judge seat(s)');
     expect(onProgress.mock.calls.map(([text]) => text)).toEqual([
-      'Repairing batch 1-1', 'Starting judge anthropic judge for 1-1 openai/test one',
-      'Finished judge anthropic judge for 1-1 openai/test one: filled', 'Finished batch 1-1: 0 gap(s) remain',
+      'Repairing batch 1-1', 'Starting judge anthropic judge for 1-1 openai/test@low one',
+      'Finished judge anthropic judge for 1-1 openai/test@low one: filled', 'Finished batch 1-1: 0 gap(s) remain',
     ]);
   });
 
@@ -180,8 +179,8 @@ describe('study repair', { timeout: 30_000 }, () => {
     failure = call => call.phase === 'synthesis' ? 'Synthesizer down' : undefined;
     const first = await repairStudy(study(), options());
     expect(first.judgeSeatsFilled).toBe(1);
-    expect(first.remaining).toEqual([expect.objectContaining({ model: 'openai/test', scenario: 'one', error: 'synthesis: Synthesizer down' })]);
-    expect(read(failuresFile())).toEqual([{ model: 'openai/test', scenario: 'one', error: 'synthesis: Synthesizer down' }]);
+    expect(first.remaining).toEqual([expect.objectContaining({ model: 'openai/test@low', scenario: 'one', error: 'synthesis: Synthesizer down' })]);
+    expect(read(failuresFile())).toEqual([{ model: 'openai/test@low', scenario: 'one', error: 'synthesis: Synthesizer down' }]);
     const turns = fs.readFileSync(artifact('candidates', 'turns.json'), 'utf8');
     failure = () => undefined; calls.length = 0; synthesisScore = 9;
     const second = await repairStudy(study(), options());
@@ -194,7 +193,7 @@ describe('study repair', { timeout: 30_000 }, () => {
 
   it('re-judges a saved answer whose judging failed instead of generating a new one', async () => {
     await finishedWithGap();
-    write(failuresFile(), [{ model: 'openai/test', scenario: 'one', error: 'Synthesis failed: timeout' }]);
+    write(failuresFile(), [{ model: 'openai/test@low', scenario: 'one', error: 'Synthesis failed: timeout' }]);
     const turns = fs.readFileSync(artifact('candidates', 'turns.json'), 'utf8');
     const result = await repairStudy(study(), options());
     expect(result).toMatchObject({ answersRerun: 0, judgeSeatsFilled: 1, remaining: [] });
@@ -213,7 +212,7 @@ describe('study repair', { timeout: 30_000 }, () => {
 
   it('clears an earlier attempt\'s scores before regenerating an answer', async () => {
     await finishedWithGap();
-    const model = 'openai/test';
+    const model = 'openai/test@low';
     write(artifact('candidates', 'error.json', model), { error: 'Cut off' });
     write(failuresFile(), [{ model, scenario: 'one', error: 'Cut off' }]);
     expect(fs.existsSync(artifact('judges', 'custom_3.json', model))).toBe(true);
@@ -270,8 +269,8 @@ describe('study repair', { timeout: 30_000 }, () => {
     const result = await repairStudy(study(), options());
     const error = `judge anthropic judge: ${kind === 'throw' ? 'Still unavailable' : 'anthropic judge returned invalid score JSON'}`;
     expect(result).toMatchObject({ answersRerun: 0, judgeSeatsFilled: 0,
-      remaining: [{ runId: path.basename(runDirs()[0]), model: 'openai/test', scenario: 'one', error }] });
-    expect(read(failuresFile())).toEqual([{ model: 'openai/test', scenario: 'one', error }]);
+      remaining: [{ runId: path.basename(runDirs()[0]), model: 'openai/test@low', scenario: 'one', error }] });
+    expect(read(failuresFile())).toEqual([{ model: 'openai/test@low', scenario: 'one', error }]);
     expect(fs.readFileSync(artifact('judges', 'synthesis.json'), 'utf8')).toBe(oldSynthesis);
     expect(calls.every(missingJudge)).toBe(true);
     if (kind === 'invalid') expect(fs.readFileSync(artifact('judges', 'custom_1.failed.txt'), 'utf8')).toBe('invalid score output');
@@ -440,9 +439,8 @@ describe('study repair', { timeout: 30_000 }, () => {
   it.each([
     ['repair', () => repairStudy(study(), options())],
     ['run', () => runStudy(study(), options())],
-  ])('restores the reasoning setting even when releasing the lock fails (%s)', async (_name, operation) => {
+  ])('reports a lock release failure (%s)', async (_name, operation) => {
     await finishedWithGap();
-    process.env.TOURNAMENT_REASONING_EFFORT = 'high';
     const lock = path.join(studyDir(), '.lock');
     const realRead = fs.readFileSync;
     // No lock exists yet, so the claim never reads it; the only read of the lock is the release.
@@ -455,7 +453,6 @@ describe('study repair', { timeout: 30_000 }, () => {
     } finally {
       spy.mockRestore();
     }
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('high');
   });
 
   it('replaces a lock a crash left half-written', async () => {
@@ -517,13 +514,11 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
   });
 
-  it.each([undefined, 'high'])('sets reasoning effort and restores previous %s', async previous => {
+  it('uses the study level for repaired judge and synthesis calls', async () => {
     await finishedWithGap();
-    if (previous) process.env.TOURNAMENT_REASONING_EFFORT = previous;
     await repairStudy(study(), options());
     expect(calls.length).toBeGreaterThan(0);
     expect(calls.every(call => call.effort === 'low')).toBe(true);
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe(previous);
   });
 
   it.each(['throw', 'invalid'])('keeps old synthesis when refresh returns %s and still analyzes the new seat', async kind => {
@@ -533,7 +528,7 @@ describe('study repair', { timeout: 30_000 }, () => {
     else invalid = call => call.phase === 'synthesis';
     const result = await repairStudy(study(), options());
     expect(result.judgeSeatsFilled).toBe(1);
-    expect(result.remaining).toEqual([{ runId: path.basename(runDirs()[0]), model: 'openai/test', scenario: 'one',
+    expect(result.remaining).toEqual([{ runId: path.basename(runDirs()[0]), model: 'openai/test@low', scenario: 'one',
       error: `synthesis: ${kind === 'throw' ? 'Unavailable synthesis' : 'invalid score output'}` }]);
     expect(fs.readFileSync(artifact('judges', 'synthesis.json'), 'utf8')).toBe(old);
     expect(result.analysis?.answers.analyzed).toBe(6);
@@ -543,7 +538,7 @@ describe('study repair', { timeout: 30_000 }, () => {
   it('keeps unmatched entries while repairing known gaps and deduplicates repeated seats', async () => {
     await finishedWithGap();
     const known = read(failuresFile())[0];
-    const unknown = { model: 'openai/test', scenario: 'unknown', error: 'Untouched' };
+    const unknown = { model: 'openai/test@low', scenario: 'unknown', error: 'Untouched' };
     write(failuresFile(), [known, unknown, known]);
     const result = await repairStudy(study(), options());
     expect(result.judgeSeatsFilled).toBe(1);
@@ -567,7 +562,10 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(result.answersRerun).toBe(stage === 'some judges' ? 2 : 0);
     expect(result.judgeSeatsFilled).toBe(0);
     expect(result.remaining).toHaveLength(2);
-    expect(result.remaining.every(gap => gap.model === 'anthropic:claude-test' && gap.error === error)).toBe(true);
+    // An all-judges failure names each judge's own error.
+    const matches = (text: string) => stage === 'all judges'
+      ? text.startsWith(`${error}: `) && text.includes('New judge failure') : text === error;
+    expect(result.remaining.every(gap => gap.model === 'anthropic:claude-test@low' && matches(gap.error))).toBe(true);
     expect(read(failuresFile())).toEqual(result.remaining.map(({ model, scenario, error }) => ({ model, scenario, error })));
     if (stage === 'answer') expect(calls.every(call => call.phase === 'answer')).toBe(true);
   });
@@ -602,7 +600,7 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(calls.some(call => call.phase === 'answer')).toBe(false);
   });
 
-  it('preflights routes before confirmation and preserves the environment on unexpected failure', async () => {
+  it('preflights routes before confirmation and releases the lock on unexpected failure', async () => {
     await finishedWithGap();
     const opts = options();
     registerModelClient('anthropic', { ...fake('anthropic'), isConfigured: () => false });
@@ -611,23 +609,20 @@ describe('study repair', { timeout: 30_000 }, () => {
     expect(opts.fetchUsage).not.toHaveBeenCalled();
     expect(calls).toHaveLength(0);
     registerModelClient('anthropic', fake('anthropic'));
-    process.env.TOURNAMENT_REASONING_EFFORT = 'high';
     await expect(repairStudy(study(), { ...options(), onProgress: () => { throw new Error('Stopped'); } })).rejects.toThrow('Stopped');
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('high');
+    expect(fs.existsSync(path.join(studyDir(), '.lock'))).toBe(false);
   });
 
-  it('keeps an unknown prior spend unknown and inherits effort when the input omits it', async () => {
+  it('keeps unknown spend unknown and uses provider defaults when the input omits a level', async () => {
     const input = study(); delete input.reasoningEffort;
     failure = call => missingJudge(call) ? 'Missing seat' : undefined;
     const first = options(); first.fetchUsage.mockResolvedValue(null);
     await runStudy(input, first);
     calls.length = 0; failure = () => undefined;
-    process.env.TOURNAMENT_REASONING_EFFORT = 'medium';
     const opts = options(); opts.fetchUsage.mockResolvedValueOnce(10).mockResolvedValueOnce(12);
     await repairStudy(input, opts);
     expect(read(path.join(studyDir(), 'progress.json')).spentUsd).toBeNull();
     expect(read(path.join(studyDir(), 'study.json')).meta.actualUsd).toBeNull();
-    expect(calls.every(call => call.effort === 'medium')).toBe(true);
-    expect(process.env.TOURNAMENT_REASONING_EFFORT).toBe('medium');
+    expect(calls.every(call => call.effort === undefined)).toBe(true);
   });
 });

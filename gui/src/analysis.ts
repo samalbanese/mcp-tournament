@@ -59,6 +59,10 @@ export function disagreementCount(entry: LeaderboardEntry) {
   );
 }
 
+function withLevel(seat: { model: string; reasoning?: string }) {
+  return seat.reasoning ? `${seat.model} · ${seat.reasoning}` : seat.model;
+}
+
 export function buildReport(
   run: RunManifest,
   entries: LeaderboardEntry[],
@@ -119,8 +123,8 @@ export function buildReport(
     "",
     "These are recorded scenario-specific observations, not a universal model ranking. Small samples do not establish statistical significance. AI judges can make mistakes; candidate and judge models may overlap.",
     "",
-    ...run.judges.map((judge) => `- ${judge.name}: ${judge.model}`),
-    `- Synthesizer: ${run.synthesizer.model}`,
+    ...run.judges.map((judge) => `- ${judge.name}: ${withLevel(judge)}`),
+    `- Synthesizer: ${withLevel(run.synthesizer)}`,
     "",
     "Source: https://github.com/samalbanese/mcp-tournament",
     "",

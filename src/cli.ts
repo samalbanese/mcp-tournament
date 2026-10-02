@@ -55,7 +55,7 @@ program.command('gui')
   });
 program.command('run')
   .description('Run a tournament evaluation')
-  .requiredOption('--models <models>', 'Comma-separated OpenRouter model IDs')
+  .requiredOption('--models <models>', 'Comma-separated OpenRouter model IDs; add @level (e.g. @low) to set reasoning')
   .option('--plugin <plugin>', 'Plugin name', 'dnd')
   .option('--scenario <id>', 'Run one scenario ID')
   .option('--judges <count>', 'Number of judges', value => Number.parseInt(value, 10), 3)

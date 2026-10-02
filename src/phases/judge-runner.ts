@@ -1,8 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { ClientRoute } from '../clients/index.js';
 import { runJudge, type JudgeResult } from '../agents/judge-agent.js';
-import { runSynthesis, type SynthesisResult } from '../agents/synthesizer.js';
+import { runSynthesis, type SynthesisOptions, type SynthesisResult } from '../agents/synthesizer.js';
 import { JUDGES, type JudgeConfig } from '../config/judges.js';
 import { modelSlug, scenarioSlug, type TestCase, type TournamentPlugin, type Turn } from '../plugins/base.js';
 import type { Synthesis } from '../schemas/synthesis.js';
@@ -43,7 +42,7 @@ export async function evaluateWithJudges(
   judges: JudgeConfig[] = JUDGES,
   useSynthesizer = true,
   synthesizerModel?: string,
-  synthesizerRoute: ClientRoute = 'openrouter',
+  synthesizerOptions: SynthesisOptions = {},
 ): Promise<JudgePhaseResult> {
   const judgeDir = path.join(outputDir, 'judges', modelSlug(modelId), scenarioSlug(scenario));
   fs.mkdirSync(judgeDir, { recursive: true });
@@ -71,11 +70,13 @@ export async function evaluateWithJudges(
     ? [{ judge: judges[index].name, error: result.reason instanceof Error
       ? result.reason.message : String(result.reason) }]
     : []);
-  if (!judgeResults.length) throw new Error('All judges failed');
+  if (!judgeResults.length) {
+    throw new Error(`All judges failed: ${failedJudges.map(failure => `${failure.judge}: ${failure.error}`).join('; ')}`);
+  }
 
   let synthesis: SynthesisResult;
   if (useSynthesizer) {
-    synthesis = await runSynthesis(scenario, judgeResults, synthesizerModel, synthesizerRoute);
+    synthesis = await runSynthesis(scenario, judgeResults, synthesizerModel, synthesizerOptions);
     if (!synthesis.synthesis) throw new Error(`Synthesis failed: ${synthesis.raw}`);
   } else {
     const derived = singleJudgeSynthesis(judgeResults[0]);

@@ -1,0 +1,28 @@
+{
+  "final_scores": {
+    "empathy": {
+      "score": 4,
+      "confidence": "high",
+      "outliers": []
+    },
+    "resolution_quality": {
+      "score": 6,
+      "confidence": "contested",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 8 vs median 6 - viewed the template and practical workarounds as excellent given AI's lack of access",
+        "deepseek/deepseek-v4-pro-0813: scored 3 vs median 6 - judged that no ownership, escalation, or actual resolution was provided, leaving the customer to do all the work"
+      ]
+    },
+    "policy_clarity": {
+      "score": 4,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 8 vs median 4 - emphasized that the agent honestly stated its limitations and avoided inventing merchant policies"
+      ]
+    }
+  },
+  "average_score": 4.7,
+  "rule_errors_confirmed": [],
+  "assessment": "The candidate is honest about its lack of billing access and provides a usable, specific refund-request email template, but the interaction is emotionally flat and partly circular. It never explicitly acknowledges the customer's frustration despite the next-day deadline, delays asking for the company name until after unnecessary back-and-forth, and gives vague timing reassurance ('provisional credit quickly') without realistic refund timelines. Judges split sharply on whether the practical guidance is a strong result within the AI's constraints or a failure to actually resolve or escalate the issue.",
+  "judge_agreement": "All five judges agreed the candidate lacked empathy and never validated the customer's frustration, and all confirmed no rule or tool errors. They disagreed most on resolution quality (3-8) and policy clarity (3-8): gemini viewed the honest limitations and practical template as high quality, while deepseek and openai saw generic self-service redirection with unsupported timing claims as a core failure."
+}

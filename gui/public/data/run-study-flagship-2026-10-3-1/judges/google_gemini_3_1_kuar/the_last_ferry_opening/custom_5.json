@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The narrator's voice is specific and consistent, rooted in her scientific training (Pelican case model number, coelacanth decal, benthic zone references) and her emotional exhaustion. The Turn 3 revision successfully strips away melodramatic declarations ('frantic, animal terror') in favor of clipped, observational sentences that convey shock through restraint. The handwriting details—'The sharp, left-handed slant. The high cross of the t. The tight, pinched loop of the C.'—are particularly effective, implying years of obsessive familiarity without stating it. A few moments remain slightly conventional ('A cold sweat broke across the back of my neck, mapping my spine'), but the overall voice feels authored and distinct.",
+      "quotes": [
+        "The sharp, left-handed slant. The high cross of the 't'. The tight, pinched loop of the 'C'.",
+        "I pressed my thumb against the 'C'. The ink smeared slightly. It was fresh.",
+        "I didn't turn around to look at the other passengers. I couldn't."
+      ],
+      "improvement": "The 'mapping my spine' metaphor for sweat is a well-worn image; replacing it with a more idiosyncratic physical detail (perhaps one filtered through her scientific eye—nerve response, vasoconstriction) would further distinguish the voice."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "Sensory details are well-selected and serve the emotional arc without overcrowding. The ferry environment is established concretely in the original ('sour coffee, wet wool, and the heavy, sulfurous exhaust of marine diesel'), and the revision maintains tactile specificity: the ink smearing under her thumb, the cotton string refusing to give way, the plastic handle snapping against metal hinges. The storm appropriately recedes in the final revision to focus attention on the interior crisis. The 'vise around my throat' simile is effective but slightly familiar; the ink-smear detail is the standout image, doing double work as both sensory proof and emotional revelation.",
+      "quotes": [
+        "I pressed my thumb against the 'C'. The ink smeared slightly. It was fresh.",
+        "The thick cotton twisted, refusing to give way. I yanked harder, desperate now, the plastic handle snapping loudly against the metal hinges.",
+        "The cabin was a sealed steel box miles from the mainland, pitching violently in the black water"
+      ],
+      "improvement": "The final revision sacrifices some of the storm's physical presence (the original's 'deep, violent shudder of the hull') to focus on interiority; a single brief return to the ferry's motion during her panic—perhaps the boat lurching as she yanks the string—would re-anchor the scene in its physical setting without diluting focus."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The opening arc is clearly structured: recognition → verification → paranoia → attempted action → interruption. Character motivation is established early (burnout, retreat to Ocracoke) and the inciting incident (the case falling) arises organically from the storm. The revision improves coherence by removing redundant emotional description and tightening the physical sequence: she reads the tag, verifies the ink is fresh, realizes the implication ('someone on this boat had written my name'), tries to remove the tag, and is interrupted. The final turn—'You're touching my bag'—is a strong hook that forces immediate action and raises the question of who this person is. The pacing escalates naturally without rushing.",
+      "quotes": [
+        "The cabin was a sealed steel box miles from the mainland, pitching violently in the black water, and someone on this boat had written my name.",
+        "My knuckles turned bone-white, the joints locking up. I needed to get the tag off.",
+        "'Excuse me,' a man's voice said from above, smooth and entirely too steady for the sea. 'You're touching my bag.'"
+      ],
+      "improvement": "The transition between 'I couldn't feel them anymore' (diesel vibration) and the sweater-as-vise image could be slightly smoother; a single bridging beat—perhaps her noticing her own breathing or the sound of her pulse—would make the shift from external to internal sensation feel more inevitable rather than listed."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong literary mystery opening that improves markedly across three revisions. The final version demonstrates genuine craft: restraint replaces melodrama, physical details carry emotional weight, and the voice remains specific and consistent. The handwriting detail and ink-smear moment are standout beats. Minor conventional images and a slight loss of environmental grounding in the revision are the only notable weaknesses. The piece ends on a compelling hook that demands the reader continue."
+}

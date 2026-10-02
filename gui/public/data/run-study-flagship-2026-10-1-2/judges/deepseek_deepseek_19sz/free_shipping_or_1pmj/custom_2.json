@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 6,
+      "justification": "The offer, storefront messaging, and two-arm test are feasible for a small store. However, the 30-day plan lacks tracking setup, persistent visitor assignment, sample-size guidance, and a clear inconclusive outcome. More importantly, the proposed profit formula omits shipping revenue, which can incorrectly favor the free-shipping treatment.",
+      "quotes": [
+        "Show the threshold early in the cart and product pages",
+        "50/50 split between control and treatment.",
+        "After 30 days, or once the test reaches statistical significance"
+      ],
+      "improvement": "Specify setup and validation before launch, persistent visitor-level assignment, a fixed 30-day measurement window, and an inconclusive-result policy. Track actual shipping receipts and costs so the test measures real contribution profit."
+    },
+    "specificity": {
+      "score": 6,
+      "justification": "The answer supplies an exact $95 offer, uses the provided economics, correctly calculates the unchanged-basket discount loss and 55.6% break-even order lift, and names useful metrics. However, its primary metric is materially incomplete: shipping receipts are excluded despite assuming customers currently cover shipping. Applying 42% to discounted revenue and then subtracting discounts also does not correctly preserve actual COGS. The claim that $95 is the lowest protective threshold is imprecise; the simplified break-even threshold is approximately $93.43. 'Reasonable confidence' is not an operational decision rule.",
+      "quotes": [
+        "Free standard shipping on orders $95 or more.",
+        "$10.80 / $19.44 = 55.6% increase in orders",
+        "[Total merchandise revenue × 42% − shipping cost − discounts]",
+        "higher contribution per visitor than control with reasonable confidence"
+      ],
+      "improvement": "Use net merchandise receipts plus shipping receipts minus actual COGS, shipping expense, and other variable costs, divided by assigned visitors. Explain $95 as a rounded threshold above $72 + $9 / 0.42, and predefine a confidence interval and minimum worthwhile profit lift."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "The answer recognizes subsidy leakage to existing high-value orders, lower-threshold margin risk, and interference from running both promotions. These are useful controls, but experiment-design safeguards are thin, and the recommendation to stop when significance appears invites optional-stopping bias. It also treats abandonment after shipping disclosure as a confirmed shipping objection and does not address variation in shipping costs, add-on margins, returns, or insufficient traffic.",
+      "quotes": [
+        "The main profit leak is existing customers who already spend $95+ and would have bought anyway.",
+        "Do not run the 15% discount at the same time.",
+        "that lower threshold will be less margin-safe",
+        "After 30 days, or once the test reaches statistical significance"
+      ],
+      "improvement": "Precommit to the test duration and analysis, keep other promotions and acquisition conditions stable, and maintain persistent assignments. Add shipping-cost and profit-loss guardrails, account for returns and product-level margins, and describe shipping-related abandonment as a hypothesis rather than proven causation."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A useful, economically motivated starting recommendation with a feasible offer and sensible test structure. Its central profit-accounting error and underspecified statistical decision rule prevent it from reliably answering whether the promotion improves profit."
+}

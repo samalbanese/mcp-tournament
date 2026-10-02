@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "Correctly calculates the $33 wholesale price, $66,000 revenue, $36,000 product cost, $2,000 freight, and $28,000 contribution, versus $33 per direct unit. Explicitly distinguishes $51 direct cash receipts on paid-for inventory from contribution and treats the full-retail alternative as five months of sales rather than immediate opportunity cost.",
+      "quotes": [
+        "Contribution per unit | **$33.00** | **$14.00**",
+        "Contribution: $28,000",
+        "At 400 per month, that takes 5 months to earn.",
+        "Direct sales bring in $51 per lamp ($60 minus $9) because the stock is already paid for."
+      ],
+      "improvement": "Describe the $18 as the original landed cost, with replenishment separately a cash commitment, rather than calling replacement spending the 'true cost' of the shipped lamps. Explicitly state the theoretical $38,000 contribution difference."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "Provides a correct inventory timeline and a detailed reserve-excluding cash schedule. Correctly identifies the 200-unit pre-replenishment buffer, supplier balance preceding retailer collection, and the important fact that deposit plus existing free cash covers all known commitments even without future collections. Minor limitations are omission of direct receipts between week 8 and day 59 and lack of a recalculated schedule for the split-order alternative.",
+      "quotes": [
+        "Week 2 | 200 sold direct; ship 2,000 to retailer | 800",
+        "Week 8 | Replenishment arrives | 2,200",
+        "The remaining **$5,000** comes from your existing $6,000 of free cash.",
+        "Without them, free cash bottoms out at about **$1,000 at week 8**."
+      ],
+      "improvement": "Include direct receipts through the final payment date or label $74,800 as excluding them. For the split shipment, specify deposit allocation, revised freight, supplier commitments, and the resulting cash and inventory timeline."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Addresses default and delayed payment, supplier slippage, defects, cannibalization, and retailer sell-through with concrete safeguards. Quantifies default loss and the replenishment buffer without assuming immediate direct sell-through. However, the assertion that local cannibalization is unlikely is unsupported, MAP is presented without legal or practical qualifications, and shipment splitting is claimed to halve credit risk without defined payment allocation.",
+      "quotes": [
+        "Run a credit check and get trade references.",
+        "Don't let them withhold the entire balance over a few defects.",
+        "A supplier slip of more than 2 weeks would cost you direct sales at $33 each.",
+        "Local shoppers alone are unlikely to cost you that much."
+      ],
+      "improvement": "Qualify advertised-price restrictions by applicable competition law and distinguish advertised from actual selling prices. Replace unsupported cannibalization reassurance with diligence on customer overlap, and define staged payments before asserting that split shipments halve exposure."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, quantitatively accurate assessment with an unusually clear distinction between profitability and liquidity. The core recommendation is feasible; proposed alternative terms and channel safeguards need modest refinement."
+}

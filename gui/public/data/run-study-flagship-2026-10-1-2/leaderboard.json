@@ -1,0 +1,302 @@
+[
+  {
+    "modelId": "deepseek/deepseek-v4-pro-0813",
+    "modelName": "deepseek-v4-pro-0813",
+    "tier": "unknown",
+    "overallAverage": 7.82,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 7.3,
+        "scores": {
+          "practicality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 7 - Only judge to find the plan fully executable, ignoring the missing sample-size guidance, tooling specifics, and low-traffic contingency flagged by all other judges"
+            ]
+          },
+          "specificity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - Overlooked the undefined 'reasonable confidence' decision rule and the imprecise 'lowest threshold' claim (true break-even near $93.50) noted by anthropic and openai judges"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 7 - Saw no gaps, while anthropic and openai both scored 5, citing peeking bias, variable shipping costs, returns, seasonality, and low statistical power"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Possible early stopping/peeking: 'or once the test reaches statistical significance'",
+          "Assumes shipping cost stays a constant $9 as order size grows"
+        ]
+      },
+      {
+        "scenarioId": "hire-or-outsource",
+        "scenarioName": "A Marketer on Payroll or an Agency",
+        "average": 7.67,
+        "scores": {
+          "financial_reasoning": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - treated all calculations as flawless, ignoring the minor imprecisions in the 90-day cash projection (e.g., the ~$9,200 partial salary estimate) that other judges flagged"
+            ]
+          },
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 9 vs median 8 - saw the phased 90-day plan as fully actionable without probing whether the 4-hour founder limit was actually feasible",
+              "openai judge: scored 6 vs median 8 - emphasized that the response commits to onboarding without a precommitment workload test and leaves an unplanned six-week coverage gap in the fallback"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google judge: scored 10 vs median 7 - judged the risk identification as comprehensive while other judges found downside scenarios and attribution methods underquantified",
+              "anthropic judge: scored 6 vs median 7 - placed more weight on missing attribution methodology for incremental orders and unmodeled ramp risk"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "wholesale-offer",
+        "scenarioName": "The First Large Wholesale Order",
+        "average": 8,
+        "scores": {
+          "unit_economics": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - noted failure to explicitly reconcile the deal's net cash effect (+$28,000) with accounting contribution",
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 9 - found no flaws and called the analysis excellent"
+            ]
+          },
+          "cash_and_stock_plan": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - considered the timeline flawless and reserve modeling fully accurate, overlooking the misleading $5,000 gap framing other judges criticized",
+              "anthropic judge (claude-opus-5-5) and openai judge (openai/gpt-6.1-sol): scored 7 vs median 8 - both flagged the misleading '$5,000 gap' framing that ignores $6,000 of unreserved starting cash, and absence of reserve tracking or stress-testing against late payment"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 9 vs median 7 - viewed risk coverage as comprehensively addressed with only a minor defect-clause omission",
+              "qwen judge (qwen/qwen3.8-max-0902): scored 8 vs median 7 - shared the defect-risk concern but weighted the strong credit and channel safeguards more heavily"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "inventory-cash-crunch",
+        "scenarioName": "Stock on the Shelf, Payroll on Friday",
+        "average": 8.33,
+        "scores": {
+          "cash_math": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - flawless math, but other judges identified a shared omission: no combined loan-plus-sale scenario and no revised liquidator offer after partial flash sales"
+            ]
+          },
+          "execution_plan": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - praised the timeline but did not weigh the unverified liquidator-after-sale fallback or the Day-3 trigger's premature-borrowing risk",
+              "openai judge: scored 5 vs median 8 - flagged settled-cash vs completed-sales ambiguity at Day 7 and unsupported liquidation fallback that other judges treated as minor"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - found no gaps, whereas four other judges noted missing clearance/brand-damage and remaining-inventory-risk discussion"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Liquidator fallback assumes a buyer for all 2,000 units after the flash sale may already have sold some of them"
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "qwen/qwen3.8-max-0902",
+    "modelName": "qwen3.8-max-0902",
+    "tier": "unknown",
+    "overallAverage": 7.33,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 7.7,
+        "scores": {
+          "practicality": {
+            "score": 9,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - perfect score ignoring gaps like day-by-day timeline and low-traffic A/B feasibility",
+              "openai judge: scored 6 vs median 9 - flagged missing full-month schedule and risk of noise-driven permanent rollout decisions",
+              "anthropic judge: scored 7 vs median 9 - noted underpowered A/B split for small stores and lack of a detailed timeline"
+            ]
+          },
+          "specificity": {
+            "score": 9,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - did not detect the discount-margin calculation error other judges confirmed",
+              "openai judge: scored 4 vs median 9 - heavily penalized the material margin-math error (contribution $19.44 not $25.70, breakeven ~56% not 17.7%) and non-exhaustive decision bands",
+              "anthropic judge: scored 6 vs median 9 - also found the COGS error and gaps in decision-rule bands"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - did not flag missing risks like returns, statistical power, or shipping-cost variability",
+              "anthropic judge: scored 5 vs median 8 - noted omitted sub-threshold abandoners, return rates, bulky-item shipping costs, and sample-size risk",
+              "openai judge: scored 5 vs median 8 - cited unsupported recovery predictions and missing variable costs, returns, and confidence intervals"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "calculation_error: 15% discount scenario applies 42% margin to discounted revenue instead of holding COGS constant",
+          "The back-of-envelope breakeven relies on assumed order distribution and recovery rates not provided in the prompt; these should be validated against actual store data before relying on the projected 6% profit lift."
+        ]
+      },
+      {
+        "scenarioId": "hire-or-outsource",
+        "scenarioName": "A Marketer on Payroll or an Agency",
+        "average": 6.3,
+        "scores": {
+          "financial_reasoning": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 5 vs median 6 - placed more weight on the cash projection error undermining the entire cash analysis and the unsupported $117/hour claim",
+              "qwen judge: scored 8 vs median 6 - misdiagnosed the months-vs-weeks error as only a minor recruiting-fee double-count and deemed core calculations clean"
+            ]
+          },
+          "practicality": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "openai judge: scored 4 vs median 6 - stressed the plan ignores the founder's four-hour cap during the six-week hiring gap and proposes ad-spend changes despite flat-spend rules",
+              "google judge: scored 7 vs median 6 - viewed the choice and 90-day plan as logical and actionable, only mildly undermined by cash errors"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 9 vs median 7 - found the risk identification thorough with objective, measurable review points",
+              "openai judge: scored 5 vs median 7 - faulted the overstated cash cushion, lack of a reserve floor or downside scenario, and misaligned review timelines"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Cash projection arithmetic error (months vs weeks; recruiting fee subtracted twice)",
+          "Material cash-projection error: six weeks of monthly surplus counted as six months, with recruiting deducted twice.",
+          "Unsupported assumptions about task-hour allocation, founder hourly returns, and typical CPA volatility.",
+          "cash_accumulation_arithmetic_error"
+        ]
+      },
+      {
+        "scenarioId": "wholesale-offer",
+        "scenarioName": "The First Large Wholesale Order",
+        "average": 8,
+        "scores": {
+          "unit_economics": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 9 - flagged 'pure upside collection' framing as conflating cash with contribution and muddled default-loss discussion",
+              "openai judge: scored 7 vs median 9 - same concern about the 'pure upside' framing and default loss calculation",
+              "google judge: scored 10 vs median 9 - found calculations flawless and declined to note the default-framing issue"
+            ]
+          },
+          "cash_and_stock_plan": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 9 - noted missing insight that the supplier deposit depends on the retailer deposit and absent default/delay scenarios",
+              "openai judge: scored 7 vs median 9 - challenged the claim that the deposit fully funds all costs, citing a $5,000 gap",
+              "google judge: scored 10 vs median 9 - called the plan masterful with no weaknesses"
+            ]
+          },
+          "risk_awareness": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 9 vs median 6 - saw only a minor defect-risk omission, unlike other judges who found broader gaps",
+              "qwen judge: scored 8 vs median 6 - viewed the safeguards as largely concrete despite defect risk being underdeveloped",
+              "anthropic judge: scored 5 vs median 6 - found no defect treatment, thin credit safeguards, and unsupported MAP-loss claim"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Defect risk omitted despite the defects-only returns term",
+          "'Pure upside' framing conflates cash coverage with contribution"
+        ]
+      },
+      {
+        "scenarioId": "inventory-cash-crunch",
+        "scenarioName": "Stock on the Shelf, Payroll on Friday",
+        "average": 7.3,
+        "scores": {
+          "cash_math": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - overlooked the fallback's $2,000 shortfall error and the freight omission in liquidation loss, which three other judges flagged"
+            ]
+          },
+          "execution_plan": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 6 - praised the timeline without noticing the fallback math error or reliance on an unconfirmed partial-lot liquidation",
+              "openai/gpt-6.1-sol: scored 3 vs median 6 - judged the fallback and settlement assumptions far more harshly, treating the same flaws as disqualifying rather than partial weaknesses",
+              "qwen/qwen3.8-max-0902: scored 8 vs median 6 - weighted the dated timeline and decision gates more generously despite noting the zero-buffer liquidity window"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found the sunk-cost framing and solvency risk discussion flawless, while others noted missing clearance-damage and residual-inventory risk analysis",
+              "anthropic judge (claude-opus-5-5): scored 6 vs median 8 - more critical of the blurred accounting write-down versus economic decision and unaddressed residual stock value"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "fallback_math_inconsistency",
+          "Fallback liquidation math appears inconsistent: liquidating the remaining units after a low flash sale would likely cover payroll, contradicting the stated $2,000 shortfall.",
+          "The claim that the combined plan is the only option that guarantees payroll is overstated because the loan alone also covers payroll."
+        ]
+      }
+    ]
+  }
+]

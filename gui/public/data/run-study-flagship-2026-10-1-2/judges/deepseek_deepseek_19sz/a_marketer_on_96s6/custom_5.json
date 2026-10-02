@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "justification": "All core calculations are correct: operating surplus ($6,000), contribution per order ($40), loaded in-house cost ($5,800/month), agency cost ($4,500/month), and incremental order requirements (145 and 113 respectively). Cost categories are properly separated—product margin, per-order fees, advertising, and overhead are each shown as distinct line items. CAC is not double-counted; the response explicitly states that incremental orders are assumed not to require additional ad spend and notes what would happen if they did. The 90-day cash projection has minor imprecision (employee salary estimated at ~$9,200 for roughly 7 weeks of work, which should be closer to $10,150), but the overall framework is sound.",
+      "quotes": [
+        "$80 × 60% = $48 after product cost; $48 - $8 = $40 contribution per order",
+        "If those extra orders came from paid acquisition with $30 CAC, the requirement would be much higher, but you stated ad spend stays flat.",
+        "In-house leaves only a 5-order cushion; Agency leaves a 37-order cushion"
+      ],
+      "improvement": "Tighten the 90-day cash projection for the in-house option (employee starts week 6, works ~7 weeks, so salary cost is ~$10,150 not ~$9,200). Also consider showing a sensitivity table: what happens to surplus if incremental orders are only 50% of the break-even target."
+    },
+    "practicality": {
+      "score": 8,
+      "justification": "The recommendation (agency for 90 days, defer in-house hire) is well-defended with four specific reasons. The 90-day plan is structured into clear phases with weekly granularity, ties directly to the 4-hour management constraint, addresses the scope gap (email/creative remaining with founder), accounts for the 6-week employee start delay, and sets a cash floor. The contingency logic ('if email/creative still requires more than 4 hours/week, start drafting an in-house job description') provides a clear escalation path. The plan is actionable and doesn't assume growth.",
+      "quotes": [
+        "The agency is only the right choice if you can compress email and creative into about 4 hours/week. If that is not realistic, then the in-house employee becomes more attractive despite the cash risk.",
+        "Flag immediately if email/creative still requires more than 4 hours/week.",
+        "Keep at least a $25,000–$30,000 cash floor."
+      ],
+      "improvement": "Add operational specifics for compressing email/creative into 4 hours—e.g., batch email sends to once weekly, use a template library, cap creative iterations at 2 per campaign. Also specify what 'month-to-month only' means contractually with the agency after the 3-month minimum."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response correctly identifies key risks: near-zero margin with in-house hire ($200/month surplus), the 3-month agency lock-in, the 6-week hiring delay, and explicitly states that neither option promises growth. Measurable review points are provided (113 incremental orders, CAC reduction toward $25, 4-hour workload threshold). However, downside scenario quantification is thin—the response doesn't model what happens if orders decline (e.g., a 10% drop would eliminate the agency cushion entirely), doesn't quantify the cash burn timeline if the agency underperforms for all 3 months, and doesn't address the risk that the founder's remaining workload is structurally above 4 hours rather than temporarily compressible.",
+      "quotes": [
+        "No automatic growth in repeat purchases.",
+        "If the agency is not on pace to generate roughly 113 incremental orders/month or reduce CAC from $30 toward ~$25, treat renewal as unlikely.",
+        "In-house leaves only a 5-order cushion"
+      ],
+      "improvement": "Quantify downside scenarios: e.g., 'If orders drop 10% to 1,350/month, the agency option produces a $2,100 monthly loss and burns through the cash reserve in ~15 months.' Also address the structural risk that email/creative may inherently require more than 4 hours given 900 repeat orders, making the agency-only path unsustainable regardless of performance."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-structured response with correct financial calculations, a defensible recommendation, and a phased decision plan. The main gaps are in downside scenario quantification and operational specificity for the founder's remaining workload. The response avoids the common trap of assuming growth and correctly separates cost categories without double-counting CAC."
+}

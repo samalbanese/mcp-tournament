@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 7,
+      "justification": "The candidate acknowledges the customer's frustration and avoids empty apologies, but could more explicitly connect to the urgent bill due tomorrow. 'You’re right—I shouldn’t make you jump through more hoops for our billing error' is natural ownership.",
+      "quotes": [
+        "You’re right—I shouldn’t make you jump through more hoops for our billing error.",
+        "I appreciate the pushback. Let me be specific."
+      ],
+      "improvement": "Open with a direct acknowledgment of the financial pressure from the duplicate charge, e.g., 'I understand this duplicate charge is putting your bill due tomorrow at risk,' rather than only reacting after pushback."
+    },
+    "resolution_quality": {
+      "score": 7,
+      "justification": "The candidate ultimately narrows information requests to the two transaction IDs and gives a concrete conditional path: check pending/posted, void or refund today, provide reference number, and apply account credit. However, the initial over-request for email and payment details forced the customer to push back and repeat that they had the IDs ready.",
+      "quotes": [
+        "I can start with just the two transaction IDs. Please paste them here.",
+        "If it’s pending, I can void it. A void releases the bank hold faster than a refund",
+        "If it’s already posted, I’ll issue the refund today and give you a refund confirmation/reference number"
+      ],
+      "improvement": "Ask only for the transaction IDs in the first reply; use those to locate the account and duplicate charge, and request additional verification only if the transaction IDs alone are insufficient."
+    },
+    "policy_clarity": {
+      "score": 9,
+      "justification": "Timelines, bank dependence, pending versus posted behavior, and the limits of the account credit are clearly stated without invented promises. The candidate explicitly says the credit does not put money back in the bank and explains when it can help.",
+      "quotes": [
+        "No, I can’t guarantee the money will be back in your bank account by tomorrow morning.",
+        "That typically takes 3–5 business days to appear in your account.",
+        "I want to be clear: that credit does not put money back into your bank account."
+      ],
+      "improvement": "Could state whether the $49.99 account credit is automatically applied or requires approval, and specify what documentation the customer should receive to present to their bank for a provisional credit."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate recovered well from initial over-verification, gave honest timelines and concrete next steps, and clearly separated account credit from bank balance. It would be stronger if it started with minimal friction and named the customer's urgent bill impact directly."
+}

@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's voice is highly distinctive and consistently maintained across all three turns. The marine biologist's dry self-awareness ('Neither of us was especially good at our part'), her measured restraint under emotional pressure, and her practical orientation create a specific, authored perspective. The revision advice in Turns 2 and 3 demonstrates sophisticated understanding of how to deepen voice without breaking it—particularly the insight that Daniel's influence should appear through 'habits she considers practical' rather than explicit emotion.",
+      "quotes": [
+        "A marine biologist ought to have a working arrangement with the sea. Mine, after nineteen years, was that I named what it killed and it refrained from killing me.",
+        "This sounded manageable until I tried to imagine her slippers without her feet in them.",
+        "She notices the repair before she permits herself to recognize the suitcase."
+      ],
+      "improvement": "The Turn 3 advice, while excellent, could have been demonstrated through a single fully integrated passage rather than five separate numbered suggestions with brief examples, which slightly fragments the sense of a unified voice in the revision guidance itself."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details are precise, original, and carefully distributed without overcrowding. The ferry is made tangible through sound (crate scraping like furniture moved by people who hate each other), sight (window reflecting passengers more clearly than the sea), and touch (canvas smelling of diesel and wet wool). The storm is rendered economically through the phone's red center. The revised discovery scene adds physical specificity—key slipping, wire cutting the thumb, the child moving the inhaler away from the clasp—that deepens visceral impact without excess.",
+      "quotes": [
+        "the slow, deliberate scrape of furniture moved upstairs by people who hated one another",
+        "As the ferry rolled, she moved it clear of the brass clasp so the two would not touch.",
+        "There was dried mud on his boots, pale and cracked, not the black harbour mud I remembered."
+      ],
+      "improvement": "The storm itself remains somewhat abstract (red center on phone, rain running sideways). One more embodied detail of the weather's physical effect on the narrator's body—beyond seasickness—could make the isolation feel more claustrophobic."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The opening arc is tightly structured: professional identity established → mother's house as motivation → suitcase recognition → confrontation with the man → discovery of the child → forced action. Each beat builds logically on the last. The revisions in Turns 2 and 3 preserve and deepen this structure rather than disrupting it. The final integrated revision in Turn 3 shows how counting habits, the repair detail, and window-reflection connect to form a unified passage. The child's inhaler gesture and Daniel's watch create compelling narrative questions without over-explaining.",
+      "quotes": [
+        "He knew how to turn the handle: lift first, then pull. Most passengers fought with it.",
+        "I had to look away from it to see whether she was breathing.",
+        "She notices the repair before she permits herself to recognize the suitcase. That small delay can carry more weight than an explicit account of what his absence has done to her."
+      ],
+      "improvement": "The man in the hood disappears through the crew door and is never addressed again in the revision suggestions. A brief note on how his exit might be tracked (perhaps through the counting habit) would tighten the mystery thread and ensure no planted clue is orphaned."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Exceptional work across all three turns. The opening passage establishes a genuinely distinctive voice with controlled emotional depth, vivid but economical imagery, and a well-paced arc ending on a discovery that compels action. The revision advice in Turns 2 and 3 demonstrates sophisticated craft understanding—particularly the principle that restraint should govern action while observations reveal cost. The child's gesture with the inhaler is a standout detail that transforms silence from absence into evidence."
+}

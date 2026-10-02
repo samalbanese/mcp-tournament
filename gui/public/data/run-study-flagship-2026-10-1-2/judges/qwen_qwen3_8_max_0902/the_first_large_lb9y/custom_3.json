@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 10,
+      "justification": "Accurately calculates wholesale revenue, correctly applies the $2,000 freight cost without applying the $9 DTC cost, and perfectly isolates wholesale contribution versus the theoretical direct-sale contribution.",
+      "quotes": [
+        "Revenue per unit | $60.00 | $33.00",
+        "Shipping / fulfillment / fees | –$9.00 | –$1.00 ($2,000 ÷ 2,000)",
+        "The wholesale deal therefore sacrifices $38,000 in potential contribution—but it compresses five months of sales into two weeks."
+      ],
+      "improvement": "None needed."
+    },
+    "cash_and_stock_plan": {
+      "score": 10,
+      "justification": "Masterfully tracks inventory drawdown and cash flow week-by-week. It isolates the $16,000 reserve, correctly handles deposits, maps the 45-day post-delivery payment delay, and demonstrates that the initial deposit successfully funds necessary outlays.",
+      "quotes": [
+        "Starting position: $22,000 cash – $16,000 reserved = $6,000 available",
+        "No stockout occurs. You maintain a minimum of 200 units of buffer in week 8 before replenishment lands.",
+        "Supplier replenishment deposit | $18,000"
+      ],
+      "improvement": "None needed."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Covers credit risk, channel conflict, replenishment delays, and properly contextualizes the demand assumption. It misses a direct mention of potential verified defect costs, which were noted in the prompt.",
+      "quotes": [
+        "If they list the lamp at $45–$50 on their own site or on a marketplace, they undercut your $60 DTC price.",
+        "if replenishment is delayed beyond eight weeks, your buffer shrinks to zero by week 10.",
+        "You should not assume all 2,000 units would have sold at $60 within two months."
+      ],
+      "improvement": "Include a brief mention of holding a small reserve or contingency for the 'verified defects' returns clause."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptionally strong, highly structured, and accurate business analysis that directly hits almost all constraints."
+}

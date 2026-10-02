@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 10,
+      "justification": "The response provides a highly feasible, step-by-step 30-day testing plan that a small business operator can easily implement, including tactical UX advice.",
+      "quotes": [
+        "If your platform supports it: Run a true A/B split (50/50 on sessions) for at least 14 days",
+        "Show a progress bar or callout in the cart: \"You're $13 away from free shipping.\""
+      ],
+      "improvement": "None needed; exceptionally practical and grounded."
+    },
+    "specificity": {
+      "score": 10,
+      "justification": "The candidate perfectly leverages the provided unit economics to establish an exact threshold, clearly calculates net contribution for all scenarios, and sets precise decision rules.",
+      "quotes": [
+        "Free shipping at $85 threshold | $85.00 | $35.70 | −$9.00 | $26.70",
+        "Contribution per session flat (±3%) | Try threshold at $90",
+        "Net Contribution per Session = (Total Gross Profit - Total Shipping Absorbed) / Total Cart Sessions"
+      ],
+      "improvement": "None needed; highly specific and quantitative."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The response thoroughly addresses risks regarding margin erosion, customer lifetime value (bargain hunters), and experiment validity (day-of-week effects, baseline controls).",
+      "quotes": [
+        "Revenue alone is not success. If revenue rises 10% but contribution per session is flat, you're just buying volume with margin.",
+        "Watch repeat rate. If the test attracts one-time bargain hunters who never return, 30-day contribution will look fine but LTV suffers.",
+        "Use the prior 30 days as baseline, but control for any promotions, email sends, or seasonal shifts."
+      ],
+      "improvement": "None needed; excellent anticipation of pitfalls."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional, highly analytical, and actionable response that perfectly answers the prompt with sound business logic and rigorous testing methodology."
+}

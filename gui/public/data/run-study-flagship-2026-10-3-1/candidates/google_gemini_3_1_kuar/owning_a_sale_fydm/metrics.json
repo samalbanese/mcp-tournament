@@ -1,0 +1,8 @@
+{
+  "candidateInputTokens": 2109,
+  "candidateOutputTokens": 2712,
+  "participantInputTokens": 0,
+  "participantOutputTokens": 0,
+  "totalTimeMs": 25222,
+  "toolCallCount": 0
+}

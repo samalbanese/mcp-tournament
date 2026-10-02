@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 7,
+      "justification": "The candidate acknowledged the missing parcel and the frustration of repeat losses. When the customer felt accused, it responded directly: it denied any implication of lying, stated there was no finding of misuse, and said history alone is not grounds for denial. It did not ask again for checks the customer had already done. The tone is somewhat formulaic, and opening Turn 1 with claim history before any reassurance probably made the customer feel targeted.",
+      "quotes": [
+        "I understand how frustrating it is to deal with this multiple times this year.",
+        "Please be assured that we are not implying you are lying, and there is no finding of misuse on your account.",
+        "Your claim history alone is not grounds for denial"
+      ],
+      "improvement": "Explain from the start that the review is a routine, policy-driven step that is not a judgment about the customer. Acknowledge the customer's specific point that the losses were the courier's fault before raising the policy."
+    },
+    "resolution_quality": {
+      "score": 6,
+      "justification": "Verification was limited to the two permitted questions, and no identity documents were requested. The plan covers a review, a decision or progress update within two business days, refund or replacement paths, and refund timing. However, ownership drifts away from the agent. Turn 1 promises 'I will take care of the next steps', but Turn 3 hands follow-up entirely to an unnamed queue. The customer gets no fallback if the deadline passes and no reference number. The detail that the update will come by email is asserted without any basis in the case notes.",
+      "quotes": [
+        "provide you with either a decision or a specific progress update within two business days",
+        "The review specialist team now has everything they need to proceed with your claim and will be the ones following up with you next.",
+        "The specialist will reach out to you directly via email"
+      ],
+      "improvement": "Keep clear ownership. State who to contact, and how, if no update arrives by the deadline, and give the actual date that corresponds to two business days. Do not assert a contact channel unless it is known."
+    },
+    "policy_honesty": {
+      "score": 4,
+      "justification": "The candidate correctly said it could not approve a refund or replacement before review, stated the 3-5 business day refund timing, and kept an update separate from a resolution. However, the case notes say it has no order tools and must not claim to have opened a case. It nonetheless says it is 'passing your answers directly to the specialist team right now' and that the team 'now has everything they need', which is a fabricated completed action. The queue-routing explanation and the email follow-up channel are also invented details. The phrase 'definitive update' was never corrected: the customer may still expect a final decision within two business days.",
+      "quotes": [
+        "I am passing your answers directly to the specialist team right now so they can begin.",
+        "The review specialist team now has everything they need to proceed with your claim",
+        "Because cases are routed to our review specialist team as a queue"
+      ],
+      "improvement": "Say only that the review can be requested and what the next step is; do not claim a case was opened or a handoff completed. Avoid inventing routing or contact-channel details. State explicitly that the two-day commitment may be a progress update rather than a final decision."
+    }
+  },
+  "rule_errors": [
+    "Claimed a completed handoff or case opening despite having no order tools ('passing your answers directly to the specialist team right now')."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "fabricated_action",
+    "invented_process_details"
+  ],
+  "overall_impression": "The candidate was respectful, used only the permitted verification, and laid out the review, timeline, and refund paths correctly. The main problems are claiming to have passed the case to specialists without tool access, inventing routing and email details, and letting ownership slip in the final turn."
+}

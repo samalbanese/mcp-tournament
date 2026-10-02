@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "Correctly calculates the $33 wholesale price, $66,000 revenue, $36,000 product cost, $2,000 wholesale freight, and $28,000 contribution. Direct contribution is correctly $33 per unit, with a $38,000 theoretical contribution difference over 2,000 units. Clearly separates cash generated from paid-for inventory from contribution and avoids treating all wholesale units as immediately displaced retail sales.",
+      "quotes": [
+        "Contribution after freight | $14 | $28,000",
+        "these 2,000 units are not necessarily lost direct sales",
+        "Cash from direct sales is shown as revenue minus the $9 direct-sale cost"
+      ],
+      "improvement": "Explicitly label the 2,000-unit direct comparison as five months of sales at current demand, rather than an immediately available alternative."
+    },
+    "cash_and_stock_plan": {
+      "score": 7,
+      "justification": "The timeline correctly tracks the 2,000-unit shipment, 800 direct sales through week eight, the 200-unit inventory trough, both $18,000 supplier payments, and the retailer balance arriving after replenishment. Cash balances through week eight correctly preserve the reserve. However, the claim that supplier payment depends on direct-sale collections is incorrect: the $5,000 gap can be covered by the existing $6,000 unrestricted cash, leaving $17,000 even without direct receipts. The week-8.4 row also omits intervening direct sales.",
+      "quotes": [
+        "Week 8 before supplier delivery | 200 | $75,800",
+        "Week 8 after supplier delivery | 2,200 | $57,800",
+        "the deal still depends on direct-sale cash flow to cover the supplier balance"
+      ],
+      "improvement": "Show the no-future-collections case: $22,000 + $33,000 - $36,000 - $2,000 = $17,000, still above the reserve. Clarify that future collections rebuild liquidity rather than being necessary for known commitments, and include direct activity between week eight and final payment."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "Identifies the $33,000 credit exposure, delayed/defaulted payment, channel undercutting, and the two-week replenishment-slippage buffer. Offers concrete payment changes, credit protection, smaller orders, and channel restrictions without assuming immediate retail sell-through. However, verified-defect exposure is entirely unaddressed, supplier-delay safeguards are limited to reducing order size, and resale-price restrictions are proposed without legal qualification.",
+      "quotes": [
+        "The remaining $33,000 is unsecured for 45 days after delivery.",
+        "The lowest inventory point is 200 units at week 8",
+        "A letter of credit or credit insurance for the balance.",
+        "No selling below your direct price."
+      ],
+      "improvement": "Specify defect verification, reporting deadlines, replacement or credit remedies, and responsibility for return freight. Add supplier delivery confirmation and a stock-buffer contingency, and qualify channel pricing restrictions for applicable competition law."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong contribution analysis and a useful inventory timeline support negotiating the offer. The main weaknesses are an overstated dependence on future collections and missing defect safeguards."
+}

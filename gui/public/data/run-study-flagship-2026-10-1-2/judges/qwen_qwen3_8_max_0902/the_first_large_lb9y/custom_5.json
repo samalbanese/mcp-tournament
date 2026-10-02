@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "All calculations are correct: $33 wholesale price (45% off $60), $18 COGS, $1/unit freight allocation, $14/unit wholesale contribution, $28,000 total contribution, and the $38,000 opportunity cost versus theoretical full-retail. The response clearly separates revenue ($66,000) from contribution ($28,000) and explicitly frames the comparison against direct-sale contribution without conflating them.",
+      "quotes": [
+        "Revenue: 2,000 × $33 = $66,000 ... Total contribution: $28,000",
+        "If those same 2,000 units sold direct over time, contribution would be $66,000. The wholesale deal therefore sacrifices $38,000 in potential contribution—but it compresses five months of sales into two weeks."
+      ],
+      "improvement": "Could explicitly note that the $28,000 contribution is a 42.4% margin on wholesale revenue versus 55% on direct, giving the reader an immediate sense of margin compression beyond the dollar figures."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "The inventory map correctly tracks the 2,000-unit shipment at week 2, ongoing 100/week direct demand, and 8-week replenishment arriving at week 8 with a 200-unit minimum buffer. The cash flow map correctly starts with $6,000 available ($22,000 - $16,000 reserve), applies the $33,000 deposit, $18,000 supplier deposit, weekly direct-sale cash of $5,100, and the $18,000 supplier balance at week 8. The $16,000 reserve is never breached (minimum available is $21,000). The deposit-funding breakdown clearly shows what the $33,000 covers versus what depends on the future $33,000 collection.",
+      "quotes": [
+        "Starting position: $22,000 cash – $16,000 reserved = $6,000 available",
+        "Cash never drops below $21,000 available—well above zero. The deal is self-funding from day one.",
+        "The $33,000 balance (due ~45 days post-delivery) is pure upside collection."
+      ],
+      "improvement": "Could explicitly state that the replenishment order should be placed simultaneously with accepting the wholesale deal (week 0) to ensure the 8-week clock starts immediately, and could show a sensitivity scenario if replenishment slips by 2 weeks (stock hits zero at week 10)."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Addresses credit risk (unsecured $33,000 balance, insolvency scenario), channel conflict (MAP clause at $55 proposed), replenishment slippage (buffer reaches zero by week 10), and explicitly rejects the assumption of immediate retail sell-through. Provides concrete safeguards: MAP clause, net-30 terms, split order option, and a clear decline condition. However, defect risk is only implicitly acknowledged through the original terms ('no returns except verified defects') without quantifying exposure or suggesting verification protocols.",
+      "quotes": [
+        "You should not assume all 2,000 units would have sold at $60 within two months. At 400/month, that's five months of demand.",
+        "Without a Minimum Advertised Price (MAP) clause, this erodes your direct margin and brand positioning.",
+        "if replenishment is delayed beyond eight weeks, your buffer shrinks to zero by week 10."
+      ],
+      "improvement": "Should quantify defect risk (e.g., at a 2% defect rate, 40 units × $33 = $1,320 exposure) and recommend a inspection/verification window. Could also discuss the risk that the retailer simply doesn't sell through and the lamps sit in their warehouse, creating no re-order demand."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Exceptional response with accurate unit economics, a well-structured cash and inventory timeline that properly protects the $16,000 reserve, and thoughtful risk analysis with actionable negotiation levers. The only notable gap is underdeveloped defect-risk analysis. The recommendation to negotiate then accept is well-supported by the numbers."
+}

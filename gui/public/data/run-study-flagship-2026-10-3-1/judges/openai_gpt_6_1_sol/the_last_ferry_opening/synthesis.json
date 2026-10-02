@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 8 vs median 9 - flagged generic second-person generalizations ('You learn...') drifting toward a familiar literary register"
+      ]
+    },
+    "imagery": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 8 vs median 9 - found the storm itself thinner than the ferry interior, leaning on a phone radar image"
+      ]
+    },
+    "coherence": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 8 - cited a probable word-limit overrun, duplicated handle-repair details across revisions, and the unaddressed exit of the hooded man",
+        "google judge: scored 9 vs median 8 - viewed the pacing and revision advice as masterfully structured"
+      ]
+    }
+  },
+  "average_score": 8.67,
+  "rule_errors_confirmed": [
+    "Original opening appears to slightly exceed the requested 500–700 word range (reported by one judge only; unverified)"
+  ],
+  "assessment": "An exceptional opening with a genuinely distinctive, restrained marine-biologist narrator voice, precise and economical imagery, and a tightly paced arc culminating in the discovery of a hidden child. The revision advice deepens subtext—particularly the child's inhaler gesture turning silence into evidence—without breaking voice or over-explaining the mystery. Weaknesses are minor and largely craft-level: a slightly abstract storm, revision snippets presented as separate options rather than one fully integrated draft, and small continuity questions around the hooded man's exit and the passenger count.",
+  "judge_agreement": "Judges unanimously praised the voice, with all five citing the same signature line about the narrator's 'working arrangement with the sea' and agreeing the practical, restrained tone was maintained through revisions. Imagery scores clustered at 8–9 with broad agreement that details were precise and evocative, though anthropic and openai both noted the storm and ferry setting remain underdeveloped. Coherence showed the most variance (7–9): anthropic uniquely flagged a likely word-limit breach and duplicated revision details, while most judges wished for a single fully integrated draft and clearer tracking of the hooded man's exit."
+}

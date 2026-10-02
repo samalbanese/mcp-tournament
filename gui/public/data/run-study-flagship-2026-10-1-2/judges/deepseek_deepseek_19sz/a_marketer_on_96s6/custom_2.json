@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "justification": "Correctly calculates the $6,000 current surplus, $40 marginal contribution, $5,800 loaded monthly salary, agency fees, and 145 versus 113 additional orders without double-counting CAC. No-growth surpluses and breakeven cushions are useful. Cash projections reasonably approximate startup timing, but assume operating surplus converts directly to cash. The $25 CAC review target is slightly insufficient to cover the agency fee through paid orders alone: it yields 120 additional orders and $4,800 contribution, rather than precisely matching the 113-order threshold.",
+      "quotes": [
+        "$48 - $8 = **$40 contribution per order**",
+        "$58,000 × 1.20 = $69,600/year = **$5,800/month**",
+        "Incremental orders used to cover new recurring cost are assumed not to require additional ad spend."
+      ],
+      "improvement": "Clarify that cash projections exclude inventory working-capital changes and taxes, distinguish full contractual agency liability from payments within 90 days, and calculate the paid-only breakeven CAC as approximately $25.26."
+    },
+    "practicality": {
+      "score": 6,
+      "justification": "Provides a conditional agency recommendation and a staged plan with dashboards, workload tracking, and renewal criteria. However, it commits to onboarding before establishing whether email, creative, agency coordination, and onboarding can fit the four-hour limit. Templates alone do not establish that feasibility. The proposed fallback hire also leaves an unplanned six-week coverage gap after agency termination.",
+      "quotes": [
+        "So the agency is only the right choice if you can compress email and creative into about 4 hours/week.",
+        "Start agency onboarding.",
+        "If agency is not covering its cost or email/creative still overwhelm you, let the agency contract end and hire in-house"
+      ],
+      "improvement": "Make a workload audit and explicit four-hour allocation a prerequisite to signing. Specify who supplies creative and handles onboarding, defer if neither option is feasible, and plan the employee search and transition early enough to cover the six-week start delay."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "Explicitly avoids guaranteed growth, exposes the employee's very thin operating cushion, acknowledges the agency's scope gap and minimum commitment, and sets measurable performance and cash review points. Risk treatment remains incomplete: employee onboarding productivity is not distinguished from its start date, the reserve floor is unexplained, and there is no quantified downside case or action if cash falls during the locked agency term.",
+      "quotes": [
+        "No automatic growth in repeat purchases.",
+        "In-house leaves only a **5-order cushion**",
+        "Keep at least a $25,000–$30,000 cash floor.",
+        "If the agency is not on pace to generate roughly 113 incremental orders/month or reduce CAC from $30 toward ~$25, treat renewal as unlikely."
+      ],
+      "improvement": "Add a declining-order cash scenario, justify the reserve floor using obligations, distinguish hiring start from productive ramp, and specify cash-triggered actions that remain possible during the noncancelable agency period."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong core financial comparison with clear no-growth economics. The agency recommendation is plausible but requires a precommitment workload test, better transition planning, and more explicit downside cash protection."
+}

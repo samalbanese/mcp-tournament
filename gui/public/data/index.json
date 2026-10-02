@@ -1,9 +1,18 @@
 {
   "runs": [
+    "run-study-flagship-2026-10-3-2",
+    "run-study-flagship-2026-10-3-1",
+    "run-study-flagship-2026-10-2-2",
+    "run-study-flagship-2026-10-2-1",
+    "run-study-flagship-2026-10-1-2",
+    "run-study-flagship-2026-10-1-1",
     "run-2026-07-21-000136",
     "run-2026-07-20-095412",
     "run-2026-07-18-194500",
     "run-2026-07-18-004130",
     "run-2026-04-22-143951"
+  ],
+  "studies": [
+    "flagship-2026-10"
   ]
 }

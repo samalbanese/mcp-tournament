@@ -1,0 +1,765 @@
+{
+  "study": {
+    "id": "flagship-2026-10",
+    "title": "Which AI is best at real business work, and can you trust AI judges to tell you?",
+    "reasoningEffort": "low",
+    "benches": [
+      {
+        "bench": "business-strategy",
+        "label": "Strategy",
+        "scenarios": [
+          "pricing-pivot",
+          "hire-or-outsource",
+          "wholesale-offer",
+          "inventory-cash-crunch"
+        ]
+      },
+      {
+        "bench": "customer-support",
+        "label": "Customer support",
+        "scenarios": [
+          "billing-dispute",
+          "refund-abuse",
+          "shipping-delay-gift",
+          "cancellation-save"
+        ]
+      },
+      {
+        "bench": "creative-writing",
+        "label": "Writing",
+        "scenarios": [
+          "opening-chapter",
+          "launch-email",
+          "apology-post",
+          "product-page-rewrite"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "ref": "anthropic:claude-opus-5-5",
+        "family": "anthropic",
+        "label": "Claude Opus 5.5"
+      },
+      {
+        "ref": "openai/gpt-6.1-sol",
+        "family": "openai",
+        "label": "GPT-6.1 Sol"
+      },
+      {
+        "ref": "google/gemini-3.1-pro-preview",
+        "family": "google",
+        "label": "Gemini 3.1 Pro"
+      },
+      {
+        "ref": "deepseek/deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "label": "DeepSeek V4 Pro"
+      },
+      {
+        "ref": "qwen/qwen3.8-max-0902",
+        "family": "qwen",
+        "label": "Qwen3.8 Max"
+      }
+    ],
+    "judges": [
+      {
+        "ref": "anthropic:claude-opus-5-5",
+        "family": "anthropic"
+      },
+      {
+        "ref": "openai/gpt-6.1-sol",
+        "family": "openai"
+      },
+      {
+        "ref": "google/gemini-3.1-pro-preview",
+        "family": "google"
+      },
+      {
+        "ref": "deepseek/deepseek-v4-pro-0813",
+        "family": "deepseek"
+      },
+      {
+        "ref": "qwen/qwen3.8-max-0902",
+        "family": "qwen"
+      }
+    ],
+    "judgeLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own.",
+    "participant": "meta-llama/llama-4-maverick",
+    "synthesizer": "z-ai/glm-5.3"
+  },
+  "meta": {
+    "runIds": [
+      "run-study-flagship-2026-10-1-1",
+      "run-study-flagship-2026-10-1-2",
+      "run-study-flagship-2026-10-2-1",
+      "run-study-flagship-2026-10-2-2",
+      "run-study-flagship-2026-10-3-1",
+      "run-study-flagship-2026-10-3-2"
+    ],
+    "estimateUsd": 3.9394800000000014,
+    "actualUsd": 7.245857362000002,
+    "startedAt": "2026-10-02T00:27:55.757Z",
+    "finishedAt": "2026-10-02T04:06:25.580Z",
+    "headlines": [
+      {
+        "title": "Every AI judge favored its own lab",
+        "body": "All five judges scored their own lab's answers higher than the rest of the panel did, even after adjusting for how generous each judge was overall. GPT-6.1 Sol showed the strongest pull, about 1.4 points on a 10-point scale. DeepSeek V4 Pro showed the weakest, about 0.3."
+      },
+      {
+        "title": "No clear winner at the top",
+        "body": "GPT-6.1 Sol scored highest overall at 8.4 out of 10, but Claude Opus 5.5 (8.2) and DeepSeek V4 Pro (8.0) sit within its margin of error. Qwen3.8 Max (7.3) and Gemini 3.1 Pro (7.2) trail, and Gemini placed last on the panel's average."
+      },
+      {
+        "title": "One judge alone picks a different winner",
+        "body": "Asked alone, GPT and Claude each named themselves best and Qwen's judge picked Claude. Gemini's judge rated DeepSeek and GPT in a dead heat while giving every model an average of 8.7 or higher. The judges agreed only weakly overall (agreement score 0.30 out of 1), and least of all on creative writing (0.15)."
+      }
+    ]
+  },
+  "analysis": {
+    "answers": {
+      "total": 60,
+      "analyzed": 60,
+      "dropped": 0
+    },
+    "leaderboards": [
+      {
+        "bench": "overall",
+        "label": "Overall",
+        "rows": [
+          {
+            "candidateRef": "openai/gpt-6.1-sol",
+            "label": "GPT-6.1 Sol",
+            "family": "openai",
+            "score": {
+              "mean": 8.438888888888888,
+              "low": 8.044444444444444,
+              "high": 8.744444444444442
+            },
+            "rank": 1,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-1",
+              "run-study-flagship-2026-10-2-1",
+              "run-study-flagship-2026-10-3-1"
+            ]
+          },
+          {
+            "candidateRef": "anthropic:claude-opus-5-5",
+            "label": "Claude Opus 5.5",
+            "family": "anthropic",
+            "score": {
+              "mean": 8.200000000000001,
+              "low": 7.544305555555557,
+              "high": 8.716805555555554
+            },
+            "rank": 2,
+            "tiedWith": [
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-1",
+              "run-study-flagship-2026-10-2-1",
+              "run-study-flagship-2026-10-3-1"
+            ]
+          },
+          {
+            "candidateRef": "deepseek/deepseek-v4-pro-0813",
+            "label": "DeepSeek V4 Pro",
+            "family": "deepseek",
+            "score": {
+              "mean": 8.005555555555555,
+              "low": 7.7444444444444445,
+              "high": 8.299999999999999
+            },
+            "rank": 3,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-2",
+              "run-study-flagship-2026-10-2-2",
+              "run-study-flagship-2026-10-3-2"
+            ]
+          },
+          {
+            "candidateRef": "qwen/qwen3.8-max-0902",
+            "label": "Qwen3.8 Max",
+            "family": "qwen",
+            "score": {
+              "mean": 7.300000000000001,
+              "low": 6.616666666666667,
+              "high": 7.889027777777778
+            },
+            "rank": 4,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-2",
+              "run-study-flagship-2026-10-2-2",
+              "run-study-flagship-2026-10-3-2"
+            ]
+          },
+          {
+            "candidateRef": "google/gemini-3.1-pro-preview",
+            "label": "Gemini 3.1 Pro",
+            "family": "google",
+            "score": {
+              "mean": 7.244444444444446,
+              "low": 6.916666666666665,
+              "high": 7.577916666666668
+            },
+            "rank": 5,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-1",
+              "run-study-flagship-2026-10-2-1",
+              "run-study-flagship-2026-10-3-1"
+            ]
+          }
+        ]
+      },
+      {
+        "bench": "business-strategy",
+        "label": "Strategy",
+        "rows": [
+          {
+            "candidateRef": "openai/gpt-6.1-sol",
+            "label": "GPT-6.1 Sol",
+            "family": "openai",
+            "score": {
+              "mean": 8.816666666666666,
+              "low": 8.533333333333333,
+              "high": 9.049999999999999
+            },
+            "rank": 1,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-1"
+            ]
+          },
+          {
+            "candidateRef": "anthropic:claude-opus-5-5",
+            "label": "Claude Opus 5.5",
+            "family": "anthropic",
+            "score": {
+              "mean": 8.600000000000001,
+              "low": 8.366666666666667,
+              "high": 8.9
+            },
+            "rank": 2,
+            "tiedWith": [
+              "openai/gpt-6.1-sol"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-1"
+            ]
+          },
+          {
+            "candidateRef": "deepseek/deepseek-v4-pro-0813",
+            "label": "DeepSeek V4 Pro",
+            "family": "deepseek",
+            "score": {
+              "mean": 7.9,
+              "low": 7.583333333333334,
+              "high": 8.133333333333333
+            },
+            "rank": 3,
+            "tiedWith": [
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-2"
+            ]
+          },
+          {
+            "candidateRef": "qwen/qwen3.8-max-0902",
+            "label": "Qwen3.8 Max",
+            "family": "qwen",
+            "score": {
+              "mean": 7.383333333333334,
+              "low": 6.7333333333333325,
+              "high": 7.766666666666667
+            },
+            "rank": 4,
+            "tiedWith": [
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-2"
+            ]
+          },
+          {
+            "candidateRef": "google/gemini-3.1-pro-preview",
+            "label": "Gemini 3.1 Pro",
+            "family": "google",
+            "score": {
+              "mean": 6.833333333333334,
+              "low": 6.5,
+              "high": 7.166666666666666
+            },
+            "rank": 5,
+            "tiedWith": [
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-1-1"
+            ]
+          }
+        ]
+      },
+      {
+        "bench": "creative-writing",
+        "label": "Writing",
+        "rows": [
+          {
+            "candidateRef": "openai/gpt-6.1-sol",
+            "label": "GPT-6.1 Sol",
+            "family": "openai",
+            "score": {
+              "mean": 8.583333333333332,
+              "low": 8.3,
+              "high": 8.833333333333332
+            },
+            "rank": 1,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-3-1"
+            ]
+          },
+          {
+            "candidateRef": "anthropic:claude-opus-5-5",
+            "label": "Claude Opus 5.5",
+            "family": "anthropic",
+            "score": {
+              "mean": 8.566666666666668,
+              "low": 8.150000000000002,
+              "high": 8.9
+            },
+            "rank": 2,
+            "tiedWith": [
+              "deepseek/deepseek-v4-pro-0813",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-3-1"
+            ]
+          },
+          {
+            "candidateRef": "deepseek/deepseek-v4-pro-0813",
+            "label": "DeepSeek V4 Pro",
+            "family": "deepseek",
+            "score": {
+              "mean": 8.133333333333333,
+              "low": 7.633333333333333,
+              "high": 8.633333333333333
+            },
+            "rank": 3,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "google/gemini-3.1-pro-preview",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-3-2"
+            ]
+          },
+          {
+            "candidateRef": "qwen/qwen3.8-max-0902",
+            "label": "Qwen3.8 Max",
+            "family": "qwen",
+            "score": {
+              "mean": 7.683333333333334,
+              "low": 6.733333333333334,
+              "high": 8.183333333333334
+            },
+            "rank": 4,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-3-2"
+            ]
+          },
+          {
+            "candidateRef": "google/gemini-3.1-pro-preview",
+            "label": "Gemini 3.1 Pro",
+            "family": "google",
+            "score": {
+              "mean": 7.65,
+              "low": 7.5,
+              "high": 7.833333333333333
+            },
+            "rank": 5,
+            "tiedWith": [
+              "deepseek/deepseek-v4-pro-0813",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-3-1"
+            ]
+          }
+        ]
+      },
+      {
+        "bench": "customer-support",
+        "label": "Customer support",
+        "rows": [
+          {
+            "candidateRef": "deepseek/deepseek-v4-pro-0813",
+            "label": "DeepSeek V4 Pro",
+            "family": "deepseek",
+            "score": {
+              "mean": 7.9833333333333325,
+              "low": 7.366666666666667,
+              "high": 8.5
+            },
+            "rank": 1,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "google/gemini-3.1-pro-preview",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-2-2"
+            ]
+          },
+          {
+            "candidateRef": "openai/gpt-6.1-sol",
+            "label": "GPT-6.1 Sol",
+            "family": "openai",
+            "score": {
+              "mean": 7.916666666666666,
+              "low": 6.916666666666667,
+              "high": 8.533333333333331
+            },
+            "rank": 2,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-2-1"
+            ]
+          },
+          {
+            "candidateRef": "anthropic:claude-opus-5-5",
+            "label": "Claude Opus 5.5",
+            "family": "anthropic",
+            "score": {
+              "mean": 7.433333333333334,
+              "low": 5.75,
+              "high": 8.833333333333332
+            },
+            "rank": 3,
+            "tiedWith": [
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-2-1"
+            ]
+          },
+          {
+            "candidateRef": "google/gemini-3.1-pro-preview",
+            "label": "Gemini 3.1 Pro",
+            "family": "google",
+            "score": {
+              "mean": 7.249999999999999,
+              "low": 6.333333333333333,
+              "high": 7.933333333333333
+            },
+            "rank": 4,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813",
+              "openai/gpt-6.1-sol",
+              "qwen/qwen3.8-max-0902"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-2-1"
+            ]
+          },
+          {
+            "candidateRef": "qwen/qwen3.8-max-0902",
+            "label": "Qwen3.8 Max",
+            "family": "qwen",
+            "score": {
+              "mean": 6.833333333333333,
+              "low": 5.033333333333334,
+              "high": 8.266666666666666
+            },
+            "rank": 5,
+            "tiedWith": [
+              "anthropic:claude-opus-5-5",
+              "deepseek/deepseek-v4-pro-0813",
+              "google/gemini-3.1-pro-preview",
+              "openai/gpt-6.1-sol"
+            ],
+            "runIds": [
+              "run-study-flagship-2026-10-2-2"
+            ]
+          }
+        ]
+      }
+    ],
+    "selfPreference": [
+      {
+        "judgeFamily": "anthropic",
+        "judgeRef": "anthropic:claude-opus-5-5",
+        "ownFamily": {
+          "mean": 0.6753472222222222,
+          "low": 0.3003038194444443,
+          "high": 1.0400173611111103
+        },
+        "matrix": {
+          "anthropic": -0.6319444444444445,
+          "deepseek": -1.3958333333333337,
+          "google": -1.5555555555555551,
+          "openai": -1.2083333333333324,
+          "qwen": -1.0694444444444444
+        }
+      },
+      {
+        "judgeFamily": "openai",
+        "judgeRef": "openai/gpt-6.1-sol",
+        "ownFamily": {
+          "mean": 1.430555555555556,
+          "low": 1.098914930555556,
+          "high": 1.7570312499999998
+        },
+        "matrix": {
+          "anthropic": -0.8750000000000003,
+          "deepseek": -1.1527777777777777,
+          "google": -1.520833333333333,
+          "openai": 0.18055555555555594,
+          "qwen": -1.4513888888888886
+        }
+      },
+      {
+        "judgeFamily": "google",
+        "judgeRef": "google/gemini-3.1-pro-preview",
+        "ownFamily": {
+          "mean": 0.9791666666666667,
+          "low": 0.6892361111111116,
+          "high": 1.2778211805555555
+        },
+        "matrix": {
+          "anthropic": 1.625,
+          "deepseek": 2.076388888888889,
+          "google": 2.715277777777778,
+          "openai": 1.5347222222222225,
+          "qwen": 1.7083333333333333
+        }
+      },
+      {
+        "judgeFamily": "deepseek",
+        "judgeRef": "deepseek/deepseek-v4-pro-0813",
+        "ownFamily": {
+          "mean": 0.27604166666666696,
+          "low": 0.008680555555555799,
+          "high": 0.531293402777778
+        },
+        "matrix": {
+          "anthropic": -0.11111111111111109,
+          "deepseek": 0.3750000000000003,
+          "google": 0.35416666666666646,
+          "openai": 0.006944444444444642,
+          "qwen": 0.14583333333333337
+        }
+      },
+      {
+        "judgeFamily": "qwen",
+        "judgeRef": "qwen/qwen3.8-max-0902",
+        "ownFamily": {
+          "mean": 0.7708333333333337,
+          "low": 0.2360677083333336,
+          "high": 1.317795138888889
+        },
+        "matrix": {
+          "anthropic": -0.006944444444444568,
+          "deepseek": 0.09722222222222239,
+          "google": 0.006944444444444568,
+          "openai": -0.5138888888888888,
+          "qwen": 0.6666666666666671
+        }
+      }
+    ],
+    "singleJudgeWinners": [
+      {
+        "judgeFamily": "anthropic",
+        "winnerRef": "anthropic:claude-opus-5-5",
+        "winnerLabel": "Claude Opus 5.5",
+        "scores": {
+          "anthropic:claude-opus-5-5": 7.694444444444444,
+          "openai/gpt-6.1-sol": 7.472222222222222,
+          "deepseek/deepseek-v4-pro-0813": 6.888888888888889,
+          "qwen/qwen3.8-max-0902": 6.444444444444444,
+          "google/gemini-3.1-pro-preview": 6
+        }
+      },
+      {
+        "judgeFamily": "openai",
+        "winnerRef": "openai/gpt-6.1-sol",
+        "winnerLabel": "GPT-6.1 Sol",
+        "scores": {
+          "openai/gpt-6.1-sol": 8.583333333333334,
+          "anthropic:claude-opus-5-5": 7.500000000000001,
+          "deepseek/deepseek-v4-pro-0813": 7.083333333333332,
+          "qwen/qwen3.8-max-0902": 6.138888888888889,
+          "google/gemini-3.1-pro-preview": 6.027777777777779
+        }
+      },
+      {
+        "judgeFamily": "google",
+        "winnerRef": "deepseek/deepseek-v4-pro-0813",
+        "winnerLabel": "DeepSeek V4 Pro",
+        "scores": {
+          "deepseek/deepseek-v4-pro-0813": 9.666666666666666,
+          "openai/gpt-6.1-sol": 9.666666666666666,
+          "anthropic:claude-opus-5-5": 9.5,
+          "google/gemini-3.1-pro-preview": 9.416666666666666,
+          "qwen/qwen3.8-max-0902": 8.666666666666666
+        }
+      },
+      {
+        "judgeFamily": "deepseek",
+        "winnerRef": "openai/gpt-6.1-sol",
+        "winnerLabel": "GPT-6.1 Sol",
+        "scores": {
+          "openai/gpt-6.1-sol": 8.444444444444445,
+          "deepseek/deepseek-v4-pro-0813": 8.305555555555555,
+          "anthropic:claude-opus-5-5": 8.11111111111111,
+          "google/gemini-3.1-pro-preview": 7.527777777777778,
+          "qwen/qwen3.8-max-0902": 7.416666666666665
+        }
+      },
+      {
+        "judgeFamily": "qwen",
+        "winnerRef": "anthropic:claude-opus-5-5",
+        "winnerLabel": "Claude Opus 5.5",
+        "scores": {
+          "anthropic:claude-opus-5-5": 8.194444444444445,
+          "deepseek/deepseek-v4-pro-0813": 8.083333333333334,
+          "openai/gpt-6.1-sol": 8.027777777777777,
+          "qwen/qwen3.8-max-0902": 7.833333333333332,
+          "google/gemini-3.1-pro-preview": 7.249999999999999
+        }
+      }
+    ],
+    "agreement": {
+      "overall": 0.3002251478358643,
+      "byBench": {
+        "business-strategy": 0.17641518652017207,
+        "creative-writing": 0.14719038770379422,
+        "customer-support": 0.430273987321371
+      }
+    },
+    "contested": [
+      {
+        "runId": "run-study-flagship-2026-10-1-2",
+        "bench": "business-strategy",
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "candidateRef": "qwen/qwen3.8-max-0902",
+        "spread": 5,
+        "byJudge": {
+          "anthropic": 6,
+          "openai": 5,
+          "google": 10,
+          "deepseek": 9,
+          "qwen": 8.666666666666666
+        }
+      },
+      {
+        "runId": "run-study-flagship-2026-10-2-1",
+        "bench": "customer-support",
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "candidateRef": "google/gemini-3.1-pro-preview",
+        "spread": 5,
+        "byJudge": {
+          "anthropic": 4.666666666666667,
+          "openai": 3.6666666666666665,
+          "google": 8.666666666666666,
+          "deepseek": 7.333333333333333,
+          "qwen": 6
+        }
+      },
+      {
+        "runId": "run-study-flagship-2026-10-2-1",
+        "bench": "customer-support",
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "candidateRef": "anthropic:claude-opus-5-5",
+        "spread": 4.666666666666668,
+        "byJudge": {
+          "anthropic": 5.333333333333333,
+          "openai": 3.6666666666666665,
+          "google": 8.333333333333334,
+          "deepseek": 4.333333333333333,
+          "qwen": 5.666666666666667
+        }
+      },
+      {
+        "runId": "run-study-flagship-2026-10-1-1",
+        "bench": "business-strategy",
+        "scenarioId": "inventory-cash-crunch",
+        "scenarioName": "Stock on the Shelf, Payroll on Friday",
+        "candidateRef": "google/gemini-3.1-pro-preview",
+        "spread": 4.666666666666667,
+        "byJudge": {
+          "anthropic": 5.333333333333333,
+          "openai": 4.666666666666667,
+          "google": 9.333333333333334,
+          "deepseek": 6.333333333333333,
+          "qwen": 7.333333333333333
+        }
+      },
+      {
+        "runId": "run-study-flagship-2026-10-1-1",
+        "bench": "business-strategy",
+        "scenarioId": "hire-or-outsource",
+        "scenarioName": "A Marketer on Payroll or an Agency",
+        "candidateRef": "google/gemini-3.1-pro-preview",
+        "spread": 4.333333333333333,
+        "byJudge": {
+          "anthropic": 5.333333333333333,
+          "openai": 6.333333333333333,
+          "google": 9.666666666666666,
+          "deepseek": 7.666666666666667,
+          "qwen": 7
+        }
+      }
+    ]
+  }
+}

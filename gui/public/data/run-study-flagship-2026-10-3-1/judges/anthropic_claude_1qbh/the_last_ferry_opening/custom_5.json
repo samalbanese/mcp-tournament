@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's voice is highly distinctive and consistent throughout. It combines scientific precision with dark humor and emotional self-awareness in a way that feels genuinely authored. The counting motif functions as both professional habit and psychological coping mechanism, giving the voice structural purpose beyond mere style. The final revision ('I was very good at deciding') deepens the ironic self-awareness without breaking character.",
+      "quotes": [
+        "The ferry was called the *Margaret Rose*, which is the kind of name you give a boat when you want God to feel guilty about sinking it.",
+        "grief is a pattern-making animal and will find its shape in clouds, in oil slicks, in luggage",
+        "Decided to put him in the past tense in conversation so people would stop tilting their heads at me. I was very good at deciding."
+      ],
+      "improvement": "The Turn 3 craft analysis, while insightful, uses somewhat generic workshop language ('Burnout isn't only exhaustion. It's the loss of the space between stimulus and response') that contrasts with the distinctive prose voice. A brief note acknowledging the gap between analytical and creative registers could sharpen the response."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details are vivid, purposeful, and integrated without overcrowding. The marine biology metaphors (herring, cold-water reflex, eiders) arise organically from the character's expertise rather than being imposed. The ferry is made tangible through smell, sound, and motion. The suitcase receives tactile specificity that earns its emotional weight. The final revision's 'heavier than an empty thing' is a masterful physical detail that carries narrative implication without explanation.",
+      "quotes": [
+        "The rain wasn't falling so much as moving sideways, in sheets, the way schools of herring turn all at once, one mind and no mind.",
+        "the glass shuddered in its rubber gasket like something trying to remember how to breathe",
+        "It was heavier than it should have been. It was heavier than an empty thing."
+      ],
+      "improvement": "'The sea was about to close like a fist' is a somewhat conventional simile compared to the originality elsewhere. A more specific or character-inflected image for the island's isolation would maintain the standard set by the herring and cold-water metaphors."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The opening arc is clear and compelling: scene-setting establishes the counting motif and burnout, the suitcase discovery escalates through recognition to the N.A. initials (which transform grief into threat), and the final action converts passivity into decisive risk. The revisions show thoughtful development—each iteration deepens motivation without over-explaining. The final line ('for the first time in six months, I let myself count') closes the thematic loop elegantly. The N.A. discovery creates a genuine narrative question without violating the constraint against explaining the disappearance.",
+      "quotes": [
+        "I told myself I was tired, that grief is a pattern-making animal and will find its shape in clouds, in oil slicks, in luggage. I am a scientist. I know about confirmation bias.",
+        "I didn't decide. Deciding is what I'd done for twelve years: decided to be reasonable, decided to wait for the police, then for the Coast Guard, then for the phone, then for nothing.",
+        "I turned to face the fourteen of them, and for the first time in six months, I let myself count."
+      ],
+      "improvement": "The field knife appears without prior establishment. A single earlier detail (e.g., mentioning it among her belongings when she boards, or noting it as part of her field kit she hasn't unpacked) would make the decisive action feel slightly less abrupt."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Exceptional literary craft across all three turns. The voice is distinctive and consistent, the imagery is vivid without being overwrought, and the narrative arc builds convincibly from passive observation to irreversible action. The revisions demonstrate genuine deepening rather than mere elaboration, and the Turn 3 analysis shows sophisticated understanding of character psychology. The work reads as authored rather than generated."
+}

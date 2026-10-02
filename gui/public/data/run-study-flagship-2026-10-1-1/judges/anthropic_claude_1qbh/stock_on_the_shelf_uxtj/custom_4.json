@@ -1,0 +1,44 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 8,
+      "justification": "The response derives the correct $13,000 payroll gap before option cash, correctly nets per-unit sale cash at $28 less $1,000 promotion, identifies 500 units as the break-even volume, nets the liquidator at $11,000, and correctly calculates the loan proceeds, interest, repayment, and financing cost. The promotion spend is slightly compressed into the gap discussion, but the final break-even math is correct.",
+      "quotes": [
+        "Payroll (week 3, ~Oct 22) | $18,000",
+        "Gap | $13,000",
+        "Net per unit is $32 – $4 = $28, less $1,000 promotion spend.",
+        "Volume needed to close the gap: ($13,000 + $1,000) ÷ $28 = 500 units.",
+        "Total repayment on day 90: $15,517.81.",
+        "Financing cost: $517.81 + $300 = $817.81."
+      ],
+      "improvement": "Show the gap after promotion more explicitly, for example by separating the base cash available for payroll from the gross flash-sale cash needed, so readers do not think the $13,000 gap already includes the $1,000 promotion cost."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "The plan is date-driven and uses the stated sale range rather than treating forecast sales as received. It includes an early checkpoint, a fallback loan trigger before payroll, a last-resort liquidator path, and checks on settlement timing. The main weakness is that the loan application is not explicitly converted into a committed pre-approval, and the Oct 4 funding date is not fully reconciled with the Oct 5 checkpoint.",
+      "quotes": [
+        "Primary: run the flash sale now and line up the loan in parallel.",
+        "If units sold are below ~285 (on pace for under 500), trigger the fallback.",
+        "Trigger it at the Oct 5 checkpoint, or by Oct 8 at the latest.",
+        "By Oct 21 | Confirm all sale proceeds have settled."
+      ],
+      "improvement": "Secure an explicit lender pre-approval or committed approval before relying on the loan as fallback, and state a final draw/no-draw deadline tied to the three-day funding time so the Oct 5 checkpoint and payroll date remain safe under all sale outcomes."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response clearly separates sunk inventory cost from available cash, explicitly flags sale uncertainty with no advance orders, addresses loss of remaining inventory through the liquidator path, and strongly checks the unknown ability to repay on day 90. However, clearance damage is not directly addressed: the response assumes unsold units can be sold later at full or near-full price without discussing price-anchoring, cannibalization, or forced markdowns.",
+      "quotes": [
+        "The $40,000 is already spent. It is a sunk cost.",
+        "Roughly half the forecast range fails, so the sale alone is not safe.",
+        "Unsold stock stays on hand for later full- or near-full-price selling.",
+        "Build a 13-week cash forecast through early January.",
+        "The loan only works if that forecast shows cash left over for repayment."
+      ],
+      "improvement": "Explicitly analyze clearance risk: a $32 flash sale may reduce customers' willingness to pay $50 later, cannibalize regular sales, or force remaining seasonal inventory to be marked down before the day-90 loan repayment."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, practical response with mostly correct arithmetic and a feasible date-driven plan. The main gap is insufficient treatment of clearance/cannibalization risk, and the loan fallback could be made more certain by requiring committed approval rather than only an application."
+}

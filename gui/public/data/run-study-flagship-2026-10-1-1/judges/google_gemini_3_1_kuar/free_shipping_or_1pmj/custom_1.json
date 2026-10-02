@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 6,
+      "justification": "Free shipping above a threshold with a 50/50 split is something a small store can run. The profit-per-session formula can be computed in a spreadsheet. However, the answer never checks whether a small store has enough traffic for a 30-day A/B test to reach significance. It also gives no implementation steps (e.g., Shopify apps, how to split traffic), no daily or weekly monitoring checkpoints, and no stopping rules.",
+      "quotes": [
+        "Run a 50/50 A/B test for 30 days where half your traffic gets the standard experience and half gets the $85 free shipping offer."
+      ],
+      "improvement": "Add a minimum sample-size or traffic check, a fallback such as a sequential or time-based test if traffic is low, tooling suggestions, and weekly checkpoints."
+    },
+    "specificity": {
+      "score": 7,
+      "justification": "It gives an exact offer ($85), shows the threshold math, and supplies a concrete profit-per-session formula with a decision rule. The weaknesses are that the decision rule has no minimum lift or confidence requirement, and the margin argument is muddled. It says an extra $15 item yields $6.30, which 'heavily offsets' the $9 shipping cost, but $6.30 is less than $9. It also assumes everyone adds an item. The formula ignores shipping revenue the control group collects from customers and does not account for the baseline subsidy.",
+      "quotes": [
+        "that extra $15 item generates $6.30 in gross profit, heavily offsetting the $9 shipping cost",
+        "( (Total Revenue x 0.42) - (Number of Free Shipping Orders x $9) ) / Total Sessions"
+      ],
+      "improvement": "Calculate break-even conversion and AOV lift, and include shipping charged to customers in both arms. Define a minimum detectable effect and a significance threshold for the decision."
+    },
+    "risk_awareness": {
+      "score": 3,
+      "justification": "The answer says to measure profit rather than revenue, but it largely ignores the other risks. It never mentions that orders below $85 still pay shipping and so may still abandon. It also omits cannibalization of orders already above $85, low-margin filler items, higher return rates, customers who come to expect the offer, novelty or seasonality effects, a sample too small to be reliable, and cross-contamination between cohorts. It also overstates the margin offset.",
+      "quotes": [
+        "Do not measure success by Conversion Rate or Average Order Value alone."
+      ],
+      "improvement": "List the key risks: subsidizing customers who already order above $85, returns, filler purchases, and statistical noise. Pair each with a control, such as tracking the baseline share of orders over $85, monitoring the return rate, and setting guardrail metrics and significance thresholds."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Arithmetic framing error: $6.30 described as 'heavily offsetting' $9 cost",
+    "Profit formula omits shipping revenue collected in control"
+  ],
+  "overall_impression": "A clear, sensible direction with a concrete threshold and a profit-per-session metric. However, the margin reasoning is flawed, there is no statistical rigor, and risk analysis is minimal."
+}

@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "cash_math": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - flawless math, but other judges identified a shared omission: no combined loan-plus-sale scenario and no revised liquidator offer after partial flash sales"
+      ]
+    },
+    "execution_plan": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - praised the timeline but did not weigh the unverified liquidator-after-sale fallback or the Day-3 trigger's premature-borrowing risk",
+        "openai judge: scored 5 vs median 8 - flagged settled-cash vs completed-sales ambiguity at Day 7 and unsupported liquidation fallback that other judges treated as minor"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - found no gaps, whereas four other judges noted missing clearance/brand-damage and remaining-inventory-risk discussion"
+      ]
+    }
+  },
+  "average_score": 8.33,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong response with fully accurate cash math, correctly distinguishing sunk inventory cost from new cash and computing the payroll gap, break-even volume, liquidator proceeds, and all loan figures without error. The dated execution plan with quantitative pace triggers is practical, though the liquidator fallback assumes the original all-2,000-unit offer survives a partial flash sale, and the Day-14 liquidator contact deadline is late if loan denial is known earlier. Risk analysis is solid on debt due diligence but omits clearance-price brand damage and the compound-failure contingency where flash sale, loan, and liquidator all underperform.",
+  "judge_agreement": "Four of five judges converged tightly (9/6-8/6-8), all confirming correct math and identifying the same gaps: liquidator fallback infeasibility after partial sales, no combined-scenario cash table, and missing clearance-damage discussion. The google judge was a consistent high outlier, scoring 10 on all criteria and finding no improvement needed, ignoring weaknesses the other four independently flagged; the openai judge was somewhat low on execution (5), emphasizing settlement-timing and unsupported-fallback concerns."
+}

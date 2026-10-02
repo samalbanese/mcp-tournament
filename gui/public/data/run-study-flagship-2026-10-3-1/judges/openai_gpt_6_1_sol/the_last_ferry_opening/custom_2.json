@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The advice and sample lines closely preserve the narrator’s practical, restrained perspective while allowing grief to register through habits and unfinished sibling arguments. The brother remains an imperfect, specific person rather than an idealized absence. Particularly effective is the use of interrupted counting instead of an explicit emotional explanation.",
+      "quotes": [
+        "I braced the clasp before turning the key. Otherwise the strain would go into the stitching.",
+        "I had told Daniel it would do that. He had told me to hold the torch still.",
+        "I moved it back and started counting again."
+      ],
+      "improvement": "Give one example more specifically rooted in her marine-biological work or professional exhaustion, so her practical voice remains distinctive to this character rather than simply controlled."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The response develops emotional tension through economical tactile and visual details: the knot rubbing a palm, light directed onto wire, and a watch sliding over a hand. These details carry relational history without crowding the prose. Ferry and weather imagery remain mostly background rather than being further developed in this revision.",
+      "quotes": [
+        "The knot sat exactly where it would rub against anyone carrying it.",
+        "I angled my phone so the light fell on the wire, not on my fingers.",
+        "I leaned forward until the window stopped reflecting my face."
+      ],
+      "improvement": "Connect one of the inherited habits to the ferry’s physical motion or storm noise, allowing the setting to exert pressure on her restraint as well as providing a backdrop."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The suggestions connect existing elements—the repair, torch, house-clearing task, passenger count, and watch—rather than introducing unrelated backstory. They also preserve the mystery and the narrator’s rescue-oriented action. However, the integrated passage is presented as an addition without specifying what it replaces; retaining the original recognition memory and explicit disappearance reflection could produce repetition and undermine the requested indirectness.",
+      "quotes": [
+        "Later, when the man disappears through the crew door, that habit becomes useful to the mystery.",
+        "Use only one or two such routines. Too many would make the subtext conspicuous.",
+        "Around the suitcase’s first appearance, you might add:"
+      ],
+      "improvement": "Identify the original passages to replace or cut, especially the explicit twelve-year reflection, and provide a short stitched sequence showing how the subtler recognition leads into opening the case and responding to the child."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Specific, sensitive revision guidance with strong sample prose. It deepens the sibling relationship through practical behavior and remembered friction; clearer replacement instructions would make the proposed changes easier to integrate into the opening."
+}

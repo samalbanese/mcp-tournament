@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 6,
+      "justification": "Offers an implementable $85 free-shipping promotion, a useful cart callout, a control-group option, and a day-30 review. However, the plan does not specify a consistent full-month test schedule or how a small store should handle insufficient traffic, and its rollout rule could turn sampling noise into a permanent decision.",
+      "quotes": [
+        "Run a true A/B split (50/50 on sessions) for at least 14 days",
+        "Show a progress bar or callout in the cart",
+        "Contribution per session ↑ ≥ 5% | Roll out permanently"
+      ],
+      "improvement": "Specify setup and validation before launch, maintain the same control and treatment for the full 30 days, use persistent shopper assignment, and extend the experiment rather than roll out when the sample is too small or uncertainty remains."
+    },
+    "specificity": {
+      "score": 4,
+      "justification": "The response supplies an exact threshold, numerical scenarios, named metrics, and explicit decision rules, but its core discount economics are incorrect. Discounting a $72 basket does not reduce its $41.76 product cost: contribution becomes $19.44, not $25.70, requiring approximately 55.6% more orders rather than 17.7%. The projected recovery also depends on invented basket-distribution and behavior assumptions; the claimed 13% recovery breakeven is approximately 13.6% even under those assumptions. Decision rules leave several outcome ranges unspecified.",
+      "quotes": [
+        "15% sitewide discount | $61.20 | $25.70",
+        "You'd need a 17.7% increase in order volume",
+        "20% of existing orders already ≥$85 now get free ship",
+        "Even if you only recover 13% of abandoners, you break even"
+      ],
+      "improvement": "Keep product costs fixed when calculating discounts, distinguish illustrative assumptions from supplied facts, verify current shipping revenue and the actual basket distribution, and define exhaustive decision bands. Calculate contribution using actual net sales, product costs, shipping revenue, and shipping expense."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "Recognizes shipping subsidies on existing qualifying orders, repeat-purchase concerns, revenue-versus-profit confusion, and before/after confounding. However, it asserts recovery will compensate without evidence, omits uncertainty and repeat-visitor contamination controls, and treats a simplified contribution metric as conclusive profit evidence without accounting for returns, payment fees, fulfillment costs, or unusually expensive shipments.",
+      "quotes": [
+        "124 orders lose $9 each",
+        "Watch repeat rate",
+        "control for any promotions, email sends, or seasonal shifts",
+        "The volume recovery from the 38% abandoner pool more than compensates",
+        "If it goes up, the test is profitable — full stop"
+      ],
+      "improvement": "Frame conversion recovery as a hypothesis, use persistent randomized assignment and confidence intervals, include all material variable costs and returns in the profit metric, and set shipping-cost or eligibility guardrails for bulky and remote-destination orders."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A concrete and directionally sensible free-shipping test proposal, weakened by a material discount-margin calculation error, unsupported recovery predictions, and incomplete experimental and profit-accounting safeguards."
+}

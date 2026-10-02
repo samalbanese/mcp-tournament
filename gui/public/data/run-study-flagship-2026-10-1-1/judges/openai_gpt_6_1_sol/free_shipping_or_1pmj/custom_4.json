@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The recommendation is actionable for a small operator: it gives a clear offer, display locations, a 50/50 split with control, a full 30-day run, and a concrete profit-per-visitor metric. It is somewhat demanding because it requires visitor-level randomization, persistent assignment, and a contribution-margin calculation that includes several variable costs, but the plan is usable.",
+      "quotes": [
+        "Randomly split eligible visitors 50/50",
+        "Primary metric: contribution profit per visitor.",
+        "Keep visitors in the same group on repeat visits."
+      ],
+      "improvement": "Add a minimum detectable effect or sample-size/power estimate, and provide a simpler starter metric for operators who cannot calculate payment fees, fulfillment costs, and return reserves at visitor level from day one."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "The answer uses the supplied AOV, margin, and shipping cost to propose an exact offer and threshold, shows the margin arithmetic, defines the primary metric with a formula, and gives a profit-based decision rule rather than a revenue-based one.",
+      "quotes": [
+        "Test free shipping on orders of $95 or more first.",
+        "Contribution profit = merchandise revenue after discounts + shipping fees collected − product cost − actual shipping expense − payment fees − variable fulfillment costs − return/refund costs",
+        "Keep the offer only if contribution profit per visitor rises—not merely revenue or conversion."
+      ],
+      "improvement": "State an explicit numeric decision threshold for the profit-per-visitor lift, such as a 90% confidence interval entirely above $0.00 or a minimum lift of $0.10 per visitor, so the final go/no-go is less subjective."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "The response identifies the main margin and customer-behavior risks, including existing high-AOV customers capturing free shipping, buyers who would have purchased anyway, add-on products not having the average margin, and returns maturing after day 30. It also controls experiment-design risks by holding other variables constant and warning against early stopping.",
+      "quotes": [
+        "Customers already ordering above $95 may simply stop paying shipping, and customers who would have bought anyway may receive the benefit without adding items.",
+        "Use actual item margins and shipping costs where possible; add-on products may not have your average 42% margin.",
+        "Run for the full 30 days rather than stopping when early results look favorable."
+      ],
+      "improvement": "Add a control for existing high-AOV customers, such as reporting the qualifying-order rate and shipping subsidy separately for that segment, and set a maximum shipping-cost exposure or prepaid-return cap before launch."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, margin-aware recommendation that correctly prioritizes a shipping-threshold offer over a sitewide discount and provides a practical experiment plan with appropriate profit-based measurement and risk controls."
+}

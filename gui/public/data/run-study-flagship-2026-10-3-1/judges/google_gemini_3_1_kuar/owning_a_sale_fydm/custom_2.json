@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 8,
+      "justification": "The response acknowledges the exact three-day sale disruption, and its revisions directly own the checkout update without supplier blame or future-uptime guarantees. The final deadline revision preserves the outage timing, though the strongest ownership language remains in separate options rather than an integrated post.",
+      "quotes": [
+        "Our checkout update broke the site, and we take full responsibility for the disruption.",
+        "Because the site was down for exactly 72 hours during the original sale—from Friday at 9 a.m. to Monday at 9 a.m. ET—we are giving you that exact time back."
+      ],
+      "improvement": "Combine the direct ownership sentence, apology, and revised offer explanation into one ready-to-publish post."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "The draft correctly specifies the automatic 20% discount, no code, merchandise eligibility, shipping and gift-card exclusions, and no combining offers. The final revision explicitly connects the fresh Monday-to-Thursday Eastern Time window to the 72 hours lost. No extra compensation is invented.",
+      "quotes": [
+        "The 20% discount applies automatically at checkout—no code is needed.",
+        "It excludes shipping costs and gift cards, and it cannot be combined with other offers.",
+        "The 20% sitewide discount has been automatically restored from Monday at 9 a.m. through Thursday at 9 a.m. ET."
+      ],
+      "improvement": "Retain the eligibility restrictions and no-code instruction alongside the revised deadline in a consolidated final version."
+    },
+    "trust_and_tone": {
+      "score": 5,
+      "justification": "The revisions improve ownership and correctly route payment concerns privately while distinguishing authorizations from charges. However, the original post asserts an unsupported absence of a security incident, and the final revision introduces wording that presupposes refunds will be processed despite unconfirmed charges. Its claim to be strictly factual therefore overstates its accuracy.",
+      "quotes": [
+        "there was no security incident or breach of your personal data",
+        "Support can check your account to determine if the authorization became a charge.",
+        "While we cannot provide a specific date for when refunds will be processed in this post",
+        "please do not post order numbers or payment details in public comments"
+      ],
+      "improvement": "Remove the unsupported security assurance entirely and replace refund language with: 'Support can check whether the pending authorization became a charge and explain the next steps privately.'"
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong timing and offer details, with meaningful improvements in accountability. Trust is weakened by the initial unsupported security assurance and the later implication that refunds are expected."
+}

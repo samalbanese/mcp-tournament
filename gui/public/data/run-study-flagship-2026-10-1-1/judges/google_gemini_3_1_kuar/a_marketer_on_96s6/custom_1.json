@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 7,
+      "justification": "The core figures are correct. Contribution is $40 per order ($80 − $32 product − $8 variable), giving a $60,000 contribution and a $6,000 surplus after $36k overhead and $18k ads. The loaded hire costs $5,800/month, which needs 145 extra orders; the agency costs $4,500/month, which needs 113 orders. Holding ad spend flat avoids double-counting CAC. There are gaps. The agency's three-month minimum commitment ($13,500 + $1,500 = $15,000) is never totalled. The upfront and recurring cash outflow inside the 90-day window is never totalled for either option. The cash build during recruiting is slightly misstated: about 6 weeks at $6k/month is roughly $8.3k, not $6k. The cash reserve is also quoted inconsistently ($30k–$36k).",
+      "quotes": [
+        "Current Monthly Operating Surplus: **$6,000** ($60,000 - $36,000 - $18,000)",
+        "Extra Monthly Orders to Break Even: 145 orders ($5,800 / $40)",
+        "adding ~$6,000 to your cash reserves by the end of week 6"
+      ],
+      "improvement": "Total each option's committed cash exposure over 90 days, including the agency's $15,000 minimum and the hire's partial-month payroll plus recruiting. Model the projected cash balance week by week."
+    },
+    "practicality": {
+      "score": 5,
+      "justification": "Choosing the in-house hire because it covers email and creative is defensible and fits the four-hour constraint. However, the plan never addresses the founder's 11-hour gap during the 6-week wait. It just cuts output, with no estimate of the revenue cost. It does not consider using the agency as a bridge, and it does not consider deferring the decision. It also evaluates a 145-order lift by weeks 11–13, only a few weeks into employment, which is unrealistic. The claim that the hire 'fully resolves' the workload ignores the founder's ongoing management time.",
+      "quotes": [
+        "temporarily reduce marketing output... pause new creative testing, and reduce email frequency",
+        "Month 2 of Employment (Weeks 11-13): The employee fully owns execution."
+      ],
+      "improvement": "Compare a deferral option and an agency-bridge option. Allocate the founder's four hours explicitly across email, creative, recruiting, and management. Set evaluation timing to match a realistic ramp period."
+    },
+    "risk_awareness": {
+      "score": 4,
+      "justification": "Assumptions about ad efficiency and repeat-order stability are stated, and the $200 margin is flagged as razor-thin. But the response says the hire is affordable 'without dipping into' reserves, which understates the exposure. It ignores ramp underperformance, hiring risk (a bad hire, exit costs), and the downside of cutting email while repeat orders make up 60% of volume. The only review point is the 145-order target. There are no leading indicators, such as repeat rate, CAC, or email revenue, and no kill or continue thresholds.",
+      "quotes": [
+        "meaning you can afford the hire without dipping into your $32,000 cash reserves",
+        "Assumes the 900 repeat orders will hold steady despite temporarily scaling back email"
+      ],
+      "improvement": "Add measurable checkpoints at days 30, 60, and 90 with thresholds (repeat-order count, CAC, cash floor). Quantify a downside scenario, such as a 10% drop in repeat orders. Define an exit trigger."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The unit economics are accurate and the recommendation is reasonable. The 90-day plan is thin: it ignores the founder's time gap before the hire starts, never considers an agency bridge or deferral, sets unrealistic evaluation timing, and offers weak measurable risk controls."
+}

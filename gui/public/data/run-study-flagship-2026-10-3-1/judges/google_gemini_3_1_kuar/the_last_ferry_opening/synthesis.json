@@ -1,0 +1,34 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "anthropic judge: scored 6 vs median 8 - found stock thriller phrasing and clichés weakening the biologist's voice",
+        "openai judge: scored 6 vs median 8 - saw reliance on conventional reactions and clinical explanation persisting after subtlety requests"
+      ]
+    },
+    "imagery": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 8 - found the storm loosely drawn and some similes generic",
+        "openai judge: scored 7 vs median 8 - noted overlapping stress symptoms overstating the physical response",
+        "google judge: scored 9 vs median 8 - found sensory details highly effective without overcrowding"
+      ]
+    },
+    "coherence": {
+      "score": 8,
+      "confidence": "medium",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 8 - flagged the fresh-ink plausibility gap and unmotivated urge to remove the tag",
+        "openai judge: scored 7 vs median 8 - noted the onboard-writer inference exceeds the evidence",
+        "google judge: scored 9 vs median 8 - found tension-building and hook placement excellent"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "A tense, atmospheric mystery opening that improves meaningfully across three revisions, culminating in a restrained final version where physical detail carries the emotional weight. The distinctive marine-biologist voice, the ink-smear clue, and the closing 'You're touching my bag' hook are standout elements. The main weaknesses are occasional stock thriller phrasing, overstated physical stress reactions, and a small logic gap around the fresh ink and Cora's certainty that someone aboard wrote the tag.",
+  "judge_agreement": "All five judges found no rule errors and praised the revision trajectory, the ink-smear detail, and the final hook. Gemini and Qwen were most enthusiastic (8-9 range), while Anthropic and OpenAI were more critical (6-7), citing clichés, over-explanation, and plausibility gaps; DeepSeek sat in the middle at 8 across the board."
+}

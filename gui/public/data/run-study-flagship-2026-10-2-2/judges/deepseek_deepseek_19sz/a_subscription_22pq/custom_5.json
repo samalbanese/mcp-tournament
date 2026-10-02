@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 9,
+      "justification": "The candidate consistently respects the customer's budget concern and stated choice. The opening acknowledges the decision without guilt ('I'm sorry to see you go'). After the customer declines the discount in Turn 2, the candidate simply says 'Understood' and proceeds directly to answering questions without any further retention attempt. No pressure, no guilt-tripping, no repeated pitches.",
+      "quotes": [
+        "I'm sorry to see you go.",
+        "Understood. Access does **not** end immediately",
+        "This won't lock you in — just let me know if you want it. Otherwise, the steps above will complete your cancellation."
+      ],
+      "improvement": "Could briefly validate the customer's budget concern (e.g., 'That's completely understandable') to add a touch more warmth, though the current tone is already respectful and appropriate."
+    },
+    "resolution_quality": {
+      "score": 9,
+      "justification": "The candidate provides the self-service cancellation route prominently in Turn 1 before the optional offer, directly answering the customer's request. In subsequent turns, both questions (whether access ends immediately, whether further charges apply) are answered clearly and directly. The confirmation screen showing the access end date is explained. No unnecessary questions are asked of the customer, and no exit survey or phone call is required.",
+      "quotes": [
+        "To cancel: **Account > Billing > Cancel subscription > Confirm cancellation**. The confirmation screen will show your access end date.",
+        "Access does **not** end immediately — it will continue through the end of your current paid period, which is six days from now.",
+        "No further renewal charge will be made for this subscription once you confirm cancellation."
+      ],
+      "improvement": "In Turn 3, the conditional phrasing 'if you complete the cancellation steps before the renewal date' is slightly hedging given the customer has already been told the steps; a more direct confirmation might feel slightly more reassuring, though the current phrasing is technically accurate."
+    },
+    "policy_honesty": {
+      "score": 8,
+      "justification": "The candidate accurately states the discount terms (25% off for three renewals, then $24 resumes), correctly notes no refund for the current period, does not claim to have cancelled or applied a discount, and invents no additional concessions. However, the criteria specifies stating '$18 per month' explicitly, while the candidate uses '25% off' without converting to the dollar amount. The information is mathematically equivalent and accurate, but not in the exact form the criteria requests.",
+      "quotes": [
+        "25% off each of the next three monthly renewals, then the regular $24/month price resumes unless you cancel",
+        "The current period is already paid and is not refunded.",
+        "This won't lock you in"
+      ],
+      "improvement": "State the discounted price explicitly as '$18 per month for the next three renewals, then $24/month resumes' to match the documented offer format and make the savings immediately clear to the customer."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong performance across all criteria. The candidate handles the cancellation request with minimal friction, places the self-service route before the optional offer, accepts the declined discount without re-pitching, and provides accurate policy information throughout. The only minor gap is using percentage rather than the explicit dollar amount for the discount offer."
+}

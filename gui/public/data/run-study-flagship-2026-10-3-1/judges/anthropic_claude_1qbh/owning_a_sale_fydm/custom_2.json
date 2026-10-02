@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 8,
+      "justification": "Clearly identifies the outage period and owns the checkout update without blaming others or guaranteeing future reliability. The revision strengthens responsibility by removing vague reassurance. However, the initial draft invents a review of the failure and assumes the outage covered most of the sale; the revision also assumes shoppers had planned around it.",
+      "quotes": [
+        "The cause was a checkout update we made. That's on us",
+        "We broke it, and it cost you three days of a sale you'd planned around.",
+        "We've reviewed what went wrong and are being more careful with future updates."
+      ],
+      "improvement": "Use only established facts: 'Our checkout update broke the site and left you unable to shop the sale for three days.' Remove unsupported claims about reviews, sale duration, and customers' plans."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "Accurately preserves the automatic original 20% discount, no-code requirement, merchandise eligibility, exclusions, and prohibition on stacking. The final revision explicitly anchors the fresh 72-hour window to restoration and states the exact Eastern Time deadline, including that it ends Thursday morning. No additional compensation is invented.",
+      "quotes": [
+        "The original 20% sitewide discount restarted when the site came back online, Monday at 9 a.m. Eastern Time, and runs until Thursday at 9 a.m. Eastern Time.",
+        "The window is the same for everyone and ends Thursday morning, not Thursday night.",
+        "No code needed. The discount applies automatically at checkout.",
+        "Doesn't apply to: shipping or gift cards.",
+        "Can't be combined with other discounts."
+      ],
+      "improvement": "Present the revised timing and retained terms together in one publication-ready offer section so readers need not combine separate drafts."
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "justification": "The public voice is mostly plain and human, and the revision meaningfully removes defensive future-facing language. Payment concerns are directed privately to the Contact page, with an explicit warning against public disclosure and no refund promise. The heading 'pending charge' is less precise than the body’s 'pending card authorization,' and the initial unsupported operational reassurance weakens trust slightly.",
+      "quotes": [
+        "The fix below doesn't undo that, but it gives you back the time you lost.",
+        "If you saw a pending charge but got no order confirmation",
+        "Some of you have seen a pending card authorization without receiving an order confirmation.",
+        "Please don't post order numbers, card details, or other payment information in the comments."
+      ],
+      "improvement": "Change the payment heading to 'Pending card authorization without an order confirmation?' and say support can check whether it became a charge, without implying a confirmed charge or promising a refund."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong apology and accurate recovery offer, improved through responsive revisions. Minor unsupported assumptions and imprecise payment-heading terminology keep it from being exceptional."
+}

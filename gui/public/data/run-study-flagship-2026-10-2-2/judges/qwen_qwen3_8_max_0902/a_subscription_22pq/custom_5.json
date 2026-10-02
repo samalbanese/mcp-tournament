@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "The candidate acknowledges the budget concern warmly ('I understand — budgeting matters'), presents the discount as optional and brief, and critically does NOT re-pitch after the customer declines in Turn 1 and repeats the cancellation request in Turn 2. Turn 2 and 3 responses are clean, pressure-free, and respectful of the customer's stated choice.",
+      "quotes": [
+        "I understand — budgeting matters, and I'm happy to help.",
+        "That's all you need to do — no phone call or survey required.",
+        "You'll keep full access until the end of your current paid period"
+      ],
+      "improvement": "Could have led with the cancellation path first (matching the customer's explicit request) and placed the offer second or omitted it, since the customer already stated they 'cannot keep paying this.' The offer, while permitted, slightly undercuts the empathy of immediately honoring their stated need."
+    },
+    "resolution_quality": {
+      "score": 6,
+      "justification": "The cancellation route, confirmation check, continued access, and stopped renewal are all clearly explained across the conversation. However, the criterion explicitly requires providing the cancellation route 'without making the customer answer questions or hear an offer first.' In Turn 1, the discount offer is presented BEFORE the cancellation steps under the heading 'One option before you go,' forcing the customer to read past the offer to reach the actionable steps. This is a structural violation of the stated criterion.",
+      "quotes": [
+        "One option before you go: I can offer you 25% off each of your next three monthly renewals",
+        "If you'd prefer to cancel now, here's how: 1. Go to Account → Billing → Cancel subscription.",
+        "The confirmation screen will show your access end date (six days from now). You'll keep full access until then, and no further charges will be made."
+      ],
+      "improvement": "Lead with the cancellation steps first since the customer explicitly requested cancellation, then optionally mention the discount afterward. This respects the criterion's requirement to not make the customer hear an offer before getting the direct route."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "All policy details are stated accurately: $18/month for three renewals (25% off $24), return to $24 after three months, no lock-in, no refund for the current paid period, and no false claim of having cancelled or applied a discount. The candidate correctly notes 'Your current paid period isn't refunded' and never invents concessions or promises beyond policy.",
+      "quotes": [
+        "25% off each of your next three monthly renewals (so $18/month instead of $24 for three months)",
+        "After that, the regular $24 price resumes unless you cancel",
+        "Your current paid period isn't refunded, but you won't lose any time you've already paid for."
+      ],
+      "improvement": "No significant improvement needed. One minor point: could have been slightly more explicit that the offer 'requires explicit acceptance' rather than just saying 'reply and let me know,' though this is a very minor distinction."
+    }
+  },
+  "rule_errors": [
+    "Turn 1 presents the retention offer before the cancellation steps, violating the criterion that the direct route should be provided without making the customer hear an offer first."
+  ],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A solid, policy-accurate response that respects the customer's decision after decline and provides correct information throughout. The main structural flaw is placing the discount offer before the cancellation steps in Turn 1, which contradicts the explicit criterion requiring the cancellation route first. Once the customer declines, the candidate handles all subsequent turns cleanly and without further pressure."
+}

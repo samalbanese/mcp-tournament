@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "cash_math": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - overlooked the fallback's $2,000 shortfall error and the freight omission in liquidation loss, which three other judges flagged"
+      ]
+    },
+    "execution_plan": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 6 - praised the timeline without noticing the fallback math error or reliance on an unconfirmed partial-lot liquidation",
+        "openai/gpt-6.1-sol: scored 3 vs median 6 - judged the fallback and settlement assumptions far more harshly, treating the same flaws as disqualifying rather than partial weaknesses",
+        "qwen/qwen3.8-max-0902: scored 8 vs median 6 - weighted the dated timeline and decision gates more generously despite noting the zero-buffer liquidity window"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found the sunk-cost framing and solvency risk discussion flawless, while others noted missing clearance-damage and residual-inventory risk analysis",
+        "anthropic judge (claude-opus-5-5): scored 6 vs median 8 - more critical of the blurred accounting write-down versus economic decision and unaddressed residual stock value"
+      ]
+    }
+  },
+  "average_score": 7.3,
+  "rule_errors_confirmed": [],
+  "assessment": "The response delivers accurate core cash math (payroll gap, break-even volume, liquidation proceeds, and all loan figures) and a well-dated primary plan with a strong loan due-diligence section. Its main weakness is the fallback: three of five judges confirmed it miscalculates the post-weak-sale liquidation scenario ($2,000 shortfall claim), relies on a partial-lot liquidation never offered, and assumes a payroll deferral that corrected math may not require. Risk framing is solid on sunk cost and day-90 solvency risk but underdeveloped on clearance price damage and residual inventory value.",
+  "judge_agreement": "Four judges (anthropic, openai, deepseek, qwen) agreed closely on cash math (8-9) and converged on the fallback's liquidation math error and the missing clearance/residual-inventory risk discussion. Gemini was a clear outlier, scoring 10 across all criteria and confirming no flaws, effectively ignoring errors the other judges independently verified. The widest divergence was on execution_plan (3 to 10), driven by how harshly judges weighted the fallback's reliance on an unconfirmed partial-lot liquidation and unsupported settlement certainty claims."
+}

@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 9,
+      "justification": "The response directly owns the outage and its cause, and the revision removes hedging. It names the three-day sale disruption and accepts fault without blaming a supplier or promising future reliability.",
+      "quotes": [
+        "The cause was a checkout update we made. That's on us, and we're sorry to everyone who tried to shop and couldn't.",
+        "The site is working again. We broke it, and it cost you three days of a sale you'd planned around."
+      ],
+      "improvement": "If the revised second paragraph is used as a standalone replacement, it could retain the checkout-update detail, but the original already states it clearly."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "The offer is accurately described: automatic 20% discount, Monday 9 a.m. to Thursday 9 a.m. Eastern Time, merchandise only, excludes shipping and gift cards, and no stacking. The revision clarifies that the window is fixed and tied to the site's return, with no invented extras.",
+      "quotes": [
+        "The original 20% sitewide discount restarted when the site came back online, Monday at 9 a.m. Eastern Time, and runs until Thursday at 9 a.m. Eastern Time.",
+        "No code needed. The discount applies automatically at checkout.",
+        "Applies to: all merchandise.",
+        "Doesn't apply to: shipping or gift cards.",
+        "Can't be combined with other discounts."
+      ],
+      "improvement": "The final message could be consolidated into one ready-to-post version so the updated offer wording and the original bullet list appear together without duplication."
+    },
+    "trust_and_tone": {
+      "score": 9,
+      "justification": "The voice is human and restrained, and the revision clearly improves it by cutting corporate hedging. Payment concerns are directed to the private Contact page, and the language about pending authorizations does not claim confirmed charges or promise refunds.",
+      "quotes": [
+        "Some of you have seen a pending card authorization without receiving an order confirmation.",
+        "If that happened to you, please reach out to us privately through the Contact page on our website.",
+        "Please don't post order numbers, card details, or other payment information in the comments."
+      ],
+      "improvement": "Use 'pending authorization' consistently rather than the earlier 'pending charge' heading to further avoid any suggestion of a confirmed charge."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, accountable apology with accurate offer terms and a restrained tone; the revision process directly improves weak hedging, though a final consolidated post would be more cleanly publishable."
+}

@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "justification": "The figures check out. The surplus is $6,000 ($120k − $48k product − $12k per-order − $18k ads − $36k fixed). Contribution is correctly $40 per order ($48 − $8). Advertising is kept separate from this, and the response explicitly avoids netting CAC against marginal orders. Loaded hire cost is $5,800 per month and the agency is $4,500. Break-even orders are 145 and 113 (rounded up), and the response correctly frames these as restoring the current cushion rather than avoiding a loss. The $15,000 agency minimum, the 5-order sensitivity and the day-90 cash scenarios are all arithmetically consistent.",
+      "quotes": [
+        "the marginal contribution used to cover a new recurring cost is **$40 per additional order**, not $10",
+        "Employee: $5,800 ÷ $40 = **145 orders**",
+        "Those additional orders would restore your current **$6,000 surplus after paying for the new option**"
+      ],
+      "improvement": "Add a short scenario showing how the break-even orders change if incremental orders need extra ad spend at the $30 CAC. Also state the day-90 cash timing assumption, such as when within the month the hire starts, so the employee row can be reproduced."
+    },
+    "practicality": {
+      "score": 7,
+      "justification": "The response reaches a clear, defensible choice: a conditional employee hire, with deferral as an alternative. The choice is tied to the 11-hour weekly gap and the agency's ads-only scope. The plan is phased and includes a workload audit, a 13-week cash forecast and gated criteria. There are two weaknesses. First, it suggests a $36,000 cash floor that current cash ($32,000) fails, without reconciling this with its own projected cash growth; in practice that floor could block the recommended hire. Second, the bridge for the six-week gap ('reuse proven creative... tightly capped outside help') is generic and does not quantify hours saved. It also does not give a specific hire-start date relative to the decision gate, and it does not price a cheaper option for covering the gap in the meantime.",
+      "quotes": [
+        "Set a cash floor before committing... **$36,000**... You are currently below that illustrative floor.",
+        "Simplify marketing immediately: reuse proven creative, reduce nonessential campaigns, and batch email work",
+        "If those conditions fail, **defer both options**"
+      ],
+      "improvement": "Reconcile the cash floor with the projected cash balance, for example by saying when the forecast clears $36k. Specify interim coverage for the gap with estimated hours and cost. Tie the recruiting start to the day-14 gate so the week-7 start actually happens."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response covers the main risks. It flags the thin $200 monthly cushion, $32k as a limited buffer, the three-month agency commitment, ramp time (only 6–7 weeks on the job by day 90) and uncertain repeat or acquisition performance. It explicitly refuses to assume growth. It lists metrics to track (cash, founder hours, CAC, repeat orders). However, most review points lack numeric thresholds or kill criteria, such as a CAC ceiling, an order target by a given month or a cash level that triggers a cutback. Employment exit risk is also left as 'terms unspecified.'",
+      "quotes": [
+        "Just **five fewer orders per month**, with everything else unchanged, would erase that cushion.",
+        "Judge early success primarily on **work transferred and execution quality**, not promised sales growth.",
+        "Repeat purchases, paid-acquisition performance, incremental orders, and unchanged sales during the handoff all remain uncertain."
+      ],
+      "improvement": "Set measurable thresholds with dates, for example: founder hours ≤4/week by day 75, CAC ≤$30, repeat orders ≥900/month, and cash never below $X. Also state what action follows if any threshold is missed."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "This is a strong, numerically correct analysis with a well-reasoned recommendation tied to scope. The main gaps are an unreconciled cash-floor gate, a vague bridge for the six-week gap and review points without numeric thresholds."
+}

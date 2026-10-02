@@ -1,0 +1,31 @@
+{
+  "final_scores": {
+    "cash_math": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 7 - credited core bridge arithmetic as flawless while ignoring the per-unit loss mischaracterization and timeline omissions (day-4 balance, missing $4,000 other-product inflow) that other judges documented"
+      ]
+    },
+    "execution_plan": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 9 vs median 6 - did not credit the fallback's $2,000 shortfall, the constraint-violating suggestions, or the missing loan-denial trigger that most judges flagged",
+        "openai/gpt-6.1-sol: scored 3 vs median 6 - weighted the infeasible fallback and assumption violations more heavily than the plan's structure and correct sequencing"
+      ]
+    },
+    "risk_awareness": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 9 vs median 6 - overlooked the self-contradictory 'easily cover' repayment claim and missing clearance-damage discussion that four other judges cited",
+        "openai/gpt-6.1-sol: scored 4 vs median 6 - penalized the repayment assurance and day-20 repayment suggestion more severely"
+      ]
+    }
+  },
+  "average_score": 6.3,
+  "rule_errors_confirmed": [],
+  "assessment": "The response gets the headline numbers right: the $13,000 payroll gap, 500-unit break-even, loan economics ($14,700 proceeds, $15,517.81 repayment, $817.81 financing cost), and liquidator net of $11,000 are all correct. However, it mischaracterizes the flash sale as producing a per-unit accounting loss when it actually yields a margin above cost, and its cash timeline omits the $4,000 other-product inflow and double-counts or mis-times promotion spend. The execution plan is well-sequenced but the fallback does not close the $2,000 gap and relies on actions that violate the problem's no-other-cash-flows assumption, while the 'easily covers' repayment claim is unsupported at low sale volumes. Risk awareness is solid on sunk costs and day-90 exposure but misses clearance damage and unsold-inventory disposition.",
+  "judge_agreement": "Four of five judges (anthropic, openai, deepseek, qwen) converged closely, all flagging the same trio of weaknesses: the per-unit loss error, the infeasible/vague fallback plan, and the unsupported repayment assurance. Gemini was a consistent positive outlier across all three criteria, treating the fallback and loss characterization as non-issues, which drove all contested gaps. No judge found rule or tool errors."
+}

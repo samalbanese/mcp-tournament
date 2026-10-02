@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "All calculations are verified correct: payroll gap ($13,000), per-unit net ($28), range outcomes ($8,800–$15,800), minimum volume (500 units), liquidator net ($11,000), loan interest ($517.81), total repayment ($15,517.81), total financing cost ($817.81), and effective annualized rate (~22.6%). The candidate correctly distinguishes inventory write-down from new cash available and explicitly treats the $40,000 landed cost as sunk.",
+      "quotes": [
+        "($13,000 + $1,000) ÷ $28 = 500 units",
+        "$15,000 × 14% × 90/365 = $517.81",
+        "Selling $40,000 of inventory for $12,000 creates a $28,000 inventory write-down, plus $1,000 freight cost. But the actual new cash available is only $11,000."
+      ],
+      "improvement": "Could explicitly show the profit/loss calculation for the flash sale at the low end (350 units) to contrast with the high end, and could note that the liquidator's $2,000 shortfall means even the 'guaranteed' option fails alone—a useful summary table comparing all three options side-by-side would strengthen clarity."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "The plan provides a clear day-by-day timeline with a quantitative trigger (215 units by Day 3 ≈ 72/day pace) that correctly accounts for the 3-day loan funding period. The fallback correctly identifies the liquidator's 5-day payment window and sets Day 14 as the contact deadline. The plan treats the 350–600 range as uncertain rather than guaranteed, using conditional triggers instead of assuming a specific outcome.",
+      "quotes": [
+        "Day 3: Review sales pace. If sales are tracking below about 215 units by day 3, or below roughly 72 units/day, apply for the loan.",
+        "If needed, contact the liquidator by Day 14 so payment can arrive by Day 19, before payroll.",
+        "Do not take the loan automatically, because the flash sale alone can close the gap if it hits at least 500 units."
+      ],
+      "improvement": "The Day 3 trigger could be more nuanced: if only 215 units have sold by Day 3 but pace is accelerating, a Day 4 or Day 5 reassessment might avoid unnecessary borrowing. The plan also doesn't explicitly address the scenario where the flash sale yields between 350–499 units (partial gap closure) and the loan is simultaneously denied—what is the immediate contingency then? A brief decision tree or matrix of outcomes would strengthen the plan."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response clearly separates sunk cost from liquidity, identifies the liquidator's total economic loss ($29,000 including freight), flags the loss of all remaining inventory, and provides a substantive checklist for the day-90 repayment obligation including effective cost (22.6%), prepayment terms, covenants, and the structural question of whether debt merely postpones the problem. The candidate correctly notes there are no advance orders and no forecast beyond three weeks.",
+      "quotes": [
+        "Treat the inventory cost as already paid/sunk for cash-flow purposes.",
+        "Whether taking debt merely postpones a cash shortage rather than solving the underlying slow-moving inventory problem.",
+        "Effective cost: the $300 fee and interest make the effective annualized cost roughly 22.6% on cash received, not 14%."
+      ],
+      "improvement": "Could more explicitly address the compound failure scenario (flash sale underperforms AND loan is denied AND liquidator is the only remaining option but still leaves a $2,000 gap). Also, the risk of the flash sale cannibalizing future full-price sales or damaging brand perception is not mentioned, which is a relevant clearance-damage consideration beyond just the per-unit loss."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-organized response with accurate arithmetic throughout, a practical staged execution plan with quantitative triggers, and good risk separation between sunk costs and liquidity. Minor gaps include the absence of a compound-failure contingency and limited discussion of brand/cannibalization risk from the flash sale."
+}

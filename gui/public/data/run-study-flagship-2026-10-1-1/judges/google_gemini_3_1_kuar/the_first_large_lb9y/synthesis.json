@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "unit_economics": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - awarded perfection despite the missing aggregate direct-retail comparison ($66,000 vs $28,000) and the muddled contribution-vs-cash framing that other judges penalized",
+        "anthropic judge: scored 6 vs median 8 - weighed the missing theoretical comparison and the unreconciled 'immediate cash infusion' claim more heavily than peers"
+      ]
+    },
+    "cash_and_stock_plan": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - judged the aggregate plan as flawless despite acknowledged gaps in week-by-week granularity and the overstated deposit-funding claim",
+        "anthropic judge: scored 6 vs median 8 - penalized the coarse timeline, untimed direct inflows, and unexamined 200-unit buffer adequacy more than peers"
+      ]
+    },
+    "risk_awareness": {
+      "score": 6,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 8 vs median 6 - treated the omission of replenishment slippage and defect risk as minor, whereas three other judges docked points for these missing required risks",
+        "anthropic judge and openai judge: scored 4 vs median 6 - additionally penalized the incorrect default-loss characterization (default results in roughly a -$5,000 net loss, not just lost profit) and the overconfident no-cannibalization claim"
+      ]
+    }
+  },
+  "average_score": 7.3,
+  "rule_errors_confirmed": [],
+  "assessment": "The response demonstrates strong quantitative fundamentals: correct wholesale pricing ($33/unit), contribution math ($28,000 or $14/unit vs. $33/unit direct), and a feasible eight-week cash and inventory plan that preserves the $16,000 reserve and correctly identifies that the retailer deposit covers the supplier deposit plus freight. Its main weakness is risk analysis: replenishment slippage and defect returns go unaddressed, the default-loss framing is materially wrong (defaulting produces a ~$5,000 net loss, not merely lost profit), and credit protections (trade references, MAP) are relatively weak given the unsecured $33,000 exposure and thin 200-unit stock buffer. A smaller first order or stronger deposit terms would materially improve the risk profile.",
+  "judge_agreement": "All five judges agreed the core arithmetic and cash/stock mapping were correct, with broad consensus around unit economics (median 8) and cash planning (median 8); most noted the missing aggregate direct-retail comparison and minor timeline imprecision as secondary. On risk, four of five judges converged on 4–6, consistently citing the absent replenishment-slippage and defect risks; Gemini was the clear outlier, scoring 8–10 across all criteria and treating omissions other judges saw as material. No rule errors were flagged by any judge."
+}

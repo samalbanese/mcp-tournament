@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "accountability": {
+      "score": 9,
+      "confidence": "medium",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - viewed the plain factual causation statement as fully sufficient ownership",
+        "anthropic judge: scored 7 vs median 9 - penalized the removal of explicit 'take responsibility' language across revisions"
+      ]
+    },
+    "offer_clarity": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - found the offer complete with no possible improvement",
+        "openai judge: scored 10 vs median 9 - likewise saw the offer as flawless"
+      ]
+    },
+    "trust_and_tone": {
+      "score": 9,
+      "confidence": "medium",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - praised tone and privacy handling as excellent without reservations",
+        "anthropic judge: scored 7 vs median 9 - flagged a choppy opening, repeated apology, and revision-driven weakening"
+      ]
+    }
+  },
+  "average_score": 9,
+  "rule_errors_confirmed": [],
+  "assessment": "The final post is a strong, constraint-compliant public apology. All judges confirmed the offer details (20% discount, 72-hour window, exclusions, no stacking) are complete and accurate, with no invented compensation. Judges also agreed the post avoids blame shifting, does not promise refunds or future stability, and handles payment concerns responsibly through a private channel. The main point of disagreement is whether replacing explicit 'we take responsibility' language with a plain factual causation statement strengthens or weakens accountability.",
+  "judge_agreement": "Judges unanimously agreed there were no rule errors and that offer clarity and privacy handling were excellent. Agreement was strong on accountability in substance (direct causation, no excuses), but diverged on framing: anthropic scored accountability and tone lower due to the dropped 'take responsibility' phrase and a choppier final opening, while google gave perfect scores. Median-based synthesis lands at 9 across all criteria."
+}

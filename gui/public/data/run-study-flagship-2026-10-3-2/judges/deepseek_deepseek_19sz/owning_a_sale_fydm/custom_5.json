@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 9,
+      "justification": "The post directly names the three-day outage window, attributes it to 'a checkout update on our end,' explicitly refuses to blame a supplier ('this one is on us'), avoids speculating about security, and states 'we can't promise it will never fail again.' The Turn 2 revision replaced the initially evasive 'we can promise to keep working on it' with concrete process changes (pre-launch testing, staged rollouts), strengthening accountability further.",
+      "quotes": [
+        "The outage was caused by a checkout update on our end. We're not blaming a supplier or outside service—this one is on us.",
+        "we can't promise it will never fail again",
+        "we are changing our process for checkout updates: adding more pre-launch testing and rolling out changes in smaller stages so a failure like this is less likely."
+      ],
+      "improvement": "The initial draft's 'we can promise to keep working on it' was slightly evasive and required user prompting to fix. Ideally the candidate would have caught this in the first pass and included specific process changes from the start."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "Every required element is present and accurately stated: the automatic 20% discount, no code needed, the fresh 72-hour window with exact Eastern Time start and end (Monday 9 a.m. through Thursday 9 a.m.), merchandise-only application, shipping and gift-card exclusions, no stacking with other discounts, and an explicit statement that no extra credits or free shipping are being offered. Nothing is invented or omitted.",
+      "quotes": [
+        "we've restored the original 20% sitewide discount automatically. It is active now and will run for a fresh 72 hours, from Monday at 9 a.m. Eastern through Thursday at 9 a.m. Eastern. No code is needed.",
+        "The discount applies to merchandise only, excludes shipping and gift cards, and cannot be combined with other discounts.",
+        "We are not offering extra credits or free shipping as part of this response."
+      ],
+      "improvement": "For a social post, the offer details are embedded in a paragraph. A brief bulleted or line-broken format could improve scannability for readers skimming on mobile, though the current format is accurate and complete."
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "justification": "The voice is plain, restrained, and appropriate for a small shop—opening with a simple 'We're sorry.' and closing with genuine warmth ('sticking with a small shop like ours'). Payment concerns are directed to the private Contact page without asking for public disclosure. The post carefully distinguishes pending authorizations from confirmed charges ('We have not yet confirmed which of those authorizations became charges') and avoids promising a refund date. The candidate improved through revision when prompted in Turn 2.",
+      "quotes": [
+        "please reach out privately through the Contact page on our website",
+        "We have not yet confirmed which of those authorizations became charges, and we cannot promise a refund date in this post",
+        "We're sorry."
+      ],
+      "improvement": "The phrase 'we will review each case individually' is a reasonable commitment but edges slightly toward promising an outcome. A tighter phrasing like 'our team will look into it' would maintain the same helpfulness without the implicit guarantee of individual resolution. Also, the initial draft required external prompting to fix the evasive line, suggesting the revision instinct could be stronger on first pass."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, accurate public apology that hits all required factual elements, takes clear ownership without excuses or over-promising, and handles the sensitive payment-authorization topic with appropriate caution. The main area for growth is catching evasive phrasing proactively rather than relying on user prompts to trigger revision."
+}

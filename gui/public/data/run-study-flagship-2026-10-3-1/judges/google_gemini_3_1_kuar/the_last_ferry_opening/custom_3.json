@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's background as a marine biologist is naturally woven into her observations, creating a distinct and consistent perspective. The language feels authored and specific.",
+      "quotes": [
+        "Ten years of studying the benthic zones, of mapping dead coral and tracking the systematic starvation of apex predators, had left me hollowed out.",
+        "olive drab plastic faded to the color of bruised kelp",
+        "The sharp, left-handed slant. The high cross of the ‘t’. The tight, pinched loop of the ‘C’."
+      ],
+      "improvement": "To make the voice even more distinct, the narrator could use a slightly more cynical or detached tone initially to contrast more sharply with her panic at the end."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details are highly effective, establishing the oppressive atmosphere of the ferry and the visceral nature of the protagonist's panic without overcrowding the prose.",
+      "quotes": [
+        "The passenger cabin smelled of sour coffee, wet wool, and the heavy, sulfurous exhaust of marine diesel.",
+        "A cold sweat broke across the back of my neck, mapping my spine.",
+        "The thick cotton twisted, refusing to give way. I yanked harder, desperate now, the plastic handle snapping loudly against the metal hinges."
+      ],
+      "improvement": "A brief auditory detail distinguishing the ambient noise of the storm from the mechanical noise of the ferry could add another layer of immersion."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The narrative flows logically and builds tension excellently. The candidate successfully applied the user's feedback in each turn, moving from a standard reaction to an overly dramatic one, and finally to a subtly grounded, highly effective physical reaction. The final hook is perfectly timed.",
+      "quotes": [
+        "The cabin was a sealed steel box miles from the mainland, pitching violently in the black water, and someone on this boat had written my name.",
+        "\"Excuse me,\" a man's voice said from above, smooth and entirely too steady for the sea. \"You're touching my bag.\""
+      ],
+      "improvement": "The transition from observing the bag to kneeling on the floor could be smoothed slightly, as she moves down the aisle while the boat is pitching violently."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent display of creative writing and revision. The candidate successfully established a gripping atmosphere, a distinct narrator, and skillfully refined the emotional climax according to the user's increasingly nuanced directions."
+}

@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 9,
+      "justification": "The revised opening directly names the exact three-day window, owns the checkout update as the cause, and says 'That's on us' rather than blaming a supplier or speculating about security. It also avoids promising future reliability by acknowledging the site could fail again.",
+      "quotes": [
+        "From Friday at 9 a.m. to Monday at 9 a.m. ET, our website was down during what was supposed to be a sale weekend.",
+        "A checkout update we rolled out broke the site, and it stayed broken until we could fix it. That's on us.",
+        "We won't promise it will never happen again, but we're working to make sure it doesn't."
+      ],
+      "improvement": "A direct 'We're sorry' could make the apology more explicit, but the ownership is already clear and accountable."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "The compensation is stated accurately: automatic 20% discount, no code, correct 72-hour ET window, merchandise-only scope, shipping/gift-card exclusion, and no stacking. It does not invent extra credits or free shipping.",
+      "quotes": [
+        "The original 20% discount on merchandise has been restored automatically—no code needed.",
+        "It runs from Monday at 9 a.m. through Thursday at 9 a.m. ET, giving you a fresh 72 hours to shop.",
+        "Shipping and gift cards are not included",
+        "Cannot be combined with other discounts"
+      ],
+      "improvement": "Could add an explicit line that no extra credits or free shipping are part of the offer, but omitting them does not create confusion."
+    },
+    "trust_and_tone": {
+      "score": 9,
+      "justification": "The final voice is restrained and human, especially after removing the defensive security denial. Payment concerns are routed to the private Contact page, and the message carefully distinguishes pending authorizations from confirmed charges without making refund promises.",
+      "quotes": [
+        "That's on us.",
+        "please reach out to us through the Contact page on our site.",
+        "We haven't yet confirmed which of those authorizations became actual charges, so we don't want to make promises about refunds we can't keep right now—but we will check your specific situation.",
+        "Please don't post order numbers, payment details, or account information in the comments or replies."
+      ],
+      "improvement": "The public apology is spread across revision turns; combining all accepted sections into one clean final draft would improve readiness for posting."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The cumulative revised public apology is strong: it owns the checkout failure plainly, states the restored offer and exclusions accurately, and routes payment concerns privately without overpromising. The removal of the security denial and the merchandise-first discount phrasing are meaningful improvements."
+}

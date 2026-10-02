@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 7,
+      "justification": "The response provides a clear, actionable 30-day A/B test with a 50/50 split, defined control and treatment, a primary metric (contribution per visitor), secondary metrics, and a decision rule. The implementation tip ('You're $X away from free shipping') is useful. However, it lacks operational details a small operator would need: no guidance on required sample size or minimum detectable effect, no mention of what tools to use for the split, and 'reasonable confidence' is left undefined. If traffic is low, 30 days may be insufficient, and this contingency is unaddressed.",
+      "quotes": [
+        "Run a proper A/B test.",
+        "50/50 split between control and treatment.",
+        "After 30 days, or once the test reaches statistical significance"
+      ],
+      "improvement": "Add a minimum sample size estimate (e.g., 'you need ~X visitors per variant to detect a Y% lift at 95% confidence'), specify what to do if significance isn't reached in 30 days, and name accessible tools (e.g., Shopify's built-in A/B features, Google Optimize, or a simple cookie-based split)."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "The response directly uses all four supplied numbers ($72 AOV, 42% margin, $9 shipping, 38% abandonment) to derive the $95 threshold from first principles ($23 × 42% = $9.66 ≈ $9 shipping cost). It provides exact contribution calculations for both options, a break-even table across three cannibalization scenarios, a formula for the primary metric, and a binary decision rule. The comparison showing the 15% discount requires a 55.6% order lift versus a much lower bar for free shipping is particularly compelling and well-supported.",
+      "quotes": [
+        "Extra contribution from the add-on: $23 × 42% = $9.66. Shipping cost you absorb: $9.00",
+        "To maintain the same total contribution profit, you would need: $10.80 / $19.44 = 55.6% increase in orders",
+        "If the $95 free-shipping variant has higher contribution per visitor than control with reasonable confidence, roll it out."
+      ],
+      "improvement": "Could specify what 'reasonable confidence' means numerically (e.g., p < 0.05 or a Bayesian posterior probability > 90%) and provide a concrete minimum detectable effect size that would justify rollout."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The response correctly identifies the primary margin risk (cannibalization of existing $95+ orders) and quantifies it with a break-even table. It also flags the behavioral risk that $95 might be too high to move behavior and suggests threshold adjustments. However, it omits several important risks: no discussion of sample size adequacy or seasonality confounding the 30-day window; no mention of return-rate risk (customers adding items to hit threshold then returning them); no novelty/primacy effect warning; and no discussion of the risk that customers learn to wait for free shipping promotions.",
+      "quotes": [
+        "The main profit leak is existing customers who already spend $95+ and would have bought anyway. For those orders, you lose $9 shipping.",
+        "If you find that $95 is too high to influence behavior, then consider testing a lower threshold like $85 — but that lower threshold will be less margin-safe."
+      ],
+      "improvement": "Add discussion of: (1) return-rate inflation risk from threshold-gaming, (2) seasonality or day-of-week effects that could confound a 30-day window, (3) the risk of insufficient statistical power if traffic is low, and (4) long-term conditioning risk where customers delay purchases awaiting free shipping."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-reasoned response that excels in specificity by deriving the threshold from first principles and providing rigorous margin comparisons. The test plan is structurally sound but would benefit from more operational detail (sample size, tools, contingency plans). Risk awareness covers the main margin concern well but misses several experiment-design and behavioral risks that a careful operator should anticipate."
+}

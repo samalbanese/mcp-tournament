@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 8,
+      "justification": "All the core figures are correct. Cash before payroll is $6,000 − $5,000 + $4,000 = $5,000, leaving a $13,000 gap. The sale nets $28 per unit less $1,000 upfront, giving $8,800 to $15,800 across the range. Break-even is 500 units. The liquidator nets $11,000, which leaves the shop $2,000 short. The loan advances $14,700 net, charges $517.81 interest, requires $15,517.81 on day 90, and costs $817.81 in total, about 22.6% annualised. The combined-plan tables are also correct. The fallback contains one error. It says partial liquidation after a weak sale still leaves a '$2,000 payroll shortfall', but that figure applies to a liquidator-only plan. Liquidating the 1,650 units left after a 350-unit sale at 30% of cost would raise $9,900 gross, or about $8,900 after freight. Together with the $8,800 from the sale, that would close the gap.",
+      "quotes": [
+        "Interest = $15,000 × 0.14 × (90 ÷ 365) | **$517.81**",
+        "Gap-closing volume | **500** | **$13,000**",
+        "accept the $2,000 payroll shortfall"
+      ],
+      "improvement": "Recompute the fallback with actual numbers. Show cash from the sale plus liquidation of unsold units at 30% of cost minus freight, and confirm whether payroll is covered."
+    },
+    "execution_plan": {
+      "score": 6,
+      "justification": "The primary timeline is dated and feasible. Loan funds land on day 3, before bills on day 5. The plan does not count the sale as cash already received, and the projections cover the full 350–600 range. The fallback has weaknesses. It is triggered only by loan denial or a delay past day 5, and it has no mid-sale checkpoint, such as a day 3–4 run-rate check. It relies on a partial-lot liquidation the liquidator never offered. It concludes with a payroll deferral that the corrected math may not require. The plan spends $1,000 on promotion on day 0, which leaves exactly $5,000 for bills, but this tight margin is not flagged. The plan also does not say what to do if the loan is denied on day 1–2, while the liquidator's 5-day window is still open.",
+      "quotes": [
+        "**Day 0 (today)** | Submit loan application; simultaneously launch flash-sale promotion ($1,000 spend).",
+        "If < 500, immediately contact the liquidator to negotiate a **partial-lot purchase**"
+      ],
+      "improvement": "Add a mid-sale volume trigger and a latest date for accepting the liquidator, counting back from payroll using its 5-day payment lag. Flag the zero-buffer bill payment, and confirm that the liquidator will accept a partial lot before relying on it."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "The response correctly treats the $40,000 as sunk and frames the decision around new cash. It flags the sale's volume risk. Its strongest point is the day-90 repayment risk: it calls for a 90-day cash model and checks on default terms, liens, covenants and funding reliability. It does not address clearance damage, meaning that a $32 sale may anchor customer price expectations or devalue the remaining stock and brand at the normal $50 price. It also gives little attention to the fate and real value of the 1,400–1,650 units left unsold, and says only that they 'remain on the books at $20'. The phrase 'locks in a permanent $28,000 loss' blurs the accounting write-down with the economic decision it has just called sunk.",
+      "quotes": [
+        "The $40,000 is sunk either way; the question is how much *new cash* you extract.",
+        "If you cannot, the loan converts a liquidity problem into a solvency problem."
+      ],
+      "improvement": "Address the risk of price-anchoring or brand damage from the clearance sale. Assess the realistic sell-through and value of the remaining stock, and keep the accounting write-down separate from the cash decision."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "fallback_math_inconsistency"
+  ],
+  "overall_impression": "The core calculations are accurate and well organised, and the loan due-diligence section is strong. The fallback has a numerical error and depends on a partial liquidation the liquidator never offered, and it lacks mid-sale triggers. The response also omits the risk of clearance damage to the remaining inventory."
+}

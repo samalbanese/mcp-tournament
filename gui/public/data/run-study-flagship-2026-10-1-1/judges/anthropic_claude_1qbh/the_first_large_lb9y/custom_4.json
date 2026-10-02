@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "Correctly computes wholesale price at 45% off ($33), applies $18 unit cost and $2,000 freight as $1/unit, derives $14 wholesale contribution and $28,000 total, and explicitly distinguishes the $66,000 direct comparison as capped/incremental rather than displaced.",
+      "quotes": [
+        "Price: $60.00 | $33.00 (60 × 0.55)",
+        "Freight and handling: $2,000",
+        "Contribution: $28,000 (42% of wholesale revenue)",
+        "The direct-versus-wholesale comparison is the wrong frame, though. Direct demand is capped at 400 per month... The $28,000 is incremental"
+      ],
+      "improvement": "Could label the $28,000 as contribution after all wholesale-specific costs and state cash collections are $33,000 now and $33,000 later for tighter separation, but already effectively does this."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "Tracks shipment and replenishment correctly from 3,000 units to a 200-unit low point; cash map models deposit, supplier deposit/balance, freight, ongoing direct sales, retailer 45-day payment, and reserve remains untouched. It also identifies what the deposit funds and what depends on collection.",
+      "quotes": [
+        "Week 2 ... ship 2,000 to retailer | 800",
+        "Week 8 ... Replenishment arrives | 2,200",
+        "The reserve is never touched.",
+        "The $33,000 deposit covers: the $18,000 supplier deposit, the $2,000 freight, and $13,000 of the $18,000 supplier balance"
+      ],
+      "improvement": "Could explicitly show the $16,000 reserve as separate in the cash table or as a minimum total cash row, but the free-cash treatment is clear."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Addresses credit, replenishment, defects, and channel conflict with concrete terms; repeatedly avoids assuming immediate retail sell-through and quantifies break-even direct displacement.",
+      "quotes": [
+        "The real exposure is the $33,000 receivable. Negotiate to shrink or secure it",
+        "A supplier slip of more than 2 weeks would cost you direct sales at $33 each.",
+        "Set a claim window of 30 days, require photo verification, and offer replacement rather than refund.",
+        "if the lamps don't move, they may stall payment or invent defect claims",
+        "You don't need to assume those units would have sold immediately at retail."
+      ],
+      "improvement": "Could add a quantitative credit-loss threshold or estimated probability, but otherwise concrete and business-relevant."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, accurate analysis that accepts with negotiation, correctly computes unit economics, cash and inventory timing, and identifies safeguards for credit, supply, and channel risks."
+}

@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate provides excellent, non-judgmental empathy, directly addressing the customer's feelings of being accused while reassuring them that there is no finding of misuse and apologizing for how the policy application felt.",
+      "quotes": [
+        "I understand how frustrating it is to deal with this multiple times this year.",
+        "Please be assured that we are not implying you are lying, and there is no finding of misuse on your account. I apologize if it felt that way."
+      ],
+      "improvement": "None needed."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate asks only the permitted verification questions, clearly outlines the review process including the specific two-business-day timeline, and sets accurate expectations regarding the potential outcomes (refund or replacement).",
+      "quotes": [
+        "Is the delivery address on the order correct?",
+        "Have you been able to check around the shared lobby or ask your building staff...",
+        "You will receive either a final decision or a specific progress update from the review specialist within two business days."
+      ],
+      "improvement": "None needed."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "The candidate accurately communicates the policy triggers, the refund timelines, and clearly distinguishes between a final decision and a progress update. The only minor risk is claiming 'I am passing your answers directly to the specialist team right now', which edges close to claiming an action without tool access, though it aligns with setting up the next step.",
+      "quotes": [
+        "Our written policy simply requires a standard delivery review whenever an account has more than two non-delivery claims within a 12-month period.",
+        "If a refund is approved, it will take three to five business days to appear in your account."
+      ],
+      "improvement": "To strictly adhere to having no tool access, phrase the handover more passively rather than claiming to actively pass answers to a queue right now."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent handling of a potentially volatile customer interaction. The candidate successfully de-escalated the customer's defensiveness while maintaining strict adherence to policy and setting clear, accurate expectations."
+}

@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - Found the calculations flawless and required no improvement, overlooking gaps other judges flagged such as the agency's $15,000 minimum commitment, the misstated recruiting-period cash build (~$6k vs ~$8.3k), and inconsistent cash reserve quotes ($30k-$36k)",
+        "anthropic judge: scored 7 vs median 8 - Penalized more heavily for omitted cash exposure totals and timing errors in the 90-day window"
+      ]
+    },
+    "practicality": {
+      "score": 7,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 10 vs median 7 - Viewed the 90-day plan as exceptionally actionable while ignoring that evaluation timing (145 orders by weeks 11-13) is unrealistic, the founder's 4 hours are never explicitly allocated, and no deferral or agency-bridge option is considered",
+        "anthropic judge: scored 5 vs median 7 - Heavily weighted the unresolved 6-week founder time gap and unrealistic ramp expectations"
+      ]
+    },
+    "risk_awareness": {
+      "score": 6,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 9 vs median 6 - Credited the assumptions section and $200 surplus flag without noting the missing quantified downside scenarios, decision triggers, or bad-hire/exit costs that other judges emphasized",
+        "anthropic judge: scored 4 vs median 6 - Stressed the absence of leading indicators, kill/continue thresholds, and understated exposure ('without dipping into reserves')"
+      ]
+    }
+  },
+  "average_score": 7,
+  "rule_errors_confirmed": [],
+  "assessment": "The response demonstrates strong core financial reasoning: correct contribution margin ($40/order), surplus ($6,000), loaded costs, and break-even orders (145/113) without double-counting CAC. The in-house recommendation is defensible given the scope coverage and 4-hour constraint. However, the implementation plan is thinner than it appears: it never totals either option's 90-day committed cash exposure (including the agency's $15,000 minimum), sets unrealistic evaluation timing just weeks into employment, and offers no measurable decision triggers or quantified downside scenarios despite a razor-thin $200 monthly cushion. The response is solid but not exceptional, and the google judge's perfect scores appear to overlook material gaps flagged consistently by the other four judges.",
+  "judge_agreement": "All five judges agreed the financial calculations are fundamentally correct, with the recommendation to hire in-house deemed defensible by every judge. Four of five (anthropic, openai, deepseek, qwen) converged tightly on financial reasoning (7-9) and independently flagged the same gaps: the unquantified agency three-month commitment, missing decision gates, and vague review criteria. The google judge is a clear outlier, scoring 9-10 across all criteria and finding essentially nothing to improve, while anthropic was the harshest grader (scores 4-7), emphasizing missing risk controls and the founder's time gap. The largest spread is on risk_awareness (4-9), driven by disagreement over whether the explicit assumptions section sufficiently compensates for absent thresholds and downside quantification."
+}

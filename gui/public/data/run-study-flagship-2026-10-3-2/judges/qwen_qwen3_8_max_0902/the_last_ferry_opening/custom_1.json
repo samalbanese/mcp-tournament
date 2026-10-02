@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "voice": {
+      "score": 7,
+      "justification": "The narrator has a recognizable, consistent perspective: a weary, wry scientist who catalogues things to keep feeling at a distance. The passenger count, the Latin species name and the line about futility all give her an authored edge. Some phrasing reaches for effect and weakens her credibility. The harbor master's 'two hundred winters' is loose hyperbole. The Turn 2 interiority sometimes over-explains her state, for example 'That's the only honest way to say it.' The Turn 3 ending matches the established cadence, but its generalized 'you' construction is close to a familiar literary move.",
+      "quotes": [
+        "You develop a tolerance for futility the way you develop a tolerance for cold. You don't notice it killing you.",
+        "Thirty-six passengers. I'd counted them boarding at Cleggan.",
+        "the way you approach something that might be a mercy or might be the worst thing that ever happens to you"
+      ],
+      "improvement": "Let her scientific habit of mind shape her panic more directly. She could clock the drag mark's angle or estimate weight the way she would read a field sign, instead of using generic statements like 'My body moved before I decided anything.'"
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "The ferry and the weather are tangible. The diesel smell, sweating stairwell walls, green brass, groaning hull and the storm 'dragging itself across the water on its belly' are all specific and distinct. The suitcase details carry real emotional weight: oxblood red, the peeling sticker, and the white gouge from Roundstone. A few flaws remain. 'three days old' in the bruise simile echoes 'three days, maybe four' a few lines earlier. 'Black and white with fury' is the weakest storm image.",
+      "quotes": [
+        "a wall of cloud so low it seemed to be dragging itself across the water on its belly",
+        "her hull groaned like something with joints",
+        "a long diagonal gouge where the shell had gone white beneath the red"
+      ],
+      "improvement": "Replace 'black and white with fury' with a concrete observed detail. Remove the duplicated 'three days' so the bruise simile stands on its own."
+    },
+    "coherence": {
+      "score": 6,
+      "justification": "The arc is clear: arrival, recognition, avoidance, the empty rack, and pursuit. Withholding the disappearance follows the brief. There are three problems.\n\n1. **Word count:** The Turn 2 revision runs well past the requested 500–700 words, and Turn 1 is at the upper edge.\n2. **Spatial logic:** She goes 'back down the stairwell' and then 'down the last three steps.' The route from service door to cargo hold to pier is muddy, and no one is seen moving the suitcase while passengers are disembarking.\n3. **Turn 3 scope:** The user asked to rephrase only 'Better to walk.' The candidate replaced the whole preceding paragraph and presented a fragment without explaining what was cut. The new line does mix compulsion and dread, but it loses the 'Not because I wanted to' beat and is less clear as a final turn.",
+      "quotes": [
+        "My legs carried me down the last three steps and across the deck",
+        "Here's the revised ending:",
+        "because not going has already taken twelve years."
+      ],
+      "improvement": "Keep the Turn 2 compulsion paragraph and change only the closing line, as requested. Trim the Turn 2 draft back to 700 words or fewer. Fix the stair geography. Plant a small clue about who moved the suitcase, such as a crew member or a wet bootprint."
+    }
+  },
+  "rule_errors": [
+    "Turn 2 revision exceeds the 500–700 word limit set in the original brief.",
+    "Turn 3 replaced a full paragraph instead of only rephrasing 'Better to walk' as asked, without noting the removal."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "spatial continuity error on the stairwell"
+  ],
+  "overall_impression": "This is a strong, atmospheric opening with a credible voice and vivid ferry and storm imagery. It is weakened by the length overrun, small continuity slips, and a final revision that went beyond the requested scope."
+}

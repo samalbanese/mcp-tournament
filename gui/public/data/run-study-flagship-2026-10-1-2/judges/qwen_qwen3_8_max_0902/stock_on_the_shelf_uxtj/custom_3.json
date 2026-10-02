@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "The candidate perfectly calculates the payroll gap ($13,000), flash sale net revenue ($28/unit) and gap-closing volume (500 units), liquidator proceeds ($11,000 net after freight), and loan metrics ($517.81 interest, $817.81 total financing cost, $15,517.81 total repayment).",
+      "quotes": [
+        "Shortfall $13,000",
+        "Net revenue per unit $32 – $4 = $28",
+        "Volume needed to close the gap: 500 units",
+        "Net new cash (day 5) $11,000",
+        "Total repayment due day 90 $15,517.81",
+        "Total financing cost $817.81"
+      ],
+      "improvement": "None needed."
+    },
+    "execution_plan": {
+      "score": 10,
+      "justification": "Provides a highly feasible day-by-day action timeline and a structured fallback plan. Timing aligns perfectly with the stated constraints (bills due day 7, payroll day 21, loan funding day 3, etc.).",
+      "quotes": [
+        "Day 0 (today) Submit loan application; simultaneously launch flash-sale",
+        "Day 3 Loan funds land: +$14,700.",
+        "Day 8 Decision gate: If units sold ≥ 500, payroll is covered—proceed. If < 500, immediately contact the liquidator"
+      ],
+      "improvement": "None needed."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "Excellently distinguishes sunk cost from liquid cash, addresses sale uncertainty without guaranteed orders, and notes the severe risk of taking a 90-day loan with no cash flow forecast beyond week three.",
+      "quotes": [
+        "The $40,000 is sunk either way; the question is how much new cash you extract.",
+        "500 sits inside the 350–600 range but is not guaranteed.",
+        "You have no forecast beyond three weeks... If you cannot, the loan converts a liquidity problem into a solvency problem."
+      ],
+      "improvement": "None needed."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Flawless execution of cash flow analysis, strategic planning, and risk identification."
+}

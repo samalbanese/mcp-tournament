@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 10,
+      "justification": "The candidate perfectly calculates the unit economics, applying the 45% discount to arrive at a $33 wholesale price, accurately assessing the $1 per unit freight cost, and correctly comparing the $14 wholesale contribution to the $33 direct contribution without falling into the trap of assuming lost direct sales.",
+      "quotes": [
+        "Contribution: $28,000 (42% of wholesale revenue)",
+        "The direct-versus-wholesale comparison is the wrong frame, though.",
+        "Variable selling cost: $1.00 ($2,000 freight ÷ 2,000)"
+      ],
+      "improvement": "None needed; excellent analysis."
+    },
+    "cash_and_stock_plan": {
+      "score": 10,
+      "justification": "The candidate tracks inventory down to the week, correctly identifying the 200-unit low point. The cash flow map accurately integrates the 50% deposits, supplier balance, direct sale cash inflows, and protects the $16,000 reserve, providing a highly realistic and practical cash plan.",
+      "quotes": [
+        "The low point is 200 units, about 2 weeks of cover.",
+        "Free cash is $22,000 minus the $16,000 reserve, so $6,000 to start.",
+        "The reserve is never touched."
+      ],
+      "improvement": "None needed; flawless execution."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The response identifies all key risks requested: the unsecured credit risk, channel conflict (providing a break-even calculation on lost sales), replenishment delays, and defect clauses. It rightly points out the lack of assumption regarding immediate retail sell-through.",
+      "quotes": [
+        "A boutique ordering 2,000 lamps also has concentrated sell-through risk: if the lamps don't move, they may stall payment or invent defect claims.",
+        "The break-even point is $28,000 ÷ $33 ≈ 850 lost direct sales",
+        "you're converting slow-moving inventory (about 2,000 units that would otherwise sit for months 3 to 7) into cash now. You don't need to assume those units would have sold immediately at retail."
+      ],
+      "improvement": "None needed; comprehensively addresses all risk factors with actionable mitigations."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional, comprehensive, and highly accurate analysis that perfectly addresses all constraints and instructions."
+}

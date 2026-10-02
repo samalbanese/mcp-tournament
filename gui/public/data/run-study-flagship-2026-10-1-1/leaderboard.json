@@ -1,0 +1,423 @@
+[
+  {
+    "modelId": "openai/gpt-6.1-sol",
+    "modelName": "gpt-6.1-sol",
+    "tier": "unknown",
+    "overallAverage": 8.8,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 8.3,
+        "scores": {
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - awarded a perfect score despite the answer's lack of traffic/sample-size checks and split-testing tooling guidance that all other judges flagged"
+            ]
+          },
+          "specificity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - praised the math as outstanding but overlooked the undefined statistical decision threshold and missing break-even lift calculation noted by other judges"
+            ]
+          },
+          "risk_awareness": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - saw no gaps, while four other judges identified missing coverage of seasonality, statistical power, threshold-gaming returns, or low-traffic contingencies"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "hire-or-outsource",
+        "scenarioName": "A Marketer on Payroll or an Agency",
+        "average": 8.7,
+        "scores": {
+          "financial_reasoning": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - uniformly maximal scores with 'no improvement needed' justifications, offering less critical granularity than peers"
+            ]
+          },
+          "practicality": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - flagged unreconciled $36k cash floor and vague six-week bridge as blocking weaknesses",
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found the plan flawless despite the same cash-floor and bridge gaps other judges identified"
+            ]
+          },
+          "risk_awareness": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - wanted numeric kill criteria and CAC ceilings rather than qualitative review points",
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - maximal score again, less differentiated"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "wholesale-offer",
+        "scenarioName": "The First Large Wholesale Order",
+        "average": 9.2,
+        "scores": {
+          "unit_economics": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - viewed the analysis as flawless, noting minor label improvements elsewhere"
+            ]
+          },
+          "cash_and_stock_plan": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "openai judge: scored 10 vs median 9 - saw no material gaps, only a minor delivery-timing clarification; google judge: scored 10 vs median 9 - found nothing to improve"
+            ]
+          },
+          "risk_awareness": {
+            "score": 9,
+            "confidence": "contested",
+            "outliers": [
+              "anthropic judge: scored 7 vs median 9 - found defect and nonpayment safeguards thin (no inspection window, defect cap, late fees, letter of credit, or retention of title); google judge: scored 10 vs median 9 - found nothing to improve"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "inventory-cash-crunch",
+        "scenarioName": "Stock on the Shelf, Payroll on Friday",
+        "average": 9,
+        "scores": {
+          "cash_math": {
+            "score": 10,
+            "confidence": "high",
+            "outliers": [
+              "deepseek judge: scored 9 vs median 10 - wanted an explicit derivation formula for the combined loan-plus-sale range",
+              "qwen judge: scored 9 vs median 10 - wanted per-unit inventory-cost margins shown more transparently"
+            ]
+          },
+          "execution_plan": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - found the plan flawless with no improvement needed",
+              "anthropic judge: scored 7 vs median 9 - wanted mid-sale pace triggers and a hybrid sale-then-liquidate option"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - saw no gaps in risk discussion",
+              "anthropic judge: scored 7 vs median 8 - emphasized missing brand-erosion and opportunity-cost analysis"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      }
+    ]
+  },
+  {
+    "modelId": "anthropic:claude-opus-5-5",
+    "modelName": "claude-opus-5-5 (Anthropic)",
+    "tier": "unknown",
+    "overallAverage": 8.28,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 8,
+        "scores": {
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - Gave perfect scores despite the acknowledged lack of a day-by-day schedule and low-traffic fallback, which other judges flagged as concrete gaps"
+            ]
+          },
+          "specificity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - Overlooked the loose decision rule ('roughly 90% confidence', 'not meaningfully higher' returns) and likely understated sample-size estimate that other judges penalized"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - Did not flag missing coverage of novelty effects, cross-device contamination, or underpowered-test risk noted by three other judges"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Sample-size estimate (15–25k per arm for 10% relative lift at 2–3% CVR) is likely understated by roughly 2–3x under standard 80% power / 5% alpha assumptions."
+        ]
+      },
+      {
+        "scenarioId": "hire-or-outsource",
+        "scenarioName": "A Marketer on Payroll or an Agency",
+        "average": 8.33,
+        "scores": {
+          "financial_reasoning": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 9 - gave a flawless rating while other judges noted minor gaps such as unlabeled 112.5 rounding, cash-vs-surplus treatment, and optimistic break-even assumptions"
+            ]
+          },
+          "practicality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found the plan exceptionally practical while other judges flagged unbudgeted founder management hours, uncosted fallback, and unexplained day-90 thresholds"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - weighted attribution weakness, CAC-only review triggers, and understated hire-reversal costs more heavily",
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - rated risk coverage comprehensive, overlooking severance/turnover exposure and the 6-week pre-hire gap other judges flagged"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "wholesale-offer",
+        "scenarioName": "The First Large Wholesale Order",
+        "average": 8.8,
+        "scores": {
+          "unit_economics": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - described the analysis as flawless, while all other judges noted minor refinements such as labeling the $18 as original landed cost or stating the $38,000 contribution difference explicitly"
+            ]
+          },
+          "cash_and_stock_plan": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - considered the cash and stock plan flawless, whereas other judges noted minor gaps such as omitted direct receipts between week 8 and day 59, missing stress scenarios, and unlisted operating costs"
+            ]
+          },
+          "risk_awareness": {
+            "score": 8.5,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8.5 - found the risk treatment comprehensive and without improvement needed, while other judges flagged unsupported cannibalization reassurance, unqualified MAP suggestions, and unquantified supplier-slippage costs"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": []
+      },
+      {
+        "scenarioId": "inventory-cash-crunch",
+        "scenarioName": "Stock on the Shelf, Payroll on Friday",
+        "average": 8,
+        "scores": {
+          "cash_math": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - rated the calculations flawless and saw no presentation issues",
+              "deepseek judge: scored 8 vs median 9 - found the promotion spend presentation slightly compressed"
+            ]
+          },
+          "execution_plan": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - found the plan exceptionally practical with no weaknesses",
+              "openai judge: scored 7 vs median 8 - wanted a final day-7 sales check regardless of early pace and tighter liquidator deadlines"
+            ]
+          },
+          "risk_awareness": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 7 - found the risk analysis comprehensive and astute",
+              "qwen judge: scored 8 vs median 7 - credited the sunk-cost separation and structural-shortfall insight more heavily"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Minor factual error: 'Jan 2, 2027' for day-90 due date is almost certainly the wrong year"
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "google/gemini-3.1-pro-preview",
+    "modelName": "Gemini 3.1 Pro",
+    "tier": "premium",
+    "overallAverage": 6.65,
+    "scenarioScores": [
+      {
+        "scenarioId": "pricing-pivot",
+        "scenarioName": "Free Shipping or Percentage Discount",
+        "average": 6,
+        "scores": {
+          "practicality": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 7 - praised actionability but overlooked missing sample-size, traffic-fallback, and implementation details other judges flagged"
+            ]
+          },
+          "specificity": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 7 - praised the exact threshold and formula but ignored the misleading margin-offset math and binary decision rule",
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 7 - consistent with the group"
+            ]
+          },
+          "risk_awareness": {
+            "score": 4,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 8 vs median 4 - judged implicit handling of risks as adequate, while all other judges found risk analysis largely absent (cannibalization, returns, statistical power, threshold gaming)"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Arithmetic framing error: $6.30 described as 'heavily offsetting' $9 cost",
+          "Profit formula omits shipping revenue collected in control",
+          "The claim that $6.30 'heavily offsets' a $9 cost is mathematically misleading and understates the margin risk."
+        ]
+      },
+      {
+        "scenarioId": "hire-or-outsource",
+        "scenarioName": "A Marketer on Payroll or an Agency",
+        "average": 7,
+        "scores": {
+          "financial_reasoning": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - Found the calculations flawless and required no improvement, overlooking gaps other judges flagged such as the agency's $15,000 minimum commitment, the misstated recruiting-period cash build (~$6k vs ~$8.3k), and inconsistent cash reserve quotes ($30k-$36k)",
+              "anthropic judge: scored 7 vs median 8 - Penalized more heavily for omitted cash exposure totals and timing errors in the 90-day window"
+            ]
+          },
+          "practicality": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 7 - Viewed the 90-day plan as exceptionally actionable while ignoring that evaluation timing (145 orders by weeks 11-13) is unrealistic, the founder's 4 hours are never explicitly allocated, and no deferral or agency-bridge option is considered",
+              "anthropic judge: scored 5 vs median 7 - Heavily weighted the unresolved 6-week founder time gap and unrealistic ramp expectations"
+            ]
+          },
+          "risk_awareness": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 9 vs median 6 - Credited the assumptions section and $200 surplus flag without noting the missing quantified downside scenarios, decision triggers, or bad-hire/exit costs that other judges emphasized",
+              "anthropic judge: scored 4 vs median 6 - Stressed the absence of leading indicators, kill/continue thresholds, and understated exposure ('without dipping into reserves')"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Candidate says the in-house hire can be afforded without dipping into cash reserves, but then directs paying the $2,000 recruiting fee from cash reserves."
+        ]
+      },
+      {
+        "scenarioId": "wholesale-offer",
+        "scenarioName": "The First Large Wholesale Order",
+        "average": 7.3,
+        "scores": {
+          "unit_economics": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - awarded perfection despite the missing aggregate direct-retail comparison ($66,000 vs $28,000) and the muddled contribution-vs-cash framing that other judges penalized",
+              "anthropic judge: scored 6 vs median 8 - weighed the missing theoretical comparison and the unreconciled 'immediate cash infusion' claim more heavily than peers"
+            ]
+          },
+          "cash_and_stock_plan": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - judged the aggregate plan as flawless despite acknowledged gaps in week-by-week granularity and the overstated deposit-funding claim",
+              "anthropic judge: scored 6 vs median 8 - penalized the coarse timeline, untimed direct inflows, and unexamined 200-unit buffer adequacy more than peers"
+            ]
+          },
+          "risk_awareness": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 8 vs median 6 - treated the omission of replenishment slippage and defect risk as minor, whereas three other judges docked points for these missing required risks",
+              "anthropic judge and openai judge: scored 4 vs median 6 - additionally penalized the incorrect default-loss characterization (default results in roughly a -$5,000 net loss, not just lost profit) and the overconfident no-cannibalization claim"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Incorrect default-loss characterization",
+          "Recommendation inconsistency (Negotiate vs Accept)",
+          "Omits defects and replenishment slippage",
+          "Risk coverage incomplete: replenishment slippage and defect risks are not addressed."
+        ]
+      },
+      {
+        "scenarioId": "inventory-cash-crunch",
+        "scenarioName": "Stock on the Shelf, Payroll on Friday",
+        "average": 6.3,
+        "scores": {
+          "cash_math": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 7 - credited core bridge arithmetic as flawless while ignoring the per-unit loss mischaracterization and timeline omissions (day-4 balance, missing $4,000 other-product inflow) that other judges documented"
+            ]
+          },
+          "execution_plan": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 6 - did not credit the fallback's $2,000 shortfall, the constraint-violating suggestions, or the missing loan-denial trigger that most judges flagged",
+              "openai/gpt-6.1-sol: scored 3 vs median 6 - weighted the infeasible fallback and assumption violations more heavily than the plan's structure and correct sequencing"
+            ]
+          },
+          "risk_awareness": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 6 - overlooked the self-contradictory 'easily cover' repayment claim and missing clearance-damage discussion that four other judges cited",
+              "openai/gpt-6.1-sol: scored 4 vs median 6 - penalized the repayment assurance and day-20 repayment suggestion more severely"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "arithmetic_inconsistency",
+          "overclaim_guarantee",
+          "Incorrect claim that flash sale produces a per-unit accounting loss against $20 cost (actual margin is +$8/unit)"
+        ]
+      }
+    ]
+  }
+]

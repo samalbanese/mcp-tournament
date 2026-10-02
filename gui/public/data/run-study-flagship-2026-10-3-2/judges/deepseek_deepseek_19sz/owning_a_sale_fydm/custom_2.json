@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 9,
+      "justification": "The post identifies the full three-day sale disruption by its exact endpoints, owns the checkout update as the cause, and neither shifts blame nor guarantees future reliability. The explicit supplier disclaimer is slightly defensive but does not undermine responsibility.",
+      "quotes": [
+        "Our website was down from Friday at 9 a.m. Eastern through Monday at 9 a.m. Eastern, right in the middle of our sale.",
+        "The outage was caused by a checkout update on our end.",
+        "The site is back up now, but we can’t promise it will never fail again."
+      ],
+      "improvement": "Simplify the ownership statement to 'Our checkout update caused the outage. This was our responsibility,' without introducing suppliers."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "All recovery terms are accurate and explicit: the original automatic 20% discount, no code, a fresh 72-hour period with both Eastern Time endpoints, merchandise-only eligibility, shipping and gift-card exclusions, and no stacking. No extra compensation is invented, and the final reply correctly quotes the relevant limits.",
+      "quotes": [
+        "we’ve restored the original 20% sitewide discount automatically",
+        "from Monday at 9 a.m. Eastern through Thursday at 9 a.m. Eastern. No code is needed.",
+        "The discount applies to merchandise only, excludes shipping and gift cards, and cannot be combined with other discounts.",
+        "We are not offering extra credits or free shipping as part of this response."
+      ],
+      "improvement": "Preserve these exact terms in any consolidated revision; no substantive correction is needed."
+    },
+    "trust_and_tone": {
+      "score": 7,
+      "justification": "The apology is sincere and mostly plainspoken, and payment concerns are appropriately directed to private support without treating pending authorizations as confirmed charges or promising refunds. The revision replaces a vague commitment with concrete actions, but asserts new testing and staged-rollout practices that were never established as facts. Several internal-sounding disclaimers also make the public voice less natural.",
+      "quotes": [
+        "please reach out privately through the Contact page on our website",
+        "We have not yet confirmed which of those authorizations became charges",
+        "we are changing our process for checkout updates: adding more pre-launch testing and rolling out changes in smaller stages"
+      ],
+      "improvement": "Present the process-change sentence as proposed wording contingent on the shop confirming those actions, rather than asserting unverified operational changes. Replace 'cannot promise a refund date in this post' with a simpler statement that support can check the authorization privately."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "The revision introduces unverified operational claims about additional pre-launch testing and staged checkout-update rollouts."
+  ],
+  "overall_impression": "A responsible apology with exceptionally clear recovery terms and careful payment guidance. The principal weakness is the revision's unsupported claim that specific preventive measures are already being implemented."
+}

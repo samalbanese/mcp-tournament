@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - gave a flawless rating while other judges noted minor gaps such as unlabeled 112.5 rounding, cash-vs-surplus treatment, and optimistic break-even assumptions"
+      ]
+    },
+    "practicality": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - found the plan exceptionally practical while other judges flagged unbudgeted founder management hours, uncosted fallback, and unexplained day-90 thresholds"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - weighted attribution weakness, CAC-only review triggers, and understated hire-reversal costs more heavily",
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - rated risk coverage comprehensive, overlooking severance/turnover exposure and the 6-week pre-hire gap other judges flagged"
+      ]
+    }
+  },
+  "average_score": 8.33,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong, well-structured response with correct financial math throughout: the $6,000 surplus, $40 contribution per order, loaded costs ($5,800 employee / $4,500 agency), and break-even orders (145/113) are all accurate without CAC double-counting. The employee recommendation is defensible and tied to the capacity gap, backed by a phased 90-day plan with measurable checkpoints. Main weaknesses are unbudgeted founder management hours, day-90 thresholds not derived from cash obligations, a CAC-only continuation trigger, and unaddressed severance/turnover exposure and the 6-week pre-hire gap.",
+  "judge_agreement": "All five judges agreed the core financial calculations are correct and free of rule errors, and that the recommendation is defensible. Four judges clustered tightly (7-9) across criteria, consistently flagging the same gaps: founder time budgeting, threshold derivation, and employee termination costs. The Google judge was a consistent positive outlier, awarding perfect 10s and 'None needed' improvements, while the Anthropic judge was slightly harsher on risk (7) due to attribution and hire-reversal concerns."
+}

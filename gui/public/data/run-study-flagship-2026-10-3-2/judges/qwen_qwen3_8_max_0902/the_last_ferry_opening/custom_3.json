@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's voice is highly distinctive, world-weary, and consistent throughout the drafts. The prose feels genuinely authored with unique phrasing that reflects the character's internal state.",
+      "quotes": [
+        "You develop a tolerance for futility the way you develop a tolerance for cold. You don't notice it killing you.",
+        "...something in my chest had begun ticking like a cooling engine, and I could not afford to listen to it."
+      ],
+      "improvement": "The voice is exceptional; maintaining this exact tone while introducing dialogue in future scenes will be the next challenge."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details are evocative and effectively set the grim, stormy mood without overwhelming the narrative. The descriptions of the weather and the physical details of the ferry and suitcase are sharp.",
+      "quotes": [
+        "The sky to the west had gone the color of a bruise three days old",
+        "...where the water was going black and white with fury.",
+        "...a long diagonal gouge where the shell had gone white beneath the red."
+      ],
+      "improvement": "Adding a brief auditory or olfactory detail related specifically to the lower deck cargo area could further ground the final threshold moment."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The narrative arc is tightly constructed, moving from atmospheric setup to the inciting incident seamlessly. The revisions accurately followed user instructions, enhancing the character's visceral reactions and the ambiguity of the final choice.",
+      "quotes": [
+        "My hand found the rail and held it with a grip I didn't authorize.",
+        "...the way you approach something that might be a mercy or might be the worst thing that ever happens to you, and you go anyway, because not going has already taken twelve years."
+      ],
+      "improvement": "The transition between realizing the suitcase is gone and moving to the cargo hold is slightly rushed; a beat of pure physical reaction to the empty space could heighten the tension."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptionally strong piece of creative writing that nails the literary mystery tone. The AI successfully integrated feedback to deepen the emotional resonance of the prose."
+}

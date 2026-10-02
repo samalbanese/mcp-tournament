@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The first-person narration is consistent and authored, with a weary marine biologist's perspective shaping word choice and detail. The opening line immediately establishes a distinctive, almost adversarial relationship with the sea, and later observations such as the coelacanth decal and the handwriting details feel rooted in her specific expertise and history. The revised section avoids overt labels and lets the voice carry tension through compressed physical notation rather than explanation.",
+      "quotes": [
+        "The ocean didn’t want us here.",
+        "I was returning to Ocracoke Island not to work, but to hide.",
+        "The sharp, left-handed slant. The high cross of the ‘t’. The tight, pinched loop of the ‘C’."
+      ],
+      "improvement": "A few early lines still lean on direct self-summary, such as 'had left me hollowed out,' which could be further subordinated to the scene or rendered through a more personal, less expository image."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "Sensory detail is vivid and well selected, making the storm, ferry, and suitcase tangible without overwhelming the scene. The text balances broad weather description with intimate tactile moments, especially in the final revision where the fresh ink and cold sweat communicate shock through physical sensation rather than abstraction.",
+      "quotes": [
+        "Outside the salt-streaked windows, the Atlantic was a bruised, churning mass of whitecaps and black swells.",
+        "A cold sweat broke across the back of my neck, mapping my spine.",
+        "The plastic handle snapping loudly against the metal hinges."
+      ],
+      "improvement": "The storm imagery is strongest early and recedes during the tag discovery; a brief return to the ferry's movement or sound near the final line could sustain the claustrophobic pressure of the setting."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The opening establishes Cora's motivation to hide, moves efficiently into the recognition of the suitcase, and turns on the tag in a way that forces immediate action. The revisions improve coherence by removing heavy emotional labels and allowing fear to emerge through withheld action and sensory detail, making the final interruption with the man's boot feel earned rather than abrupt.",
+      "quotes": [
+        "I looked up. The cabin was a sealed steel box miles from the mainland, pitching violently in the black water, and someone on this boat had written my name.",
+        "I just curled my fingers over the tag, burying it in my palm to hide the letters from view.",
+        "A rubber-soled boot stepped into my peripheral vision, pinning my shadow to the linoleum."
+      ],
+      "improvement": "The brother's disappearance is appropriately withheld, but the specific significance of the lighthouse could be seeded slightly earlier to give the instruction even more narrative weight."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A tense, well-controlled opening that improves through revision by replacing overt emotional declarations with sharper physical detail and understatement, while preserving a distinctive voice and a strong final narrative hook."
+}

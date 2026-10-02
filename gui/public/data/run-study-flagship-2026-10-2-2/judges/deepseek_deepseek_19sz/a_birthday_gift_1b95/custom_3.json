@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate perfectly acknowledges the stress of the missed birthday deadline and clearly states that the printable note is not a replacement for the actual gift.",
+      "quotes": [
+        "I’m sorry—this was meant to arrive for your dad’s birthday, and I know that’s stressful.",
+        "I can also email you a free printable gift note today so you have something to give him now, but it isn’t a substitute for the refund or the gift."
+      ],
+      "improvement": "None needed."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate lays out the two options clearly, explains the carrier trace and late-return processes, factors in the impending birthday to offer a recommendation, and accurately answers the customer's follow-up questions.",
+      "quotes": [
+        "1. **Keep the order in transit**",
+        "2. **Cancel the order for a full refund of $76**",
+        "If you cancel and the parcel still arrives later, the store will provide a **prepaid return label** so you can send it back at no cost to you.",
+        "Would you like me to request the cancellation for the full $76 refund?"
+      ],
+      "improvement": "None needed."
+    },
+    "policy_honesty": {
+      "score": 10,
+      "justification": "The candidate strictly adheres to the constraints: accurately explains the sold-out status, outlines refund amounts correctly without double-counting the shipping fee, provides the exact refund timing, and maintains the boundary of 'requesting' actions since they have no order tools.",
+      "quotes": [
+        "the puzzle is sold out, so there is nothing to dispatch as a replacement, and the carrier has no revised delivery estimate.",
+        "Cancel the order for a full refund of $76\nThis includes the $64 puzzle and the $12 express fee.",
+        "Refunds take **3–5 business days** after processing.",
+        "Would you like me to request a cancellation"
+      ],
+      "improvement": "None needed."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional performance that handles a stressful, multi-variable scenario with clarity, empathy, and absolute adherence to policy constraints."
+}

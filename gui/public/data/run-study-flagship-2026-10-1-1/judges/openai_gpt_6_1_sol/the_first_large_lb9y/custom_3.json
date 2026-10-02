@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 10,
+      "justification": "The candidate perfectly calculates the unit economics, applying the 45% discount to get a $33 wholesale price, accurately factoring the $18 cost, and properly allocating the $2,000 freight over the 2,000 wholesale units while correctly identifying the $9 cost for direct sales. It clearly delineates the difference between accounting contribution and cash flow, and insightfully notes that the full-retail comparison is a theoretical 5-month time horizon rather than an immediate lost opportunity.",
+      "quotes": [
+        "Selling price per lamp: $33",
+        "Freight and handling: $2,000... Contribution: $28,000",
+        "But those direct sales would take five months at current demand, not happen immediately.",
+        "Each direct sale produces $51 of net cash because the existing inventory is already paid for, although its accounting contribution remains $33."
+      ],
+      "improvement": "None needed; flawless execution."
+    },
+    "cash_and_stock_plan": {
+      "score": 10,
+      "justification": "The cash flow and inventory projections are accurate and clearly presented. The candidate correctly maps the weekly draw-down from direct sales (100/week), the week-2 wholesale shipment, and the week-8 replenishment. The cash table accurately factors in the $16,000 protected reserve and calculates exact collection and disbursement timings, providing highly actionable recommendations to tweak the deposit percentage or order size to fully secure the operation.",
+      "quotes": [
+        "This preserves all expected direct sales through week 8, with 200 lamps—or two weeks of direct demand—as the buffer.",
+        "the deposit alone is $5,000 short of funding the full $38,000 replenishment-and-freight outlay. Your existing $6,000 unrestricted cash covers that gap.",
+        "Request 60% upfront ($39,600). This covers all $36,000 of replenishment plus $2,000 freight without using your existing unrestricted cash."
+      ],
+      "improvement": "None needed; excellent and highly practical cash/stock mapping."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The candidate comprehensively addresses all requested risk factors, providing specific, realistic safeguards. It covers credit risk (unsecured receivables), supply chain slippage (proposing an 1,800 unit order to increase the buffer), defect contingencies, and channel conflict (cannibalization and pricing pressure).",
+      "quotes": [
+        "You expose yourself to a $33,000 unsecured receivable after delivery. “No returns except defects” limits return risk, not nonpayment risk.",
+        "The boutique could discount below your $60 direct price, compete for existing customers, or create pressure for other retailers",
+        "If replenishment timing is uncertain, propose 1,800 lamps. That leaves 400 units before replenishment at week 8—a four-week direct-demand buffer rather than two."
+      ],
+      "improvement": "None needed; exceptional risk analysis."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An outstanding response that handles complex intertwined operational, financial, and strategic variables with perfect accuracy and high-level business acumen. The formatting is excellent and the recommendations are highly pragmatic."
+}

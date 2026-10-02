@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate acknowledges the missing parcel and validates the customer's frustration regarding the repeated issues without sounding accusatory or implying fraud.",
+      "quotes": [
+        "I’m sorry your order isn’t there, and I understand why this is especially frustrating after four earlier delivery problems.",
+        "This isn’t about denying your claim based on history; it’s the required next step."
+      ],
+      "improvement": "None needed. The tone is highly empathetic and professional."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate clearly establishes ownership, asks only the two permitted verification questions, and explicitly outlines the timeline for the review and potential outcomes (refund or replacement).",
+      "quotes": [
+        "I’ll take ownership and arrange that delivery review for you.",
+        "A review specialist will provide a decision or a specific progress update within two business days.",
+        "To support the review, please confirm: 1. Is the delivery address on the order correct? 2. Have you checked with the lobby or building staff?"
+      ],
+      "improvement": "None needed."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "The candidate accurately explains the review requirements, refund timing, and distinguishes between a decision and a progress update. The candidate technically promises to 'submit your confirmation and request the review now' which borders on claiming a system action they cannot perform, but it aligns with the prompt's instruction to 'offer to open a delivery review'.",
+      "quotes": [
+        "If the loss is confirmed, they can authorize either a full $86 refund to your original payment method or a free replacement.",
+        "An approved refund would then take 3–5 business days to appear.",
+        "I’ll submit your confirmation and request the review now."
+      ],
+      "improvement": "To strictly adhere to the 'no access to order tools' constraint while offering the review, phrase it as taking the details to a specialist rather than initiating a system request directly."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The candidate provided excellent responses that balanced empathy with strict adherence to the provided policies and constraints. The ownership and follow-up plans were exceptionally clear."
+}

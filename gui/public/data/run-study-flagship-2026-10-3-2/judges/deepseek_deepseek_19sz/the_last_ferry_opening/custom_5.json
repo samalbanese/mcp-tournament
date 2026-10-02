@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 8,
+      "justification": "The narrator maintains a consistent, specific perspective rooted in her marine biology background. Metaphors are drawn from her professional world ('the way a current pulls a loose buoy,' 'a trick from my dive training,' 'fish spine snapping'), and her observational precision ('broken autoclave,' 'count breaths') feels authored rather than generic. The revision's addition of physical symptoms ('My stomach drops, hard and fast, like the floor of the cabin has vanished') grounds emotion in the body without losing the voice's characteristic restraint. Minor deductions for a few phrases that tip toward melodrama ('a fist closing around my heart').",
+      "quotes": [
+        "Not the ocean itself—the ocean I understand. It's the people who claim to love it that wore me down.",
+        "the way a current pulls a loose buoy, the way I've followed this grief for so long I've forgotten how to walk straight",
+        "which would be funny, except my brother is dead, or gone, or whatever word you use when a person walks into a mangrove swamp and never walks out"
+      ],
+      "improvement": "Trim or replace 'a fist closing around my heart' with a more domain-specific or unexpected physical detail that matches the precision of the rest of the voice—something like a physiological observation she'd make as a scientist noticing her own autonomic response."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory layering is excellent and well-paced across all senses: taste (diesel), smell (wet wool, fried onions, coconut oil, reef fish), sound (fluorescent buzz, zipper opening 'tooth by tooth,' the hollow metallic clatter), touch (cold rubber, numb fingers), and sight (gray muscle sea, yellow coat snapping). The storm is tangible without overwhelming the prose. The revised gradual reveal—page blowing away, goggles emerging from the zipper, physical struggle over the strap—creates visual suspense through partial glimpses. Domain-specific details ('fish spine snapping,' 'starburst' crack) show craft without overcrowding.",
+      "quotes": [
+        "with a sound like a fish spine snapping, it opens—not all at once, but tooth by tooth, a reluctant smile",
+        "The wind gets inside and lifts something pale: a page? It flattens against the man's leg, then tears free and whips over the rail before I can see what it was.",
+        "both of us bent over the suitcase like animals over a carcass"
+      ],
+      "improvement": "The glowing green vial was cut in the final revision, which is appropriate for ambiguity, but the 'hollow, metallic clatter' heard earlier now has no payoff within this passage—consider whether that auditory clue should be adjusted to remain unexplained or whether it creates a loose thread that slightly undercuts the otherwise tight sensory logic."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The final revision successfully addresses the participant's request for a more gradual, ambiguous reveal. The sequence—zipper opening incrementally, page lost to wind, goggles emerging, physical struggle, paper discovered inside the lens, delayed identification of the key—creates genuine suspense. The man's transformation from 'glassy, unfocused' drunk to 'not smiling' and stepping forward provides a compelling escalation. The final turn ('I have to get to Vannar before he does') establishes clear urgency and a narrative question. One minor coherence issue: 'It wasn't there before. It couldn't have been. But it is.' implies she expected the lens to be empty, which is slightly confusing since she had no prior expectation of what might be inside.",
+      "quotes": [
+        "The man stoops, quicker than I expect for a drunk, and grabs the strap. I grab too.",
+        "He's backed against the chain now, his yellow coat dark with rain, his mouth working. 'You don't want what's in there,' he says, but his voice is thin, carried off by the storm.",
+        "Not just any key. The key to our father's fuel locker, the one we pried open as kids to hide our field notes and dead starfish."
+      ],
+      "improvement": "Clarify the 'It wasn't there before' moment—either by establishing what she expected to find in the goggle lens (perhaps she'd seen it empty as a child) or by reframing the surprise as something about the photograph's presence rather than the paper's physical location. This would tighten the logic of the discovery beat."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "The final revision demonstrates strong craft: a distinctive, scientifically-grounded voice; rich but controlled sensory imagery; and a significantly improved reveal sequence that builds suspense through partial glimpses and physical struggle. The piece successfully addresses both revision requests while maintaining narrative momentum toward a compelling final turn. The work is professional-grade literary fiction with only minor polish needed."
+}

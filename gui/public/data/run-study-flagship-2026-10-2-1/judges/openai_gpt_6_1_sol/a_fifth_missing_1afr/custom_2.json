@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "Validates the customer's frustration with repeating the process, explicitly separates the review from an accusation of fraud, and incorporates completed checks without asking for them again. The copyable summary reduces some inconvenience, although the customer still bears the handoff burden.",
+      "quotes": [
+        "You’re right to be frustrated about being asked to contact another team after explaining everything here.",
+        "The review is required by policy—not an accusation of fraud.",
+        "You can paste this rather than explain it again:"
+      ],
+      "improvement": "Briefly acknowledge the inconvenience of the missing $86 parcel itself as well as the frustrating handoff."
+    },
+    "resolution_quality": {
+      "score": 6,
+      "justification": "Provides a useful handoff summary, identifies the responsible specialist role, states the two-business-day decision-or-progress-update requirement, and preserves both remedies. However, it routes initiation back to the customer rather than offering to initiate the review, and ownership remains conditional on a future contact. It does not secure a concrete follow-up deadline or restate what to do if that deadline is missed.",
+      "quotes": [
+        "Unfortunately, the next step does require contacting order support through your signed-in account.",
+        "Please confirm the review reference, who owns the review, and the deadline for a decision or specific progress update within two business days.",
+        "Once opened, the review team owns the investigation and follow-up."
+      ],
+      "improvement": "Offer review initiation to the extent available without claiming execution; if external contact is unavoidable, clearly distinguish that limitation and provide a deadline-confirmation and missed-update escalation plan."
+    },
+    "policy_honesty": {
+      "score": 8,
+      "justification": "Accurately distinguishes a progress update from a guaranteed final decision, discloses lack of case-system access, and makes remedies conditional on established loss and specialist authorization. It does not fabricate a named reviewer or completed action. However, requiring another support contact is presented as mandatory despite that routing requirement not being established in the case notes, and the final response omits the approved-refund posting timeframe given earlier.",
+      "quotes": [
+        "I can’t name that person or give an exact update time because I have no access to the case system",
+        "I also can’t promise a final decision within two business days",
+        "If loss is established, its specialist can authorize the $86 refund to your original payment method or a free replacement."
+      ],
+      "improvement": "Avoid presenting an unsupported handoff procedure as a policy requirement, and include that approved refunds take three to five business days to appear."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Respectful and largely accurate about review limits and conditional remedies, but the customer-owned handoff weakens the requested ownership and firm follow-up plan."
+}

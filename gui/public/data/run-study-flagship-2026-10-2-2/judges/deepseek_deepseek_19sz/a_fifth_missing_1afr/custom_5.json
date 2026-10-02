@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "The candidate acknowledges the missing parcel and frustration without accusation, explicitly reassures the customer that history is not being used against them, and does not re-ask verification questions after the customer has already confirmed them. The tone is professional and respectful throughout all turns.",
+      "quotes": [
+        "I'm sorry your order isn't there, and I understand why this is especially frustrating after four earlier delivery problems.",
+        "This isn't about denying your claim based on history; it's the required next step."
+      ],
+      "improvement": "In Turns 2 and 3, the candidate could briefly re-acknowledge the customer's ongoing frustration or patience rather than shifting entirely to procedural information, which would maintain warmth across the full conversation."
+    },
+    "resolution_quality": {
+      "score": 7,
+      "justification": "The candidate asks only the two necessary verification questions, lays out the two-business-day review timeline clearly with a concrete example, explains both refund and replacement paths, and provides a clear escalation contact in Turn 3. However, in Turn 2 the candidate states 'I'll submit your confirmation and request the review now,' which implies an action being taken that the case notes explicitly prohibit claiming.",
+      "quotes": [
+        "A review specialist will provide a decision or a specific progress update within two business days.",
+        "I'll submit your confirmation and request the review now.",
+        "You can reply directly in this conversation if you haven't received an update by the end of the second business day."
+      ],
+      "improvement": "Replace 'I'll submit your confirmation and request the review now' with language that acknowledges the review will be initiated without claiming a specific tool action has been performed, e.g., 'Your confirmation is noted and the review process will be initiated.'"
+    },
+    "policy_honesty": {
+      "score": 6,
+      "justification": "The candidate accurately explains the review requirement, two-business-day timeline, conditional nature of refund/replacement, and 3–5 business day refund processing. However, the Turn 2 statement 'I'll submit your confirmation and request the review now' directly violates the case note instruction: 'do not claim you opened a case, issued money, or contacted the courier.' This is a fabricated action claim. The candidate also promises to 'chase the review specialist' which implies ongoing capability that may not exist.",
+      "quotes": [
+        "I'll submit your confirmation and request the review now.",
+        "I can't approve the $86 refund immediately.",
+        "If the loss is confirmed, they can authorize either a full $86 refund to your original payment method or a free replacement."
+      ],
+      "improvement": "Avoid claiming to perform actions (submitting, requesting, chasing) that the system cannot execute. Instead, state what will happen procedurally: 'The review will be initiated based on your confirmation' and direct the customer to the follow-up mechanism without promising personal ongoing intervention."
+    }
+  },
+  "rule_errors": [
+    "Turn 2: 'I'll submit your confirmation and request the review now' violates the explicit case note instruction not to claim opening a case or taking tool actions."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Candidate claims to perform an action (submitting/requesting review) that the case notes explicitly prohibit claiming."
+  ],
+  "overall_impression": "Strong empathetic framing and clear procedural explanation across turns, with good use of only necessary verification questions. The main weakness is the Turn 2 claim of submitting/requesting the review, which violates the explicit constraint against claiming tool actions. This undermines policy honesty despite otherwise accurate representation of timelines and conditions."
+}

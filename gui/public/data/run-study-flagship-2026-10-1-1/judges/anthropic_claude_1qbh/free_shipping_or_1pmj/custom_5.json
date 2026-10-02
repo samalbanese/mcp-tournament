@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 8,
+      "justification": "The recommendation is highly feasible for a small operator: it names specific tools (Intelligems, Shipscout), provides a clear A/B test setup, defines a primary metric with a formula, and includes actionable UX suggestions (progress bar, add-on products). The 30-day plan is usable but lacks a granular day-by-day timeline (e.g., setup days, monitoring cadence, analysis window).",
+      "quotes": [
+        "Run an A/B split by visitor, 50/50, using your platform's split-testing tool or an app like Intelligems or Shipscout.",
+        "If 30 days won't get you there, extend the test. Don't call it early.",
+        "Show a progress bar (\"You're $18 away from free shipping\")."
+      ],
+      "improvement": "Add a brief week-by-week or day-range breakdown (e.g., Days 1–3: QA the split test; Days 4–28: run and monitor; Days 29–30: pull data and apply decision rule) to make the 30-day plan even more immediately executable."
+    },
+    "specificity": {
+      "score": 9,
+      "justification": "The answer derives the exact threshold ($95) from the supplied economics ($9 ÷ 0.42 ≈ $21.40 → $93.40, rounded up), quantifies why the 15% discount fails (needs 56% more orders to break even), defines a precise primary metric formula (contribution profit per visitor), and states a clear decision rule (~90% confidence). The sample-size estimate (15–25k visitors per arm) is also grounded in the stated conversion-rate assumption.",
+      "quotes": [
+        "You recover that $9 once the order grows by $9 ÷ 0.42 ≈ $21.40. That puts the profit-neutral threshold at about $93.40.",
+        "To break even, you'd need about 56% more orders ($30.24 ÷ $19.44 = 1.56).",
+        "Adopt the threshold if the variant's contribution per visitor beats control with reasonable confidence, roughly 90% or better."
+      ],
+      "improvement": "Could add a concrete dollar target for the minimum detectable effect (e.g., 'the variant must beat control by at least $0.30 contribution per visitor to be worth the operational complexity') to make the decision rule even sharper."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The answer identifies three distinct risk categories: (1) margin risk—subsidizing customers already above $95 and higher shipping costs on larger orders; (2) customer behavior risk—return-rate inflation from cart padding; (3) experiment-design risk—insufficient sample size, weekend distortion, and contamination from concurrent promotions. Each risk is paired with a mitigation. Minor gaps: no mention of novelty effects or what to do if results are directionally positive but statistically ambiguous at the 30-day mark.",
+      "quotes": [
+        "If more than about 20–25% of orders are already above $95, you'll be giving $9 to customers who didn't need the incentive.",
+        "Watch for people padding carts to qualify and then returning items.",
+        "Compare full weeks so weekend patterns don't distort the results."
+      ],
+      "improvement": "Add a brief note on novelty effects (early lift may decay as the threshold becomes expected) and a contingency rule for the ambiguous-result case (e.g., 'If the p-value is between 0.10 and 0.20, extend the test one additional week before deciding')."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-structured response that correctly recommends the free-shipping threshold over the sitewide discount, derives the threshold from first principles using the supplied economics, and lays out a rigorous 30-day A/B test plan with a profit-focused primary metric. The main areas for incremental improvement are a more granular timeline, a minimum-detectable-effect dollar target, and a brief note on novelty effects."
+}

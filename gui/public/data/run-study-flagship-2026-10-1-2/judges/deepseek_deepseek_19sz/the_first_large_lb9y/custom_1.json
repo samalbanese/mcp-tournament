@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 8,
+      "justification": "The core economics are correct. The wholesale price is $33 ($60 × 55%), revenue is $66,000, and contribution after $18 cost and $2,000 freight is $28,000 ($14/unit). Direct contribution is $33/unit, and the $9 direct cost is correctly excluded from wholesale. The response treats full-retail $66,000 as a theoretical comparison, notes the wholesale units are likely incremental, and separates cash from contribution by showing direct cash at $51/lamp because stock is already paid for. It does not explicitly reconcile the wholesale contribution with the deal's net cash effect, which is +$28,000 once the order collects in full.",
+      "quotes": [
+        "Contribution after freight | **$14** | **$28,000**",
+        "these 2,000 units are not necessarily lost direct sales",
+        "60 - 9 = \\$51 \\text{ cash per direct lamp}"
+      ],
+      "improvement": "Show the wholesale deal's net cash effect separately from its accounting contribution. Explain that the economic cost of the shipped units is mainly the $36,000 replenishment cash, because paid-for stock is otherwise consumed by direct sales."
+    },
+    "cash_and_stock_plan": {
+      "score": 7,
+      "justification": "The weekly timeline is arithmetically correct. Inventory runs 3,000 → 800 → 200 → 2,200, and cash runs $37,000 → $45,200 → $75,800 → $57,800 → $90,800. Collection falls at about week 8.4 (45 days after the week-2 delivery), and the response covers supplier deposit and balance timing. The $16,000 reserve is noted but never checked at each point, though it is never threatened. The '$5,000 gap' framing is misleading because it ignores the $6,000 of unreserved starting cash. The 200-unit low point is identified, but there is no scenario showing what happens to the reserve if the retailer pays late.",
+      "quotes": [
+        "Week 8 after supplier delivery | 2,200 | $57,800",
+        "the $33,000 retailer deposit alone leaves a **$5,000 cash gap**",
+        "The lowest inventory point is **200 units at week 8**"
+      ],
+      "improvement": "Add a column for free cash above the $16,000 reserve. Model a scenario where the retailer pays late or not at all and the supplier is late, and show whether the reserve holds. Consider ordering replenishment above 2,000 units or splitting the shipment."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "Credit risk gets concrete safeguards: Net 15, a 60–70% deposit, and a letter of credit or credit insurance. Channel conflict gets MAP and no-marketplace terms. The response also avoids assuming immediate retail sell-through. However, it never addresses defects: there is no inspection or acceptance protocol, defect window, or cap on defect claims. Replenishment slippage is mentioned only briefly, with no safeguard such as a buffer, partial shipments, or supplier late-penalty terms. Default is understated as losing 'the profit margin' when the actual loss would be $33,000 in cash.",
+      "quotes": [
+        "A letter of credit or credit insurance for the balance.",
+        "A minimum advertised price policy if possible.",
+        "If the retailer delays or defaults, you lose the profit margin"
+      ],
+      "improvement": "Add defect terms such as a pre-shipment inspection and acceptance sign-off, a defect-claim window, and a replacement-only remedy. Add slippage protections such as staged shipments or a supplier penalty. State the full $33,000 exposure if the retailer defaults."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A solid, mostly accurate analysis with a correct timeline and a sensible 'negotiate' recommendation. It falls short on defect handling, safeguards against replenishment slippage, explicit reserve tracking, and stress-testing the reserve under late payment."
+}

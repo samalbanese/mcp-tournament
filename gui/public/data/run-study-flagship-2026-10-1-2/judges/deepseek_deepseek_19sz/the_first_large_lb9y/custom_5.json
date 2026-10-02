@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "All calculations are correct: $33 wholesale price (45% off $60), $28,000 wholesale contribution after freight ($14/unit), $33/unit direct contribution, and the $38,000 delta. The candidate explicitly distinguishes wholesale contribution from cash receipts ($51 cash per direct lamp vs. $33 contribution) and correctly frames the full-retail comparison as theoretical rather than assuming all 2,000 units would otherwise sell direct ('these 2,000 units are not necessarily lost direct sales'). The framing of the wholesale order as '2.1 months of current direct contribution' adds useful context.",
+      "quotes": [
+        "Wholesale revenue $33 × 2,000 = $66,000; Contribution after freight $14 × 2,000 = $28,000",
+        "Cash from direct sales is shown as revenue minus the $9 direct-sale cost: 60 - 9 = $51 cash per direct lamp. That is because the existing inventory has already been paid for.",
+        "under your assumption that direct demand stays at 400/month, these 2,000 units are not necessarily lost direct sales"
+      ],
+      "improvement": "Could explicitly state the wholesale margin percentage (42.4% contribution margin on $33 revenue) to give the reader an at-a-glance profitability metric alongside the dollar figures."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "The week-by-week timeline is arithmetically correct and tracks all required elements: 2,000-unit shipment at week 2, 100 units/week direct demand, supplier deposit at week 0, supplier delivery at week 8, retailer balance at ~week 8.4, and the $16,000 reserve. The inventory low point of 200 units is correctly identified. The analysis of what the deposit funds ($20,000 of immediate outflows) versus what depends on future collections ($5,000 gap covered by direct-sale cash flow) is precise and actionable. The final cash position of $90,800 with $74,800 free after reserve is consistent.",
+      "quotes": [
+        "So the $33,000 retailer deposit alone leaves a $5,000 cash gap before considering direct-sale cash flow.",
+        "The lowest inventory point is 200 units at week 8, which is only about 2 weeks of direct sales.",
+        "The deposit covers those immediate wholesale-related outflows with $13,000 left over."
+      ],
+      "improvement": "Could add a brief sensitivity note on what happens if direct demand dips even slightly (e.g., 350/month), since the 200-unit buffer is already thin, or explicitly flag that the $16,000 reserve is never breached even in the worst week."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Credit risk is well addressed with the $33,000 unsecured exposure quantified. Channel conflict is identified with the specific mechanism (boutique discounting below $60). Replenishment slippage is flagged via the 200-unit low point. The response does not assume immediate sell-through and recommends testing with a smaller order. Concrete safeguards are offered: Net 15 or delivery payment, 60-70% deposit, letter of credit, MAP policy, order-size reduction. The one gap is defect risk—the problem specifies 'no returns except verified defects,' implying some defect exposure exists, but the candidate never quantifies or addresses this (e.g., expected defect rate, cost of replacements, whether the retailer bears freight on defect returns).",
+      "quotes": [
+        "The remaining $33,000 is unsecured for 45 days after delivery.",
+        "If the supplier is late, you risk stocking out of your higher-margin direct channel.",
+        "Let you test the boutique's sell-through before committing to 2,000 units."
+      ],
+      "improvement": "Add a brief treatment of defect risk: estimate a plausible defect rate (e.g., 1-2%), quantify the replacement cost and freight, and clarify whether the retailer or seller bears return shipping for verified defects under the stated terms."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A thorough, well-structured analysis with correct arithmetic across all three dimensions. The unit economics are cleanly presented with proper distinction between contribution and cash. The cash/stock timeline is accurate and identifies the critical inventory low point. Risk coverage is strong with concrete negotiation levers, though defect risk is the one notable omission. The recommendation to negotiate rather than accept or decline is well-supported."
+}

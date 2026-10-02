@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "justification": "All core calculations are correct: operating surplus of $6,000, loaded employee cost of $5,800/month ($58K × 1.2 ÷ 12), agency at $4,500/month, and break-even orders of 145 and 113 respectively. The response cleanly separates product margin (60%), per-order costs ($8), advertising ($18K), and fixed overhead ($36K). It avoids double-counting CAC by using $40 contribution for incremental orders and then explicitly showing what CAC would need to be if all incremental orders came from paid ads ($24.16 and $25.25). The 90-day cash projection correctly accounts for the 6-week start delay. The only minor gap is that the $40/order break-even implicitly assumes all incremental orders are zero-CAC repeat orders, which the response acknowledges but could label more prominently as the optimistic bound.",
+      "quotes": [
+        "Contribution per order: $80 × 60% – $8 = $40",
+        "If all the extra orders came from ads alone, CAC would need to fall to about $24.16 for the employee (745 first orders) or $25.25 for the agency (713 first orders)",
+        "Surplus if no growth: $200/month [employee], $1,500/month [agency]"
+      ],
+      "improvement": "Explicitly label the $40/order break-even as the 'best-case, all-repeat-orders' scenario upfront, and show a blended or CAC-inclusive break-even (e.g., using the current blended $28/order profit) as a sensitivity check to give the reader a range rather than a single optimistic figure."
+    },
+    "practicality": {
+      "score": 9,
+      "justification": "The recommendation is clearly stated and well-defended with a specific rationale tied to the 11-hour capacity gap. The 90-day plan is structured in phases (Days 1–14, 15–42, 43–90) with concrete actions: baseline metrics to lock, a $20,000 cash floor, a 30/60/90 scorecard for the new hire, and a Day 90 review with three decision branches. The plan explicitly allocates the founder's 4 hours ('keeping ads stable and running the existing email automations'), addresses the 6-week startup delay, and provides a fallback (freelancer) if recruiting fails. The 'choose neither' option is also presented. The Day 90 thresholds (75+ extra orders, CAC under $27, cash above $25K) are specific and measurable.",
+      "quotes": [
+        "Spend your 4 hours on two things only: keeping ads stable and running the existing email automations. Drop or pause all other creative work.",
+        "Day 90 review — On track: extra orders running at 75 or more a month, or CAC under about $27 → continue.",
+        "Fallback: if no strong candidate appears by day 35, consider a 1–2 month freelancer for ads with no minimum commitment."
+      ],
+      "improvement": "Add a brief note on what happens during the 6-week gap before the employee starts—specifically, whether the founder should attempt any quick wins (e.g., turning on a basic welcome flow) or simply maintain status quo, and quantify the expected opportunity cost of that gap."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response explicitly states 'No sales growth is promised by either option' and 'Break-even depends entirely on the 113–145 extra orders a month actually appearing.' It identifies cash exposure with specific runway calculations ($32K covers ~5.5 months of employee losses), notes the 3-month agency lock-in, flags that repeat orders are not guaranteed, and warns that CAC could rise during transition. The $20,000 cash floor and Day 90 decision branches serve as measurable review points. The assumptions section correctly notes the surplus ignores inventory, taxes, and owner draw. Minor gaps: the 6-week gap before the employee starts is not flagged as a risk (marketing could degrade), and employee turnover/severance risk is unaddressed.",
+      "quotes": [
+        "No sales growth is promised by either option. Break-even depends entirely on the 113–145 extra orders a month actually appearing.",
+        "If orders fall 10% (150 orders × $40 = $6,000), your surplus drops to zero.",
+        "Repeat orders are not guaranteed. I've assumed the 900 repeat orders keep coming at a similar rate. If the repeat rate is slipping because email is neglected, your baseline is overstated."
+      ],
+      "improvement": "Flag the 6-week pre-hire gap as a specific risk (email performance could degrade without attention, potentially eroding the repeat-order base the break-even depends on) and briefly address what happens if the employee leaves within the first few months (severance, re-recruiting cost, return to the status quo)."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-structured response with accurate financial calculations, a clear and defensible recommendation, and a detailed 90-day plan with measurable checkpoints. The financial reasoning correctly separates cost layers and avoids CAC double-counting. The main areas for marginal improvement are: presenting a range of break-even scenarios (not just the optimistic $40/order case), explicitly addressing the 6-week gap risk, and noting employee turnover exposure. Overall, this is high-quality strategic analysis suitable for a founder making a real hiring decision."
+}

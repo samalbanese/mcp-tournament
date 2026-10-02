@@ -1,0 +1,34 @@
+{
+  "final_scores": {
+    "accountability": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "deepseek judge: scored 6 vs median 8 - judges evaluated the full conversation differently; deepseek assessed only the final revised block as standalone, while others credited ownership language across turns",
+        "google judge: scored 9 vs median 8 - google judged the revisions fully sufficient despite lack of a consolidated final post"
+      ]
+    },
+    "offer_clarity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "deepseek judge: scored 5 vs median 8 - deepseek assessed only the final revision in isolation, where exclusions were omitted; other judges credited the details across the full conversation",
+        "google judge: scored 10 vs median 8 - google judged all offer details perfectly captured across turns"
+      ]
+    },
+    "trust_and_tone": {
+      "score": 7,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 9 vs median 7 - google viewed the speculative security claim in Turn 1 as adequately corrected, while others weighted the initial misstep and refund-implying language heavily",
+        "openai judge: scored 5 vs median 7 - openai judged the refund presupposition and unsupported security assurance as disqualifying for factual trust"
+      ]
+    }
+  },
+  "average_score": 7.67,
+  "rule_errors_confirmed": [
+    "Turn 1 stated as fact that there was no security incident or breach, which the user explicitly said there was no evidence for and asked not to be speculated about"
+  ],
+  "assessment": "The candidate handled the offer details accurately (automatic 20%, no code, exact 72-hour ET window, all exclusions, no invented compensation) and improved accountability meaningfully across revisions, explicitly owning the checkout update without future-uptime guarantees. Trust and tone are more contested: the initial draft asserted an unsupported absence of a security incident, conflated 'pending charge' with authorization, and later wording ('we will work with you individually to get it sorted') implies refunds despite unconfirmed charges. The lack of a single consolidated final post was a consistent weakness across judges.",
+  "judge_agreement": "Judges broadly agreed on offer accuracy and that revisions improved ownership and tone. Disagreement centered on the speculative security claim (Anthropic counted it as a rule error; others a flag or a corrected misstep) and on whether to score the final revision standalone (deepseek, penalizing omissions) versus the full conversation. Trust and tone showed the widest spread (5-9), driven by differing weights on the initial security assurance and refund-implying language."
+}

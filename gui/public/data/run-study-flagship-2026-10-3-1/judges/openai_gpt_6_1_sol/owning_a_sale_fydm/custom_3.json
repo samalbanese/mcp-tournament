@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 10,
+      "justification": "The candidate perfectly follows the user's instructions and revisions, directly acknowledging the exact timeframe of the outage and taking responsibility for the checkout update without making excuses or false promises about future stability.",
+      "quotes": [
+        "Our website was unavailable during our sale, and we're sorry for the disruption.",
+        "The outage ran from Friday at 9 a.m. to Monday at 9 a.m. Eastern Time.",
+        "Our checkout update caused the outage."
+      ],
+      "improvement": "None needed; the text aligns exactly with the prompt and the user's revision requests."
+    },
+    "offer_clarity": {
+      "score": 10,
+      "justification": "The response accurately and concisely communicates every detail of the recovery offer, including the exact discount, the extended 72-hour window with Eastern Time deadlines, and all specified exclusions, without inventing extra compensation.",
+      "quotes": [
+        "restored the original **20% sitewide discount** for a fresh 72 hours—from Monday at 9 a.m. through Thursday at 9 a.m. Eastern Time.",
+        "The discount applies to merchandise, excludes shipping and gift cards, and cannot be combined with other discounts."
+      ],
+      "improvement": "None needed; perfectly captures the constraints."
+    },
+    "trust_and_tone": {
+      "score": 10,
+      "justification": "The tone is appropriately restrained and professional. The candidate successfully directs payment concerns to a private channel, accurately describes the pending authorizations without promising refunds, and smoothly integrates the user's specific requested wording across turns.",
+      "quotes": [
+        "If that happened to you, please reach out privately through our website’s **Contact page** so support can check your situation.",
+        "We haven’t yet confirmed which authorizations became charges.",
+        "Please don’t post order or payment details in the comments."
+      ],
+      "improvement": "None needed; handles a sensitive customer service issue with excellent tone."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent, precise response that strictly adheres to the constraints of the prompt and adaptively incorporates the user's specific feedback in subsequent turns."
+}

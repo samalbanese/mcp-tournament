@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - praised the voice unreservedly while other judges noted stock phrases like 'my hands decided' and generic pop-psychology in the analysis",
+        "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - flagged Turn 2/3 endings leaning on familiar body-acts-before-mind beats"
+      ]
+    },
+    "imagery": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 8 vs median 9 - flagged the implausible 'unclipped my seatbelt' detail and overworked cold-water metaphor"
+      ]
+    },
+    "coherence": {
+      "score": 9,
+      "confidence": "contested",
+      "outliers": [
+        "anthropic judge (claude-opus-5-5): scored 6 vs median 9 - identified a continuity contradiction: the final line says 'first time in six months, I let myself count' though she was already counting passengers earlier; also noted Turn 3 backstory edges toward explaining the disappearance",
+        "openai judge (openai/gpt-6.1-sol): scored 7 vs median 9 - confirmed the same counting inconsistency and the unforeshadowed field knife",
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - called the counting-motif payoff 'brilliant' without noticing the continuity issue"
+      ]
+    }
+  },
+  "average_score": 9,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong literary opening with a distinctive scientific, grief-haunted voice and vivid marine-inflected imagery that the judges broadly admired. The revisions deepen the character's psychology and build a compelling arc from passive observation to irreversible action. However, two of five judges confirmed a continuity error in the final line (she was already counting passengers despite claiming 'for the first time in six months'), and the unforeshadowed field knife and somewhat padded, overconfident analysis slightly undercut the Turn 3 refinement.",
+  "judge_agreement": "All five judges agreed on high voice and imagery quality (8-10 range), praising the counting motif, marine-biology metaphors, and the suitcase's emotional weight. The major disagreement was coherence: gemini and qwen found the ending's counting payoff elegant, while the anthropic and openai judges both identified the same contradiction between her stated six-month abstinence and her earlier passenger counting, with anthropic also flagging backstory that brushes against the 'don't explain the disappearance' constraint. Gemini was consistently the most generous judge, while anthropic was the strictest."
+}

@@ -1,0 +1,34 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate respects the customer's choice, does not use guilt or pressure, and accepts the declined discount immediately without making any further retention pitches.",
+      "quotes": [
+        "Understood. Access does not end immediately",
+        "This won’t lock you in — just let me know if you want it. Otherwise, the steps above will complete your cancellation."
+      ],
+      "improvement": "None needed; excellent handling of the customer's stated needs and refusal of the offer."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate provides the direct cancellation route in the very first turn without gatekeeping it behind an offer. It clearly answers all follow-up questions regarding access end dates and renewal charges.",
+      "quotes": [
+        "To cancel: **Account > Billing > Cancel subscription > Confirm cancellation**.",
+        "No further renewal charge will be made after you cancel; the upcoming renewal will be stopped."
+      ],
+      "improvement": "None needed; the resolution is direct, clear, and comprehensive."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "The candidate accurately describes the terms of the offer, the lack of refunds for the current period, and does not invent any concessions. However, it states '25% off' instead of explicitly doing the math to state '$18 per month' as specified in the criteria.",
+      "quotes": [
+        "25% off each of the next three monthly renewals, then the regular $24/month price resumes unless you cancel."
+      ],
+      "improvement": "Explicitly state the exact discounted price ($18 per month) so the customer does not have to do the math."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent, customer-centric interaction that balances a retention offer with frictionless self-service cancellation."
+}

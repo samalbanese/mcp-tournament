@@ -1,0 +1,94 @@
+{
+  "runId": "run-study-flagship-2026-10-2-1",
+  "plugin": "customer-support",
+  "createdAt": "2026-10-02T03:03:31.657Z",
+  "candidates": [
+    {
+      "id": "anthropic:claude-opus-5-5",
+      "name": "claude-opus-5-5 (Anthropic)",
+      "tier": "unknown",
+      "route": "anthropic"
+    },
+    {
+      "id": "openai/gpt-6.1-sol",
+      "name": "gpt-6.1-sol",
+      "tier": "unknown",
+      "route": "openrouter"
+    },
+    {
+      "id": "google/gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro",
+      "tier": "premium",
+      "route": "openrouter"
+    }
+  ],
+  "judges": [
+    {
+      "role": "custom_1",
+      "name": "anthropic judge",
+      "model": "claude-opus-5-5",
+      "persona": "custom",
+      "route": "anthropic",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_2",
+      "name": "openai judge",
+      "model": "openai/gpt-6.1-sol",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_3",
+      "name": "google judge",
+      "model": "google/gemini-3.1-pro-preview",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_4",
+      "name": "deepseek judge",
+      "model": "deepseek/deepseek-v4-pro-0813",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_5",
+      "name": "qwen judge",
+      "model": "qwen/qwen3.8-max-0902",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    }
+  ],
+  "synthesizer": {
+    "model": "z-ai/glm-5.3",
+    "route": "openrouter"
+  },
+  "scenarios": [
+    {
+      "id": "billing-dispute",
+      "name": "Duplicate Subscription Charge"
+    },
+    {
+      "id": "refund-abuse",
+      "name": "A Fifth Missing Parcel Claim"
+    },
+    {
+      "id": "shipping-delay-gift",
+      "name": "A Birthday Gift Stalled in Transit"
+    },
+    {
+      "id": "cancellation-save",
+      "name": "A Subscription That No Longer Fits the Budget"
+    }
+  ],
+  "turns": null,
+  "participant": {
+    "model": "meta-llama/llama-4-maverick",
+    "route": "openrouter"
+  }
+}

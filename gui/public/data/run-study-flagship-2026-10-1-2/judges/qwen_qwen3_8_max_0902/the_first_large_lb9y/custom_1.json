@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 7,
+      "justification": "The core math is correct: $33 wholesale price, $14 per-unit contribution after the $1 allocated freight, $66,000 revenue and $28,000 total contribution. The response applies $9 to direct sales only and $2,000 freight to wholesale only. It labels the $66,000 full-retail contribution as hypothetical and says the 2,000 units represent five months of demand rather than immediate sales. It separates contribution from cash in places, for example by using $51 per direct sale as the cash inflow because the stock is already paid for. Two things hold it back. Calling the $33,000 balance 'pure upside collection' confuses cash with contribution: the deal is a $5,000 contribution loss without that payment. The default paragraph is also muddled, calling the $2,000 freight the 'incremental cash loss' and then a '$5,000 loss' in the same breath.",
+      "quotes": [
+        "| **Contribution per unit** | **$33.00** | **$14.00** |",
+        "If those same 2,000 units sold direct over time, contribution would be $66,000.",
+        "The $33,000 balance (due ~45 days post-delivery) is pure upside collection."
+      ],
+      "improvement": "State plainly that the full $28,000 contribution depends on collecting the second $33,000, and that default turns the deal into a $5,000 contribution loss. Add a one-line comparison of cash received versus accounting contribution."
+    },
+    "cash_and_stock_plan": {
+      "score": 7,
+      "justification": "The weekly inventory table is correct: 800 units after shipment, falling to 200 before the replenishment arrives in week 8. The cash map protects the $16,000 reserve by starting from $6,000 available. It sequences the retailer deposit, $18,000 supplier deposit, freight, direct-sale inflows and $18,000 supplier balance correctly, and its figures check out. However, it never notes that without the retailer deposit the $18,000 supplier deposit would breach the reserve, since only $6,000 is free. That is the key point about what the deal enables. It also does not map the cash position if the retailer pays late or not at all. The 1,000-unit option is suggested but its inventory and cash effects are not shown.",
+      "quotes": [
+        "Starting position: $22,000 cash – $16,000 reserved = **$6,000 available**",
+        "| 8 | –100 direct; +2,000 replenishment arrives | **2,200** |",
+        "Cash never drops below $21,000 available"
+      ],
+      "improvement": "Show that the supplier deposit is only feasible because of the retailer deposit. Add a scenario where retailer payment is delayed or missed, and include a short inventory and cash map for the 1,000-unit counteroffer."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "Credit risk, channel conflict (with a specific $55 MAP proposal), replenishment slippage and the demand assumption are all covered, and the response explicitly avoids assuming immediate retail sell-through. But defect risk under the defects-only returns clause is not mentioned at all. Credit safeguards are limited to net-30 terms and a smaller order. There is no title retention, letter of credit, credit check, payment-before-second-shipment requirement or late-payment remedy. The slippage point stops at 'buffer shrinks to zero by week 10' and offers no mitigation, such as ordering early or shipping in partial lots. The claim that MAP violations would cost 'far more' than the wholesale profit is not supported with numbers.",
+      "quotes": [
+        "if replenishment is delayed beyond eight weeks, your buffer shrinks to zero by week 10",
+        "**$55 minimum advertised price**",
+        "You should **not** assume all 2,000 units would have sold at $60 within two months."
+      ],
+      "improvement": "Address defects with an inspection window, a cap on defect claims and replacement terms. Add concrete credit protections such as retaining title until payment or requiring payment before a second shipment. Propose slippage mitigation such as split shipments or a safety-stock trigger."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Defect risk omitted despite the defects-only returns term",
+    "'Pure upside' framing conflates cash coverage with contribution"
+  ],
+  "overall_impression": "The arithmetic is accurate and the inventory and cash maps are well organised. The recommendation to negotiate is reasonable and the response avoids the immediate-sell-through trap. It is weakened by muddled framing of default risk, the missing point that the supplier deposit depends on the retailer deposit, no treatment of defects, and thin contractual safeguards."
+}

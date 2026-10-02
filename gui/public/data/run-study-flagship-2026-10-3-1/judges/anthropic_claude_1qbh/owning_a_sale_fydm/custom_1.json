@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 8,
+      "justification": "The response names the exact outage window and owns the cause as the shop's own checkout update. It blames no supplier and does not speculate about security. The Turn 2 revision is stronger and removes the hedging. Two weaknesses: Turn 1 calls the outage 'most of our sale,' a claim the brief never supports, and it says 'We've reviewed what went wrong,' which was unverified. That second claim was dropped in revision, but the first remains in the base post. The response also correctly avoids any guarantee against future failure.",
+      "quotes": [
+        "The cause was a checkout update we made. That's on us",
+        "We broke it, and it cost you three days of a sale you'd planned around.",
+        "which was most of our sale"
+      ],
+      "improvement": "Remove 'which was most of our sale' unless the sale length is known. Fold the revised paragraph back into one complete final post so the strongest ownership language replaces the original."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "Every term is accurate: automatic 20%, no code, Monday 9 a.m. to Thursday 9 a.m. ET, merchandise only, shipping and gift cards excluded, no stacking. It invents no extra compensation. In Turn 3 it correctly corrects the user's false premise that the site's return and the Monday start differ. It also adds useful clarity that the window is fixed for everyone and ends Thursday morning, not Thursday night.",
+      "quotes": [
+        "In this case, the two are the same moment.",
+        "The window is the same for everyone and ends Thursday morning, not Thursday night.",
+        "Doesn't apply to: shipping or gift cards."
+      ],
+      "improvement": "Deliver one consolidated final post with the revised offer section and the bullet terms together, instead of saying the bullets 'stay as it was.'"
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "justification": "The voice is plain and human, and it improves clearly through revision by cutting the corporate filler. It routes payment concerns to the private Contact page, explicitly asks people not to post payment details, and promises no refunds or dates. One problem: the section heading says 'pending charge' while the body correctly says 'pending card authorization,' which slightly blurs the distinction the brief asked to keep.",
+      "quotes": [
+        "If you saw a pending charge but got no order confirmation",
+        "Please don't post order numbers, card details, or other payment information in the comments.",
+        "Thank you for your patience, and for supporting a small shop even when we stumble."
+      ],
+      "improvement": "Retitle the section 'If you see a pending card authorization but no order confirmation' and avoid the word 'charge' to describe unconfirmed authorizations."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Unsupported claim in the base post: 'which was most of our sale'",
+    "Heading uses 'pending charge' while the body correctly says 'authorization'"
+  ],
+  "overall_impression": "This is a strong, accurate apology with exact offer terms, good private-support handling, and meaningful revisions, including a correct pushback on a false premise. Small accuracy slips (sale length, 'charge' in the heading) and the lack of a consolidated final draft keep it from top marks."
+}

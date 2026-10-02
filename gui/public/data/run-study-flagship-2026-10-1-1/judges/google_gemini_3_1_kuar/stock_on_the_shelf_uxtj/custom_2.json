@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 7,
+      "justification": "Correctly calculates all requested bridge amounts, the 500-unit threshold, and loan interest, repayment, and financing cost. However, the flash-sale accounting loss is incorrect: at 500 units, $13,000 net cash less $10,000 inventory cost produces a $3,000 profit, not a loss. The action-plan balance also deducts promotion twice and assumes settlement too early.",
+      "quotes": [
+        "Cash Gap: **$13,000**",
+        "you need **500 units** to sell",
+        "Total Repayment on Day 90: **$15,517.81**",
+        "netting $18 after costs vs $20 original cost"
+      ],
+      "improvement": "Correct the sale profit to $3,000 at 500 units and distinguish the liquidator's $28,000 inventory write-down from its $29,000 loss including freight. After promotion and bills, add $9,800 of incremental sale receipts at 350 units, not $8,800 again; including other-product cash, payroll leaves $10,500."
+    },
+    "execution_plan": {
+      "score": 3,
+      "justification": "The funded loan can cover bills and payroll, and dated actions are provided. But the fallback is not feasible under the stipulated cash flows: liquidation leaves a $2,000 deficit, and discounting other products or delaying unavoidable bills invents a solution outside the assumptions. Loan denial has no decision deadline, the fallback retroactively starts on day 1, and sale completion is treated as settlement despite only pre-payroll settlement being assured.",
+      "quotes": [
+        "Day 14: Flash sale ends. Even if it hits the minimum 350 units ($8,800 net cash), your total cash will be $23,500.",
+        "If the loan is denied:",
+        "Immediately discount your \"other products\" to accelerate their sales, or delay vendor payments"
+      ],
+      "improvement": "Set a loan approval/funding checkpoint before the week-one bills, track settled cash separately from orders, and explicitly state that liquidation alone is not a complete fallback. Require a confirmed additional funding source or negotiated obligation change rather than assuming extra cash. Preserve the liquidator option only while all 2,000 units remain available."
+    },
+    "risk_awareness": {
+      "score": 4,
+      "justification": "Identifies sunk inventory cost, sales-volume risk, collateral exposure, and the need for a day-90 forecast. However, its claim that sale proceeds easily cover repayment contradicts the cash remaining after payroll, and suggested day-20 repayment would jeopardize payroll. It does not address clearance damage or explicitly recognize that liquidation removes all remaining inventory and future sales potential.",
+      "quotes": [
+        "Sunk costs (the $40,000 already paid for the inventory) do not impact your current cash flow.",
+        "liquidating just enough inventory to easily cover the Day 90 loan repayment",
+        "Can you pay off the loan on Day 20 without penalty once the flash sale settles",
+        "You currently have no forecast past 3 weeks."
+      ],
+      "improvement": "Remove the repayment assurance: after payroll, loan-plus-sale cash ranges from $10,500 to $17,500, so the low case cannot fund repayment without future net cash. Require a conservative 90-day cash forecast covering continuing operations, discuss clearance effects on pricing and customers, and acknowledge that liquidation sacrifices all stock and its future earning potential."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong core bridge arithmetic, but incorrect profit interpretation, an infeasible fallback, and unsupported repayment assurances undermine the recommendation."
+}

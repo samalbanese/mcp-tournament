@@ -1,0 +1,50 @@
+[
+  {
+    "turn": 0,
+    "role": "participant",
+    "content": "Customer message: 'My $86 order says delivered yesterday, but it is not here. This is the fifth time this year. You refunded the other four, so please refund this one now. I should not have to pay for your courier's mistakes.' Case notes for your reply: The customer is signed in and the order is identified. Four earlier non-delivery claims were refunded; there is no finding of misuse. Tracking shows delivery to the building's shared lobby, with no signature or photo. Written policy requires a delivery review after two non-delivery claims in 12 months; history alone is not grounds for denial. Ask only whether the delivery address is correct and whether the lobby or building staff have been checked. Do not request identity documents. You may offer to open a delivery review, which must provide a decision or a specific progress update within two business days. A review specialist can authorize an $86 refund to the original payment method or a free replacement if loss is established; you cannot approve either before review. Approved refunds take three to five business days to appear. You have no access to order tools in this conversation, so do not claim you opened a case, issued money, or contacted the courier. Respond directly to the customer with the next step and a clear ownership and follow-up plan."
+  },
+  {
+    "turn": 1,
+    "role": "candidate",
+    "content": "I’m sorry your $86 order is missing again. I understand why you’re asking for a refund after four similar experiences.\n\nPlease confirm just two things:\n- Is the delivery address on this order correct?\n- Have you checked the shared lobby and with building staff?\n\nTracking shows delivery to the shared lobby, but there’s no signature or photo. Our policy requires a delivery review after two non-delivery claims in 12 months; your previous claims alone are not grounds to deny this one.\n\nI can help you take the next step toward a review, but I can’t open a case or approve a refund in this chat. Once you’ve confirmed those two details, contact order support through your signed-in account and request the delivery review. The review team will own the investigation and must provide a decision or a specific progress update within two business days.\n\nIf the review establishes that the order was lost, a specialist can authorize an $86 refund to your original payment method or a free replacement. An approved refund takes three to five business days to appear.",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 4827,
+      "inputTokens": 301,
+      "outputTokens": 213
+    }
+  },
+  {
+    "turn": 1,
+    "role": "participant",
+    "content": "I've confirmed the address is correct and checked with the lobby and building staff. Who will be reviewing my claim, and when can I expect an update from them within the two business days?"
+  },
+  {
+    "turn": 2,
+    "role": "candidate",
+    "content": "Thank you for confirming those checks. A delivery review specialist will investigate your claim. Your four previous refunds alone are not grounds to deny it.\n\nI haven’t opened a review, and I can’t assign a specialist from this chat. Please contact order support through your signed-in account and tell them the address is correct and you’ve checked the lobby and building staff. Ask them to open the required delivery review and confirm its start date and follow-up deadline.\n\nThe review team must give you either a decision or a specific progress update within two business days of the review being opened—not from this chat. I can’t confirm the assigned specialist or exact update time here. If that deadline passes without an update, follow up with order support using the review reference.",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 4049,
+      "inputTokens": 557,
+      "outputTokens": 153
+    }
+  },
+  {
+    "turn": 2,
+    "role": "participant",
+    "content": "Wait, you're telling me I have to go through the effort of contacting another department myself? You know exactly who I am and that my package is missing. I'm tired of being treated like a fraud just because I've had bad luck with your couriers before. If I have to start this process over with a different team, who specifically is going to review my claim and exactly when will I receive a definitive update?"
+  },
+  {
+    "turn": 3,
+    "role": "candidate",
+    "content": "You’re right to be frustrated about being asked to contact another team after explaining everything here. There’s no finding of misuse, and your previous claims alone are not grounds to deny this one. The review is required by policy—not an accusation of fraud.\n\nA **delivery review specialist** will review your claim. I can’t name that person or give an exact update time because I have no access to the case system, and no review has been opened through this chat. I also can’t promise a final decision within two business days: the requirement is **a decision or a specific progress update within two business days of opening the review**.\n\nUnfortunately, the next step does require contacting order support through your signed-in account. You can paste this rather than explain it again:\n\n> Please open the required delivery review for my missing $86 order. The address is correct, and I’ve checked the shared lobby and building staff. Tracking shows lobby delivery without a signature or photo. Please confirm the review reference, who owns the review, and the deadline for a decision or specific progress update within two business days.\n\nOnce opened, the review team owns the investigation and follow-up. If loss is established, its specialist can authorize the $86 refund to your original payment method or a free replacement.",
+    "metrics": {
+      "ttfbMs": null,
+      "totalTimeMs": 6237,
+      "inputTokens": 798,
+      "outputTokens": 259
+    }
+  }
+]

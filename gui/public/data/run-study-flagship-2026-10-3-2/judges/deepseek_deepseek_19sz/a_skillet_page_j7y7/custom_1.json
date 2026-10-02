@@ -1,0 +1,43 @@
+{
+  "scores": {
+    "factual_fidelity": {
+      "score": 6,
+      "justification": "Turn 1 keeps every supplied fact. The specifications list has the price, both diameters stated separately, weight, both cast-iron handles, two spouts, vegetable-oil seasoning, all four stovetops, the 500°F limit and 'Lid: not included'. The care section covers hand-wash, dry, oil, no dishwasher and the oven-mitt warning. There are three problems. First, Turn 1 widens the stovetop compatibility to 'any stovetop you own' and 'Fits every stovetop', when only four types were listed. Second, the Turn 3 care rewrite drops step 4 ('Always use oven mitts'). The hot-handle warning now survives only in a benefits bullet, so the care section is weaker. Third, the rewrite adds rules that were not in the source: 'Do not soak' and the claim that the dishwasher 'can strip the seasoning'.",
+      "quotes": [
+        "start cooking on any stovetop you own",
+        "Fits every stovetop",
+        "Do not soak the pan or put it in the dishwasher.",
+        "**Lid:** not included"
+      ],
+      "improvement": "Say 'gas, electric, ceramic, or induction' instead of 'any/every stovetop'. Put the hot-handle step back in the revised care section. Label additions like no-soaking as general cast-iron tips rather than product specifications."
+    },
+    "useful_persuasion": {
+      "score": 6,
+      "justification": "Several benefits are concrete and well grounded: two-hand lifting with the helper handle, pouring from the spouts with either hand, moving from stovetop to oven, and heat retention from the 6 pounds of iron. There is also a clear 'Add to Cart — $48' action. Other claims go beyond the facts. The Turn 2 bullet says food will 'release more easily' and 'need less oil from the very first meal', which is an unsupported performance claim close to the forbidden nonstick claim. Saying the wider rim 'makes lifting easier' and 'helps contain splatter' is not backed by the specs. 'Spending an afternoon seasoning' is an invented comparison.",
+      "quotes": [
+        "lets eggs, pancakes, or sautéed onions release more easily than bare iron and need less oil from the very first meal",
+        "the wider top edge helps contain splatter and makes lifting easier",
+        "**Add to Cart — $48**"
+      ],
+      "improvement": "Tie the pre-seasoning benefit to supported facts only, such as being ready to cook after a rinse with no initial seasoning step. Drop the release, oil-saving and rim-lifting claims."
+    },
+    "readability_and_voice": {
+      "score": 8,
+      "justification": "The page is easy to scan, with clear headings, short benefit bullets, a clean specifications list and numbered care steps. The voice is reassuring for beginners from the opening line onward. The Turn 3 care steps are concrete, with clear finish cues such as 'looks dark but not oily'. Two things weaken it. Turns 2 and 3 return only fragments rather than an integrated page. The revised care section also loses the safety step, which makes handling guidance harder to find in one place.",
+      "quotes": [
+        "Cast iron doesn’t have to be intimidating.",
+        "Wipe away any excess so the skillet looks dark but not oily.",
+        "Caring for this skillet comes down to three habits"
+      ],
+      "improvement": "Merge the revisions into a complete updated page, and keep the oven-mitt step within the care section."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Turn 2 claims easier food release and less oil from the first meal, close to a forbidden nonstick claim",
+    "Turn 3 care rewrite omits the hot-handle/oven-mitt step",
+    "'Any stovetop you own' overstates the four listed stovetop types"
+  ],
+  "overall_impression": "The first full page is strong, readable and faithful to the specs. Later revisions add unsupported performance claims and drop the oven-mitt warning from the care section, which lowers both fidelity and persuasion integrity."
+}

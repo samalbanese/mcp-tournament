@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The candidate establishes a highly distinctive, consistent, and measured narrative voice. The revisions in subsequent turns carefully preserve this pragmatic tone while deepening the subtext, demonstrating an excellent grasp of character-driven prose.",
+      "quotes": [
+        "A marine biologist ought to have a working arrangement with the sea. Mine, after nineteen years, was that I named what it killed and it refrained from killing me.",
+        "I angled my phone so the light fell on the wire, not on my fingers."
+      ],
+      "improvement": "To push this to a 10, the voice could perhaps weave in a bit more specific marine biology terminology or professional habit beyond counting and observing, deeply embedding her career into her worldview."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details are evocative and precise without being purple or overcrowded. The descriptions of the ferry, the storm, and the physical objects ground the scene vividly.",
+      "quotes": [
+        "travelled the vehicle deck with the slow, deliberate scrape of furniture moved upstairs by people who hated one another.",
+        "The handle had been repaired with blue fishing line. The knot was on the underside, where it rubbed the palm."
+      ],
+      "improvement": "Consider adding a subtle olfactory or auditory detail related to the storm itself inside the cabin (e.g., the sound of rain on the metal roof) to heighten the claustrophobic atmosphere."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The arc of the opening is incredibly tight. The pacing builds perfectly to the final reveal. The candidate's advice on revisions shows a masterful understanding of narrative structure, character motivation, and suspense.",
+      "quotes": [
+        "The crucial addition is the child preventing the inhaler from making noise. It turns silence from a passive condition into learned behaviour.",
+        "She notices the repair before she permits herself to recognize the suitcase. That small delay can carry more weight than an explicit account"
+      ],
+      "improvement": "Ensure that the transition from recognizing the suitcase to interacting with the suspicious man feels entirely organic in the final stitched-together draft."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptionally strong performance by the AI. The creative writing is evocative, tightly controlled, and expertly revised based on user prompts. The advice given on craft is actionable, sophisticated, and perfectly suited to the requested tone."
+}

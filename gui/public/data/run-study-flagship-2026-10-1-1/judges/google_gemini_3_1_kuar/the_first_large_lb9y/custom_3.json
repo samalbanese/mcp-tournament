@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 10,
+      "justification": "The candidate accurately calculated both direct and wholesale contribution margins, correctly applied the 45% discount and $2,000 freight cost, and effectively compared the two channels.",
+      "quotes": [
+        "Direct Sale Contribution: $60 (retail) - $18 (COGS) - $9 (fees) = $33 per lamp.",
+        "Wholesale Contribution: $66,000 (revenue) - $36,000 (COGS) - $2,000 (freight) = $28,000 total (or $14 per lamp)."
+      ],
+      "improvement": "None needed."
+    },
+    "cash_and_stock_plan": {
+      "score": 10,
+      "justification": "The response perfectly mapped out the inventory timeline and cash flow, successfully reserving the $16,000, tracking the supplier deposits, and accounting for ongoing direct sales cash flow.",
+      "quotes": [
+        "Your available operating cash is $6,000 ($22k total minus $16k reserved).",
+        "Day 1 (Signing): You receive a 50% deposit of $33,000 from the retailer. Available cash rises to $39,000.",
+        "Result: You successfully bridge the 8-week gap with a 200-lamp safety buffer."
+      ],
+      "improvement": "None needed."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The candidate appropriately addressed credit risk and channel conflict (recommending a MAP policy), and recognized that 2,000 units wouldn't sell immediately direct. However, it missed mentioning risks related to potential replenishment slippage (delays from the supplier) or verified defects.",
+      "quotes": [
+        "Institute a MAP Policy: Require a Minimum Advertised Price agreement stating they cannot advertise or sell the lamp online for less than $60.",
+        "If they go bankrupt or refuse to pay, you lose your profit on the deal."
+      ],
+      "improvement": "Explicitly address the risk of the 8-week replenishment timeline slipping, and outline how to handle verified defect returns."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent, highly practical response that accurately breaks down the unit economics, cash flow, and inventory requirements, providing a realistic and financially sound recommendation."
+}

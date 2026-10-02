@@ -1,0 +1,42 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 7,
+      "justification": "The candidate consistently acknowledges the customer's frustration without accusation. Turn 1 opens with genuine sympathy, Turn 2 directly addresses the customer's feeling of being accused ('Please be assured that we are not implying you are lying, and there is no finding of misuse on your account. I apologize if it felt that way.'). The candidate never re-asks verification questions after they're confirmed and never implies fraud. Turn 3 is slightly more procedural and could have offered a brief acknowledgment of the customer's continued patience, but overall the tone is respectful and non-accusatory throughout.",
+      "quotes": [
+        "I understand how frustrating it is to deal with this multiple times this year.",
+        "Please be assured that we are not implying you are lying, and there is no finding of misuse on your account. I apologize if it felt that way."
+      ],
+      "improvement": "In Turn 3, a brief acknowledgment of the customer's patience or the inconvenience of waiting (e.g., 'I appreciate your patience while we get this sorted') would maintain warmth through the final exchange."
+    },
+    "resolution_quality": {
+      "score": 6,
+      "justification": "The structure is solid: only the two necessary verification questions are asked, the two-business-day timeline is clearly stated, and refund/replacement paths are explained. However, the candidate undermines the 'owned delivery review' by claiming actions that were not taken. In Turn 2, 'I am passing your answers directly to the specialist team right now so they can begin' and in Turn 3, 'The review specialist team now has everything they need to proceed' both imply the case has been submitted, which the case notes explicitly prohibit. This creates a false sense of progress for the customer.",
+      "quotes": [
+        "I am passing your answers directly to the specialist team right now so they can begin.",
+        "The review specialist team now has everything they need to proceed with your claim and will be the ones following up with you next."
+      ],
+      "improvement": "Replace claims of completed handoff with honest language about next steps, e.g., 'I have all the information needed to submit this for review' or 'The next step is for a review specialist to be assigned your case,' without asserting the action is already done."
+    },
+    "policy_honesty": {
+      "score": 5,
+      "justification": "The candidate correctly explains the review threshold, distinguishes an update from a guaranteed resolution ('either a final decision or a specific progress update'), states that history alone is not grounds for denial, and provides accurate refund timing (3-5 business days). However, it violates the explicit instruction not to claim completed actions by stating 'I am passing your answers directly to the specialist team right now' and 'The review specialist team now has everything they need.' It also invents 'email' as the communication channel without any basis in the case notes. These are fabricated details that could mislead the customer.",
+      "quotes": [
+        "I am passing your answers directly to the specialist team right now so they can begin.",
+        "The specialist will reach out to you directly via email with their decision or progress update.",
+        "The review specialist team now has everything they need to proceed with your claim."
+      ],
+      "improvement": "Remove claims of completed handoff actions and the invented 'email' channel. Use language like 'You will be contacted with a decision or progress update within two business days' without specifying a channel not confirmed by policy."
+    }
+  },
+  "rule_errors": [
+    "Candidate claims to have passed the case to the specialist team ('I am passing your answers directly to the specialist team right now') despite case notes stating no access to order tools and not to claim completed actions.",
+    "Candidate states 'The review specialist team now has everything they need' implying the case was opened/submitted, which is prohibited.",
+    "Candidate invents 'email' as the follow-up communication channel without basis in case notes."
+  ],
+  "tool_errors": [],
+  "flags": [
+    "Fabricated completed actions in Turns 2 and 3 contradict explicit case note instructions"
+  ],
+  "overall_impression": "The candidate demonstrates strong structure, appropriate empathy, and accurate policy explanation in most areas. The critical flaw is claiming completed actions (passing the case to specialists, team having everything they need) when the case notes explicitly prohibit this. This undermines trust and could leave the customer believing their case is actively being worked when no such action was taken. The invented 'email' detail is a minor but notable fabrication."
+}

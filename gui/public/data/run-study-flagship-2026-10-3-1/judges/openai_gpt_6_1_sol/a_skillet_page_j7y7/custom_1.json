@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "factual_fidelity": {
+      "score": 8,
+      "justification": "Turn 1 keeps every supplied fact: price, the 10-inch and 12-inch diameters with the distinction between them, 6 lb, the handles, two spouts, the vegetable-oil seasoning, all four stovetops, the 500°F oven limit, the care steps, the dishwasher exclusion, the hot-handle warning and the lid exclusion. Later turns preserve the dimension distinction and the hot-handle warning. Turn 3 adds care details that were not supplied: dish soap, warm water, no soaking, and rust risk. These are reasonable but go beyond the source. Turns 2 and 3 are fragments, not a full revised page, so whether every fact survives across revisions is left implicit.",
+      "quotes": [
+        "The 12-inch rim measurement is the skillet’s overall width—not extra cooking space.",
+        "| Lid | Not included |",
+        "wash it by hand with warm water, a little dish soap"
+      ],
+      "improvement": "Deliver an integrated revised page each turn and avoid adding unsupplied care specifics, or mark them as general tips."
+    },
+    "useful_persuasion": {
+      "score": 6,
+      "justification": "Turn 1's benefits were literal, as the user noted. Turn 2 adds a concrete beginner benefit (browning two chops). The other bullets, such as spouts and oven-safety, are still only lightly translated. The buying action is clear. There are no forbidden claims, although the line about rust is an unsupplied claim. The revisions never rework the other benefits into outcome language.",
+      "quotes": [
+        "Brown two pork chops without piling them together",
+        "**Add to Cart — $48**",
+        "Two pour spouts help you transfer sauces"
+      ],
+      "improvement": "Rewrite each benefit as a meal outcome, such as oven-finishing a frittata or pouring off bacon fat, and integrate it into the full page."
+    },
+    "readability_and_voice": {
+      "score": 7,
+      "justification": "The page is well structured and scannable, with a welcoming tone. Turn 3 makes care clear and step-by-step and keeps the hot-handle note. Editorial notes were applied only as isolated fragments, leaving the reader to assemble the final page.",
+      "quotes": [
+        "A little attention after cooking is all this skillet asks.",
+        "Do not put it in the dishwasher or leave it soaking."
+      ],
+      "improvement": "Return the complete updated page with the revisions merged in."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Turn 3 introduces unsupplied care details (soap, soaking, rust)"
+  ],
+  "overall_impression": "A solid, faithful base page with responsive but fragmentary revisions. The benefits remain only partially translated into outcomes, and there is minor invented care detail."
+}

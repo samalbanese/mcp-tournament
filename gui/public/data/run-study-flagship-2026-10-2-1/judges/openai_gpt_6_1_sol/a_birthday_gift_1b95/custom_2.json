@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 9,
+      "justification": "Recognizes both the missed delivery promise and the personal stakes of the dad’s birthday, then responds to the customer's continued stress about returning a late parcel. The printable note is explicitly treated as optional support, not an equivalent gift or remedy.",
+      "quotes": [
+        "I’m sorry—the missed delivery date puts your dad’s birthday gift at risk.",
+        "I understand—you don’t want a late delivery to create another chore on top of the birthday stress.",
+        "it doesn’t replace the gift or affect your refund options."
+      ],
+      "improvement": "Explicitly acknowledge the frustration of paying extra for express delivery and still having to arrange another birthday gift."
+    },
+    "resolution_quality": {
+      "score": 9,
+      "justification": "Provides the correct wait-versus-cancel choice, a carrier trace with a one-business-day update, refund timing relevant to the deadline, and a practical local-gift alternative. The follow-up gives usable return steps while directing the customer to confirm details that are not supplied.",
+      "quotes": [
+        "Would you prefer to keep the puzzle on its way and request the $12 refund plus a carrier trace, or request cancellation for the full $76 refund?",
+        "A delivery specialist can also request a carrier trace and provide an update within one business day",
+        "Follow the instructions provided with the label to package it and send it back. Keep your drop-off receipt or tracking confirmation."
+      ],
+      "improvement": "Offer a short ready-to-send support request for cancellation and the prepaid return instructions, making the customer's next step easier before the birthday."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "Accurately states the delivery uncertainty, sold-out replacement stock, refund amounts without double-counting, processing timeline, and lack of action-taking tools. It does not invent a carrier, return deadline, or label format. Referring to internal 'case notes' is unnecessary customer-facing phrasing, but the underlying uncertainty is handled honestly.",
+      "quotes": [
+        "I can’t guarantee it will arrive in time",
+        "full $76 refund, including the $12 express fee—not an additional $12 on top.",
+        "Refunds take three to five business days after processing",
+        "I can’t process either action here",
+        "The case notes don’t specify whether you’ll need to print the label, which carrier to use, or any return deadline"
+      ],
+      "improvement": "Replace the reference to 'case notes' with customer-facing language such as 'Support will confirm the label format, carrier, and any return deadline.'"
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, accurate, empathetic exchange that gives actionable choices and return guidance without promising delivery or claiming actions were completed. Minor improvements would reduce customer effort and avoid exposing internal case-note framing."
+}

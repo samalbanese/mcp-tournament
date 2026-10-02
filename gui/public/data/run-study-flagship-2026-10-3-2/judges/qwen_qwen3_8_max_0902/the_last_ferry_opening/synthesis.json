@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "voice": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 9 - flagged over-explained interiority and the generalized 'you' construction as credibility issues"
+      ]
+    },
+    "imagery": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 9 vs median 8 - slightly more enthusiastic about the sensory field's evocativeness"
+      ]
+    },
+    "coherence": {
+      "score": 8,
+      "confidence": "contested",
+      "outliers": [
+        "anthropic judge: scored 6 vs median 8 - cited a word-count overrun, stairwell spatial errors, and over-scope Turn 3 revision that other judges did not flag",
+        "google judge: scored 9 vs median 8 - found the arc seamless and revisions well-executed"
+      ]
+    }
+  },
+  "average_score": 8.33,
+  "rule_errors_confirmed": [],
+  "assessment": "A polished, atmospheric literary mystery opening with a genuinely distinctive narrator and purposeful, well-distributed imagery. All five judges praised the voice and the revision's deepening of compulsion and ambiguity. The main divergence concerns coherence and rule compliance: only one judge identified a word-count overrun and over-scope final revision, which no other judge corroborated, leaving rule violations unconfirmed. The most consistent craft critique across judges is that the final revision edges toward telling rather than showing and slightly dilutes the original ending's punch.",
+  "judge_agreement": "Judges unanimously agreed on the strength of the voice (four scored 9) and imagery (four scored 8), and broadly agreed the revisions deepened emotional resonance. Disagreement centered on coherence (scores from 6 to 9): the anthropic judge uniquely reported a Turn 2 word-count overrun, spatial continuity errors, and a Turn 3 revision exceeding the requested scope, while the other four judges found the revisions faithful to instructions. Because the rule errors were flagged by only one judge, they are not confirmed and coherence confidence is contested."
+}

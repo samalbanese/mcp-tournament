@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator has a specific, consistent perspective that blends wry detachment, scientific habit, and unresolved grief into a distinctive voice. The prose feels authored rather than generic, and the later revisions deepen that voice instead of flattening it.",
+      "quotes": [
+        "The ferry was called the Margaret Rose, which is the kind of name you give a boat when you want God to feel guilty about sinking it.",
+        "I am a scientist. I know about confirmation bias. I have written that phrase in the margins of graduate students' papers in red ink.",
+        "I was very good at deciding. My hands were not."
+      ],
+      "improvement": "Some of the later explanatory commentary slips into a more essayistic register; a final clean, fully integrated draft would preserve the narrator's ironic compression throughout without the meta-analysis interrupting it."
+    },
+    "imagery": {
+      "score": 9,
+      "justification": "Sensory details make the ferry, storm, and emotional tension vivid and specific. The imagery is precise, physical, and consistently tied to the narrator's observational training without overcrowding the prose.",
+      "quotes": [
+        "The diesel smell pooled there, thick and sweet, and every time the hull came down off a swell the glass shuddered in its rubber gasket like something trying to remember how to breathe.",
+        "The rain wasn't falling so much as moving sideways, in sheets, the way schools of herring turn all at once, one mind and no mind.",
+        "It was heavier than it should have been. It was heavier than an empty thing."
+      ],
+      "improvement": "A few images, such as the sea closing 'like a fist,' are vivid but familiar; replacing any stock figurative turns with more surprising, marine-biology-inflected comparisons would keep the imagery uniformly fresh."
+    },
+    "coherence": {
+      "score": 9,
+      "justification": "The opening establishes a clear arc: the narrator's burnout and counting habit are introduced, the suitcase becomes a concrete clue, the second set of initials raises the stakes, and the revised ending turns passive observation into irreversible action. Revisions connect trauma and motivation convincingly.",
+      "quotes": [
+        "She promised not to count anything for six months and was counting within minutes. Counting is how she controls things: if you can quantify a disaster, you can survive it.",
+        "I hauled the suitcase against my chest. It was heavier than it should have been.",
+        "I turned to face the fourteen of them, and for the first time in six months, I let myself count."
+      ],
+      "improvement": "The final turn would cohere even more strongly if the field knife were subtly foreshadowed earlier in the opening, and if the ending were delivered as one integrated draft rather than as a fragment with explanatory commentary."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong literary opening with a distinctive voice, sharply sensed storm atmosphere, and a genuinely compelling final turn. The revisions effectively deepen the protagonist's psychology and convert her burnout into action, though the final response would benefit from presenting one clean, complete draft."
+}

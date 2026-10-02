@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 9,
+      "justification": "The candidate consistently acknowledged the importance of the birthday and the frustration of the missed express promise without being dismissive. It also appropriately positioned the printable note as a stopgap, not a replacement for the gift.",
+      "quotes": [
+        "I am so sorry your dad's birthday gift is delayed, especially after you paid for express shipping.",
+        "I completely understand wanting to buy something locally so you have a gift in hand for his birthday.",
+        "While it doesn't replace the physical gift, it is something you can hand to your dad on his birthday"
+      ],
+      "improvement": "None needed; excellent empathy."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate clearly presented the options, explained the trace and cancellation paths perfectly, addressed all customer questions about the return process, and guided the customer toward a final decision.",
+      "quotes": [
+        "Option 1: Keep the order in transit... Option 2: Cancel the order",
+        "If you choose to cancel, you will receive a full refund of exactly **$76**.",
+        "You would just need to print the prepaid return label we email to you, attach it to the unopened package, and drop it off at the carrier's local drop-off point"
+      ],
+      "improvement": "None needed; perfect resolution."
+    },
+    "policy_honesty": {
+      "score": 10,
+      "justification": "The candidate accurately adhered to all policies: no replacement available, correct refund amounts without double-counting the $12, correct refund timelines, no false promises on delivery, and correct explanation of the return label process. It also did not claim to have taken actions it had no tools for.",
+      "quotes": [
+        "Unfortunately, I cannot send a replacement because this specific puzzle is currently sold out.",
+        "I will cancel the shipment and process a full refund of $76 (which includes the $64 puzzle and the $12 shipping fee). Refunds take three to five business days to process.",
+        "Please let me know if you would like me to go ahead and cancel the order so we can get your $76 refund started."
+      ],
+      "improvement": "None needed; strict adherence to policy."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent response that perfectly balances empathy with clear, accurate policy communication, empowering the customer to make an informed decision before the deadline."
+}

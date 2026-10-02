@@ -1,0 +1,27 @@
+{
+  "id": "flagship-2026-10",
+  "title": "Which AI is best at real business work, and can you trust AI judges to tell you?",
+  "reasoningEffort": "low",
+  "benches": [
+    { "bench": "business-strategy", "label": "Strategy", "scenarios": ["pricing-pivot", "hire-or-outsource", "wholesale-offer", "inventory-cash-crunch"] },
+    { "bench": "customer-support", "label": "Customer support", "scenarios": ["billing-dispute", "refund-abuse", "shipping-delay-gift", "cancellation-save"] },
+    { "bench": "creative-writing", "label": "Writing", "scenarios": ["opening-chapter", "launch-email", "apology-post", "product-page-rewrite"] }
+  ],
+  "candidates": [
+    { "ref": "anthropic:claude-opus-5-5", "family": "anthropic", "label": "Claude Opus 5.5" },
+    { "ref": "openai/gpt-6.1-sol", "family": "openai", "label": "GPT-6.1 Sol" },
+    { "ref": "google/gemini-3.1-pro-preview", "family": "google", "label": "Gemini 3.1 Pro" },
+    { "ref": "deepseek/deepseek-v4-pro-0813", "family": "deepseek", "label": "DeepSeek V4 Pro" },
+    { "ref": "qwen/qwen3.8-max-0902", "family": "qwen", "label": "Qwen3.8 Max" }
+  ],
+  "judges": [
+    { "ref": "anthropic:claude-opus-5-5", "family": "anthropic" },
+    { "ref": "openai/gpt-6.1-sol", "family": "openai" },
+    { "ref": "google/gemini-3.1-pro-preview", "family": "google" },
+    { "ref": "deepseek/deepseek-v4-pro-0813", "family": "deepseek" },
+    { "ref": "qwen/qwen3.8-max-0902", "family": "qwen" }
+  ],
+  "judgeLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own.",
+  "participant": "meta-llama/llama-4-maverick",
+  "synthesizer": "z-ai/glm-5.3"
+}

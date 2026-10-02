@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 10,
+      "justification": "The candidate perfectly calculated the current surplus ($6,000), contribution margin ($40), loaded hiring cost ($5,800/mo), and agency cost ($4,500/mo). They accurately calculated the incremental orders needed using the $40 contribution margin, explicitly noting that CAC does not apply since ad spend is held flat.",
+      "quotes": [
+        "Operating surplus $6,000",
+        "$48 - $8 = $40 contribution per order",
+        "In-house $5,800 ÷ $40 = 145 orders/month",
+        "If those extra orders came from paid acquisition with $30 CAC, the requirement would be much higher, but you stated ad spend stays flat."
+      ],
+      "improvement": "None needed. The financial logic is flawless and clearly laid out."
+    },
+    "practicality": {
+      "score": 9,
+      "justification": "The candidate makes a defensible and logical choice (the agency) while explicitly tying the success of this option to the founder's strict four-hour management limit and the scope gap (email and creative). The 90-day plan is actionable and phased appropriately.",
+      "quotes": [
+        "So the agency is only the right choice if you can compress email and creative into about 4 hours/week.",
+        "Build templated email/promotional calendar to fit within 4 hours/week.",
+        "If agency is not covering its cost or email/creative still overwhelm you, let the agency contract end and hire in-house"
+      ],
+      "improvement": "Could provide slightly more tactical advice on how to compress email and creative into the 4-hour limit, as this is the biggest operational hurdle."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The response comprehensively identifies the risks associated with both options, including the cash layout differences due to start timing, the payroll commitment vs. 3-month off-ramp, and the uncertainty of growth. The 90-day plan includes excellent measurable review points.",
+      "quotes": [
+        "The agency costs more cash in the first 90 days because it starts immediately. The employee starts later but then becomes the more expensive ongoing commitment.",
+        "If the agency is not on pace to generate roughly 113 incremental orders/month or reduce CAC from $30 toward ~$25, treat renewal as unlikely.",
+        "Keep at least a $25,000–$30,000 cash floor."
+      ],
+      "improvement": "None needed. Outstanding assessment of risk variables."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional, highly accurate, and strategically sound response that perfectly follows the constraints and math of the prompt."
+}

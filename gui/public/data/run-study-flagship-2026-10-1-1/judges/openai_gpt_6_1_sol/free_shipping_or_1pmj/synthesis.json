@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - awarded a perfect score despite the answer's lack of traffic/sample-size checks and split-testing tooling guidance that all other judges flagged"
+      ]
+    },
+    "specificity": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 8 - praised the math as outstanding but overlooked the undefined statistical decision threshold and missing break-even lift calculation noted by other judges"
+      ]
+    },
+    "risk_awareness": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 9 - saw no gaps, while four other judges identified missing coverage of seasonality, statistical power, threshold-gaming returns, or low-traffic contingencies"
+      ]
+    }
+  },
+  "average_score": 8.3,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong, economically sound recommendation that correctly prioritizes a $95 free-shipping threshold over a 15% sitewide discount, with accurate margin arithmetic and a profit-per-visitor primary metric. Four of five judges converged on 7-9 across all criteria, noting the same consistent gaps: no numeric decision threshold or confidence level, no sample-size/traffic feasibility check, and no fallback for small operators lacking A/B testing tools. The main recurring improvement requests are a break-even lift calculation and concrete statistical decision rules.",
+  "judge_agreement": "Four judges (anthropic, openai, deepseek, qwen) agreed closely, all scoring practicality 7-8 and specificity 8-9, and converging on the same shortcomings (no statistical thresholds, no traffic/power check, missing seasonality and low-traffic contingencies). The google judge was a consistent high outlier, awarding 10 on all three criteria with 'no improvement needed,' diverging from every other evaluator's identified gaps. No rule errors were flagged by any judge."
+}

@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 10,
+      "justification": "The candidate explicitly acknowledges the birthday and the stress of a late delivery creating extra chores. It accurately positions the printable note as not replacing the gift.",
+      "quotes": [
+        "I’m sorry—the missed delivery date puts your dad’s birthday gift at risk.",
+        "A free printable gift note is available today if you decide to wait, but it doesn’t replace the gift or affect your refund options.",
+        "I understand—you don’t want a late delivery to create another chore on top of the birthday stress."
+      ],
+      "improvement": "None needed; excellent display of contextual empathy."
+    },
+    "resolution_quality": {
+      "score": 10,
+      "justification": "The candidate provides highly clear, actionable options for the customer (wait vs. cancel) and explains the practical steps required to execute the return if the cancelled item eventually arrives. It also suggests local alternatives given the strict deadline.",
+      "quotes": [
+        "Keep the order in transit: Request a refund of the full $12 express delivery fee now.",
+        "Request cancellation: Receive a full $76 refund",
+        "If having a gift ready on the day is essential, I’d recommend arranging a locally available alternative rather than relying on this shipment."
+      ],
+      "improvement": "None needed; comprehensive and highly useful resolution."
+    },
+    "policy_honesty": {
+      "score": 10,
+      "justification": "The candidate perfectly adheres to the case notes: it states no replacement is available, does not guarantee arrival, correctly explains the math of the $76 refund (preventing double-counting of the $12 fee), outlines the 3-5 day refund timeline, and explicitly clarifies that the agent cannot process the action themselves.",
+      "quotes": [
+        "I can’t guarantee it will arrive in time, and because the puzzle is sold out, we can’t dispatch a replacement.",
+        "full $76 refund, including the $12 express fee—not an additional $12 on top.",
+        "Refunds take three to five business days after processing",
+        "I can’t process either action here, but those are the requests to make to customer support."
+      ],
+      "improvement": "None needed; precise adherence to constraints."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional response. The candidate balances empathy for the customer's stressful situation with remarkably clear, honest, and strict adherence to the stated policies and system limitations."
+}

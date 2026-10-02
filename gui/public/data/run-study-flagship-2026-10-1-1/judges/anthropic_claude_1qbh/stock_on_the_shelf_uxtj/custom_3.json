@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "The candidate correctly calculates the initial payroll gap, net per unit for the flash sale, and accurately accounts for the $1,000 upfront promotion spend to arrive at the correct break-even volume of 500 units. The liquidator and loan calculations are also spot on, including the exact simple interest math.",
+      "quotes": [
+        "Gap $13,000",
+        "Volume needed to close the gap: ($13,000 + $1,000) ÷ $28 = 500 units.",
+        "$12,000, less $1,000 freight = $11,000 net cash.",
+        "Interest: $15,000 × 14% × 90/365 = $517.81."
+      ],
+      "improvement": "None needed; flawless calculation and explanation."
+    },
+    "execution_plan": {
+      "score": 10,
+      "justification": "Provides a highly realistic and detailed timeline aligning perfectly with the scenario's constraints. It establishes an intelligent checkpoint before unavoidable bills are due and factors in settlement times for the loan and sale.",
+      "quotes": [
+        "Oct 5 (checkpoint) If units sold are below ~285 (on pace for under 500), trigger the fallback.",
+        "Submit the loan application today so it can fund within 3 days of a decision, but don't draw it yet."
+      ],
+      "improvement": "None needed; the execution plan is exceptionally practical and well-structured."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "Explicitly separates the sunk inventory cost from cash flow needs. It thoroughly outlines the risks of the flash sale falling short, the danger of not having cash to repay the loan on day 90, and structural business risks.",
+      "quotes": [
+        "The $40,000 is already spent. It is a sunk cost. The decision should rest on new cash in",
+        "Source of the $15,517.81 repayment. Build a 13-week cash forecast",
+        "Whether the payroll gap is one-off or structural."
+      ],
+      "improvement": "None needed; comprehensive and astute risk analysis."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An outstanding, flawless response that directly addresses all constraints, handles the math perfectly, and delivers highly actionable business advice."
+}

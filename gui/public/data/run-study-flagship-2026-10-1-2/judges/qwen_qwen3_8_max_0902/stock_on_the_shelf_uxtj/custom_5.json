@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "All calculations are verified correct: payroll gap of $13,000 ($6,000 - $5,000 + $4,000 = $5,000 available vs. $18,000 payroll), flash sale net per unit ($28), minimum volume (500 units), liquidator net ($11,000 after $1,000 freight), loan interest ($517.81), cash received ($14,700), total repayment ($15,517.81), and total financing cost ($817.81). The combined-plan projections at each volume tier are also arithmetically correct.",
+      "quotes": [
+        "Interest = $15,000 × 0.14 × (90 ÷ 365) = $517.81",
+        "($13,000 + $1,000) / $28 = 500 units",
+        "Purchase price (30% × $40,000 cost) = $12,000; Freight at pickup = –$1,000; Net new cash (day 5) = $11,000"
+      ],
+      "improvement": "The statement 'At the high estimate you nearly self-fund the repayment from the surplus' slightly understates the situation—at 600 units the $17,500 surplus fully covers the $15,517.81 repayment with ~$1,982 to spare. Explicitly noting full coverage at the high end would be more precise."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "The timeline is well-structured with specific day-numbered actions, a clear decision gate on Day 8 in the fallback, and correct use of settlement times (loan day 3, liquidator day 5, flash sale settlement before payroll day 21). The plan does not treat forecast sales as guaranteed cash. However, the fallback has a tightness issue not fully addressed: if the loan is denied, after the $1,000 promotion spend only $5,000 remains—exactly the bill amount due on day 7—leaving zero liquidity until flash sale proceeds settle around day 7-10.",
+      "quotes": [
+        "Day 8: Decision gate: If units sold ≥ 500, payroll is covered—proceed. If < 500, immediately contact the liquidator",
+        "Day 3: Loan funds land: +$14,700",
+        "there are no advance orders, so you bear full volume risk"
+      ],
+      "improvement": "In the fallback scenario (loan denied), explicitly flag that after the $1,000 promotion spend only $5,000 remains—exactly matching the day-7 bills—so there is zero buffer if the flash sale settles even one day late. A contingency for that 2-3 day window (e.g., delaying the promotion spend or negotiating bill terms) would strengthen the plan."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "The response clearly separates sunk inventory cost from liquidity ('The $40,000 is sunk either way; the question is how much new cash you extract'), explicitly flags volume uncertainty, and provides an excellent section on what to verify before accepting the loan—including the critical point that no forecast beyond three weeks exists and the loan could convert a liquidity problem into a solvency problem. However, it does not discuss clearance damage to brand perception or the fate/valuation of the 1,400–1,650 unsold units remaining after a partial flash sale.",
+      "quotes": [
+        "The $40,000 is sunk either way; the question is how much new cash you extract",
+        "If you cannot, the loan converts a liquidity problem into a solvency problem",
+        "500 sits inside the 350–600 range but is not guaranteed. There are no advance orders, so you bear full volume risk"
+      ],
+      "improvement": "Address the residual inventory risk: after a flash sale of 350–600 units, 1,400–1,650 units remain at $20 book value with no stated plan. Discuss whether the clearance pricing damages the brand or the realizability of remaining stock, and what the fallback is for those units if they remain slow-moving past the season."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-organized response with accurate arithmetic throughout, a sensible combined primary plan with clear decision gates, and good risk framing. The main gaps are a minor understatement of the high-end surplus coverage, an unaddressed zero-buffer window in the fallback, and insufficient discussion of residual inventory and brand-damage risks from clearance pricing."
+}

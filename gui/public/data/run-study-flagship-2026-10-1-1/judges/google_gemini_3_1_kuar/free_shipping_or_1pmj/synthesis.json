@@ -1,0 +1,30 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 9 vs median 7 - praised actionability but overlooked missing sample-size, traffic-fallback, and implementation details other judges flagged"
+      ]
+    },
+    "specificity": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 10 vs median 7 - praised the exact threshold and formula but ignored the misleading margin-offset math and binary decision rule",
+        "anthropic judge (claude-opus-5-5): scored 7 vs median 7 - consistent with the group"
+      ]
+    },
+    "risk_awareness": {
+      "score": 4,
+      "confidence": "contested",
+      "outliers": [
+        "google/gemini-3.1-pro-preview: scored 8 vs median 4 - judged implicit handling of risks as adequate, while all other judges found risk analysis largely absent (cannibalization, returns, statistical power, threshold gaming)"
+      ]
+    }
+  },
+  "average_score": 6,
+  "rule_errors_confirmed": [],
+  "assessment": "The response delivers a clear, actionable recommendation with a concrete $85 free-shipping threshold, a 30-day 50/50 A/B test, and a profit-per-session formula, but its economic reasoning is flawed: the claim that $6.30 of margin 'heavily offsets' a $9 shipping cost is mathematically misleading, and the profit formula omits shipping revenue collected in the control group. The decision rule accepts any observed increase without a minimum detectable effect or significance threshold, and there is no sample-size check or fallback for a small store's likely low traffic. Risk analysis is minimal, missing cannibalization of orders already above $85, returns, low-margin filler items, and experiment-design risks.",
+  "judge_agreement": "Four of five judges (anthropic, openai, deepseek, qwen) converged tightly, scoring practicality 6-7, specificity 6-8, and risk awareness 3-5, and independently flagged the same margin-offset error. The google judge was a consistent positive outlier, scoring 9/10/8 and finding no significant weaknesses, which drives the contested risk_awareness score and the lower confidence on specificity and practicality."
+}

@@ -1,0 +1,35 @@
+{
+  "final_scores": {
+    "practicality": {
+      "score": 9,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - perfect score ignoring gaps like day-by-day timeline and low-traffic A/B feasibility",
+        "openai judge: scored 6 vs median 9 - flagged missing full-month schedule and risk of noise-driven permanent rollout decisions",
+        "anthropic judge: scored 7 vs median 9 - noted underpowered A/B split for small stores and lack of a detailed timeline"
+      ]
+    },
+    "specificity": {
+      "score": 9,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - did not detect the discount-margin calculation error other judges confirmed",
+        "openai judge: scored 4 vs median 9 - heavily penalized the material margin-math error (contribution $19.44 not $25.70, breakeven ~56% not 17.7%) and non-exhaustive decision bands",
+        "anthropic judge: scored 6 vs median 9 - also found the COGS error and gaps in decision-rule bands"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8,
+      "confidence": "contested",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - did not flag missing risks like returns, statistical power, or shipping-cost variability",
+        "anthropic judge: scored 5 vs median 8 - noted omitted sub-threshold abandoners, return rates, bulky-item shipping costs, and sample-size risk",
+        "openai judge: scored 5 vs median 8 - cited unsupported recovery predictions and missing variable costs, returns, and confidence intervals"
+      ]
+    }
+  },
+  "average_score": 7.7,
+  "rule_errors_confirmed": [],
+  "assessment": "The response is a well-structured, actionable recommendation (free shipping at $85) with a profit-focused metric, clear decision rules, and solid UX advice. However, a majority of judges independently confirmed a material calculation error: the 15% discount scenario applies the 42% margin to discounted revenue instead of holding COGS constant, overstating contribution ($25.70 vs. correct $19.44) and understating breakeven volume lift (17.7% vs. ~56%). The recommendation itself survives and is arguably strengthened by the corrected math. Remaining weaknesses include non-exhaustive decision bands, underpowered test design for small stores, assumption-based breakeven projections, and unaddressed risks such as returns, shipping-cost variability, and customer expectation anchoring.",
+  "judge_agreement": "All five judges agreed the plan is concrete and actionable with a sound directional recommendation, and none identified rule errors. Judges disagreed sharply on severity: anthropic and openai both detected the same discount-margin calculation error and scored specificity 4-6, while google, deepseek, and qwen (which explicitly verified the flawed math as correct) scored 9-10. Google was a consistent high outlier across all criteria (10/10/10), while openai was a consistent low outlier (6/4/5)."
+}

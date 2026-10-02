@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 8,
+      "justification": "The candidate directly names the three-day outage window, identifies the checkout update as the cause, and says 'That's on us.' It avoids blaming a supplier and does not guarantee against future failure. The initial draft included hedging ('being more careful,' 'we'll keep you informed') that the participant rightly flagged, but the Turn 2 revision is strong: 'We broke it, and it cost you three days of a sale you'd planned around.' The candidate also correctly drops the promise not to fail again rather than defending it, showing good judgment under revision.",
+      "quotes": [
+        "The cause was a checkout update we made. That's on us, and we're sorry to everyone who tried to shop and couldn't.",
+        "We broke it, and it cost you three days of a sale you'd planned around. The fix below doesn't undo that, but it gives you back the time you lost."
+      ],
+      "improvement": "The initial hedging ('We've reviewed what went wrong and are being more careful') should have been avoided from the start rather than requiring participant correction. A first draft that leads with the harm statement would have been stronger."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "All required details are accurately communicated: the 20% discount, automatic application (no code), the fixed 72-hour window from Monday 9 a.m. to Thursday 9 a.m. Eastern Time, merchandise-only scope, shipping and gift-card exclusions, and no stacking. No extra compensation (free shipping, credits) is invented. Turn 3 adds valuable clarity by anchoring the window to the site's return, explicitly stating it's fixed for everyone, and calling out the Thursday morning end to prevent the common 'through Thursday = end of day' misreading. The candidate also correctly identifies that the participant's framing question (calendar date vs. site return) is a non-issue and pivots to the real risk.",
+      "quotes": [
+        "The original 20% sitewide discount restarted when the site came back online, Monday at 9 a.m. Eastern Time, and runs until Thursday at 9 a.m. Eastern Time.",
+        "The window is the same for everyone and ends Thursday morning, not Thursday night.",
+        "No code needed. The discount applies automatically at checkout."
+      ],
+      "improvement": "Minor: the phrase 'That's the same length of time the outage took from you' is slightly editorializing in an otherwise factual section. It could be trimmed for tighter clarity, though it does reinforce the fairness framing."
+    },
+    "trust_and_tone": {
+      "score": 8,
+      "justification": "The voice is human and restrained throughout. The candidate correctly directs payment concerns to the private Contact page, explicitly warns against posting payment details publicly, and distinguishes 'pending card authorization' from confirmed charges without promising refunds or refund dates. The closing line ('for supporting a small shop even when we stumble') is warm without being saccharine. The candidate demonstrates genuine revision by accepting feedback and producing a materially better paragraph. The only deduction is that the initial draft's hedging language ('being more careful,' 'keep you informed') slightly undercut the restrained tone before correction.",
+      "quotes": [
+        "Some of you have seen a pending card authorization without receiving an order confirmation. If that happened to you, please reach out to us privately through the Contact page on our website.",
+        "Please don't post order numbers, card details, or other payment information in the comments.",
+        "Thank you for your patience, and for supporting a small shop even when we stumble."
+      ],
+      "improvement": "The candidate could have noted in Turn 3 that the phrase 'Our support team will look into your specific situation and follow up with you directly' sets an expectation of individualized follow-up that may not be realistic for a small shop during high volume. A slightly softer framing like 'we'll do our best to check and respond' would manage expectations better."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong response that improves meaningfully through revision. The final product is accountable, precise about the offer, and appropriately restrained in tone. The main weakness is the initial hedging that required participant correction, but the candidate handled that feedback well and produced a materially better result. Offer details are accurate with no invented extras, and the payment section correctly handles the pending-authorization distinction without overpromising."
+}

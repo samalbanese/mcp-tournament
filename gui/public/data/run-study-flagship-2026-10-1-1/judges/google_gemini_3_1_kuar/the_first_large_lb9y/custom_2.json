@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 8,
+      "justification": "Correctly calculates the $33 wholesale price, $66,000 revenue, $28,000 contribution after freight, and $33 direct contribution. It also correctly separates cash from contribution by treating existing inventory as paid for when projecting collections. The five-month direct-sales comparison avoids assuming immediate sell-through, but it omits the explicit theoretical $66,000 direct contribution and $38,000 difference.",
+      "quotes": [
+        "Wholesale Contribution: $66,000 (revenue) - $36,000 (COGS) - $2,000 (freight) = **$28,000 total** (or **$14 per lamp**).",
+        "Because direct demand is only 400/month, it would take five months to sell 2,000 lamps directly.",
+        "Selling 800 lamps direct generates $51 in net cash per unit"
+      ],
+      "improvement": "Add the theoretical $66,000 contribution from 2,000 direct sales versus $28,000 wholesale, explaining that the $38,000 difference is not an immediate opportunity loss. Correct the default analysis: collecting only $33,000 produces a $5,000 wholesale contribution loss after $36,000 COGS and $2,000 freight."
+    },
+    "cash_and_stock_plan": {
+      "score": 7,
+      "justification": "The aggregate eight-week inventory and cash calculations are correct and preserve the $16,000 reserve. It correctly places the retailer balance after replenishment and shows that anticipated direct collections make the supplier balance affordable. However, the week-two inventory figure ignores 200 intervening direct sales, and the conclusion overstates what the deposit funds: the deposit alone is $5,000 short of total replenishment plus freight, although the initial $6,000 usable cash covers that gap.",
+      "quotes": [
+        "Week 2: Ship 2,000 lamps to retailer. (1,000 remain).",
+        "Week 8: 200 lamps remain in stock.",
+        "Available cash drops to $41,800.",
+        "The retailer’s initial $33,000 deposit fully funds the $18,000 supplier deposit and the $2,000 freight cost"
+      ],
+      "improvement": "Show 800 units remaining immediately after the week-two shipment and 2,200 after replenishment. Explicitly state that the deposit leaves $13,000 toward the $18,000 arrival balance; initial usable cash can cover the $5,000 gap, leaving $1,000 above reserve even without further collections. Make shipment and supplier ordering conditional on cleared deposit funds."
+    },
+    "risk_awareness": {
+      "score": 4,
+      "justification": "Identifies credit exposure and channel conflict and proposes references and shorter payment terms. However, it omits defect safeguards and replenishment-slippage mitigation, despite a buffer lasting only two weeks. Its default reassurance is inaccurate because the deposit does not cover all replacement and freight costs. It also conflates minimum advertised pricing with restrictions on actual selling prices and asserts no cannibalization too categorically.",
+      "quotes": [
+        "This deal does not cannibalize your direct sales; it stacks on top of them.",
+        "because the deposit covers your out-of-pocket replacement costs, you will not go out of business if they default",
+        "Require a Minimum Advertised Price agreement stating they cannot advertise or sell the lamp online for less than $60.",
+        "require them to submit trade references"
+      ],
+      "improvement": "Quantify the two-week stock buffer and specify a supplier-delay contingency, such as staged shipment or a smaller initial order. Define defect verification, claim deadlines, and remedies. Seek a larger deposit or balance before shipment, and distinguish lawful advertised-price policies from resale-price controls with legal review."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong core margin calculations and a broadly feasible base-case cash plan, but several overconfident claims and missing operational safeguards weaken the negotiation recommendation."
+}

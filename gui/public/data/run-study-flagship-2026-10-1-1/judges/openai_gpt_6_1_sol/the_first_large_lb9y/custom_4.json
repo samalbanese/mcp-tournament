@@ -1,0 +1,35 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 9,
+      "justification": "Correctly computes the wholesale price, $28,000 contribution after freight, direct contribution, and the $38,000 full-retail gap while noting that direct sales would take five months rather than being immediate lost sales.",
+      "quotes": [
+        "Wholesale totals: Revenue: 2,000 × $33 = $66,000... Contribution: $28,000",
+        "Selling 2,000 units directly would generate $66,000 of contribution, versus $28,000 wholesale—a $38,000 difference. But those direct sales would take five months at current demand"
+      ],
+      "improvement": "Could more explicitly label the $36,000 product cost as accounting contribution/cost of inventory already paid for while separating cash outflows for replenishment."
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "justification": "Tracks the 3,000 units through the 2,000-unit shipment and eight-week replenishment, leaves a 200-unit buffer, and correctly maps cash from the deposit, supplier deposits, freight, direct sales, and final payment while preserving the $16,000 reserve.",
+      "quotes": [
+        "Week 8, before replenishment: Stock remaining 200... Week 8, after replenishment: Receive 2,000",
+        "Even excluding all future direct-sale cash and the retailer’s balance, you would retain $1,000 above the reserve after paying those known commitments."
+      ],
+      "improvement": "Could present a week-by-week cash timeline rather than an aggregate direct-sale line, but the math is feasible and correct."
+    },
+    "risk_awareness": {
+      "score": 9,
+      "justification": "Addresses credit risk, replenishment timing, defect exposure, channel conflict, and stock commitment with concrete conditions such as 60% upfront, earlier final payment, credit checks, documented defect terms, and a 1,800-unit alternative.",
+      "quotes": [
+        "Credit: You expose yourself to a $33,000 unsecured receivable after delivery.",
+        "Channel conflict: The boutique could discount below your $60 direct price... Clarify intended channels, territory, and promotional plans"
+      ],
+      "improvement": "Could add more enforceable credit safeguards such as a letter of credit, personal guarantee, or credit insurance, and specify channel or promotional restrictions more concretely."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Excellent, accurate analysis; it correctly models unit economics, cash flow, and inventory through replenishment, with actionable negotiation recommendations and risk safeguards."
+}

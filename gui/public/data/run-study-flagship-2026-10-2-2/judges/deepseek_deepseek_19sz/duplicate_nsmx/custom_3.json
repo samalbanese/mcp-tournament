@@ -1,0 +1,36 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 9,
+      "justification": "The agent validates the customer's frustration naturally and directly without relying on canned apologies, and respects their urgency.",
+      "quotes": [
+        "You’re right—I shouldn’t make you jump through more hoops for our billing error.",
+        "I appreciate the pushback. Let me be specific."
+      ],
+      "improvement": "Consistently maintain this level of direct empathy from the very first turn."
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "The agent initially asked for unnecessary information, which caused friction, but recovered excellently by dropping the extra requirements, taking ownership, and providing concrete paths for both pending and posted scenarios.",
+      "quotes": [
+        "I can start with just the two transaction IDs. Please paste them here.",
+        "If it’s already posted, I’ll issue the refund today and give you a refund confirmation/reference number you can give your bank."
+      ],
+      "improvement": "Avoid asking for redundant verification information in the first turn when the customer has already stated they have the transaction IDs ready."
+    },
+    "policy_clarity": {
+      "score": 10,
+      "justification": "The agent explains the limitations of their system and bank processing times exceptionally well, specifically clarifying the difference between an account credit and actual bank funds.",
+      "quotes": [
+        "that credit does not put money back into your bank account. It does not fix a low bank balance caused by the duplicate charge.",
+        "If it’s pending, I can void it. A void releases the bank hold faster than a refund",
+        "No, I can’t guarantee the money will be back in your bank account by tomorrow morning. That depends on whether the charge is still pending or already posted"
+      ],
+      "improvement": "None needed; the explanation of policies and limitations is stellar."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An excellent handling of a tense customer service scenario. The agent initially stumbled by asking for too much info, but recovered perfectly with direct, honest, and highly clear communication."
+}

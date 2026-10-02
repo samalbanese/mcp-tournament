@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 9,
+      "justification": "Correctly separates product margin, per-order expenses, advertising, and fixed overhead; calculates the $6,000 surplus, both options' costs, remaining surplus, and incremental order requirements without double-counting CAC. The ad-efficiency calculations and downside scenario are also correct. Minor limitations are calling first-order contribution 'profit' and presenting approximate 90-day cash figures that do not precisely reflect start dates or distinguish agency payments from its full contractual commitment.",
+      "quotes": [
+        "Contribution per order: $80 × 60% – $8 = $40",
+        "Extra orders to cover recurring cost ($40 each) | 5,800 ÷ 40 = 145/month (+9.7%) | 4,500 ÷ 40 = 113/month (+7.5%)",
+        "The $6,000 surplus is not cash in the bank."
+      ],
+      "improvement": "Label the $10 first-order amount as contribution after allocated acquisition cost, not profit. Show cash payments by actual start date separately from total contractual obligations, and clarify that higher AOV changes the assumed unit economics rather than producing extra orders."
+    },
+    "practicality": {
+      "score": 7,
+      "justification": "The employee recommendation is defensible because its scope addresses the founder's broader workload, and the answer provides a phased plan, bridge-period simplification, fallback, and conditional deferral. However, it does not budget recruiting, onboarding, and ongoing supervision within the four-hour limit. Its initial assertion that only the employee closes the gap depends on an invented, though disclosed, allocation of existing work. The proposed freelancer fallback has no cost estimate.",
+      "quotes": [
+        "I've assumed your 15 hours split roughly 6 on ads and 9 on email and creative.",
+        "Spend your 4 hours on two things only: keeping ads stable and running the existing email automations.",
+        "Choose neither if cash is needed elsewhere, such as an inventory buy.",
+        "Don't expect break-even yet. The hire will be only about 7 weeks in."
+      ],
+      "improvement": "Validate the actual ads/email/creative time split before committing, allocate the four weekly hours explicitly across recruiting, handoff, approvals, and supervision, and cost any bridge support. Make the hiring decision conditional on a short cash-flow forecast and a feasible onboarding workload."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Addresses thin ongoing surplus, a 10% order decline, agency lock-in, employee ramp, inventory cash needs, and uncertain repeat purchases and acquisition performance. It supplies measurable checkpoints without promising growth. The cash floor and continuation thresholds are not derived from operating obligations, and a CAC-only success trigger could approve continuation despite falling repeat orders or total contribution. Employee exit costs and operational disruption receive limited treatment.",
+      "quotes": [
+        "If orders fall 10% (150 orders × $40 = $6,000), your surplus drops to zero.",
+        "Repeat orders are not guaranteed.",
+        "On track: extra orders running at 75 or more a month, or CAC under about $27 → continue.",
+        "Declining or cash near the $20,000 floor: restructure the role or end it."
+      ],
+      "improvement": "Derive the reserve floor from upcoming inventory, payroll, taxes, and contractual commitments. Require stable total contribution and founder hours alongside CAC or order gains, and include termination costs and the time needed to restore marketing coverage in downside planning."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong financial analysis and a useful, conditional employee recommendation. The main weaknesses are an incompletely budgeted management workload and review thresholds that need stronger links to cash obligations and total business performance."
+}

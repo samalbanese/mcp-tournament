@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 7,
+      "justification": "The core offer is easy for a small store to launch: one threshold, cart messaging, and the current shipping fee below the threshold. The answer also gives a clear 30-day structure and a full contribution-profit formula. Three gaps make execution harder than it looks. A persistent 50/50 visitor split on shipping policy needs testing tooling that many small storefronts lack. The answer never checks whether the store's traffic can produce a readable result in 30 days, and it offers no fallback such as a time-based on/off test. It also never addresses customers seeing different shipping terms.",
+      "quotes": [
+        "Randomly split eligible visitors 50/50",
+        "Keep visitors in the same group on repeat visits.",
+        "Run for the full 30 days rather than stopping when early results look favorable."
+      ],
+      "improvement": "Add a quick sample-size or traffic sanity check, such as the minimum orders per arm needed to detect a given profit lift. Name a low-tech fallback for stores without split-testing tools, such as alternating weeks or a geo split. Give a week-by-week checklist covering setup, monitoring, and day-30 analysis."
+    },
+    "specificity": {
+      "score": 8,
+      "justification": "The answer uses the supplied numbers directly and correctly. It sets an exact $95 threshold, $23 (about 32%) above the $72 AOV. Its per-order profit table checks out: $30.24, $39.90, and $19.44 merchandise gross profit. It defines a precise primary metric (contribution profit per visitor across all exposed visitors), lists secondary metrics, and states a decision rule. However, the decision rule has no numeric bar: no minimum lift and no confidence level. The answer also never calculates the 38% abandonment problem in dollars or the break-even conversion lift needed to cover the shipping subsidy.",
+      "quotes": [
+        "Free standard shipping on orders $95+.",
+        "You're $23 away from free shipping.",
+        "Keep the offer only if contribution profit per visitor rises—not merely revenue or conversion."
+      ],
+      "improvement": "Compute the break-even point, for example how much conversion or AOV lift covers $9 on qualifying orders. Make the decision rule numeric, such as 'adopt if contribution profit per visitor is up at least $X with 90% confidence.' Explain how $95 was chosen relative to the store's AOV distribution, or suggest checking what share of current orders already exceed $95."
+    },
+    "risk_awareness": {
+      "score": 7,
+      "justification": "The answer covers several real risks. It flags margin leakage to customers already ordering above $95 and to buyers who would have purchased anyway. It warns that add-on items may carry lower margins than the 42% average. It addresses returns and cancellations with an expected-return reserve. On experiment design, it covers persistent assignment, holding ads and prices constant, avoiding early stopping, and calling small differences inconclusive. Several risks are missing. It does not mention threshold-gaming, where customers pad an order to $95 and then return the add-on. It does not cover seasonality or holiday effects within the 30-day window, low statistical power for a small store, or customer complaints about unequal shipping terms. It also never discusses the risk of not testing the 15% discount at all.",
+      "quotes": [
+        "Customers already ordering above $95 may simply stop paying shipping",
+        "add-on products may not have your average 42% margin",
+        "If the difference is small relative to normal variation, call the test inconclusive rather than a win."
+      ],
+      "improvement": "Add threshold-gaming returns as a tracked risk, measured as the return rate on orders just above $95. Note seasonality and how to adjust for it. Address power and sample size for small traffic. Suggest how to handle customer-service questions about seeing different offers."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "This is a strong, accurate, margin-aware recommendation with correct math, an exact offer, and a sound per-visitor contribution-profit metric. It falls short of exceptional because it has no break-even calculation, no numeric decision threshold, and no sample-size check, and it assumes A/B tooling a small operator may not have."
+}

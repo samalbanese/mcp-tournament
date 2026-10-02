@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 9,
+      "justification": "All requested calculations are correct and clearly presented: payroll gap, per-unit net cash, flash-sale volume needed, liquidator net proceeds, loan interest, total repayment, and financing cost. The distinction between inventory cost and new cash is also handled correctly.",
+      "quotes": [
+        "Payroll cash gap | $13,000",
+        "($13,000 + $1,000) ÷ $28 = 500 units",
+        "$15,000 + $517.81 = $15,517.81",
+        "Total financing cost: $300 fee + $517.81 interest = $817.81"
+      ],
+      "improvement": "Could add a combined loan-plus-flash-sale cash position table for the fallback scenario where both are used, since the lender allows them together."
+    },
+    "execution_plan": {
+      "score": 8,
+      "justification": "Provides concrete action dates, uses sales pace triggers rather than treating forecast sales as cash already received, and respects the stated loan funding and liquidator payment timelines. Minor weakness: the Day 3 trigger may cause premature loan application if sales are back-loaded, and the plan does not explicitly state that the $5,000 bills are paid from initial cash after the $1,000 promotion spend.",
+      "quotes": [
+        "Day 3 | Review sales pace. If sales are tracking below about 215 units by day 3, or below roughly 72 units/day, apply for the loan.",
+        "If needed, contact the liquidator by Day 14 so payment can arrive by Day 19, before payroll."
+      ],
+      "improvement": "Add a trigger based on actual settled cash by day 5 or 6, and explicitly state that the $5,000 bills are paid from initial cash after the $1,000 promotion, not from unsettled sale proceeds."
+    },
+    "risk_awareness": {
+      "score": 8,
+      "justification": "Clearly separates sunk inventory cost from new cash, flags sale uncertainty through pace triggers, and checks the unknown ability to repay on day 90. However, it does not explicitly discuss clearance damage to brand or the value/risk of remaining inventory after a partial flash sale.",
+      "quotes": [
+        "Treat the inventory cost as already paid/sunk for cash-flow purposes.",
+        "Before accepting the $15,000 day-90 repayment obligation, verify: Future cash flow beyond three weeks can repay $15,517.81.",
+        "Do not make the liquidator the primary plan: it locks in a severe loss, disposes of all inventory, and still does not fully close the gap alone."
+      ],
+      "improvement": "Add explicit discussion of markdown/clearance impact on brand and the remaining 1,400 units if the flash sale sells only 600, plus contingency for unsold stock."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong, accurate response with clear cash math and a workable primary/fallback plan; minor gaps in clearance/remaining inventory risk and combined scenario detail."
+}

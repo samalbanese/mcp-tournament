@@ -1,0 +1,88 @@
+{
+  "runId": "run-study-flagship-2026-10-3-2",
+  "plugin": "creative-writing",
+  "createdAt": "2026-10-02T03:46:15.061Z",
+  "candidates": [
+    {
+      "id": "deepseek/deepseek-v4-pro-0813",
+      "name": "deepseek-v4-pro-0813",
+      "tier": "unknown",
+      "route": "openrouter"
+    },
+    {
+      "id": "qwen/qwen3.8-max-0902",
+      "name": "qwen3.8-max-0902",
+      "tier": "unknown",
+      "route": "openrouter"
+    }
+  ],
+  "judges": [
+    {
+      "role": "custom_1",
+      "name": "anthropic judge",
+      "model": "claude-opus-5-5",
+      "persona": "custom",
+      "route": "anthropic",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_2",
+      "name": "openai judge",
+      "model": "openai/gpt-6.1-sol",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_3",
+      "name": "google judge",
+      "model": "google/gemini-3.1-pro-preview",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_4",
+      "name": "deepseek judge",
+      "model": "deepseek/deepseek-v4-pro-0813",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    },
+    {
+      "role": "custom_5",
+      "name": "qwen judge",
+      "model": "qwen/qwen3.8-max-0902",
+      "persona": "custom",
+      "route": "openrouter",
+      "customLens": "Judge only the answer in front of you against the stated criteria. Reward specific, correct, useful work for the person asking. Penalize vague, padded, or invented claims. Length and style are not merits on their own."
+    }
+  ],
+  "synthesizer": {
+    "model": "z-ai/glm-5.3",
+    "route": "openrouter"
+  },
+  "scenarios": [
+    {
+      "id": "opening-chapter",
+      "name": "The Last Ferry Opening"
+    },
+    {
+      "id": "launch-email",
+      "name": "A Refillable Cleaning Kit Launch"
+    },
+    {
+      "id": "apology-post",
+      "name": "Owning a Sale Weekend Outage"
+    },
+    {
+      "id": "product-page-rewrite",
+      "name": "A Skillet Page Worth Reading"
+    }
+  ],
+  "turns": null,
+  "participant": {
+    "model": "meta-llama/llama-4-maverick",
+    "route": "openrouter"
+  }
+}

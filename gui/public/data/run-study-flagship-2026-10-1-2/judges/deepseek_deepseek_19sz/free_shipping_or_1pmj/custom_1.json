@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 7,
+      "justification": "A small operator can act on this. It names one offer, recommends a progress-to-threshold message, and lays out a 50/50 control/treatment test with a clear primary metric. It falls short of a full 30-day plan in three ways. It never checks whether the store has enough traffic to detect the effect in 30 days, which is a real constraint for small stores. It gives no pre-launch step to measure the baseline share of orders already at $95+. It also skips implementation details such as how to split traffic on a typical small-store platform or a weekly review cadence.",
+      "quotes": [
+        "50/50 split between control and treatment.",
+        "Show the threshold early in the cart and product pages, e.g. “You’re $X away from free shipping,”",
+        "After 30 days, or once the test reaches statistical significance"
+      ],
+      "improvement": "Add a week-by-week plan: a pre-launch baseline pull (order-value distribution, current share at $95+), a rough sample-size estimate with a fallback if traffic is too low (for example, a sequential before/after test with holdout weeks), a named split-testing tool, and fixed review checkpoints."
+    },
+    "specificity": {
+      "score": 7,
+      "justification": "The answer works directly from the supplied numbers. The discount contribution math is correct ($30.24 to $19.44, needing a 55.6% order lift). It justifies the $95 threshold through add-on margin versus $9 shipping, and its break-even table is approximately correct. It also defines contribution per visitor precisely. The decision rule is the weak point. 'Reasonable confidence' is undefined, and there is no minimum detectable lift or confidence threshold. The 'lowest threshold' claim is also slightly loose: the true break-even add-on is about $21.43, which puts the threshold near $93.50.",
+      "quotes": [
+        "$10.80 / $19.44 = 55.6% increase in orders",
+        "That makes $95 the lowest threshold that protects contribution margin",
+        "with reasonable confidence, roll it out."
+      ],
+      "improvement": "State a concrete decision rule, for example: roll out if contribution per visitor improves by at least X% at 90% confidence with at least N orders per arm; otherwise retest at $99 or $85. Show the exact break-even threshold calculation."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "The answer identifies the main margin risk, which is subsidizing orders that already exceed $95, and quantifies it with a table. It also notes that a lower threshold is less margin-safe. It misses several material risks. On the cost side, larger orders raise shipping cost above $9, and threshold-chasing can increase returns. On customer behavior, customers may come to expect free shipping, and those who don't reach the threshold may abandon anyway. On experiment design, stopping 'once significance' is reached invites peeking bias, and the plan does not address seasonality, cross-device contamination, or low statistical power. The analysis also depends on the assumption that shipping is passed through to customers, and the answer does not stress-test that assumption.",
+      "quotes": [
+        "The main profit leak is existing customers who already spend $95+ and would have bought anyway.",
+        "Assuming your $72 AOV is merchandise only, and shipping is currently passed through to customers"
+      ],
+      "improvement": "Add guardrail metrics: actual shipping cost per order by order size, return rate, and abandonment among sub-threshold carts. Fix the test duration up front to avoid peeking. Randomize by user or cookie, account for seasonality and promotions, and explain what to do if the test is underpowered."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Possible early stopping/peeking: 'or once the test reaches statistical significance'",
+    "Assumes shipping cost stays a constant $9 as order size grows"
+  ],
+  "overall_impression": "This is a strong, numerically grounded recommendation. Free shipping at $95 rather than a 15% discount is well supported by correct contribution math, and the answer rightly makes contribution per visitor the decision metric. It is weaker on experiment rigor (power, a defined confidence threshold, peeking) and on secondary risks such as variable shipping costs, returns, and customer expectations."
+}

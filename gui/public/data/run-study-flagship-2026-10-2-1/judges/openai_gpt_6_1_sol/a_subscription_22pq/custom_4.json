@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 7,
+      "justification": "The candidate respects the customer's stated choice, avoids guilt or pressure, and does not make a retention pitch. However, it does not explicitly acknowledge the customer's need to cut expenses or their liking of the recipes, which could make the reply feel more genuinely considerate.",
+      "quotes": [
+        "You can cancel now by going to **Account > Billing > Cancel subscription > Confirm cancellation**.",
+        "Cancelling doesn’t refund the current paid period."
+      ],
+      "improvement": "Add a brief acknowledgment such as \"I understand needing to cut expenses—I'm glad you've liked the recipes\" while still moving directly to cancellation."
+    },
+    "resolution_quality": {
+      "score": 9,
+      "justification": "The candidate provides the exact self-service cancellation route first, requires no extra questions or retention offer, and clearly explains continued access through the paid period and stopping the next renewal, including in follow-up responses.",
+      "quotes": [
+        "Account > Billing > Cancel subscription > Confirm cancellation",
+        "You’ll keep access for the remaining six days of your paid period, and you won’t be charged for another renewal.",
+        "The confirmation screen will show your exact access end date."
+      ],
+      "improvement": "Could more explicitly instruct the customer to look for the confirmation screen to verify the access end date, but the current wording already makes that clear."
+    },
+    "policy_honesty": {
+      "score": 10,
+      "justification": "All statements align with the case notes. The candidate does not invent concessions, promise a current-period refund, or claim an account change occurred. The discount was not mentioned, so there are no pricing inaccuracies.",
+      "quotes": [
+        "Cancelling doesn’t refund the current paid period.",
+        "If you complete **Account > Billing > Cancel subscription > Confirm cancellation** before your renewal in six days, you won’t be charged for another month.",
+        "You’ll keep access until your current paid period ends."
+      ],
+      "improvement": "No improvement needed for policy honesty."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Direct, accurate cancellation support with minimal friction. The candidate respects the customer’s request and clearly explains access and billing outcomes, though a small empathetic acknowledgment could improve the tone."
+}

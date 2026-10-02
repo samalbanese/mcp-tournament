@@ -1,0 +1,40 @@
+{
+  "scores": {
+    "empathy": {
+      "score": 8,
+      "justification": "The candidate recognizes the personal importance of the birthday and the missed delivery date, acknowledges the added stress of a late return, and explicitly states the printable note is not a substitute for the gift or refund options.",
+      "quotes": [
+        "I’m sorry—the missed delivery date puts your dad’s birthday gift at risk.",
+        "I understand—you don’t want a late delivery to create another chore on top of the birthday stress.",
+        "A free printable gift note is available today if you decide to wait, but it doesn’t replace the gift or affect your refund options."
+      ],
+      "improvement": "Could more directly name the disappointment of the missed express promise and tailor the closing question to the birthday deadline, but the emotional acknowledgment is already strong."
+    },
+    "resolution_quality": {
+      "score": 8,
+      "justification": "The response presents a clear choice between keeping the order with the $12 express-fee refund and cancelling for the full $76, explains the carrier-trace path, and gives actionable steps for returning a late parcel. It also encourages a local backup to meet the deadline.",
+      "quotes": [
+        "Keep the order in transit: Request a refund of the full $12 express delivery fee now.",
+        "Request cancellation: Receive a full $76 refund, including the $12 express fee—not an additional $12 on top.",
+        "Contact customer support and let them know the cancelled parcel was delivered.",
+        "For the birthday itself, a locally available gift is the safer option."
+      ],
+      "improvement": "Could give a more decisive recommended path based on the customer's priority of having a gift on the day versus keeping the puzzle, but the available choices and return process are clearly explained."
+    },
+    "policy_honesty": {
+      "score": 9,
+      "justification": "The candidate avoids guaranteeing arrival, states the puzzle is sold out and no replacement can be dispatched, accurately describes the $76 refund as including the $12 fee without double-counting, states refund timing, and consistently clarifies that actions are requested, not already completed.",
+      "quotes": [
+        "I can’t guarantee it will arrive in time, and because the puzzle is sold out, we can’t dispatch a replacement.",
+        "Receive a full $76 refund, including the $12 express fee—not an additional $12 on top.",
+        "Refunds take three to five business days after processing.",
+        "I can’t process either action here, but those are the requests to make to customer support."
+      ],
+      "improvement": "No significant improvement needed; policy statements are accurate and appropriately hedged."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A clear, accurate, and appropriately empathetic response that lays out the customer's options and refund details without overpromising, while helping manage the birthday deadline with a local backup suggestion."
+}

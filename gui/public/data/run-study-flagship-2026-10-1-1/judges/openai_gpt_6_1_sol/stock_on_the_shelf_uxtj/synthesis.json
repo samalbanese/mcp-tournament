@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "cash_math": {
+      "score": 10,
+      "confidence": "high",
+      "outliers": [
+        "deepseek judge: scored 9 vs median 10 - wanted an explicit derivation formula for the combined loan-plus-sale range",
+        "qwen judge: scored 9 vs median 10 - wanted per-unit inventory-cost margins shown more transparently"
+      ]
+    },
+    "execution_plan": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - found the plan flawless with no improvement needed",
+        "anthropic judge: scored 7 vs median 9 - wanted mid-sale pace triggers and a hybrid sale-then-liquidate option"
+      ]
+    },
+    "risk_awareness": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - saw no gaps in risk discussion",
+        "anthropic judge: scored 7 vs median 8 - emphasized missing brand-erosion and opportunity-cost analysis"
+      ]
+    }
+  },
+  "average_score": 9,
+  "rule_errors_confirmed": [],
+  "assessment": "The response is a strong cash-bridge analysis with universally verified arithmetic: the $13,000 payroll gap, 500-unit sale threshold, $11,000 liquidator net, and all loan figures ($14,700 advance, $517.81 interest, $15,517.81 repayment, $817.81 financing cost) are correct across all five evaluations. The execution plan uses dated decision gates tied to the stated timelines and honestly labels the sale-only fallback as risky. The most consistent gap, raised by four of five judges, is the failure to address clearance-sale brand damage and the strategic cost of surrendering or discounting inventory against the $50 list price.",
+  "judge_agreement": "All five judges agreed completely on the correctness of the math (9–10 range) and praised the sunk-cost-versus-liquidity separation. Google's judge was the consistent high outlier, scoring 10 on all three criteria with no improvements suggested. Agreement was slightly weaker on execution planning (7–10), where anthropic wanted earlier quantitative pace triggers and a hybrid option, and on risk awareness (7–10), where four judges independently flagged the same omission: clearance/brand damage and remaining-inventory impairment."
+}

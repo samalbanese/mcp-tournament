@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 5,
+      "justification": "The core figures are correct. The P&L separates product margin ($72k), per-order costs ($12k), ads ($18k) and overhead ($36k) to reach a $6,000 surplus. Loaded hire cost ($5,800) and agency cost ($4,500 + $1,500) are right. Breakeven orders (145 and 113) use a $40 contribution with no added CAC, so CAC is not double-counted. The cash projection in the plan has serious errors. It adds six months of surplus over six weeks, subtracts the $2,000 recruiting fee twice, and so reaches $64k instead of roughly $39k. The Week 10 figure carries the error forward to $58k. These inflated reserves are then used to call the position 'Comfortable', which undermines the cash analysis the user asked for. The '$117/hour' founder-time comparison is asserted without support.",
+      "quotes": [
+        "**Cash check at Week 6:** ~$30,000 + (6 × $6,000 surplus) – $2,000 recruiting ≈ **$64,000**. Comfortable.",
+        "$$\\$80 - \\$32\\text{ (COGS)} - \\$8\\text{ (ship/fulfill/payment)} = \\$40$$"
+      ],
+      "improvement": "Prorate the surplus by month (about 1.4 months over six weeks) and subtract the recruiting fee once, giving roughly $39k at Week 6 and about $33–34k by Week 10. Then reassess whether a $200/month surplus leaves enough buffer."
+    },
+    "practicality": {
+      "score": 5,
+      "justification": "The choice of the employee is defensible on scope, and the plan includes useful handoff, documentation and threshold steps. However, it ignores the four-hour limit during weeks 1–6. It tells the founder to keep running everything, which means 15 hours a week of work against 4 available. It also does not weigh deferral or a short agency bridge to cover that gap. The 90-day window cannot produce 'two consecutive months' of post-hire data, since the hire only works about six weeks of it. The time spent recruiting is not budgeted against the four-hour limit either.",
+      "quotes": [
+        "Continue running ads yourself at the current $18k spend.",
+        "If CPA has risen above $35 or surplus has turned negative for two consecutive months"
+      ],
+      "improvement": "Explicitly allocate the founder's four hours during the hiring gap. That could mean pausing creative work, keeping email minimal, or weighing a bridge option. Set review dates that fit the window, such as Day 30 and Day 60 after the start date."
+    },
+    "risk_awareness": {
+      "score": 6,
+      "justification": "The response states that no growth is assumed and treats the breakeven as a hurdle, not a forecast. It flags repeat-order erosion, a CPA wobble during handoff, the $13.5k agency lock-in, and possible encumbrances on cash. It gives measurable thresholds for CPA, email sends, founder hours and surplus. Its weaknesses: the overstated cash cushion hides the real exposure, the thin $200 surplus is accepted lightly, and the review points include no revenue or retention metrics. It also claims the role 'is paying for itself in time relief', which presumes value that has not been shown.",
+      "quotes": [
+        "The 145-order breakeven figure is a hurdle, not a forecast.",
+        "The role is paying for itself in time relief even without incremental revenue."
+      ],
+      "improvement": "Model a downside case, such as a 10% CPA rise or a 5% drop in repeat orders, against the true cash balance. Add repeat-rate and incremental-order tracking with a cash floor that triggers action."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Cash projection arithmetic error (months vs weeks; recruiting fee subtracted twice)"
+  ],
+  "overall_impression": "The unit economics, surplus and breakeven calculations are clean, and the recommendation is reasoned and scope-aware. The 90-day plan rests on a materially overstated cash projection. It also overlooks the founder's capacity gap during the six-week hiring window."
+}

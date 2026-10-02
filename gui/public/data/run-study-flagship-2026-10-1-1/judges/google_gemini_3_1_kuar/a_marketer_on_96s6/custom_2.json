@@ -1,0 +1,41 @@
+{
+  "scores": {
+    "financial_reasoning": {
+      "score": 8,
+      "justification": "Correctly separates product margin, per-order expenses, advertising, and fixed overhead, calculates the $6,000 current surplus and both options' costs, and uses $40 incremental contribution without double-counting CAC. The order requirements are correctly rounded. However, it omits the agency's $1,500 post-retainer surplus and misstates the timing of cash accumulation and the employee's salary impact.",
+      "quotes": [
+        "Current Monthly Operating Surplus: **$6,000** ($60,000 - $36,000 - $18,000)",
+        "Extra Monthly Orders to Break Even: 145 orders ($5,800 / $40)",
+        "Extra Monthly Orders to Break Even: 113 orders ($4,500 / $40)",
+        "adding ~$6,000 to your cash reserves by the end of week 6"
+      ],
+      "improvement": "Show both post-option surpluses and a consistent prorated 90-day cash forecast. Six weeks at $6,000 per month adds roughly $8,000–$9,000 before recruiting costs, and the employee's salary reduces surplus immediately upon starting, not only in the second employment month."
+    },
+    "practicality": {
+      "score": 6,
+      "justification": "The employee recommendation is defensible because its scope covers all three marketing functions, and the phased plan addresses the six-week delay and proposes reduced marketing activity as a bridge. However, the answer asserts rather than verifies that either option meets or fails the time constraint. Recruiting, documentation, execution, and onboarding are not allocated within four weekly hours, and shadowing a founder who has already reduced execution creates an unresolved handoff problem.",
+      "quotes": [
+        "Fully resolves your 15-hour workload down to your 4-hour constraint.",
+        "temporarily reduce marketing output",
+        "Document your current ad account structures, email flows, and brand guidelines",
+        "The employee shadows you. You use your 4 hours a week exclusively to review their work and transfer knowledge."
+      ],
+      "improvement": "Make the hire conditional on a sustainable four-hour oversight plan and cash floor. Budget weekly hours for recruiting, essential campaign monitoring, documentation, and onboarding; specify what the employee executes independently from day one. Measure the existing ads/email/creative workload before concluding that the agency necessarily exceeds the limit."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "Explicitly acknowledges fragile surplus, uncertain paid acquisition, and repeat-order stability, rather than guaranteeing growth. However, it omits the agency's three-month commitment exposure, gives no downside cash scenario or reserve trigger, and assumes complete employee ownership by the second month. Its growth target is measurable but lacks interim operating reviews and a decision rule if performance or founder time deteriorates.",
+      "quotes": [
+        "a razor-thin but positive monthly surplus ($200) assuming zero sales growth",
+        "Assumes the 900 repeat orders will hold steady despite temporarily scaling back email/marketing output",
+        "The employee fully owns execution.",
+        "aiming for those 145 extra orders"
+      ],
+      "improvement": "Quantify the agency's $15,000 minimum commitment including onboarding, stress-test a decline in orders, and set cash-floor and founder-hour triggers at days 30, 60, and 90. Distinguish the 145-order target for restoring the original surplus from the much smaller decline that would erase the employee option's $200 cushion."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Strong core unit-economics calculations and a plausible scope-based recommendation, but the implementation and risk controls are less reliable. The cash timeline, management-hour budget, and downside decision thresholds need tightening."
+}

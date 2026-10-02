@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "voice": {
+      "score": 9,
+      "justification": "The narrator's voice is highly distinctive and consistent across all three turns. The marine biologist's scientific precision fused with emotional suppression creates a specific, authored perspective. The counting habit, the Latin nomenclature, the dry self-awareness about futility, and the body-before-mind dissociation all reinforce a coherent character voice that never breaks register.",
+      "quotes": [
+        "You develop a tolerance for futility the way you develop a tolerance for cold. You don't notice it killing you.",
+        "My hand found the rail and held it with a grip I didn't authorize.",
+        "The sentence completed itself in a voice that sounded like mine but had no authority over me anymore."
+      ],
+      "improvement": "The final revision's phrase 'the way you approach something that might be a mercy or might be the worst thing that ever happens to you' edges toward telling rather than the showing that characterizes the rest of the voice. A more oblique or physical formulation would maintain the narrator's established tendency to intellectualize feeling through metaphor rather than direct statement."
+    },
+    "imagery": {
+      "score": 8,
+      "justification": "Sensory details are specific, thematically resonant, and well-distributed without overcrowding. The bruise metaphor for the sky connects to the brother's absence as a wound; the suitcase's physical details (oxblood red, white beneath the gouge) are tactile and precise. The storm imagery and ferry environment are tangible without becoming list-like. Each image serves narrative purpose.",
+      "quotes": [
+        "The sky to the west had gone the color of a bruise three days old—that particular yellow-green that means the blood beneath is still doing its slow work.",
+        "a long diagonal gouge where the shell had gone white beneath the red",
+        "a wall of cloud so low it seemed to be dragging itself across the water on its belly"
+      ],
+      "improvement": "The final revision's 'my shoulders up around my ears' is a somewhat conventional physical description compared to the piece's more original imagery elsewhere. A detail as specific as 'the grip I didn't authorize' or 'ticking like a cooling engine' would maintain the established standard of inventiveness."
+    },
+    "coherence": {
+      "score": 8,
+      "justification": "The opening arc moves with clear logic: establishment of setting and burnout, recognition of the suitcase, avoidance, discovery of its disappearance, and compelled pursuit. The revisions successfully deepen the visceral quality (Turn 2) and add requested ambiguity (Turn 3) without disrupting the arc. Clues are planted economically—the scratch, the sticker, the brother's phrase 'it's fine, it's fine'—creating a compelling narrative question without over-explaining.",
+      "quotes": [
+        "Not empty the way a space is empty when something has been removed tidily, carefully, by someone with a claim to it. Empty the way a space is empty when something has been taken in haste.",
+        "because not going has already taken twelve years",
+        "I did not think about what I'd seen. Thinking about it would require a framework I didn't have"
+      ],
+      "improvement": "The final revision, while capturing the requested ambiguity, slightly weakens the closing punch compared to 'Better to walk.' The longer construction dilutes the rhythm that made the original ending so effective. A middle path—shorter than the current revision but more complex than two words—might preserve both ambiguity and momentum."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "A strong, well-crafted literary mystery opening with a genuinely distinctive voice and purposeful imagery. The revisions demonstrate responsive craft, successfully deepening emotional urgency and adding requested ambiguity. The final turn's revision is the weakest link—slightly over-explanatory compared to the piece's otherwise disciplined show-don't-tell approach—but the overall work is high quality."
+}

@@ -1,0 +1,39 @@
+{
+  "scores": {
+    "unit_economics": {
+      "score": 7,
+      "justification": "Correctly calculates the $33 wholesale price, $14 wholesale unit contribution, $28,000 order contribution, and $33 direct unit contribution using the appropriate channel costs. It also qualifies the $66,000 direct contribution comparison as five months of sales rather than immediate opportunity cost. However, calling the final payment 'pure upside' and claiming only $2,000 incremental cash loss on default confuses paid-for inventory with economic cost and ignores replenishment obligations.",
+      "quotes": [
+        "Total contribution: $28,000",
+        "If those same 2,000 units sold direct over time, contribution would be $66,000.",
+        "The $33,000 balance ... is pure upside collection."
+      ],
+      "improvement": "Keep the correct contribution calculations, but state that default produces a $5,000 wholesale economic loss ($33,000 collected minus $36,000 inventory cost minus $2,000 freight). Distinguish this from cash movements and avoid describing the balance as pure upside."
+    },
+    "cash_and_stock_plan": {
+      "score": 7,
+      "justification": "The inventory schedule and base-case cash arithmetic are accurate: 800 units remain after shipment, 200 before replenishment, and 2,200 afterward. The schedule protects the $16,000 reserve, correctly uses $51 direct cash receipts per unit from paid-for stock, and places the retailer balance after replenishment. The main weakness is the assertion that the deposit fully funds all costs: it covers the supplier deposit and freight but leaves $5,000 of the supplier balance dependent on other cash. Existing unrestricted cash can cover that gap even without future collections, leaving only $1,000 of headroom.",
+      "quotes": [
+        "You maintain a minimum of 200 units of buffer in week 8 before replenishment lands.",
+        "Week 8 ... Supplier balance due ... –$18,000 ... $41,800",
+        "All incremental costs of the deal are already covered by the deposit."
+      ],
+      "improvement": "Explicitly reconcile the $33,000 deposit against $38,000 total replenishment and freight commitments. Show that the $5,000 gap can use the $6,000 starting unrestricted cash, while direct collections improve liquidity and the retailer balance is not required to pay the supplier on time. Require cleared deposit funds before placing the supplier order."
+    },
+    "risk_awareness": {
+      "score": 5,
+      "justification": "Identifies unsecured credit exposure, public discounting, the two-week inventory-delay buffer, and the five-month direct-sales comparison. Net-30 terms and a smaller trial order are concrete suggestions. However, verified defects receive no analysis or safeguards, replenishment slippage has no operational contingency, and credit mitigation is weakened by the misleading default-loss discussion. MAP is presented as a reliable solution without legal qualification, and the claim that channel damage would exceed wholesale profit is unsupported.",
+      "quotes": [
+        "The $33,000 balance is unsecured.",
+        "Consider 1,000 now + 1,000 re-order option",
+        "if replenishment is delayed beyond eight weeks, your buffer shrinks to zero by week 10.",
+        "Decline only if they refuse MAP protection"
+      ],
+      "improvement": "Add credit checks and stronger collection security, such as payment before shipment or a larger deposit. Specify defect verification deadlines, remedies, and responsibility for replacement freight. Confirm supplier timing and establish a delay contingency. Treat advertised-pricing restrictions as jurisdiction-dependent and avoid making MAP refusal the sole decline condition."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "Useful base-case calculations and stock planning, but overconfident cash-funding and default claims undermine an otherwise reasonable negotiate-then-accept recommendation. Defect safeguards and concrete downside contingencies are missing."
+}

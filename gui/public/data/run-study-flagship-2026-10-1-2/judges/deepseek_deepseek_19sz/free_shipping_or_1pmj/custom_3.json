@@ -1,0 +1,38 @@
+{
+  "scores": {
+    "practicality": {
+      "score": 10,
+      "justification": "The recommendation provides a highly feasible, step-by-step 30-day testing plan tailored for a small business operator, including clear A/B test design guidelines and easy-to-understand metrics.",
+      "quotes": [
+        "Run a proper A/B test.",
+        "50/50 split between control and treatment.",
+        "Primary metric: Use contribution profit per visitor, not revenue."
+      ],
+      "improvement": "None needed; it perfectly addresses the practical constraints and outlines a clear path to execution."
+    },
+    "specificity": {
+      "score": 10,
+      "justification": "The candidate flawlessly uses the provided economics ($72 AOV, 42% margin, $9 shipping) to calculate the exact threshold ($95) needed to cover the shipping cost via marginal profit. It also provides an exact mathematical formula for the primary metric and a clear decision rule.",
+      "quotes": [
+        "Extra contribution from the add-on: $23 × 42% = $9.66",
+        "To maintain the same total contribution profit, you would need: $10.80 / $19.44 = 55.6% increase in orders",
+        "If the $95 free-shipping variant has higher contribution per visitor than control with reasonable confidence, roll it out."
+      ],
+      "improvement": "None needed; the level of mathematical and strategic specificity is exceptional."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The candidate identifies the exact margin risks (subsidizing existing $95+ orders) and calculates a break-even table to demonstrate the required lift based on existing customer behavior. It also controls for measurement risk by focusing strictly on contribution profit rather than vanity revenue.",
+      "quotes": [
+        "The main profit leak is existing customers who already spend $95+ and would have bought anyway.",
+        "Example break-even: | Share of current orders already $95+ | Shipping loss per 100 orders | Required order lift |",
+        "If you find that many current orders already qualify for $95+, the offer is probably giving away too much shipping to existing demand."
+      ],
+      "improvement": "None needed; excellent anticipation and quantification of risks."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An outstanding, highly analytical, and immediately actionable response that perfectly utilizes the provided data to build a rigorous business case and test plan."
+}

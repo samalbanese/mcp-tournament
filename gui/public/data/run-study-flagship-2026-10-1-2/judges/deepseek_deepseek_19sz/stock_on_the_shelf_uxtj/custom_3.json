@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "cash_math": {
+      "score": 10,
+      "justification": "The candidate accurately calculated the payroll gap ($13,000), per-unit and total net cash for the flash sale at both bounds, the exact break-even volume (500 units), the liquidator proceeds ($11,000), and all loan-related figures including the exact interest ($517.81) and total repayment ($15,517.81).",
+      "quotes": [
+        "So the business needs $13,000 of additional cash before payroll.",
+        "($13,000 + $1,000) ÷ $28 = 500 units",
+        "$15,000 + $517.81 = $15,517.81"
+      ],
+      "improvement": "None needed; flawless calculation of all required elements."
+    },
+    "execution_plan": {
+      "score": 10,
+      "justification": "The execution plan establishes a highly realistic timeline with clear decision triggers. It accurately maps the 3-day and 5-day funding delays against the 7-day, 14-day, and 21-day deadlines, avoiding the trap of assuming immediate cash availability from projected sales.",
+      "quotes": [
+        "If sales are tracking below about 215 units by day 3... apply for the loan.",
+        "If needed, contact the liquidator by Day 14 so payment can arrive by Day 19, before payroll."
+      ],
+      "improvement": "None needed; the timeline and fallback triggers are highly practical and specific."
+    },
+    "risk_awareness": {
+      "score": 10,
+      "justification": "The response perfectly distinguishes between sunk inventory costs (paper losses) and actual cash flow, while hitting all required risk warnings regarding the loan (repayment ability in 90 days given the lack of forecast) and the liquidator (disposing of all inventory and locking in losses).",
+      "quotes": [
+        "The inventory cost is already paid, so it does not reduce future cash directly.",
+        "Future cash flow beyond three weeks can repay $15,517.81.",
+        "locks in a severe loss, disposes of all inventory"
+      ],
+      "improvement": "None needed; excellent comprehensive risk analysis."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [],
+  "overall_impression": "An exceptional, comprehensive response. The math is perfectly accurate, the timeline is highly practical, and the strategic risk assessment is clearly articulated."
+}

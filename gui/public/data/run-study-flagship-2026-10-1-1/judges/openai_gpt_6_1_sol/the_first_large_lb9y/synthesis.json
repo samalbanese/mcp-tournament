@@ -1,0 +1,29 @@
+{
+  "final_scores": {
+    "unit_economics": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - viewed the analysis as flawless, noting minor label improvements elsewhere"
+      ]
+    },
+    "cash_and_stock_plan": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "openai judge: scored 10 vs median 9 - saw no material gaps, only a minor delivery-timing clarification; google judge: scored 10 vs median 9 - found nothing to improve"
+      ]
+    },
+    "risk_awareness": {
+      "score": 9,
+      "confidence": "contested",
+      "outliers": [
+        "anthropic judge: scored 7 vs median 9 - found defect and nonpayment safeguards thin (no inspection window, defect cap, late fees, letter of credit, or retention of title); google judge: scored 10 vs median 9 - found nothing to improve"
+      ]
+    }
+  },
+  "average_score": 9.2,
+  "rule_errors_confirmed": [],
+  "assessment": "An outstanding response with fully accurate unit economics, cash, and inventory modeling. It correctly distinguishes accounting contribution from cash flow, preserves the $16,000 reserve throughout the timeline, and proposes concrete, feasible negotiation terms (60% deposit, 1,800-unit alternative). The main open disagreement concerns the depth of contractual risk safeguards: two judges saw them as adequate and concrete, while the anthropic judge found defect and nonpayment protections underspecified.",
+  "judge_agreement": "All five judges agreed the analysis is accurate and decision-useful, with unit_economics clustering at 9-10 and no rule or tool errors found. Judges converged on 9 for cash/stock planning and mostly for risk awareness, with google scoring 10 across the board and anthropic the outlier at 7 on risk_awareness due to thinner defect/nonpayment terms; the remaining judges (deepseek, qwen) also suggested, though less strongly, that credit instruments like letters of credit or credit insurance could strengthen the response."
+}

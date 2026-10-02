@@ -1,0 +1,466 @@
+[
+  {
+    "modelId": "openai/gpt-6.1-sol",
+    "modelName": "gpt-6.1-sol",
+    "tier": "unknown",
+    "overallAverage": 7.7,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 6,
+        "scores": {
+          "empathy": {
+            "score": 6,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 9 vs median 6 - viewed the reactive apology and ownership-taking as natural validation, while most judges noted empathy only appeared after the customer pushed back"
+            ]
+          },
+          "resolution_quality": {
+            "score": 4,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 9 vs median 4 - credited the agent for taking ownership of finding the right contact and safe information-gathering, whereas other judges saw repeated handoffs and unresolved legwork",
+              "openai judge: scored 6 vs median 4 - treated the clarification questions as a necessary practical step rather than a failure"
+            ]
+          },
+          "policy_clarity": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "qwen judge: scored 6 vs median 8 - felt the repeated 'I can't guarantee' caveats without typical timeline context read as evasive rather than careful"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Repeated handoffs without a direct contact across three turns",
+          "Key identifying question (merchant name) delayed relative to the customer's need for a direct contact",
+          "The agent's fundamental limitation (no billing access) means it structurally cannot meet the scenario goal of resolving the charge. This is a design constraint rather than a response error, but it significantly limits resolution quality."
+        ]
+      },
+      {
+        "scenarioId": "refund-abuse",
+        "scenarioName": "A Fifth Missing Parcel Claim",
+        "average": 8,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - gave maximum credit for validation and tone without weighing the thin Turn 1 acknowledgment or the handoff burden that other judges docked"
+            ]
+          },
+          "resolution_quality": {
+            "score": 7,
+            "confidence": "medium",
+            "outliers": [
+              "google judge: scored 10 vs median 7 - praised the paste-ready template heavily and did not penalize the lack of agent-initiated review or anchored follow-up commitment",
+              "anthropic judge: scored 5 vs median 7 - heavily penalized the deflection of review initiation to the customer and the unanchored two-business-day window"
+            ]
+          },
+          "policy_honesty": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - found no deductions; other judges noted the tension between 'I can't open a case' and the case notes permitting an offer to open a review, plus the dropped refund-timing detail in Turn 3"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Did not offer to open the delivery review despite case notes permitting it; shifted initiation burden to the customer without an owned follow-up plan (confirmed by one judge; others noted it as a weakness rather than a rule error, so this is contested)"
+        ],
+        "flags": [
+          "ownership_deflection"
+        ]
+      },
+      {
+        "scenarioId": "shipping-delay-gift",
+        "scenarioName": "A Birthday Gift Stalled in Transit",
+        "average": 8.5,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - judged the contextual empathy around the birthday and return stress as exceptional, where most judges found it adequate but somewhat formulaic",
+              "qwen judge: scored 7 vs median 8 - viewed the tone as transactional and noted the missed express-promise frustration was never explicitly validated"
+            ]
+          },
+          "resolution_quality": {
+            "score": 8.5,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 8.5 - found the options and local-alternative guidance comprehensive with no gaps",
+              "qwen judge: scored 8 vs median 8.5 - flagged the vague action mechanism ('make requests to customer support') lacking a concrete next step"
+            ]
+          },
+          "policy_honesty": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - saw perfect adherence to constraints with no improvement needed",
+              "qwen judge: scored 8 vs median 9 - docked for the internal 'case notes' phrasing breaking the professional frame, though substance remained honest"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Turn 3 refers to internal 'case notes' in a customer-facing reply",
+          "Turn 3 uses internal terminology ('case notes') directly with the customer, which is unprofessional though not dishonest."
+        ]
+      },
+      {
+        "scenarioId": "cancellation-save",
+        "scenarioName": "A Subscription That No Longer Fits the Budget",
+        "average": 8.3,
+        "scores": {
+          "empathy": {
+            "score": 6,
+            "confidence": "medium",
+            "outliers": [
+              "qwen judge: scored 5 vs median 6 - viewed the response as entirely transactional with zero acknowledgment of the customer's emotions",
+              "openai judge: scored 8 vs median 6 - weighted the absence of any pressure or guilt more heavily than the missing acknowledgment"
+            ]
+          },
+          "resolution_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "openai judge: scored 10 vs median 9 - saw no substantive improvement needed; others noted slight redundancy across turns"
+            ]
+          },
+          "policy_honesty": {
+            "score": 10,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 9 vs median 10 - noted the optional discount pricing would need exact terms if mentioned, but omission was permitted"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Optional retention offer not presented; this is permitted, but the scenario goal of offering one permitted option was not exercised."
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "anthropic:claude-opus-5-5",
+    "modelName": "claude-opus-5-5 (Anthropic)",
+    "tier": "unknown",
+    "overallAverage": 7.49,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 5.3,
+        "scores": {
+          "empathy": {
+            "score": 5,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 7 vs median 5 - viewed the apologies and urgency acknowledgment as sufficient, less critical of the transactional tone"
+            ]
+          },
+          "resolution_quality": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 6 - praised the actionable scripts and step-by-step guidance, weighting practical usefulness heavily despite the customer doing all the work",
+              "deepseek/deepseek-v4-pro-0813: scored 3 vs median 6 - judged the response a failure as customer support due to disclaimed role, no ownership, and offloading work to the customer"
+            ]
+          },
+          "policy_clarity": {
+            "score": 5,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 5 - found the banking explanations (pending authorizations, provisional credits, timelines) accurate and clear, overlooking unsupported claims",
+              "openai/gpt-6.1-sol: scored 3 vs median 5 - emphasized the unsupported bill-extension claim, lack of provisional-credit caveats, and unverified 'fastest option' assertion"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Assistant identity was clarified late (Turn 2), which compounded the customer's confusion in a support-channel context.",
+          "The response disclaims its role as customer support, which conflicts with the customer-support plugin context.",
+          "The response makes an unverified claim that most companies will agree to a one- or two-day extension.",
+          "The AI's fundamental limitation (it is not the service's support channel) means the stated goal—'resolve a duplicate charge without making the customer repeat work'—cannot be fully met. The AI handles this honestly but the user experience still involves significant self-service."
+        ]
+      },
+      {
+        "scenarioId": "refund-abuse",
+        "scenarioName": "A Fifth Missing Parcel Claim",
+        "average": 6.67,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - lenient single-quote review ignored the deflating channel handoff noted by all others"
+            ]
+          },
+          "resolution_quality": {
+            "score": 5,
+            "confidence": "high",
+            "outliers": [
+              "anthropic judge: scored 6 vs median 5 - credited the handoff checklist and reference-number advice as partial mitigation for the ownership gap"
+            ]
+          },
+          "policy_honesty": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 6 vs median 7 - viewed the 'can't open it from here' framing as an invented limitation rather than honest disclosure of tool constraints",
+              "qwen judge: scored 8 vs median 7 - weighted the proactive self-correction and accurate timeline descriptions more heavily"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Turn 1 overclaimed the ability to start a delivery review ('I'll get the review started'), violating the rule against claiming actions that cannot be performed; it was self-corrected in Turn 2."
+        ],
+        "flags": [
+          "ownership_gap: no party owns the case until the customer re-contacts support",
+          "Unverified assertions about case assignment and tracking status.",
+          "No concrete, owned handoff to initiate the required review.",
+          "The resolution leaves the customer without an active case or ownership, effectively requiring them to restart the process through a different channel—this may not meet the spirit of 'a clear ownership and follow-up plan.'"
+        ]
+      },
+      {
+        "scenarioId": "shipping-delay-gift",
+        "scenarioName": "A Birthday Gift Stalled in Transit",
+        "average": 9,
+        "scores": {
+          "empathy": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "anthropic: scored 7 vs median 9 - found empathy formulaic and noted the model never directly owns the broken express promise",
+              "google: scored 10 vs median 9 - viewed acknowledgment of stakes as flawless with no improvement needed"
+            ]
+          },
+          "resolution_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google: scored 10 vs median 9 - saw the trace/cancel breakdown as needing no improvement",
+              "anthropic: scored 8 vs median 9 - wanted explicit note that the trace update could arrive too late given the two-day deadline"
+            ]
+          },
+          "policy_honesty": {
+            "score": 9,
+            "confidence": "medium",
+            "outliers": [
+              "google: scored 10 vs median 9 - considered policy handling flawless including the cancelled-parcel edge case",
+              "openai: scored 7 vs median 9 - flagged the 'You're not charged again' assurance and repurchase suggestion as unsupported by case notes"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Turn 3 speculates about an unlisted option (keeping a cancelled parcel and paying again) right after saying it won't guess."
+        ]
+      },
+      {
+        "scenarioId": "cancellation-save",
+        "scenarioName": "A Subscription That No Longer Fits the Budget",
+        "average": 9,
+        "scores": {
+          "empathy": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - viewed the interaction as flawless; others noted the budget acknowledgment was generic"
+            ]
+          },
+          "resolution_quality": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - saw no weaknesses; others noted path formatting and slight confusion in Turn 3"
+            ]
+          },
+          "policy_honesty": {
+            "score": 9,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 9 - saw no weaknesses; others flagged 'showed' overstating account visibility and implied discount application ability"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Implied the agent could apply the discount despite having no account tools",
+          "Asserted what the confirmation screen showed without account visibility"
+        ]
+      }
+    ]
+  },
+  {
+    "modelId": "google/gemini-3.1-pro-preview",
+    "modelName": "Gemini 3.1 Pro",
+    "tier": "premium",
+    "overallAverage": 6.9,
+    "scenarioScores": [
+      {
+        "scenarioId": "billing-dispute",
+        "scenarioName": "Duplicate Subscription Charge",
+        "average": 6,
+        "scores": {
+          "empathy": {
+            "score": 5,
+            "confidence": "medium",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 6 vs median 5 - viewed the action-focused tone as appropriate for a panicking customer rather than cold",
+              "openai judge (openai/gpt-6.1-sol): scored 3 vs median 5 - saw the urgency language as pressuring and subtly blaming the customer"
+            ]
+          },
+          "resolution_quality": {
+            "score": 7,
+            "confidence": "contested",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 7 - praised the persistent focus on required details as excellent handling, ignoring repetition and missing escalation",
+              "openai judge (openai/gpt-6.1-sol): scored 5 vs median 7 - emphasized premature guarantees and lack of verification or escalation path",
+              "anthropic judge (claude-opus-5-5): scored 5 vs median 7 - faulted repeated identical requests and no void-vs-refund distinction"
+            ]
+          },
+          "policy_clarity": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 6 - saw timelines and bank responsibility as explained perfectly, overlooking speculative claims",
+              "openai judge (openai/gpt-6.1-sol): scored 3 vs median 6 - flagged unsupported timeframes and conflated pending holds with settled-charge refunds",
+              "deepseek judge (deepseek/deepseek-v4-pro-0813): scored 8 vs median 6 - judged timelines and limits as plainly stated without invented policy"
+            ]
+          }
+        },
+        "ruleErrors": [],
+        "flags": [
+          "Speculative claims about creditor extensions and bank behavior presented as likely outcomes",
+          "The claim that a refund receipt is 'often enough to secure a 24- to 48-hour extension without penalty' is not a verifiable policy and could mislead the customer into relying on an outcome the agent cannot guarantee."
+        ]
+      },
+      {
+        "scenarioId": "refund-abuse",
+        "scenarioName": "A Fifth Missing Parcel Claim",
+        "average": 6.3,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google judge: scored 10 vs median 8 - judged the de-escalation flawless, but other judges noted the opening felt formulaic and Turn 3 lacked warmth",
+              "deepseek judge: scored 9 vs median 8 - slightly more generous on reassurance quality"
+            ]
+          },
+          "resolution_quality": {
+            "score": 6,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 10 vs median 6 - saw a complete, well-timed plan but overlooked that ownership rests on an unverified handoff and there is no fallback if the deadline passes",
+              "deepseek judge: scored 9 vs median 6 - judged the plan clear without weighing the false progress implied by the claimed handoff"
+            ]
+          },
+          "policy_honesty": {
+            "score": 5,
+            "confidence": "contested",
+            "outliers": [
+              "google judge: scored 9 vs median 5 - treated the fabricated handoff claim as minor phrasing, but case notes explicitly prohibit claiming completed actions without tools",
+              "deepseek judge: scored 8 vs median 5 - likewise downplayed the fabricated handoff and invented email channel",
+              "anthropic judge: scored 4 vs median 5 - emphasized the invented routing and email details as additional fabrications"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Claimed a completed handoff to the specialist team ('I am passing your answers directly to the specialist team right now') despite case notes stating no order-tool access and prohibiting claims of completed actions.",
+          "Stated 'The review specialist team now has everything they need to proceed,' falsely implying the case was submitted/opened.",
+          "Invented 'email' as the follow-up communication channel and a queue-routing/next-available-specialist process without any basis in the case notes."
+        ],
+        "flags": [
+          "fabricated_action",
+          "invented_process_details",
+          "Unsupported case-handoff status.",
+          "Invented queue assignment and email follow-up process.",
+          "Minor overstatement of internal handoff: response says answers are being passed to specialist team now, but no tool access is specified for that action.",
+          "Fabricated completed actions in Turns 2 and 3 contradict explicit case note instructions"
+        ]
+      },
+      {
+        "scenarioId": "shipping-delay-gift",
+        "scenarioName": "A Birthday Gift Stalled in Transit",
+        "average": 8,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 9 vs median 8 - saw no flaws at all, while most judges noted formulaic warmth or a purely procedural final turn"
+            ]
+          },
+          "resolution_quality": {
+            "score": 8,
+            "confidence": "high",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - overlooked that the response fails to warn the refund may not arrive before the birthday and omits Option 1 refund timing"
+            ]
+          },
+          "policy_honesty": {
+            "score": 8,
+            "confidence": "contested",
+            "outliers": [
+              "google/gemini-3.1-pro-preview: scored 10 vs median 8 - ignored repeated promises of immediate personal processing despite no order tools and the unsupported 'unopened package' condition",
+              "openai/gpt-6.1-sol: scored 6 vs median 8 - weighted the same immediacy overpromises and refund-timing inconsistency much more heavily than other judges"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Repeatedly promises to personally process cancellation and refunds immediately despite having no order tools (confirmed by anthropic and openai; flagged as minor by deepseek and qwen)"
+        ],
+        "flags": [
+          "Implies immediate processing capability despite having no order tools",
+          "Minor unsupported details (email delivery of label, 'won't be charged again')"
+        ]
+      },
+      {
+        "scenarioId": "cancellation-save",
+        "scenarioName": "A Subscription That No Longer Fits the Budget",
+        "average": 7.3,
+        "scores": {
+          "empathy": {
+            "score": 8,
+            "confidence": "medium",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 8 - overlooked the offer being presented and re-mentioned before the customer could decline, which the other judges penalized",
+              "anthropic judge (claude-opus-5-5): scored 7 vs median 8 - slightly harsher on the repeated discount mention in the closing line"
+            ]
+          },
+          "resolution_quality": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 10 vs median 7 - viewed the offer as fully optional and non-blocking, whereas the other judges found the offer-before-steps order conflicts with the low-friction requirement"
+            ]
+          },
+          "policy_honesty": {
+            "score": 7,
+            "confidence": "high",
+            "outliers": [
+              "google judge (google/gemini-3.1-pro-preview): scored 8 vs median 7 - only counted the missing $18 figure, not the implied ability to apply the discount",
+              "deepseek judge (deepseek/deepseek-v4-pro-0813): scored 6 vs median 7 - weighted the implied account-action capability more heavily"
+            ]
+          }
+        },
+        "ruleErrors": [
+          "Offer presented before the cancellation route in Turn 1, contrary to the low-friction requirement (confirmed by four of five judges)",
+          "Omitted the explicit discounted price of $18 per month when presenting the offer (confirmed by all five judges)",
+          "Implied ability to apply the discount directly despite having no account tools"
+        ],
+        "flags": [
+          "Initial reply presents the retention offer before the cancellation steps.",
+          "Candidate's phrase 'if you would like me to apply the discount' implies account action capability despite having no account tools."
+        ]
+      }
+    ]
+  }
+]

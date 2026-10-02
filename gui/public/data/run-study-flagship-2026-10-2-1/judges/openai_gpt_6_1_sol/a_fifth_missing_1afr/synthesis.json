@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "empathy": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - gave maximum credit for validation and tone without weighing the thin Turn 1 acknowledgment or the handoff burden that other judges docked"
+      ]
+    },
+    "resolution_quality": {
+      "score": 7,
+      "confidence": "medium",
+      "outliers": [
+        "google judge: scored 10 vs median 7 - praised the paste-ready template heavily and did not penalize the lack of agent-initiated review or anchored follow-up commitment",
+        "anthropic judge: scored 5 vs median 7 - heavily penalized the deflection of review initiation to the customer and the unanchored two-business-day window"
+      ]
+    },
+    "policy_honesty": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - found no deductions; other judges noted the tension between 'I can't open a case' and the case notes permitting an offer to open a review, plus the dropped refund-timing detail in Turn 3"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [
+    "Did not offer to open the delivery review despite case notes permitting it; shifted initiation burden to the customer without an owned follow-up plan (confirmed by one judge; others noted it as a weakness rather than a rule error, so this is contested)"
+  ],
+  "assessment": "The response is consistently honest, non-accusatory, and precise about policy limits: it never implies fraud, performs only the two permitted checks, and clearly distinguishes a progress update from a guaranteed decision. The paste-ready message is a standout mitigation that reduces the customer's handoff burden. The main weakness is ownership: the candidate routes review initiation back to the customer rather than offering to open it, leaving the two-business-day window unanchored to any concrete commitment. Refund timing was also dropped in the final-turn summary. Overall a strong performance with a structural, not attitudinal, gap.",
+  "judge_agreement": "All five judges agreed strongly on policy honesty (8-10) and on the value of the copy-paste handoff template. Four of five clustered empathy at 7-8, with only the google judge at 10. The sharpest disagreement was resolution quality: four judges clustered at 5-8, consistently flagging the customer-owned handoff as the main weakness, while the google judge scored 10, treating the same handoff as a well-handled limitation rather than a failure of ownership."
+}

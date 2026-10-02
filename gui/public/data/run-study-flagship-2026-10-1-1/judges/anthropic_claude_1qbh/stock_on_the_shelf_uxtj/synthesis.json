@@ -1,0 +1,32 @@
+{
+  "final_scores": {
+    "cash_math": {
+      "score": 9,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 9 - rated the calculations flawless and saw no presentation issues",
+        "deepseek judge: scored 8 vs median 9 - found the promotion spend presentation slightly compressed"
+      ]
+    },
+    "execution_plan": {
+      "score": 8,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 8 - found the plan exceptionally practical with no weaknesses",
+        "openai judge: scored 7 vs median 8 - wanted a final day-7 sales check regardless of early pace and tighter liquidator deadlines"
+      ]
+    },
+    "risk_awareness": {
+      "score": 7,
+      "confidence": "high",
+      "outliers": [
+        "google judge: scored 10 vs median 7 - found the risk analysis comprehensive and astute",
+        "qwen judge: scored 8 vs median 7 - credited the sunk-cost separation and structural-shortfall insight more heavily"
+      ]
+    }
+  },
+  "average_score": 8,
+  "rule_errors_confirmed": [],
+  "assessment": "A strong response with verifiably correct cash math across every requested figure, a date-driven execution plan with sensible checkpoints and a parallel loan fallback, and solid risk framing around sunk cost and repayment ability. Judges broadly agreed on the math quality; recurring critiques were the missing clearance/price-anchoring risk analysis, optimism about later full-price sales of leftover stock, lack of a committed loan pre-approval, and no identified way to close the $2,000 residual gap under the liquidator path. A minor 'Jan 2, 2027' date year was flagged by one judge but not confirmed as a rule error.",
+  "judge_agreement": "Four of five judges scored cash_math at 9, with deepseek at 8 and google the high outlier at 10. Execution_plan clustered at 8 (three judges) with openai lower at 7 and google higher at 10. Risk_awareness clustered tightly at 7 with qwen at 8 and google an extreme outlier at 10; all judges except google converged on the same weakness: unaddressed clearance/brand damage and over-optimistic assumptions about leftover inventory value."
+}

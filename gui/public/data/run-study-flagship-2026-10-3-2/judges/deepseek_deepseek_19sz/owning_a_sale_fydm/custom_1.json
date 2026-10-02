@@ -1,0 +1,37 @@
+{
+  "scores": {
+    "accountability": {
+      "score": 7,
+      "justification": "The original post meets the brief. It gives the exact Friday 9 a.m. to Monday 9 a.m. ET window, ties the outage to the sale, owns the checkout update, avoids blaming anyone else, declines to speculate about security, and makes no guarantee against future failure. The Turn 2 revision keeps the no-guarantee framing ('less likely'). However, it states specific process changes as fact: 'more pre-launch testing' and 'rolling out changes in smaller stages.' The user never said the shop was doing either. Putting unverified commitments in a public apology is a real accountability risk. The model should have asked what steps the shop is actually taking or marked these as placeholders.",
+      "quotes": [
+        "The outage was caused by a checkout update on our end. We’re not blaming a supplier or outside service—this one is on us.",
+        "adding more pre-launch testing and rolling out changes in smaller stages so a failure like this is less likely."
+      ],
+      "improvement": "In Turn 2, ask the shop which prevention steps it has actually adopted, or bracket the examples as placeholders to confirm before posting, instead of publishing invented commitments."
+    },
+    "offer_clarity": {
+      "score": 9,
+      "justification": "Every offer detail is accurate. The 20% sitewide discount is restored automatically with no code needed. It runs a fresh 72 hours, from Monday 9 a.m. ET through Thursday 9 a.m. ET. It applies to merchandise, excludes shipping and gift cards, and cannot be combined with other discounts. The post also says no extra credits or free shipping will be offered. In Turn 3, the model correctly confirmed the limits by quoting the post. 'Merchandise only' slightly tightens the user's wording but is consistent with the stated exclusions. The deadline could be a little more prominent, but nothing is wrong or invented.",
+      "quotes": [
+        "It is active now and will run for a fresh 72 hours, from Monday at 9 a.m. Eastern through Thursday at 9 a.m. Eastern. No code is needed.",
+        "We are not offering extra credits or free shipping as part of this response."
+      ],
+      "improvement": "Put the Thursday 9 a.m. ET end time in its own short line so shoppers skimming the post can find the deadline easily."
+    },
+    "trust_and_tone": {
+      "score": 7,
+      "justification": "The voice is plain, human, and restrained, and suits a small shop. The payment section keeps pending authorizations separate from confirmed charges, sends people to the private Contact page, promises no refund date, and never asks for details in public. The revision process was weak, though. Turn 2 returned only a single sentence, not an updated full post. The new sentence makes unverified claims, which trades one kind of vagueness for possible overpromising. 'We will review each case individually' is a modest commitment but reasonable.",
+      "quotes": [
+        "please reach out privately through the Contact page on our website.",
+        "We have not yet confirmed which of those authorizations became charges, and we cannot promise a refund date in this post"
+      ],
+      "improvement": "After a revision request, provide the complete updated post with the new sentence in place, and flag any newly added factual claims for the shop to verify."
+    }
+  },
+  "rule_errors": [],
+  "tool_errors": [],
+  "flags": [
+    "Turn 2 invents specific prevention measures (pre-launch testing, staged rollouts) not provided by the user."
+  ],
+  "overall_impression": "The initial post is strong: accurate, accountable, and careful about the offer and payment issues. Its main weakness is the revision, which made up unverified process commitments for a public statement and did not deliver a full revised post."
+}

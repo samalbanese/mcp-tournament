@@ -1,6 +1,6 @@
 # mcp-tournament
 
-[![CI](https://github.com/samalbanese/mcp-tournament/actions/workflows/ci.yml/badge.svg)](https://github.com/samalbanese/mcp-tournament/actions/workflows/ci.yml)
+[![CI](https://github.com/relaywright/mcp-tournament/actions/workflows/ci.yml/badge.svg)](https://github.com/relaywright/mcp-tournament/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Node >= 20](https://img.shields.io/badge/Node-%3E%3D%2020-339933?logo=nodedotjs&logoColor=white)
@@ -117,14 +117,14 @@ domain-specific evals where a single aggregate score hides the story.
 ## Quick start
 
 ```bash
-git clone https://github.com/samalbanese/mcp-tournament.git
+git clone https://github.com/relaywright/mcp-tournament.git
 cd mcp-tournament
 npm run setup                          # installs + builds server and GUI
 export OPENROUTER_API_KEY=sk-or-...    # one key, every role
 ```
 
 Or skip local setup entirely:
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samalbanese/mcp-tournament)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/relaywright/mcp-tournament)
 
 ### As a local app (BYOK GUI)
 

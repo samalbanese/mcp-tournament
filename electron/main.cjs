@@ -217,7 +217,7 @@ if (!hasSingleInstanceLock) {
   });
 
   void app.whenReady().then(async () => {
-    app.setAppUserModelId('com.samalbanese.mcptournament');
+    app.setAppUserModelId('com.relaywright.mcptournament');
     await createMainWindow();
   }).catch(async (error) => {
     dialog.showErrorBox('MCP Tournament could not start', error instanceof Error ? error.message : String(error));

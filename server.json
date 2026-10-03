@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.samalbanese/mcp-tournament",
+  "name": "io.github.relaywright/mcp-tournament",
   "description": "AI model evaluation as an MCP server. Multi-judge panels, structured scoring, pluggable domains.",
   "repository": {
-    "url": "https://github.com/samalbanese/mcp-tournament",
+    "url": "https://github.com/relaywright/mcp-tournament",
     "source": "github"
   },
   "version": "0.1.0",

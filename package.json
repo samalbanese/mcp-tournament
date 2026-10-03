@@ -2,14 +2,14 @@
   "name": "mcp-tournament",
   "version": "0.1.0",
   "description": "AI model evaluation as an MCP server. Multi-judge panels, structured scoring, pluggable domains.",
-  "mcpName": "io.github.samalbanese/mcp-tournament",
+  "mcpName": "io.github.relaywright/mcp-tournament",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/samalbanese/mcp-tournament.git"
+    "url": "git+https://github.com/relaywright/mcp-tournament.git"
   },
   "homepage": "https://mcp-tournament.pages.dev",
-  "bugs": "https://github.com/samalbanese/mcp-tournament/issues",
-  "author": "Sam Albanese",
+  "bugs": "https://github.com/relaywright/mcp-tournament/issues",
+  "author": "relaywright",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

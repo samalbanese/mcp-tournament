@@ -220,7 +220,7 @@ export function WorkspaceShell({
               </>
             )}
             <a
-              href="https://github.com/samalbanese/mcp-tournament"
+              href="https://github.com/relaywright/mcp-tournament"
               target="_blank"
               rel="noreferrer"
             >
@@ -282,7 +282,7 @@ export function WorkspaceShell({
                 </>
               )}
               <a
-                href="https://github.com/samalbanese/mcp-tournament"
+                href="https://github.com/relaywright/mcp-tournament"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -301,11 +301,11 @@ export function WorkspaceShell({
           <span>
             Local-first. Open source. Built by{" "}
             <a
-              href="https://samalbanese.com/portfolio"
+              href="https://github.com/relaywright"
               target="_blank"
               rel="noreferrer"
             >
-              Sam Albanese ↗
+              relaywright ↗
             </a>
           </span>
         </footer>
@@ -708,7 +708,7 @@ function Overview({
                                 style={{ width: `${(score ?? 0) * 10}%` }}
                               />
                             </span>
-                            <b>{score?.toFixed(1) ?? "—"}</b>
+                            <b>{score?.toFixed(1) ?? "–"}</b>
                             {entry.scenarioScores.some(
                               (s) =>
                                 s.scores[criterion]?.confidence === "contested",
@@ -926,7 +926,7 @@ function DecisionLab({
                   index={entries.findIndex((e) => e.modelId === entry.modelId)}
                 />
                 <h3>{entry.modelName}</h3>
-                <strong>{score?.toFixed(2) ?? "—"}</strong>
+                <strong>{score?.toFixed(2) ?? "–"}</strong>
               </div>
               <div className="weighted-track">
                 <span style={{ width: `${(score ?? 0) * 10}%` }} />
@@ -1123,7 +1123,7 @@ function CompareEvidence({
                     <h2>{entry.modelName}</h2>
                     <span>{entry.modelId}</span>
                   </div>
-                  <b>{scenario?.average.toFixed(2) ?? "—"}</b>
+                  <b>{scenario?.average.toFixed(2) ?? "–"}</b>
                 </header>
                 {item?.errors.map((error) => (
                   <p role="status" className="evidence-error" key={error}>

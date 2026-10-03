@@ -5,7 +5,7 @@ Thanks for your interest! This project is small and moves fast; issues and PRs w
 ## Getting set up
 
 ```bash
-git clone https://github.com/samalbanese/mcp-tournament.git
+git clone https://github.com/relaywright/mcp-tournament.git
 cd mcp-tournament
 npm run setup               # installs + builds server and GUI
 npm test                    # unit tests, no API key needed
@@ -13,7 +13,7 @@ node dist/cli.js gui        # local app at http://localhost:4600
 ```
 
 Or one click, zero local setup:
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samalbanese/mcp-tournament)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/relaywright/mcp-tournament)
 
 Real runs need an OpenRouter key (`OPENROUTER_API_KEY` or paste it in the GUI
 Settings). Unit tests and the results viewer work without one.

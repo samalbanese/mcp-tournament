@@ -24,7 +24,7 @@ function getClient(): OpenAI {
       baseURL: 'https://openrouter.ai/api/v1',
       apiKey,
       defaultHeaders: {
-        'HTTP-Referer': 'https://github.com/samalbanese/mcp-tournament',
+        'HTTP-Referer': 'https://github.com/relaywright/mcp-tournament',
         'X-Title': 'MCP Tournament',
       },
       timeout: API_TIMEOUT_MS,

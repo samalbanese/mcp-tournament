@@ -126,7 +126,7 @@ export function buildReport(
     ...run.judges.map((judge) => `- ${judge.name}: ${withLevel(judge)}`),
     `- Synthesizer: ${withLevel(run.synthesizer)}`,
     "",
-    "Source: https://github.com/samalbanese/mcp-tournament",
+    "Source: https://github.com/relaywright/mcp-tournament",
     "",
   );
   return lines.join("\n");

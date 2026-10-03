@@ -5,7 +5,7 @@ import JudgeSpread from './JudgeSpread';
 import { href } from './router';
 import type { JudgeScore, LeaderboardEntry, RunManifest, ScenarioScore, Synthesis } from './types';
 
-const COMMANDS = `git clone https://github.com/samalbanese/mcp-tournament.git
+const COMMANDS = `git clone https://github.com/relaywright/mcp-tournament.git
 cd mcp-tournament
 npm install && npm run build
 npm --prefix gui install && npm --prefix gui run build
@@ -150,7 +150,7 @@ export function RunItYourself() {
       <p className="eyebrow">EVERY WORD ABOVE IS REAL MODEL OUTPUT</p>
       <h2>Run it yourself</h2>
       <p>Bring your own OpenRouter key. A full run costs cents, and the evidence stays on your machine.</p>
-      <a href="https://github.com/samalbanese/mcp-tournament#readme">Or wire it into Claude Desktop / Cursor — see the README <span>↗</span></a>
+      <a href="https://github.com/relaywright/mcp-tournament#readme">Or wire it into Claude Desktop / Cursor: see the README <span>↗</span></a>
     </div>
     <div className="command-block">
       <div><span>LOCAL SETUP / POWERSHELL OR TERMINAL</span><button type="button" onClick={() => void copy()}>{copied ? 'COPIED' : 'COPY'}</button></div>
@@ -203,12 +203,12 @@ function ArbiterPanel({ timeline, run, elapsed, renderInline }: { timeline: Time
         const notes = Object.values(lane.synthesis?.final_scores ?? {}).flatMap((score) => score.outliers).join(' ').toLowerCase();
         const spreadJudges = lane.judges.map(({ role, score }) => ({ role, name: run.judges.find((judge) => judge.role === role)?.name, score: averageJudgeScore(score) }));
         const outlierRoles = spreadJudges.filter(({ role, name }) => [role, role.replaceAll('_', ' '), name].some((candidate) => candidate && notes.includes(candidate.toLowerCase()))).map(({ role }) => role);
-        return <article key={lane.entry.modelId}><header><span>{lane.entry.modelName}</span><b>{lane.synthesis?.average_score.toFixed(2) ?? '—'}</b></header><p>{lane.synthesis
+        return <article key={lane.entry.modelId}><header><span>{lane.entry.modelName}</span><b>{lane.synthesis?.average_score.toFixed(2) ?? '–'}</b></header><p>{lane.synthesis
           ? laneComplete ? renderInline(lane.synthesis.assessment) : lane.synthesisChunks.slice(0, laneVisible).join('')
           : <em>Synthesis record unavailable.</em>}{lane.synthesis && laneStarted && !laneComplete && <span className="block-cursor" aria-hidden="true">▮</span>}</p>{laneComplete && <div className="replay-arbiter-spread"><JudgeSpread judges={spreadJudges} final={lane.synthesis?.average_score} outlierRoles={outlierRoles}/></div>}</article>;
       })}
     </div>
-    {complete && outliers.length > 0 && <div className="replay-outliers"><div className="section-label"><span>OUTLIER NOTES</span><b>{outliers.length} FLAGGED</b></div>{outliers.map((item, index) => <article className="outlier" key={`${item.model}-${item.criterion}-${index}`}><span>▲ {item.criterion.replaceAll('_', ' ')}</span><p><b>{item.model}</b> — {item.note}</p></article>)}</div>}
+    {complete && outliers.length > 0 && <div className="replay-outliers"><div className="section-label"><span>OUTLIER NOTES</span><b>{outliers.length} FLAGGED</b></div>{outliers.map((item, index) => <article className="outlier" key={`${item.model}-${item.criterion}-${index}`}><span>▲ {item.criterion.replaceAll('_', ' ')}</span><p><b>{item.model}</b>: {item.note}</p></article>)}</div>}
   </section>;
 }
 
